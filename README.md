@@ -53,6 +53,9 @@ Contiene todo lo que tiene que ver con front
 #### 4.3 Reglas Tipográficas
 
 ### 5. Mascota Representativa
+
+<img width="310" height="535" alt="image" src="https://github.com/user-attachments/assets/146693b8-2ae6-4be6-b287-06f42b3e02b4" />
+
  
 #### 5.1 Nombre
 
@@ -60,7 +63,7 @@ Contiene todo lo que tiene que ver con front
 
 #### 5.2 Descripción
 
-Manchas es 
+Manchas es un perro criollo que fue la mascota icónica de la Escuela Colombiana de Ingeniería
 
 #### 5.3 Colores de la Mascota
 
