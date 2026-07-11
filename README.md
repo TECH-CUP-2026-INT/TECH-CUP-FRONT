@@ -16,6 +16,9 @@ Contiene todo lo que tiene que ver con front
 
 ### colorimetría del logo 
 
+<img width="1551" height="1691" alt="image" src="https://github.com/user-attachments/assets/a0a4f7b1-5969-40c8-a820-0fdf9a564d24" />
+
+
 | Elemento | Color | HEX |
 |---|---|---|
 | Fondo | Negro profundo | #000000 |
@@ -29,6 +32,7 @@ Contiene todo lo que tiene que ver con front
 ---
 
 ### 3. Paleta de Colores
+![Uploading image.png…]()
 
 | Nombre | HEX | Uso principal |
 |---|---|---|
