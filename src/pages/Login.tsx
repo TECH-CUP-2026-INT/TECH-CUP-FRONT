@@ -18,87 +18,8 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-black flex">
       
-      {/* Left — Video + overlay */}
-      <div className="hidden lg:flex w-1/2 relative overflow-hidden"
-        style={{
-          maskImage: "linear-gradient(to right, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%)",
-          WebkitMaskImage: "linear-gradient(to right, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%)",
-        }}>
-        {/* Background video */}
-        <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover"
-          style={{ objectPosition: "0% center" }}>
-          <source src="/hero-video.mp4" type="video/mp4" />
-        </video>
-        
-        {/* Grid dots */}
-        <div className="absolute inset-0 opacity-20"
-          style={{
-            backgroundImage: 'radial-gradient(rgba(255,255,255,.1) 1px, transparent 1px)',
-            backgroundSize: '30px 30px',
-          }}
-        />
-        
-        {/* Overlay gradiente */}
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-black/95 via-purple-black/70 to-transparent" />
-
-        <div className="relative z-10 flex flex-col justify-between p-16 h-full">
-          {/* Logo */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <Link to="/" className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl overflow-hidden bg-purple-black flex-shrink-0">
-                <img src="/assets/logo.png" alt="" className="w-full h-full object-cover" />
-              </div>
-              <div className="flex flex-col leading-none">
-                <span className="font-[family-name:var(--font-display)] font-bold text-xl tracking-[.5px]">
-                  TECH<span className="text-gold">CUP</span>
-                </span>
-                <span className="text-[9px] tracking-[1.6px] text-text-muted font-semibold">
-                  INGENIERÍA DE SISTEMAS
-                </span>
-              </div>
-            </Link>
-          </motion.div>
-
-          {/* Slogan central */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="max-w-[360px]"
-          >
-            <p className="font-[family-name:var(--font-display)] text-4xl uppercase leading-[1.1] mb-4">
-              La pasión nos <span className="text-gold">conecta</span>
-            </p>
-            <p className="text-sm text-text-muted leading-relaxed">
-              Iniciá sesión y viví la emoción del torneo universitario más importante de Ingeniería de Sistemas.
-            </p>
-            
-            {/* Línea decorativa */}
-            <div className="flex items-center gap-3 mt-6">
-              <div className="w-8 h-[2px] rounded-full bg-gold/60" />
-              <div className="w-8 h-[2px] rounded-full bg-purple-mid/40" />
-              <div className="w-8 h-[2px] rounded-full bg-gold/20" />
-            </div>
-          </motion.div>
-
-          {/* Footer izquierda */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-            className="text-xs text-text-faint"
-          >
-            © 2026 TechCup — Todos los derechos reservados
-          </motion.p>
-        </div>
-      </div>
-
-      {/* Right — Formulario */}
-      <div className="w-full lg:w-1/2 relative flex items-center justify-center p-8 lg:p-16 overflow-hidden">
+      {/* Left — Formulario */}
+      <div className="w-full lg:w-[38%] relative flex items-center justify-center p-8 lg:p-16 overflow-hidden">
         {/* Background — ambient light spots so glass effect is visible */}
         <div
           className="absolute inset-0"
@@ -108,7 +29,7 @@ export default function Login() {
               radial-gradient(ellipse 65% 55% at 80% 85%, rgba(147, 51, 234, 0.13) 0%, transparent 55%),
               radial-gradient(ellipse 40% 35% at 55% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 45%)
             `,
-            backgroundColor: '#0a0a0f',
+            backgroundColor: 'rgba(10, 10, 15, 0.7)',
           }}
         />
         <div
@@ -118,6 +39,8 @@ export default function Login() {
             backgroundSize: '30px 30px',
           }}
         />
+        {/* Gradiente de transición suave hacia el video */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent to-purple-black/50" />
 
         <div className="relative w-full max-w-[420px] space-y-5">
           {/* Logo mobile */}
@@ -248,6 +171,64 @@ export default function Login() {
               </div>
             </motion.div>
           </GlassCard>
+        </div>
+      </div>
+
+      {/* Right — Video + overlay */}
+      <div className="hidden lg:flex w-[62%] relative overflow-hidden"
+        style={{
+          maskImage: "linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 20%, rgba(0,0,0,1) 50%)",
+          WebkitMaskImage: "linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 20%, rgba(0,0,0,1) 50%)",
+        }}>
+        {/* Background video */}
+        <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover"
+          style={{ objectPosition: "center center" }}>
+          <source src="/hero-video.mp4" type="video/mp4" />
+        </video>
+        
+        {/* Grid dots */}
+        <div className="absolute inset-0 opacity-20"
+          style={{
+            backgroundImage: 'radial-gradient(rgba(255,255,255,.1) 1px, transparent 1px)',
+            backgroundSize: '30px 30px',
+          }}
+        />
+        
+        {/* Overlay gradiente — oscurece la izquierda, deja ver el video a la derecha */}
+        <div className="absolute inset-0 bg-gradient-to-l from-purple-black/95 via-purple-black/70 to-transparent" />
+
+        <div className="relative z-10 flex flex-col justify-between p-16 h-full items-end text-right">
+          {/* Slogan central */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="max-w-[360px]"
+          >
+            <p className="font-[family-name:var(--font-display)] text-4xl uppercase leading-[1.1] mb-4">
+              La pasión nos <span className="text-gold">conecta</span>
+            </p>
+            <p className="text-sm text-text-muted leading-relaxed">
+              Iniciá sesión y viví la emoción del torneo universitario más importante de Ingeniería de Sistemas.
+            </p>
+            
+            {/* Línea decorativa */}
+            <div className="flex items-center gap-3 mt-6 justify-end">
+              <div className="w-8 h-[2px] rounded-full bg-gold/20" />
+              <div className="w-8 h-[2px] rounded-full bg-purple-mid/40" />
+              <div className="w-8 h-[2px] rounded-full bg-gold/60" />
+            </div>
+          </motion.div>
+
+          {/* Footer derecha */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 }}
+            className="text-xs text-text-faint"
+          >
+            © 2026 TechCup — Todos los derechos reservados
+          </motion.p>
         </div>
       </div>
     </div>
