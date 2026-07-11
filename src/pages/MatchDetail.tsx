@@ -4,7 +4,6 @@ import { motion } from 'framer-motion'
 import Sidebar from '@/components/shared/Sidebar'
 import AppTopbar from '@/components/shared/AppTopbar'
 import Footer from '@/components/shared/Footer'
-import { AuroraBackground } from '@/components/ui/aurora-background'
 import { Badge } from '@/components/ui/badge'
 import { SpotlightCard } from '@/components/ui/spotlight-card'
 import { CalendarDays, MapPin, Clock, Trophy, Swords, Shirt } from 'lucide-react'
@@ -78,7 +77,7 @@ export default function MatchDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-black flex">
+    <div className="flex">
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="min-w-0 flex-1 flex flex-col">
         <AppTopbar title="Detalle del partido" onMenuClick={() => setSidebarOpen(true)} />
@@ -91,122 +90,59 @@ export default function MatchDetail() {
           </Link>
         </div>
 
-      <AuroraBackground>
-        <div className="relative w-full max-w-[1280px] mx-auto px-8 pt-[140px] pb-[80px] overflow-hidden">
-          <div className="absolute inset-0 opacity-30 pointer-events-none" 
-            style={{
-              backgroundImage: 'radial-gradient(rgba(255,255,255,.12) 1px, transparent 1px)',
-              backgroundSize: '24px 24px',
-              maskImage: 'radial-gradient(600px 500px at 50% 50%, black 10%, transparent 70%)',
-            }} 
-          />
-
+      <section className="py-6 pb-[60px] relative">
+        <div className="relative w-full max-w-[600px] mx-auto px-4 pt-[90px] pb-[30px] overflow-hidden">
           <div className="relative z-[2]">
-            {/* Fecha y hora desde los datos */}
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="text-center mb-6"
-            >
-              <div className="flex items-center justify-center gap-4 text-sm text-text-muted">
-                <span className="flex items-center gap-1.5"><CalendarDays size={14} /> {partido.dia} de {partido.mes}</span>
+            {/* Fecha */}
+            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+              className="text-center mb-4">
+              <div className="flex items-center justify-center gap-3 text-xs text-text-muted">
+                <span className="flex items-center gap-1"><CalendarDays size={12} /> {partido.dia} de {partido.mes}</span>
                 <span className="w-1 h-1 rounded-full bg-text-faint" />
-                <span className="flex items-center gap-1.5"><Clock size={14} /> {partido.hora}</span>
+                <span className="flex items-center gap-1"><Clock size={12} /> {partido.hora}</span>
                 <span className="w-1 h-1 rounded-full bg-text-faint" />
-                <span className="flex items-center gap-1.5"><MapPin size={14} /> {partido.lugar}</span>
+                <span className="flex items-center gap-1"><MapPin size={12} /> {partido.lugar}</span>
               </div>
             </motion.div>
 
-            {/* VS principal */}
-            <div className="flex items-center justify-center gap-6 md:gap-16 py-6">
-              {/* Local */}
-              <motion.div
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.4, duration: 0.6 }}
-                className="flex flex-col items-center text-center"
-              >
-                <div className="w-28 h-28 md:w-36 md:h-36 rounded-2xl bg-surface border-2 flex items-center justify-center mb-4"
-                     style={{ borderColor: `${local.color}40`, boxShadow: `0 0 40px -10px ${local.color}40` }}>
-                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-xl flex items-center justify-center text-3xl md:text-4xl font-black uppercase tracking-wider"
-                       style={{ backgroundColor: local.color, color: '#fff' }}>
+            {/* VS compacto */}
+            <div className="flex items-center justify-center gap-4 md:gap-8 py-3">
+              <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3, duration: 0.5 }}
+                className="flex flex-col items-center text-center">
+                <div className="w-16 h-16 md:w-20 md:h-20 rounded-xl bg-surface border-2 flex items-center justify-center mb-2"
+                  style={{ borderColor: `${local.color}40`, boxShadow: `0 0 30px -8px ${local.color}40` }}>
+                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg flex items-center justify-center text-xl md:text-2xl font-black uppercase"
+                    style={{ backgroundColor: local.color, color: '#fff' }}>
                     {partido.eq1[0]}
                   </div>
                 </div>
-                <span className="text-xs uppercase tracking-[2px] text-text-faint font-semibold mb-1">{local.program}</span>
-                <h2 className="font-[family-name:var(--font-display)] text-lg md:text-2xl uppercase tracking-[.5px] max-w-[180px]">
-                  {partido.eq1}
-                </h2>
-                <div className="flex items-center gap-3 mt-2 text-xs text-text-muted">
-                  <span>{local.wins}G</span>
-                  <span className="w-1 h-1 rounded-full bg-text-faint" />
-                  <span>{local.draws}E</span>
-                  <span className="w-1 h-1 rounded-full bg-text-faint" />
-                  <span>{local.losses}P</span>
-                </div>
+                <h2 className="font-[family-name:var(--font-display)] text-sm md:text-base uppercase max-w-[120px] leading-tight">{partido.eq1}</h2>
               </motion.div>
 
-              {/* VS central */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.6, duration: 0.5 }}
-                className="flex flex-col items-center"
-              >
-                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-[0_0_40px_-5px_rgba(245,166,35,.5)]">
-                  <Swords size={28} className="text-[#1A1206]" />
+              <motion.div initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.5, duration: 0.4 }}
+                className="flex flex-col items-center">
+                <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-[0_0_25px_-5px_rgba(245,166,35,.4)]">
+                  <Swords size={18} className="text-[#1A1206]" />
                 </div>
-                <span className="font-[family-name:var(--font-display)] text-3xl md:text-5xl font-bold text-gold mt-2 tracking-wider drop-shadow-[0_0_20px_rgba(245,166,35,.3)]">
-                  VS
-                </span>
-                <Badge className="mt-2 rounded-full bg-gold/15 text-gold border border-gold/40 text-[10px] uppercase tracking-widest font-bold">
-                  Semifinal
-              </Badge>
+                <span className="font-[family-name:var(--font-display)] text-xl md:text-3xl font-bold text-gold mt-1 tracking-wider">VS</span>
+                <Badge className="mt-1 rounded-full bg-gold/15 text-gold border border-gold/40 text-[9px] uppercase font-bold">Semifinal</Badge>
               </motion.div>
 
-              {/* Visitante */}
-              <motion.div
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.4, duration: 0.6 }}
-                className="flex flex-col items-center text-center"
-              >
-                <div className="w-28 h-28 md:w-36 md:h-36 rounded-2xl bg-surface border-2 flex items-center justify-center mb-4"
-                     style={{ borderColor: `${visitor.color}40`, boxShadow: `0 0 40px -10px ${visitor.color}40` }}>
-                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-xl flex items-center justify-center text-3xl md:text-4xl font-black uppercase tracking-wider"
-                       style={{ backgroundColor: visitor.color, color: '#fff' }}>
+              <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3, duration: 0.5 }}
+                className="flex flex-col items-center text-center">
+                <div className="w-16 h-16 md:w-20 md:h-20 rounded-xl bg-surface border-2 flex items-center justify-center mb-2"
+                  style={{ borderColor: `${visitor.color}40`, boxShadow: `0 0 30px -8px ${visitor.color}40` }}>
+                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg flex items-center justify-center text-xl md:text-2xl font-black uppercase"
+                    style={{ backgroundColor: visitor.color, color: '#fff' }}>
                     {partido.eq2[0]}
                   </div>
                 </div>
-                <span className="text-xs uppercase tracking-[2px] text-text-faint font-semibold mb-1">{visitor.program}</span>
-                <h2 className="font-[family-name:var(--font-display)] text-lg md:text-2xl uppercase tracking-[.5px] max-w-[180px]">
-                  {partido.eq2}
-                </h2>
-                <div className="flex items-center gap-3 mt-2 text-xs text-text-muted">
-                  <span>{visitor.wins}G</span>
-                  <span className="w-1 h-1 rounded-full bg-text-faint" />
-                  <span>{visitor.draws}E</span>
-                  <span className="w-1 h-1 rounded-full bg-text-faint" />
-                  <span>{visitor.losses}P</span>
-                </div>
+                <h2 className="font-[family-name:var(--font-display)] text-sm md:text-base uppercase max-w-[120px] leading-tight">{partido.eq2}</h2>
               </motion.div>
             </div>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8 }}
-              className="text-center mt-4"
-            >
-              <span className="inline-flex items-center gap-2 text-sm text-gold font-semibold bg-gold/10 border border-gold/30 px-4 py-2 rounded-full">
-                <span className="w-2 h-2 rounded-full bg-gold animate-pulse" />
-                {partido.hora}
-              </span>
-            </motion.div>
           </div>
         </div>
-      </AuroraBackground>
+      </section>
 
       {/* Detalles del partido */}
       <section className="py-10 pb-[80px] relative">
@@ -215,17 +151,35 @@ export default function MatchDetail() {
 
         <div className="max-w-[900px] mx-auto px-8 relative">
           
-          {/* Tabs */}
-          <div className="flex items-center gap-1 bg-surface/50 border border-border/60 rounded-2xl p-1 mb-8">
+          {/* Tabs glass-radio-group centrados */}
+          <div className="relative flex rounded-2xl mb-8 overflow-hidden mx-auto"
+            style={{
+              background: "rgba(255,255,255,0.06)",
+              backdropFilter: "blur(12px)",
+              boxShadow: "inset 1px 1px 4px rgba(255,255,255,0.2), inset -1px -1px 6px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.15)",
+              width: "fit-content",
+            }}
+          >
+            {/* Glider */}
+            <div
+              className="absolute top-0 bottom-0 rounded-2xl z-[1]"
+              style={{
+                width: "calc(100% / 3)",
+                transform: `translateX(${['resumen', 'estadisticas', 'alineaciones'].indexOf(activeTab) * 100}%)`,
+                background: "linear-gradient(135deg, #F5A623, #301151)",
+                boxShadow: "0 0 18px rgba(255,215,0,0.5), 0 0 10px rgba(255,235,150,0.4) inset",
+                transition: "transform 0.5s cubic-bezier(0.37, 1.95, 0.66, 0.56), background 0.4s ease-in-out, box-shadow 0.4s ease-in-out",
+              }}
+            />
             {(['resumen', 'estadisticas', 'alineaciones'] as const).map(tab => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`flex-1 py-2.5 px-4 rounded-xl text-sm font-semibold capitalize transition-all ${
-                  activeTab === tab
-                    ? 'bg-purple-mid text-white shadow-lg shadow-purple-mid/25'
-                    : 'text-text-muted hover:text-white'
-                }`}
+                className="flex-1 py-3 px-6 text-sm font-semibold capitalize relative z-[2] transition-colors duration-300 min-w-[90px]"
+                style={{
+                  color: activeTab === tab ? '#fff' : '#e5e5e5',
+                  letterSpacing: "0.3px",
+                }}
               >
                 {tab === 'resumen' ? 'Resumen' : tab === 'estadisticas' ? 'Estadísticas' : 'Alineaciones'}
               </button>
@@ -235,7 +189,7 @@ export default function MatchDetail() {
           {/* Resumen */}
           {activeTab === 'resumen' && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
-              <SpotlightCard accent="gold" className="bg-surface border border-border rounded-2xl p-6">
+              <SpotlightCard accent="gold" className="bg-surface/70 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
                 <h3 className="font-[family-name:var(--font-display)] text-lg uppercase tracking-[.3px] mb-4">
                   Previo del <span className="text-gold">partido</span>
                 </h3>
@@ -258,7 +212,7 @@ export default function MatchDetail() {
               </SpotlightCard>
 
               <div className="grid grid-cols-2 gap-4">
-                <SpotlightCard accent="purple" className="bg-surface border border-border rounded-2xl p-5">
+                <SpotlightCard accent="purple" className="bg-surface/70 backdrop-blur-sm border border-white/10 rounded-2xl p-5">
                   <div className="flex items-center gap-3">
                     <Trophy size={20} className="text-gold" />
                     <div>
@@ -267,7 +221,7 @@ export default function MatchDetail() {
                     </div>
                   </div>
                 </SpotlightCard>
-                <SpotlightCard accent="gold" className="bg-surface border border-border rounded-2xl p-5">
+                <SpotlightCard accent="gold" className="bg-surface/70 backdrop-blur-sm border border-white/10 rounded-2xl p-5">
                   <div className="flex items-center gap-3">
                     <Trophy size={20} className="text-gold" />
                     <div>
@@ -283,7 +237,7 @@ export default function MatchDetail() {
           {/* Estadísticas */}
           {activeTab === 'estadisticas' && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-              <SpotlightCard accent="gold" className="bg-surface border border-border rounded-2xl p-6">
+              <SpotlightCard accent="gold" className="bg-surface/70 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
                 <h3 className="font-[family-name:var(--font-display)] text-lg uppercase tracking-[.3px] mb-6 text-center">
                   <span className="text-gold">Estadísticas</span> del torneo
                 </h3>
@@ -365,9 +319,9 @@ export default function MatchDetail() {
 
               <div className="grid grid-cols-2 gap-4">
                 {([local, visitor] as const).map((eq, i) => (
-                  <SpotlightCard key={i} accent={i === 0 ? 'purple' : 'gold'} className="bg-surface border border-border rounded-2xl p-4">
+                  <SpotlightCard key={i} accent={i === 0 ? 'purple' : 'gold'} className="bg-surface/70 backdrop-blur-sm border border-white/10 rounded-2xl p-4">
                     <h4 className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-3 flex items-center gap-2">
-                      <Shirt size={14} /> Suplentes {i === 0 ? `(${partido.eq1})` : `(${partido.eq2})`}
+                      <Shirt size={14} /> Suplentes ({i === 0 ? partido.eq1 : partido.eq2})
                     </h4>
                     <div className="space-y-1.5">
                       {[12, 13, 14, 15, 16].map((n) => (

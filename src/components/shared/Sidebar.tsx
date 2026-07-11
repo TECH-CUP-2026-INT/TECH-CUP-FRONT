@@ -131,14 +131,16 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
                     to={item.href}
                     onClick={handleNavigate}
                     className={cn(
-                      'flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13.5px] font-semibold text-gray-light border-l-[3px] border-transparent transition-all hover:bg-white/5 hover:text-white whitespace-nowrap',
-                      isActive && 'bg-purple-mid/22 text-white border-l-gold',
-                      sideCollapsed && 'justify-center px-2 border-l-0'
+                      'sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13.5px] font-semibold text-gray-light whitespace-nowrap relative overflow-hidden',
+                      isActive && 'text-white active',
+                      sideCollapsed && 'justify-center px-2'
                     )}
                     title={sideCollapsed ? item.label : undefined}
                   >
-                    <Icon size={20} className={cn('flex-shrink-0', isActive ? 'opacity-100' : 'opacity-85')} />
-                    {!sideCollapsed && <span className="truncate">{item.label}</span>}
+                    <span className="relative z-[1] flex items-center gap-3">
+                      <Icon size={20} className={cn('flex-shrink-0', isActive ? 'opacity-100' : 'opacity-85')} />
+                      {!sideCollapsed && <span className="truncate">{item.label}</span>}
+                    </span>
                   </Link>
                 </li>
               )
@@ -175,6 +177,39 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
           )}
         </div>
       </aside>
+
+      <style>{`
+        .sidebar-link::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          transform: scaleX(0);
+          transform-origin: 0 50%;
+          width: 100%;
+          height: 100%;
+          border-radius: inherit;
+          background: linear-gradient(82.3deg, rgba(150, 93, 233, 0.4) 10.8%, rgba(99, 88, 238, 0.3) 94.3%);
+          transition: all 0.4s ease;
+          pointer-events: none;
+        }
+        .sidebar-link:hover::before {
+          transform: scaleX(1);
+        }
+        .sidebar-link:active::before {
+          transform: scaleX(1);
+          background: linear-gradient(82.3deg, rgba(150, 93, 233, 0.6) 10.8%, rgba(99, 88, 238, 0.5) 94.3%);
+        }
+        .sidebar-link .relative.z-\[1\] {
+          position: relative;
+          z-index: 1;
+        }
+        .sidebar-link.active::before,
+        a.sidebar-link.active::before {
+          transform: scaleX(1);
+          background: linear-gradient(82.3deg, rgba(150, 93, 233, 0.5) 10.8%, rgba(99, 88, 238, 0.4) 94.3%);
+        }
+      `}</style>
     </>
   )
 }

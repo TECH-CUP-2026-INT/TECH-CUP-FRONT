@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
@@ -7,7 +7,6 @@ import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Separator } from '@/components/ui/separator'
 import { Eye, EyeOff, Mail, Lock, ArrowLeft } from 'lucide-react'
-import { LiquidGlassCard } from '@/components/ui/liquid-weather-glass'
 import { useAuth } from '@/lib/auth'
 
 export default function Login() {
@@ -20,9 +19,14 @@ export default function Login() {
     <div className="min-h-screen bg-black flex">
       
       {/* Left — Video + overlay */}
-      <div className="hidden lg:flex w-1/2 relative overflow-hidden">
+      <div className="hidden lg:flex w-1/2 relative overflow-hidden"
+        style={{
+          maskImage: "linear-gradient(to right, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%)",
+          WebkitMaskImage: "linear-gradient(to right, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%)",
+        }}>
         {/* Background video */}
-        <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover">
+        <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover"
+          style={{ objectPosition: "0% center" }}>
           <source src="/hero-video.mp4" type="video/mp4" />
         </video>
         
@@ -35,8 +39,7 @@ export default function Login() {
         />
         
         {/* Overlay gradiente */}
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-black/90 via-purple-black/70 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-purple-black/50" />
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-black/95 via-purple-black/70 to-transparent" />
 
         <div className="relative z-10 flex flex-col justify-between p-16 h-full">
           {/* Logo */}
@@ -133,12 +136,7 @@ export default function Login() {
             </Link>
           </motion.div>
 
-          <LiquidGlassCard
-            shadowIntensity="md"
-            borderRadius="16px"
-            glowIntensity="sm"
-            className="p-6"
-          >
+          <GlassCard>
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
@@ -249,9 +247,81 @@ export default function Login() {
                 </p>
               </div>
             </motion.div>
-          </LiquidGlassCard>
+          </GlassCard>
         </div>
       </div>
+    </div>
+  )
+}
+
+// ── Glass Card con mouse tracking ──
+
+function GlassCard({ children }: { children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const shineRef = useRef<HTMLDivElement>(null)
+  const [mouse, setMouse] = useState({ x: 50, y: 50 })
+
+  const handleMove = useCallback((e: React.MouseEvent) => {
+    if (!ref.current) return
+    const rect = ref.current.getBoundingClientRect()
+    const x = ((e.clientX - rect.left) / rect.width) * 100
+    const y = ((e.clientY - rect.top) / rect.height) * 100
+    setMouse({ x, y })
+    if (shineRef.current) {
+      const dx = (e.clientX - rect.left) - rect.width * 0.3
+      const pct = Math.max(-100, Math.min(100, (dx / rect.width) * 100))
+      shineRef.current.style.transform = `translateX(${pct}%)`
+    }
+  }, [])
+
+  const handleLeave = useCallback(() => {
+    setMouse({ x: 50, y: 50 })
+    if (shineRef.current) shineRef.current.style.transform = 'translateX(-78%)'
+  }, [])
+
+  return (
+    <div
+      ref={ref}
+      onMouseMove={handleMove}
+      onMouseLeave={handleLeave}
+      className="relative overflow-hidden text-white bg-white/[0.06] border border-white/[0.08] backdrop-blur-xl p-6"
+      style={{
+        borderRadius: '16px',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
+        '--mouse-x': mouse.x + '%',
+        '--mouse-y': mouse.y + '%',
+      } as React.CSSProperties}
+    >
+      {/* Mouse radial glow */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          borderRadius: 'inherit',
+          background: `radial-gradient(circle at ${mouse.x}% ${mouse.y}%, rgba(255,255,255,0.10) 0%, transparent 60%)`,
+          opacity: 0.06,
+        }}
+      />
+      {/* Conic gradient */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ borderRadius: 'inherit' }}>
+        <div
+          className="absolute -inset-[100%] opacity-[0.04]"
+          style={{
+            background: 'conic-gradient(transparent, rgba(255,255,255,0.3), transparent, rgba(255,255,255,0.15), transparent)',
+            transform: 'rotate(258deg)',
+          }}
+        />
+      </div>
+      {/* Sliding linear shine */}
+      <div
+        ref={shineRef}
+        className="absolute inset-0 pointer-events-none opacity-[0.03]"
+        style={{
+          background: 'linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.5) 50%, transparent 70%)',
+          transform: 'translateX(-78%)',
+          transition: 'transform 0.075s ease-out',
+        }}
+      />
+      {children}
     </div>
   )
 }

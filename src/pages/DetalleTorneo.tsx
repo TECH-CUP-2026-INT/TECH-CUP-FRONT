@@ -75,10 +75,12 @@ export default function DetalleTorneo() {
               <p className="text-sm text-text-muted mb-4">Mostrando solo nombre y escudo hasta que inicie el torneo.</p>
               <div className="grid grid-cols-4 max-md:grid-cols-3 max-sm:grid-cols-2 gap-3">
                 {['Tigres FC', 'Sistemas FC', 'IA Warriors', 'Code United', 'Dragones FC', 'Los Bits', 'Titanes', 'Fénix'].map((eq, i) => (
-                  <SpotlightCard key={i} accent="purple" className="bg-surface border border-border rounded-2xl p-4 text-center">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-deep to-purple-black border border-gold/30 flex items-center justify-center text-lg font-bold text-gold mx-auto mb-2">{eq.split(' ')[0][0]}</div>
-                    <p className="text-xs font-semibold">{eq}</p>
-                  </SpotlightCard>
+                  <Link key={i} to="/mi-equipo" className="block">
+                    <SpotlightCard accent="purple" className="bg-surface border border-border rounded-2xl p-4 text-center">
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-deep to-purple-black border border-gold/30 flex items-center justify-center text-lg font-bold text-gold mx-auto mb-2">{eq.split(' ')[0][0]}</div>
+                      <p className="text-xs font-semibold">{eq}</p>
+                    </SpotlightCard>
+                  </Link>
                 ))}
               </div>
             </motion.div>

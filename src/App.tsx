@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from '@/lib/auth'
+import { StarfieldBackground } from '@/components/ui/starfield-bg'
 import Landing from '@/pages/Landing'
 import Dashboard from '@/pages/Dashboard'
 import TorneosPublic from '@/pages/TorneosPublic'
@@ -29,6 +30,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+      <StarfieldBackground className="min-h-screen">
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/torneos" element={<TorneosPublic />} />
@@ -58,6 +60,7 @@ export default function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/campus" element={<Campus />} />
       </Routes>
+      </StarfieldBackground>
       </AuthProvider>
     </BrowserRouter>
   )

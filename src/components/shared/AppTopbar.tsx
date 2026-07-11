@@ -45,7 +45,8 @@ export default function AppTopbar({ title, onMenuClick }: AppTopbarProps) {
 
   return (
     <>
-      <header className="sticky top-0 z-10 flex items-center justify-between px-8 py-[18px] bg-black/85 backdrop-blur-md border-b border-border max-md:px-4">
+      <div className="h-[64px]" /> {/* spacer para fixed header */}
+      <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-[18px] bg-black/85 backdrop-blur-md border-b border-border max-md:px-4">
         <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple-mid/60 to-transparent" />
         
         <div className="flex items-center gap-3">
