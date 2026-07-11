@@ -32,7 +32,6 @@ Contiene todo lo que tiene que ver con front
 ---
 
 ### 3. Paleta de Colores
-![Uploading image.png…]()
 
 | Nombre | HEX | Uso principal |
 |---|---|---|
