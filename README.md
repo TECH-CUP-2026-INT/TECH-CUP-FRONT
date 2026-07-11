@@ -25,7 +25,13 @@ Contiene todo lo que tiene que ver con front
 
 | Nombre | HEX | Uso principal |
 |---|---|---|
-
+| Fondo | Negro profundo | #000000 |
+| Morado principal | Morado oscuro | #260539 |
+| Morado de sombras | Morado muy oscuro | #160123 |
+| Dorado principal | Dorado brillante | #E4B243 |
+| Dorado claro (brillos) | Oro claro | #F4D05F |
+| Dorado oscuro (contornos y sombras) | Oro oscuro | #C5912E |
+| Sombra metálica | Marrón oliva oscuro | #5D5024 |
 ---
 
 ### 4. Tipografía
