@@ -9,6 +9,9 @@ Contiene todo lo que tiene que ver con front
 
 # LOGO
 
+<img width="1254" height="1254" alt="image" src="https://github.com/user-attachments/assets/74c36a60-de1b-401a-8b47-7bc50c4bab75" />
+
+
 # [Prototipo]()
 
 ### colorimetría del logo 
