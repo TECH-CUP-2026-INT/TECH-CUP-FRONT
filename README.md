@@ -66,6 +66,21 @@ Manchas es
 
 | Elemento | Color | HEX |
 |---|---|---|
+| Pelaje negro | Negro carbón | `#1C1B1D` |
+| Pelaje blanco | Blanco | `#F8F8F8` |
+| Pelaje dorado | Amarillo dorado | `#E7B63A` |
+| Sombra del pelaje dorado | Oro oscuro | `#C9962D` |
+| Interior de las orejas | Beige dorado | `#D9B06A` |
+| Nariz | Negro | `#111111` |
+| Ojos (iris) | Marrón muy oscuro | `#3B2A22` |
+| Pupilas | Negro | `#000000` |
+| Brillos de ojos | Blanco | `#FFFFFF` |
+| Chaleco | Burdeos | `#6F1636` |
+| Sombras del chaleco | Burdeos oscuro | `#4D0E24` |
+| Cierre y cordones | Blanco | `#F5F5F5` |
+| Boca (interior) | Gris muy oscuro | `#2A2A2A` |
+| Lengua / detalle cálido | Amarillo claro | `#F3C34D` |
+| Contorno de la ilustración | Negro | `#151515` |
 
 
 #### 5.4 Usos de la Mascota
