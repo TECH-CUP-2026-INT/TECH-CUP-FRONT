@@ -18,13 +18,6 @@ Contiene todo lo que tiene que ver con front
 
 | Elemento | Color | HEX |
 |---|---|---|
-
----
-
-### 3. Paleta de Colores
-
-| Nombre | HEX | Uso principal |
-|---|---|---|
 | Fondo | Negro profundo | #000000 |
 | Morado principal | Morado oscuro | #260539 |
 | Morado de sombras | Morado muy oscuro | #160123 |
@@ -32,6 +25,21 @@ Contiene todo lo que tiene que ver con front
 | Dorado claro (brillos) | Oro claro | #F4D05F |
 | Dorado oscuro (contornos y sombras) | Oro oscuro | #C5912E |
 | Sombra metálica | Marrón oliva oscuro | #5D5024 |
+
+---
+
+### 3. Paleta de Colores
+
+| Nombre | HEX | Uso principal |
+|---|---|---|
+| Oro Brillante | `#F4D05F` | Brillos, reflejos y zonas de mayor iluminación de la copa. |
+| Oro Principal | `#E4B243` | Color base predominante de la copa y estructura principal. |
+| Oro Medio | `#D6A23A` | Transiciones y degradados metálicos. |
+| Oro Oscuro | `#C5912E` | Contornos, profundidad y detalles. |
+| Bronce Dorado | `#A97722` | Sombras cálidas y volumen. |
+| Marrón Metálico | `#6F4E1F` | Sombras profundas del acabado metálico. |
+| Negro | `#000000` | Cavidades internas, contraste y fondo (cuando aplique). |
+
 ---
 
 ### 4. Tipografía
