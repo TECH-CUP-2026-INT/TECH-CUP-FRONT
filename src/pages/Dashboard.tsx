@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useNavigate, Link } from 'react-router-dom'
 import Sidebar from '@/components/shared/Sidebar'
 import AppTopbar from '@/components/shared/AppTopbar'
 import Footer from '@/components/shared/Footer'
@@ -11,6 +11,9 @@ import { Input } from '@/components/ui/input'
 
 export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [posExpandida, setPosExpandida] = useState(false)
+  const [calExpandido, setCalExpandido] = useState(false)
+  const navigate = useNavigate()
 
   return (
     <div className="min-h-screen bg-black">
@@ -26,13 +29,18 @@ export default function Dashboard() {
           <div className="fixed top-[40%] left-[30%] w-[300px] h-[300px] rounded-full bg-purple-deep/10 blur-[100px] pointer-events-none" />
           
           {/* Hero */}
-          <section className="rounded-2xl p-10 max-md:p-6 mb-[26px] relative bg-[radial-gradient(ellipse_500px_300px_at_85%_20%,rgba(245,166,35,.18),transparent_65%),linear-gradient(120deg,var(--color-purple-deep2)_0%,var(--color-purple-black)_70%)] border border-white/10 shadow-[0_0_0_1px_rgba(109,40,217,.15),0_20px_60px_-20px_rgba(76,29,149,.55)]">
-            <h2 className="font-[family-name:var(--font-display)] uppercase text-3xl leading-tight max-w-[480px] mb-5">
-              LA PASIÓN NOS UNE,<br />LA <span className="text-gold">INGENIERÍA</span> NOS IMPULSA.
-            </h2>
-            <Button className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold">
-              Explorar torneos →
-            </Button>
+          <section className="rounded-2xl p-10 max-md:p-6 mb-[26px] relative overflow-hidden border border-white/10">
+            <img src="/banner-soccer.jpg" alt="" className="absolute inset-0 w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-black/90 via-purple-black/70 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-purple-black/30" />
+            <div className="relative z-10">
+              <h2 className="font-[family-name:var(--font-display)] uppercase text-3xl leading-tight max-w-[480px] mb-5">
+                LA PASIÓN NOS UNE,<br />LA <span className="text-gold">INGENIERÍA</span> NOS IMPULSA.
+              </h2>
+              <Button className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold">
+                Explorar torneos →
+              </Button>
+            </div>
           </section>
 
           {/* Stats */}
@@ -60,10 +68,12 @@ export default function Dashboard() {
             <SpotlightCard accent="purple" className="p-[22px_24px] bg-surface border-border rounded-2xl">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-[14.5px] font-semibold tracking-[.3px]">Próximos partidos</h3>
-                <a href="#" className="text-xs text-gold font-bold">Ver calendario completo →</a>
+                <button onClick={() => setCalExpandido(!calExpandido)} className="text-xs text-gold font-bold hover:text-gold-dark transition-colors">
+                  {calExpandido ? 'Ver menos ↑' : 'Ver calendario completo →'}
+                </button>
               </div>
-              {partidos.map((m, i) => (
-                <div key={i} className="flex items-center gap-3.5 py-3 border-b border-border last:border-b-0">
+              {partidos.slice(0, calExpandido ? partidos.length : 2).map((m, i) => (
+                <Link key={i} to={`/partido/${i + 1}`} className="flex items-center gap-3.5 py-3 border-b border-border last:border-b-0 hover:bg-white/[0.03] transition-colors rounded-lg -mx-2 px-2">
                   <div className="w-[52px] text-center flex-shrink-0">
                     <b className="block font-[family-name:var(--font-display)] text-lg">{m.dia}</b>
                     <span className="text-[10px] text-text-muted uppercase">{m.mes}</span>
@@ -73,14 +83,16 @@ export default function Dashboard() {
                     <small className="block font-normal text-text-muted text-[11.5px] mt-0.5">{m.lugar}</small>
                   </div>
                   <div className="text-xs text-gold font-bold">{m.hora}</div>
-                </div>
+                </Link>
               ))}
             </SpotlightCard>
 
             <SpotlightCard accent="gold" className="p-[22px_24px] bg-surface border-border rounded-2xl">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-[14.5px] font-semibold tracking-[.3px]">Tabla de posiciones</h3>
-                <a href="#" className="text-xs text-gold font-bold">Ver completa →</a>
+                <button onClick={() => setPosExpandida(!posExpandida)} className="text-xs text-gold font-bold hover:text-gold-dark transition-colors">
+                  {posExpandida ? 'Ver menos ↑' : 'Ver completa →'}
+                </button>
               </div>
               <table className="w-full border-collapse">
                 <thead>
@@ -89,7 +101,7 @@ export default function Dashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {posiciones.map((r, i) => (
+                  {posiciones.slice(0, posExpandida ? posiciones.length : 3).map((r, i) => (
                     <tr key={i} className={`text-[13px] ${i === 0 ? 'text-gold font-bold' : ''}`}>
                       <td className="py-2 text-text-muted w-[26px]">{r.pos}</td>
                       <td className="py-2 border-t border-border">{i === 0 ? '🏆 ' : ''}{r.equipo}</td>
@@ -109,7 +121,7 @@ export default function Dashboard() {
               <h3 className="font-[family-name:var(--font-display)] uppercase text-xl leading-tight mb-1">Forma tu equipo y vive la experiencia</h3>
               <p className="text-[13px] text-text-muted">Invita a tus amigos y compite por la copa.</p>
             </div>
-            <InteractiveHoverButton onClick={() => alert('Crear equipo')}>
+            <InteractiveHoverButton onClick={() => navigate('/crear-equipo')}>
               Crear equipo
             </InteractiveHoverButton>
           </section>

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, User, X } from 'lucide-react'
+import { Menu, User, X, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { useAuth } from '@/lib/auth'
 
 const links = [
   { href: '/', label: 'Inicio' },
@@ -15,6 +16,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const { pathname } = useLocation()
+  const { user, isAuthenticated, logout } = useAuth()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -65,13 +67,34 @@ export default function Navbar() {
           ))}
         </ul>
 
-        {/* Right */}
+        {/* Right — depende de auth */}
         <div className="hidden md:flex items-center gap-3.5">
-          <Link to="/login">
-            <Button className="rounded-full bg-gold text-[#1A1206] hover:bg-purple-mid hover:text-white font-bold text-sm px-6 py-2.5 h-auto transition-all duration-300">
-              Iniciar sesión
-            </Button>
-          </Link>
+          {isAuthenticated && user ? (
+            <div className="flex items-center gap-3">
+              <Link
+                to="/dashboard"
+                className="flex items-center gap-2.5 bg-surface border border-border rounded-full pr-4 pl-1.5 py-1 hover:border-gold/40 transition-colors"
+              >
+                <div className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-gold/30">
+                  <img src={user.avatar} alt="" className="w-full h-full object-cover" />
+                </div>
+                <span className="text-sm font-semibold text-gray-light">{user.name}</span>
+              </Link>
+              <button
+                onClick={logout}
+                className="w-8 h-8 rounded-full bg-white/5 border border-border flex items-center justify-center text-text-muted hover:text-red-400 hover:border-red-400/30 transition-colors"
+                title="Cerrar sesión"
+              >
+                <LogOut size={14} />
+              </button>
+            </div>
+          ) : (
+            <Link to="/login">
+              <Button className="rounded-full bg-gold text-[#1A1206] hover:bg-purple-mid hover:text-white font-bold text-sm px-6 py-2.5 h-auto transition-all duration-300">
+                Iniciar sesión
+              </Button>
+            </Link>
+          )}
         </div>
 
         {/* Mobile toggle */}
@@ -102,9 +125,24 @@ export default function Navbar() {
                 </Link>
               </li>
             ))}
-            <Button className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold text-sm px-6">
-              Iniciar sesión
-            </Button>
+            {isAuthenticated && user ? (
+              <>
+                <Link to="/dashboard" onClick={() => setMobileOpen(false)}>
+                  <Button className="rounded-full bg-purple-mid text-white font-bold text-sm px-6">
+                    Ir al Dashboard
+                  </Button>
+                </Link>
+                <button onClick={() => { logout(); setMobileOpen(false) }} className="text-sm text-text-muted hover:text-red-400 transition-colors">
+                  Cerrar sesión
+                </button>
+              </>
+            ) : (
+              <Link to="/login" onClick={() => setMobileOpen(false)}>
+                <Button className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold text-sm px-6">
+                  Iniciar sesión
+                </Button>
+              </Link>
+            )}
           </ul>
         </div>
       )}

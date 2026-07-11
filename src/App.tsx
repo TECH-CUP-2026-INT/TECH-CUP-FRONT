@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { AuthProvider } from '@/lib/auth'
 import Landing from '@/pages/Landing'
 import Dashboard from '@/pages/Dashboard'
 import TorneosPublic from '@/pages/TorneosPublic'
@@ -17,10 +18,17 @@ import MisPartidos from '@/pages/MisPartidos'
 import Estadisticas from '@/pages/Estadisticas'
 import Soporte from '@/pages/Soporte'
 import DetalleTorneo from '@/pages/DetalleTorneo'
+import Arbitraje from '@/pages/Arbitraje'
+import RefereeDashboard from '@/pages/RefereeDashboard'
+import CrearEquipo from '@/pages/CrearEquipo'
+import InscribirEquipo from '@/pages/InscribirEquipo'
+import Llaves from '@/pages/Llaves'
+import Campus from '@/pages/Campus'
 
 export default function App() {
   return (
     <BrowserRouter>
+      <AuthProvider>
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/torneos" element={<TorneosPublic />} />
@@ -41,9 +49,16 @@ export default function App() {
         <Route path="/estadisticas" element={<Estadisticas />} />
         <Route path="/soporte" element={<Soporte />} />
         <Route path="/torneo/:id" element={<DetalleTorneo />} />
+        <Route path="/arbitraje" element={<Arbitraje />} />
+        <Route path="/arbitro/dashboard" element={<RefereeDashboard />} />
+        <Route path="/crear-equipo" element={<CrearEquipo />} />
+        <Route path="/inscribir-equipo" element={<InscribirEquipo />} />
+        <Route path="/llaves" element={<Llaves />} />
         <Route path="/registro" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/campus" element={<Campus />} />
       </Routes>
+      </AuthProvider>
     </BrowserRouter>
   )
 }

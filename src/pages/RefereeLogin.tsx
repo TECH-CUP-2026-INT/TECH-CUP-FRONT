@@ -10,8 +10,18 @@ export default function RefereeLogin() {
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4 relative overflow-hidden">
-      <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full bg-purple-mid/10 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-5%] w-[400px] h-[400px] rounded-full bg-gold/10 blur-[100px] pointer-events-none" />
+      {/* Background video */}
+      <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover">
+        <source src="/hero-video.mp4" type="video/mp4" />
+      </video>
+      
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-purple-black/90 via-black/80 to-purple-black/90" />
+      <div className="absolute inset-0 opacity-20" style={{backgroundImage:'radial-gradient(rgba(255,255,255,.1) 1px, transparent 1px)',backgroundSize:'30px 30px'}} />
+      
+      {/* Orbs */}
+      <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full bg-purple-mid/20 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-5%] w-[400px] h-[400px] rounded-full bg-gold/15 blur-[100px] pointer-events-none" />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -42,7 +52,7 @@ export default function RefereeLogin() {
             Los árbitros son creados por el organizador. Si no tenés credenciales, contactalo.
           </div>
 
-          <form onSubmit={(e) => { e.preventDefault(); navigate('/dashboard') }} className="space-y-4">
+          <form onSubmit={(e) => { e.preventDefault(); navigate('/arbitro/dashboard') }} className="space-y-4">
             <div>
               <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Correo electrónico</Label>
               <div className="relative mt-1.5">

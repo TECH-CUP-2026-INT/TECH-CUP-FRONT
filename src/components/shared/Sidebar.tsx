@@ -1,8 +1,8 @@
 import { useRef, useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 import {
-  Home, Trophy, Calendar, Sword, BarChart3, ShieldCheck, MapPin, MessageSquare, HelpCircle, ChevronDown, X, PanelLeftClose, PanelLeft, User
+  Home, Trophy, Calendar, Sword, BarChart3, ShieldCheck, MapPin, HelpCircle, ChevronDown, X, PanelLeftClose, PanelLeft, User
 } from 'lucide-react'
 
 const items = [
@@ -15,8 +15,8 @@ const items = [
   { id:'estadisticas',icon: BarChart3,    label:'Estadísticas',      href:'/estadisticas' },
   { id:'reglamento',  icon: ShieldCheck,  label:'Reglamento',        href:'/reglamento' },
   { id:'campus',      icon: MapPin,       label:'Campus',            href:'/campus' },
-  { id:'chat',        icon: MessageSquare,label:'Chat de equipo',    href:'/chat' },
   { id:'soporte',     icon: HelpCircle,   label:'Soporte',           href:'/soporte' },
+  { id:'arbitraje',   icon: ShieldCheck,  label:'Arbitraje',         href:'/arbitraje' },
 ]
 
 interface SidebarProps {
@@ -26,6 +26,7 @@ interface SidebarProps {
 
 export default function Sidebar({ open, onClose }: SidebarProps) {
   const { pathname } = useLocation()
+  const navigate = useNavigate()
   const sidebarRef = useRef<HTMLDivElement>(null)
   const [hovered, setHovered] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
@@ -37,6 +38,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
     : pathname.startsWith('/estadisticas') ? 'estadisticas'
     : pathname.startsWith('/mi-equipo') ? 'mi-equipo'
     : pathname.startsWith('/perfil') ? 'perfil'
+    : pathname.startsWith('/arbitraje') || pathname.startsWith('/arbitro') ? 'arbitraje'
     : pathname.startsWith('/calendario') ? 'calendario'
     : pathname.slice(1).split('/')[0] || 'inicio'
 
@@ -111,7 +113,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
             >
               {collapsed ? <PanelLeft size={16} /> : <PanelLeftClose size={16} />}
             </button>
-            <button className="text-gray-light hover:text-red-400 transition-colors p-1" onClick={onClose} aria-label="Cerrar">
+            <button className="text-gray-light hover:text-red-400 transition-colors p-1" onClick={() => { onClose(); setShowOnHover(false) }} aria-label="Cerrar">
               <X size={16} />
             </button>
           </div>
@@ -150,7 +152,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
             <p className="font-[family-name:var(--font-display)] text-sm leading-tight uppercase mb-3">
               ¡Lleva a tu equipo <span className="text-gold">a la gloria!</span>
             </p>
-            <button className="w-full rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold text-xs h-auto py-2 transition-colors">
+            <button onClick={() => { navigate('/crear-equipo'); onClose() }} className="w-full rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold text-xs h-auto py-2 transition-colors">
               Crear equipo →
             </button>
           </div>

@@ -1,5 +1,5 @@
 import { useState, useMemo, type ReactNode } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Navbar from '@/components/shared/Navbar'
 import Sidebar from '@/components/shared/Sidebar'
@@ -48,6 +48,10 @@ function TorneosContent() {
       <AuroraBackground>
         <div className="relative w-full max-w-[1280px] mx-auto px-8 pt-[160px] pb-[100px] overflow-hidden">
           <div className="absolute inset-0 opacity-30 pointer-events-none" style={{backgroundImage:'radial-gradient(rgba(255,255,255,.12) 1px, transparent 1px)',backgroundSize:'24px 24px',maskImage:'radial-gradient(600px 500px at 50% 30%, black 10%, transparent 70%)',WebkitMaskImage:'radial-gradient(600px 500px at 50% 30%, black 10%, transparent 70%)'}} />
+          <div className="absolute inset-0 opacity-10 pointer-events-none overflow-hidden">
+            <img src="/banner-soccer.jpg" alt="" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-black/80 to-transparent" />
+          </div>
           <div className="relative z-[2] text-center max-w-[700px] mx-auto">
             <motion.span initial={{opacity:0,y:-10}} animate={{opacity:1,y:0}} transition={{delay:0.2}} className="inline-flex items-center gap-2 text-[11.5px] font-bold tracking-[1.6px] uppercase text-gold bg-gold/10 border border-gold/30 px-3.5 py-1.5 rounded-full mb-[22px]"><span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" /> Explora la competencia</motion.span>
             <motion.h1 initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:0.3}} className="font-[family-name:var(--font-display)] font-bold text-[clamp(42px,6vw,72px)] leading-[.92] tracking-[.5px] uppercase mb-4">Torneos <span className="text-gold">y Equipos</span></motion.h1>
@@ -57,8 +61,9 @@ function TorneosContent() {
       </AuroraBackground>
 
       <section className="py-14 pb-[100px] relative">
-        <div className="absolute top-[10%] left-[-5%] w-[400px] h-[400px] rounded-full bg-purple-mid/10 blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-[20%] right-[-5%] w-[350px] h-[350px] rounded-full bg-gold/10 blur-[100px] pointer-events-none" />
+        <div className="absolute top-[10%] left-[-5%] w-[600px] h-[600px] rounded-full bg-purple-mid/20 blur-[180px] pointer-events-none" />
+        <div className="absolute bottom-[10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-gold/20 blur-[150px] pointer-events-none" />
+        <div className="absolute top-[50%] left-[30%] w-[350px] h-[350px] rounded-full bg-purple-deep/15 blur-[120px] pointer-events-none" />
         <div className="max-w-[1280px] mx-auto px-8 relative">
           <motion.div initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:0.6}} className="grid grid-cols-[repeat(3,160px)_1fr_auto] gap-3 items-end mb-[30px] max-lg:grid-cols-2 max-sm:grid-cols-1 bg-surface/50 backdrop-blur-sm border border-border/60 rounded-2xl p-5">
             <div><label className="block text-[11px] text-text-faint font-semibold uppercase tracking-[.4px] mb-1.5">Estado</label>
@@ -170,7 +175,7 @@ function TorneoCard({ torneo: t, listMode }: { torneo: Torneo; listMode: boolean
               <span className="text-xs text-text-muted">👥 <b className="text-white">{t.jugadores}</b> jugadores</span>
               <span className="text-xs text-text-muted">🛡 <b className="text-white">{t.canchas}</b> canchas</span>
             </div>
-            <Button className={`rounded-full text-xs py-2 h-auto ${t.estado === 'closed' ? 'bg-transparent text-gold border border-gold hover:bg-gold/10' : 'bg-gold text-[#1A1206] hover:bg-gold-dark'}`}>{t.estado === 'closed' ? 'Ver resumen' : 'Ver detalles'}</Button>
+            <Link to={`/torneo/${t.id}`}><Button className={`rounded-full text-xs py-2 h-auto ${t.estado === 'closed' ? 'bg-transparent text-gold border border-gold hover:bg-gold/10' : 'bg-gold text-[#1A1206] hover:bg-gold-dark'}`}>{t.estado === 'closed' ? 'Ver resumen' : 'Ver detalles'}</Button></Link>
           </div></>
       ) : (
         <div><div className={`h-[150px] flex items-center justify-center relative ${mediaBg} rounded-t-2xl overflow-hidden`}>
@@ -188,7 +193,7 @@ function TorneoCard({ torneo: t, listMode }: { torneo: Torneo; listMode: boolean
               <span className="text-xs text-text-muted">👥 <b className="text-white">{t.jugadores}</b> jugadores</span>
               <span className="text-xs text-text-muted">🛡 <b className="text-white">{t.canchas}</b> canchas</span>
             </div>
-            <Button className={`rounded-full w-full text-xs py-2 h-auto ${t.estado === 'closed' ? 'bg-transparent text-gold border border-gold hover:bg-gold/10' : 'bg-gold text-[#1A1206] hover:bg-gold-dark'}`}>{t.estado === 'closed' ? 'Ver resumen' : 'Ver detalles'}</Button>
+            <Link to={`/torneo/${t.id}`}><Button className={`rounded-full w-full text-xs py-2 h-auto ${t.estado === 'closed' ? 'bg-transparent text-gold border border-gold hover:bg-gold/10' : 'bg-gold text-[#1A1206] hover:bg-gold-dark'}`}>{t.estado === 'closed' ? 'Ver resumen' : 'Ver detalles'}</Button></Link>
           </div></div>
       )}
     </SpotlightCard>

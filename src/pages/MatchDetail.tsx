@@ -1,12 +1,15 @@
 import { useState } from 'react'
+import { useParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import Navbar from '@/components/shared/Navbar'
+import Sidebar from '@/components/shared/Sidebar'
+import AppTopbar from '@/components/shared/AppTopbar'
 import Footer from '@/components/shared/Footer'
 import { AuroraBackground } from '@/components/ui/aurora-background'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import { SpotlightCard } from '@/components/ui/spotlight-card'
-import { CalendarDays, MapPin, Clock, Trophy, Swords } from 'lucide-react'
+import { CalendarDays, MapPin, Clock, Trophy, Swords, Shirt } from 'lucide-react'
+import { partidos } from '@/data/partidos'
+import SoccerField3D from '@/components/cards/SoccerField3D'
 
 interface TeamInfo {
   name: string
@@ -23,16 +26,71 @@ const equipos: [TeamInfo, TeamInfo] = [
   { name: 'Ingeniería Civil', short: 'CIVIL', color: '#EF4444', program: 'Ing. Civil', wins: 3, draws: 0, losses: 2 },
 ]
 
+function PlayerDot({ name, number, color, x, y, isGoal, image, onClick }: { name: string; number: number; color: string; x: string; y: string; isGoal?: boolean; image?: string; onClick?: () => void }) {
+  return (
+    <div className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1 z-10" style={{ left: x, top: y }}>
+      <div className="relative group" onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default' }}>
+        <div className="absolute inset-0 rounded-full blur-md opacity-60 group-hover:opacity-100 transition-opacity" style={{ backgroundColor: color }} />
+        <div
+          className="relative flex items-center justify-center font-bold text-white transition-transform group-hover:scale-110 overflow-hidden"
+          style={{
+            width: isGoal ? '38px' : '32px',
+            height: isGoal ? '38px' : '32px',
+            borderRadius: '50%',
+            border: `2px solid ${color}dd`,
+            boxShadow: `0 2px 12px rgba(0,0,0,.6)`,
+          }}
+        >
+          {image ? (
+            <img src={image} alt={name} className="w-full h-full object-cover" />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center" style={{ backgroundColor: color }}>
+              <span className="text-[10px] font-black">{number}</span>
+            </div>
+          )}
+        </div>
+      </div>
+      <span className="text-[9px] font-bold text-white drop-shadow-[0_1px_3px_rgba(0,0,0,.8)] whitespace-nowrap leading-tight text-center px-1.5 py-0.5 rounded bg-black/50 backdrop-blur-sm border border-white/10" style={{ maxWidth: '70px' }}>
+        {name.split(' ')[0]}
+      </span>
+    </div>
+  )
+}
+
 export default function MatchDetail() {
+  const { id } = useParams()
+  const partido = partidos[Number(id) - 1]
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [activeTab, setActiveTab] = useState<'resumen' | 'estadisticas' | 'alineaciones'>('resumen')
+  const [selectedTeam, setSelectedTeam] = useState<'local' | 'visitor' | 'both'>('both')
   const local = equipos[0]
   const visitor = equipos[1]
 
-  return (
-    <div className="min-h-screen bg-black">
-      <Navbar />
+  if (!partido) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-text-muted mb-4">Partido no encontrado</p>
+          <Link to="/" className="text-gold underline">Volver al inicio</Link>
+        </div>
+      </div>
+    )
+  }
 
-      {/* Hero VS — estilo Paramount+ */}
+  return (
+    <div className="min-h-screen bg-black flex">
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="min-w-0 flex-1 flex flex-col">
+        <AppTopbar title="Detalle del partido" onMenuClick={() => setSidebarOpen(true)} />
+
+        {/* Hero VS — estilo Paramount+ */}
+        <div className="relative z-10">
+          <Link to="/dashboard" className="absolute top-[100px] left-8 z-20 inline-flex items-center gap-2 text-sm text-text-muted hover:text-gold transition-colors">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+            Volver
+          </Link>
+        </div>
+
       <AuroraBackground>
         <div className="relative w-full max-w-[1280px] mx-auto px-8 pt-[140px] pb-[80px] overflow-hidden">
           <div className="absolute inset-0 opacity-30 pointer-events-none" 
@@ -43,9 +101,8 @@ export default function MatchDetail() {
             }} 
           />
 
-          {/* VS Banner — estilo Paramount+ */}
           <div className="relative z-[2]">
-            {/* Fecha y hora arriba */}
+            {/* Fecha y hora desde los datos */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -53,11 +110,11 @@ export default function MatchDetail() {
               className="text-center mb-6"
             >
               <div className="flex items-center justify-center gap-4 text-sm text-text-muted">
-                <span className="flex items-center gap-1.5"><CalendarDays size={14} /> Sábado 24 de Mayo, 2026</span>
+                <span className="flex items-center gap-1.5"><CalendarDays size={14} /> {partido.dia} de {partido.mes}</span>
                 <span className="w-1 h-1 rounded-full bg-text-faint" />
-                <span className="flex items-center gap-1.5"><Clock size={14} /> 8:00 PM</span>
+                <span className="flex items-center gap-1.5"><Clock size={14} /> {partido.hora}</span>
                 <span className="w-1 h-1 rounded-full bg-text-faint" />
-                <span className="flex items-center gap-1.5"><MapPin size={14} /> Cancha Principal</span>
+                <span className="flex items-center gap-1.5"><MapPin size={14} /> {partido.lugar}</span>
               </div>
             </motion.div>
 
@@ -74,12 +131,12 @@ export default function MatchDetail() {
                      style={{ borderColor: `${local.color}40`, boxShadow: `0 0 40px -10px ${local.color}40` }}>
                   <div className="w-16 h-16 md:w-20 md:h-20 rounded-xl flex items-center justify-center text-3xl md:text-4xl font-black uppercase tracking-wider"
                        style={{ backgroundColor: local.color, color: '#fff' }}>
-                    {local.short[0]}
+                    {partido.eq1[0]}
                   </div>
                 </div>
                 <span className="text-xs uppercase tracking-[2px] text-text-faint font-semibold mb-1">{local.program}</span>
                 <h2 className="font-[family-name:var(--font-display)] text-lg md:text-2xl uppercase tracking-[.5px] max-w-[180px]">
-                  {local.short}
+                  {partido.eq1}
                 </h2>
                 <div className="flex items-center gap-3 mt-2 text-xs text-text-muted">
                   <span>{local.wins}G</span>
@@ -119,12 +176,12 @@ export default function MatchDetail() {
                      style={{ borderColor: `${visitor.color}40`, boxShadow: `0 0 40px -10px ${visitor.color}40` }}>
                   <div className="w-16 h-16 md:w-20 md:h-20 rounded-xl flex items-center justify-center text-3xl md:text-4xl font-black uppercase tracking-wider"
                        style={{ backgroundColor: visitor.color, color: '#fff' }}>
-                    {visitor.short[0]}
+                    {partido.eq2[0]}
                   </div>
                 </div>
                 <span className="text-xs uppercase tracking-[2px] text-text-faint font-semibold mb-1">{visitor.program}</span>
                 <h2 className="font-[family-name:var(--font-display)] text-lg md:text-2xl uppercase tracking-[.5px] max-w-[180px]">
-                  {visitor.short}
+                  {partido.eq2}
                 </h2>
                 <div className="flex items-center gap-3 mt-2 text-xs text-text-muted">
                   <span>{visitor.wins}G</span>
@@ -136,7 +193,6 @@ export default function MatchDetail() {
               </motion.div>
             </div>
 
-            {/* Countdown o estado */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -145,7 +201,7 @@ export default function MatchDetail() {
             >
               <span className="inline-flex items-center gap-2 text-sm text-gold font-semibold bg-gold/10 border border-gold/30 px-4 py-2 rounded-full">
                 <span className="w-2 h-2 rounded-full bg-gold animate-pulse" />
-                Comienza en 2 días
+                {partido.hora}
               </span>
             </motion.div>
           </div>
@@ -176,23 +232,19 @@ export default function MatchDetail() {
             ))}
           </div>
 
-          {/* Resumen - Timeline de eventos */}
+          {/* Resumen */}
           {activeTab === 'resumen' && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="space-y-4"
-            >
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
               <SpotlightCard accent="gold" className="bg-surface border border-border rounded-2xl p-6">
                 <h3 className="font-[family-name:var(--font-display)] text-lg uppercase tracking-[.3px] mb-4">
                   Previo del <span className="text-gold">partido</span>
                 </h3>
                 <div className="space-y-3">
                   {[
-                    { time: '8:00 PM', event: 'Inicio del partido', icon: '⚽' },
-                    { time: '8:15 PM', event: 'Posible formación titular', icon: '📋' },
-                    { time: '8:45 PM', event: 'Medio tiempo', icon: '⏸️' },
-                    { time: '9:30 PM', event: 'Fin del partido', icon: '⏹️' },
+                    { time: partido.hora, event: 'Inicio del partido', icon: '⚽' },
+                    { time: '—', event: 'Posible formación titular', icon: '📋' },
+                    { time: '—', event: 'Medio tiempo', icon: '⏸️' },
+                    { time: '—', event: 'Fin del partido', icon: '⏹️' },
                   ].map((e, i) => (
                     <div key={i} className="flex items-center gap-4 p-3 rounded-xl bg-white/5 border border-white/5">
                       <span className="text-lg">{e.icon}</span>
@@ -211,7 +263,7 @@ export default function MatchDetail() {
                     <Trophy size={20} className="text-gold" />
                     <div>
                       <p className="text-xs text-text-muted">Último encuentro</p>
-                      <p className="text-sm font-semibold">Sistemas 2 - 1 Civil</p>
+                      <p className="text-sm font-semibold">{partido.eq1} vs {partido.eq2}</p>
                     </div>
                   </div>
                 </SpotlightCard>
@@ -219,8 +271,8 @@ export default function MatchDetail() {
                   <div className="flex items-center gap-3">
                     <Trophy size={20} className="text-gold" />
                     <div>
-                      <p className="text-xs text-text-muted">Racha local</p>
-                      <p className="text-sm font-semibold text-green-400">4 victorias consecutivas</p>
+                      <p className="text-xs text-text-muted">{partido.lugar}</p>
+                      <p className="text-sm font-semibold text-green-400">{partido.hora}</p>
                     </div>
                   </div>
                 </SpotlightCard>
@@ -230,10 +282,7 @@ export default function MatchDetail() {
 
           {/* Estadísticas */}
           {activeTab === 'estadisticas' && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-            >
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
               <SpotlightCard accent="gold" className="bg-surface border border-border rounded-2xl p-6">
                 <h3 className="font-[family-name:var(--font-display)] text-lg uppercase tracking-[.3px] mb-6 text-center">
                   <span className="text-gold">Estadísticas</span> del torneo
@@ -263,20 +312,81 @@ export default function MatchDetail() {
             </motion.div>
           )}
 
-          {/* Alineaciones placeholder */}
+          {/* Alineaciones */}
           {activeTab === 'alineaciones' && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center py-12"
-            >
-              <p className="text-text-muted">Las alineaciones se publicarán 1 hora antes del partido.</p>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8">
+              <div className="flex items-center justify-between gap-4">
+                {([local, visitor] as const).map((eq, i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-black uppercase" style={{ backgroundColor: eq.color, color: '#fff' }}>
+                      {eq.short[0]}
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold">{eq.name}</p>
+                      <p className="text-[11px] text-text-muted">4-4-2 • {eq.wins + eq.draws + eq.losses} PJ</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Cancha 3D con switcher */}
+              <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-black/50 bg-black/40 pt-4">
+                <SoccerField3D
+                  homePlayers={[
+                    { name:"Carlos Ruiz", number:4, posicion:"Defensa", img:"https://i.pravatar.cc/72?img=4", x:-80, z:-100 },
+                    { name:"Miguel Díaz", number:5, posicion:"Defensa", img:"https://i.pravatar.cc/72?img=5", x:-20, z:-100 },
+                    { name:"Andrés Paz", number:3, posicion:"Defensa", img:"https://i.pravatar.cc/72?img=6", x:40, z:-100 },
+                    { name:"Jorge Mora", number:2, posicion:"Defensa", img:"https://i.pravatar.cc/72?img=7", x:100, z:-100 },
+                    { name:"Luis Rojas", number:8, posicion:"Volante", img:"https://i.pravatar.cc/72?img=8", x:-90, z:0 },
+                    { name:"David Gil", number:6, posicion:"Volante", img:"https://i.pravatar.cc/72?img=9", x:-30, z:0 },
+                    { name:"Pablo Cruz", number:10, posicion:"Volante", img:"https://i.pravatar.cc/72?img=10", x:30, z:0 },
+                    { name:"Sergio Peña", number:11, posicion:"Volante", img:"https://i.pravatar.cc/72?img=11", x:90, z:0 },
+                    { name:"Juan Vega", number:9, posicion:"Delantero", img:"https://i.pravatar.cc/72?img=12", x:-40, z:100 },
+                    { name:"Tomás Herrera", number:7, posicion:"Delantero", img:"https://i.pravatar.cc/72?img=13", x:40, z:100 },
+                    { name:"Luis Torres", number:1, posicion:"Portero", img:"https://i.pravatar.cc/72?img=14", x:0, z:-200 },
+                  ]}
+                  awayPlayers={[
+                    { name:"Pedro Gil", number:4, posicion:"Defensa", img:"https://i.pravatar.cc/72?img=15", x:-80, z:-100 },
+                    { name:"Mario Ríos", number:5, posicion:"Defensa", img:"https://i.pravatar.cc/72?img=16", x:-20, z:-100 },
+                    { name:"Alex Torres", number:3, posicion:"Defensa", img:"https://i.pravatar.cc/72?img=17", x:40, z:-100 },
+                    { name:"Fabio Mora", number:2, posicion:"Defensa", img:"https://i.pravatar.cc/72?img=18", x:100, z:-100 },
+                    { name:"Iván Duque", number:8, posicion:"Volante", img:"https://i.pravatar.cc/72?img=19", x:-90, z:0 },
+                    { name:"Óscar Paz", number:6, posicion:"Volante", img:"https://i.pravatar.cc/72?img=20", x:-30, z:0 },
+                    { name:"Julián Roa", number:10, posicion:"Volante", img:"https://i.pravatar.cc/72?img=21", x:30, z:0 },
+                    { name:"Diego Mesa", number:11, posicion:"Volante", img:"https://i.pravatar.cc/72?img=22", x:90, z:0 },
+                    { name:"Henry Vargas", number:9, posicion:"Delantero", img:"https://i.pravatar.cc/72?img=23", x:-40, z:100 },
+                    { name:"Andrés Ruiz", number:7, posicion:"Delantero", img:"https://i.pravatar.cc/72?img=24", x:40, z:100 },
+                    { name:"Camilo Rojas", number:1, posicion:"Portero", img:"https://i.pravatar.cc/72?img=25", x:0, z:-200 },
+                  ]}
+                  homeColor={local.color}
+                  awayColor={visitor.color}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                {([local, visitor] as const).map((eq, i) => (
+                  <SpotlightCard key={i} accent={i === 0 ? 'purple' : 'gold'} className="bg-surface border border-border rounded-2xl p-4">
+                    <h4 className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-3 flex items-center gap-2">
+                      <Shirt size={14} /> Suplentes {i === 0 ? `(${partido.eq1})` : `(${partido.eq2})`}
+                    </h4>
+                    <div className="space-y-1.5">
+                      {[12, 13, 14, 15, 16].map((n) => (
+                        <div key={n} className="flex items-center gap-2 text-sm">
+                          <span className="w-6 h-6 rounded-md bg-white/10 flex items-center justify-center text-[11px] font-bold">{n}</span>
+                          <span className="text-text-muted">Jugador #{n}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </SpotlightCard>
+                ))}
+              </div>
             </motion.div>
           )}
         </div>
       </section>
 
       <Footer />
+      </div>{/* .flex-1 */}
     </div>
   )
 }

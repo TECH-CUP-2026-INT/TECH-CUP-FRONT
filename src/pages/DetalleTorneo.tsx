@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Sidebar from '@/components/shared/Sidebar'
 import AppTopbar from '@/components/shared/AppTopbar'
@@ -8,7 +9,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { CalendarDays, Users, Download } from 'lucide-react'
 
-type Tab = 'info' | 'equipos' | 'calendario' | 'tabla'
+type Tab = 'info' | 'equipos' | 'calendario' | 'tabla' | 'llaves'
 
 export default function DetalleTorneo() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -43,11 +44,11 @@ export default function DetalleTorneo() {
 
           {/* Tabs */}
           <div className="flex items-center gap-1 bg-surface/50 border border-border/60 rounded-2xl p-1 mb-6 overflow-x-auto">
-            {(['info', 'equipos', 'calendario', 'tabla'] as Tab[]).map(t => (
+            {(['info', 'equipos', 'calendario', 'tabla', 'llaves'] as Tab[]).map(t => (
               <button key={t} onClick={() => setTab(t)}
                 className={`py-2.5 px-4 rounded-xl text-sm font-semibold capitalize whitespace-nowrap transition-all ${
                   tab === t ? 'bg-purple-mid text-white shadow-lg shadow-purple-mid/25' : 'text-text-muted hover:text-white'
-                }`}>{t === 'info' ? 'Información' : t === 'equipos' ? 'Equipos' : t === 'calendario' ? 'Calendario' : 'Tabla'}</button>
+                }`}>{t === 'info' ? 'Información' : t === 'equipos' ? 'Equipos' : t === 'calendario' ? 'Calendario' : t === 'tabla' ? 'Tabla' : 'Llaves'}</button>
             ))}
           </div>
 
@@ -113,6 +114,37 @@ export default function DetalleTorneo() {
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-16">
               <CalendarDays size={40} className="mx-auto text-text-faint mb-4" />
               <p className="text-text-muted">Calendario disponible próximamente.</p>
+            </motion.div>
+          )}
+
+          {tab === 'llaves' && (
+            <motion.div initial={{opacity:0}} animate={{opacity:1}}>
+              <div className="flex items-center justify-between mb-4">
+                <p className="text-sm text-text-muted">Fase eliminatoria del torneo</p>
+                <Link to="/llaves">
+                  <Button size="sm" className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark text-xs h-auto py-1.5 px-4">Ver bracket completo</Button>
+                </Link>
+              </div>
+              <div className="bg-surface/50 border border-border/60 rounded-2xl p-6 overflow-x-auto">
+                <div className="flex items-center justify-center gap-8 min-w-[500px]">
+                  <div className="space-y-4">
+                    <div className="p-3 rounded-xl bg-white/5 border border-white/10"><span className="text-sm font-semibold">🐯 Tigres FC <span className="text-gold">2</span></span></div>
+                    <div className="p-3 rounded-xl bg-white/5 border border-white/10"><span className="text-sm font-semibold">⚙️ Sistemas FC <span className="text-gold">1</span></span></div>
+                    <div className="text-center text-[10px] text-text-faint uppercase tracking-wider mt-1">Cuartos</div>
+                  </div>
+                  <div className="text-gold text-2xl">⟶</div>
+                  <div className="space-y-4">
+                    <div className="p-3 rounded-xl border border-gold/30 bg-gold/10"><span className="text-sm font-semibold">🐯 Tigres FC <span className="text-gold">1</span></span></div>
+                    <div className="p-3 rounded-xl bg-white/5 border border-white/10"><span className="text-sm font-semibold">🔵 Code United <span className="text-gold">0</span></span></div>
+                    <div className="text-center text-[10px] text-text-faint uppercase tracking-wider mt-1">Semifinal</div>
+                  </div>
+                  <div className="text-gold text-2xl">⟶</div>
+                  <div className="space-y-4">
+                    <div className="p-4 rounded-xl bg-gradient-to-b from-gold/20 to-gold/5 border border-gold/40"><span className="text-sm font-semibold">🏆🐯 Tigres FC <span className="text-gold">3</span></span></div>
+                    <div className="text-center text-[10px] text-text-faint uppercase tracking-wider mt-1">Final</div>
+                  </div>
+                </div>
+              </div>
             </motion.div>
           )}
         </main>

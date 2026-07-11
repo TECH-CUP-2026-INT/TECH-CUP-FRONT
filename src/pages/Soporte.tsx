@@ -38,10 +38,10 @@ export default function Soporte() {
 
         <main className="max-w-[700px] mx-auto px-8 py-8 pb-[60px]">
           <SpotlightCard accent="gold" className="bg-surface border border-border rounded-2xl overflow-hidden">
-            {/* Header bot */}
-            <div className="bg-gradient-to-r from-purple-deep to-purple-black p-5 border-b border-border flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-gold/20 border border-gold/30 flex items-center justify-center">
-                <Bot size={24} className="text-gold" />
+            {/* Header con imagen de Manchas */}
+            <div className="bg-gradient-to-r from-purple-deep to-purple-black p-5 border-b border-border flex items-center gap-4">
+              <div className="w-14 h-14 rounded-full overflow-hidden ring-2 ring-gold/60 ring-offset-2 ring-offset-purple-black flex-shrink-0">
+                <img src="/manchas-callcenter.png" alt="Manchas" className="w-full h-full object-cover" />
               </div>
               <div>
                 <h2 className="font-[family-name:var(--font-display)] text-lg uppercase">Manchas<span className="text-gold">Bot</span></h2>

@@ -36,17 +36,25 @@ function CalendarioContent() {
       <AuroraBackground>
         <div className="relative w-full max-w-[1280px] mx-auto px-8 pt-[160px] pb-[100px] overflow-hidden">
           <div className="absolute inset-0 opacity-30 pointer-events-none" style={{backgroundImage:'radial-gradient(rgba(255,255,255,.12) 1px, transparent 1px)',backgroundSize:'24px 24px',maskImage:'radial-gradient(600px 500px at 50% 30%, black 10%, transparent 70%)',WebkitMaskImage:'radial-gradient(600px 500px at 50% 30%, black 10%, transparent 70%)'}} />
+          <div className="absolute right-[-8%] top-[-10%] w-[60%] h-[130%] pointer-events-none opacity-20" style={{background:'repeating-linear-gradient(115deg, rgba(245,166,35,.06) 0 3px, transparent 3px 34px)'}} />
+          <div className="absolute inset-0 z-0 pointer-events-none">
+            <img src="/hero-stadium.jpg" alt="" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40" />
+          </div>
           <div className="relative z-[2] text-center max-w-[600px] mx-auto">
             <motion.span initial={{opacity:0,y:-10}} animate={{opacity:1,y:0}} transition={{delay:0.2}} className="inline-flex items-center gap-2 text-[11.5px] font-bold tracking-[1.6px] uppercase text-gold bg-gold/10 border border-gold/30 px-3.5 py-1.5 rounded-full mb-[22px]"><CalendarDays size={14} /> Calendario {año}</motion.span>
-            <motion.h1 initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:0.3}} className="font-[family-name:var(--font-display)] font-bold text-[clamp(42px,6vw,72px)] leading-[.92] tracking-[.5px] uppercase mb-4">Calendario de <span className="text-gold">Partidos</span></motion.h1>
+            <motion.h1 initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:0.3}} className="font-[family-name:var(--font-display)] font-bold text-[clamp(28px,4vw,48px)] leading-[.92] tracking-[.5px] uppercase mb-4">Calendario de <span className="text-gold">Partidos</span></motion.h1>
             <motion.p initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.5}} className="text-base leading-relaxed text-text-muted">Consultá la programación de partidos, filtrá por torneo y seguí la acción en vivo.</motion.p>
           </div>
         </div>
       </AuroraBackground>
 
       <section className="py-14 pb-[100px] relative">
-        <div className="absolute top-[20%] right-[-5%] w-[400px] h-[400px] rounded-full bg-purple-mid/10 blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-[10%] left-[-5%] w-[300px] h-[300px] rounded-full bg-gold/10 blur-[100px] pointer-events-none" />
+        <div className="absolute top-[10%] right-[-10%] w-[600px] h-[600px] rounded-full bg-purple-mid/20 blur-[180px] pointer-events-none" />
+        <div className="absolute bottom-[5%] left-[-10%] w-[500px] h-[500px] rounded-full bg-gold/20 blur-[150px] pointer-events-none" />
+        <div className="absolute top-[50%] left-[30%] w-[350px] h-[350px] rounded-full bg-purple-deep/15 blur-[120px] pointer-events-none" />
+        <div className="absolute top-[80%] right-[20%] w-[250px] h-[250px] rounded-full bg-gold/10 blur-[100px] pointer-events-none" />
         <div className="max-w-[1280px] mx-auto px-8 relative">
           <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
             <div className="flex items-center gap-3">

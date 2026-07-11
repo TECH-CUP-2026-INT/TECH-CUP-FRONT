@@ -81,7 +81,7 @@ export default function Landing() {
                   initial={{ y: 100 }}
                   animate={{ y: 0 }}
                   transition={{ delay: 0.5, duration: 0.6, ease: 'easeOut' }}
-                  className="font-[family-name:var(--font-display)] font-bold text-[clamp(52px,7vw,92px)] leading-[.92] tracking-[.5px] uppercase"
+                  className="font-[family-name:var(--font-display-alt)] font-bold text-[clamp(52px,7vw,92px)] leading-[.92] tracking-[.5px] uppercase"
                 >
                   TECH<span className="text-gold">CUP</span>
                 </motion.h1>
@@ -220,8 +220,8 @@ export default function Landing() {
       <section className="py-5 relative overflow-hidden z-[3] mt-3">
         {/* Background con glow morado y dorado */}
         <div className="absolute inset-0 bg-black/60" />
-        <div className="absolute left-[20%] top-[-50%] w-[300px] h-[300px] rounded-full bg-purple-mid/15 blur-[100px] pointer-events-none" />
-        <div className="absolute right-[20%] bottom-[-50%] w-[250px] h-[250px] rounded-full bg-gold/15 blur-[80px] pointer-events-none" />
+        <div className="absolute left-[10%] top-[-80%] w-[500px] h-[500px] rounded-full bg-purple-mid/25 blur-[150px] pointer-events-none" />
+        <div className="absolute right-[10%] bottom-[-80%] w-[400px] h-[400px] rounded-full bg-gold/20 blur-[120px] pointer-events-none" />
         
         <div className="relative border-y border-gold/20 py-2.5">
           {/* Antes: glow en esquinas */}
@@ -280,8 +280,9 @@ export default function Landing() {
 
       {/* Features simples */}
       <section className="pb-[90px] relative z-[3]">
-        <div className="absolute left-[-10%] top-[-20%] w-[500px] h-[500px] rounded-full bg-purple-mid/15 blur-[120px] pointer-events-none" />
-        <div className="absolute right-[-5%] bottom-[-10%] w-[400px] h-[400px] rounded-full bg-gold/15 blur-[100px] pointer-events-none" />
+        <div className="absolute left-[-10%] top-[-20%] w-[700px] h-[700px] rounded-full bg-purple-mid/20 blur-[180px] pointer-events-none" />
+        <div className="absolute right-[-5%] bottom-[-10%] w-[600px] h-[600px] rounded-full bg-gold/20 blur-[150px] pointer-events-none" />
+        <div className="absolute top-[30%] left-[50%] w-[400px] h-[400px] rounded-full bg-purple-deep/15 blur-[120px] pointer-events-none" />
         
         {/* Líneas decorativas */}
         <div className="absolute top-0 left-[5%] right-[5%] h-[1px] bg-gradient-to-r from-transparent via-purple-mid/40 to-transparent" />
@@ -312,10 +313,10 @@ export default function Landing() {
       {/* Torneos */}
       <section className="py-10 pb-[110px] relative overflow-hidden">
         {/* Background orbs más intensos */}
-        <div className="absolute top-[20%] left-[30%] w-[600px] h-[600px] rounded-full bg-purple-deep/15 blur-[150px] pointer-events-none" />
-        <div className="absolute bottom-[10%] right-[10%] w-[400px] h-[400px] rounded-full bg-gold/15 blur-[100px] pointer-events-none" />
-        <div className="absolute top-[60%] left-[5%] w-[200px] h-[200px] rounded-full bg-purple-mid/10 blur-[80px] pointer-events-none" />
-        {/* Borde decorativo superior */}
+        <div className="absolute top-[10%] left-[20%] w-[700px] h-[700px] rounded-full bg-purple-deep/20 blur-[180px] pointer-events-none" />
+        <div className="absolute bottom-[5%] right-[5%] w-[600px] h-[600px] rounded-full bg-gold/20 blur-[150px] pointer-events-none" />
+        <div className="absolute top-[50%] left-[50%] w-[400px] h-[400px] rounded-full bg-purple-mid/15 blur-[120px] pointer-events-none" />
+        <div className="absolute top-[80%] left-[10%] w-[300px] h-[300px] rounded-full bg-gold/10 blur-[100px] pointer-events-none" />
         <div className="absolute top-0 left-[10%] right-[10%] h-[1px] bg-gradient-to-r from-transparent via-purple-mid/40 to-transparent" />
         
         <div className="max-w-[1280px] mx-auto px-8 relative">
