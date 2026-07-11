@@ -93,6 +93,18 @@ Manchas es un perro criollo que fue la mascota icónica de la Escuela Colombiana
 
 ### DIAGRAMA DE COMPONENTES 
 
+### C1 
+
+
+### C2
+
+
+### C3 
+
+
+### C4
+
+
 ### DIAGRAMA DE CONTEXTO 
 
 
