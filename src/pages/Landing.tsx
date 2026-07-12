@@ -280,7 +280,7 @@ export default function Landing() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="grid grid-cols-4 max-md:grid-cols-2 gap-[18px] bg-surface/80 backdrop-blur-sm border border-border/60 rounded-2xl p-[30px]"
+            className="grid grid-cols-4 max-md:grid-cols-2 gap-[18px] bg-black/5 dark:bg-black/30 backdrop-blur-sm border border-black/10 dark:border-white/5 rounded-2xl p-[30px]"
           >
             {features.map((f, i) => (
               <div key={i} className="flex gap-3.5 items-start group">
@@ -337,7 +337,7 @@ export default function Landing() {
                   transition={{ delay: i * 0.1, duration: 0.4 }}
                   viewport={{ once: true }}
                 >
-                  <SpotlightCard accent="gold" className="bg-surface border-border rounded-2xl group">
+                   <SpotlightCard accent="gold" className="bg-black/5 dark:bg-black/30 border border-black/10 dark:border-white/5 rounded-2xl group">
                     <div className="h-[110px] flex items-center justify-center bg-gradient-to-br from-purple-deep to-[#1a0f2e] relative overflow-hidden">
                       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-[radial-gradient(circle_at_50%_50%,rgba(245,166,35,.15),transparent_60%)]" />
                       <Badge className={`absolute top-3.5 left-3.5 rounded-full text-[11px] font-bold uppercase tracking-[.4px] px-3 py-1 h-auto z-10 ${
@@ -402,8 +402,8 @@ export default function Landing() {
               <div
                 key={i}
                 className="group relative overflow-hidden rounded-xl min-w-[240px]
-                  bg-surface/80 backdrop-blur-sm
-                  border border-border/60
+                  bg-black/5 dark:bg-black/30 backdrop-blur-sm
+                  border border-black/10 dark:border-white/5
                   hover:border-gold/40
                   transition-all duration-300 p-3.5"
               >
