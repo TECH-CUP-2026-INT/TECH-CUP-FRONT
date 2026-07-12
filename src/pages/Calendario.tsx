@@ -43,6 +43,7 @@ function CalendarioContent() {
   const [año] = useState(2026)
   const [vista, setVista] = useState<'calendario' | 'lista'>('lista')
   const [selectedMatch, setSelectedMatch] = useState<typeof partidos[0] | null>(null)
+  const [calendarDayMatches, setCalendarDayMatches] = useState<typeof partidos | null>(null)
   const dias = generarDiasMes(mes, año)
   const nombreMes = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'][mes]
 
@@ -109,14 +110,15 @@ function CalendarioContent() {
                 {dias.map((d,i)=>(
                   <div key={i} className="aspect-square flex items-center justify-center">
                     {d ? (
-                      <div className={`w-full h-full rounded-xl flex flex-col items-center justify-center text-sm transition-all ${
+                      <button onClick={() => { if (d.tienePartido) { const matches = partidos.filter(p => p.dia === d.dia); setCalendarDayMatches(matches.length > 0 ? matches : null); } }}
+                        className={`w-full h-full rounded-xl flex flex-col items-center justify-center text-sm transition-all ${
                         d.tienePartido ? 'bg-gold/15 border border-gold/30 text-gold font-bold cursor-pointer hover:bg-gold/25 shadow-sm'
                         : d.hoy ? 'bg-purple-mid/20 border border-purple-mid/40 text-[#3D1A6B] dark:text-white font-bold'
-                        : 'text-[#7A6B99] dark:text-text-muted hover:bg-black/10 dark:hover:bg-white/5'
+                        : 'text-[#7A6B99] dark:text-text-muted'
                       }`}>
                         {d.tienePartido && <img src="/images/copa-coin.png" alt="" className="w-4 h-4 object-contain mb-0.5 opacity-70" />}
                         <span>{d.dia}</span>
-                      </div>
+                      </button>
                     ) : <span />}
                   </div>
                 ))}
@@ -236,6 +238,43 @@ function CalendarioContent() {
                 </div>
               )}
             </div>
+
+            {/* Modal al hacer clic en día del calendario */}
+            {calendarDayMatches && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => setCalendarDayMatches(null)}>
+                <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+                <div className="relative max-w-md w-full bg-white dark:bg-[#1a1a24] rounded-2xl overflow-hidden border border-[#D4C8E8]/40 dark:border-white/10 shadow-2xl" onClick={e => e.stopPropagation()}>
+                  <button onClick={() => setCalendarDayMatches(null)} className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center hover:bg-gold transition-colors">✕</button>
+                  <div className="relative h-[180px] overflow-hidden">
+                    <img src="/images/copa-coin.png" alt="" className="w-full h-full object-contain p-8 opacity-30" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0A0614] via-[#0A0614]/40 to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-5">
+                      <span className="text-[10px] tracking-[1.2px] text-gold font-bold uppercase">Partidos</span>
+                      <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase text-white leading-tight mt-1">{calendarDayMatches[0]?.dia} de {calendarDayMatches[0]?.mes}</h2>
+                    </div>
+                  </div>
+                  <div className="p-5 space-y-3 max-h-[300px] overflow-y-auto">
+                    {calendarDayMatches.map((m, i) => (
+                      <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-[#E8DFF5]/50 dark:bg-white/5 border border-[#D4C8E8]/40 dark:border-white/10">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: equipoLogos[m.eq1]?.color || '#6B7280' }} />
+                            <span className="text-sm font-semibold text-[#3D1A6B] dark:text-white">{m.eq1}</span>
+                            <span className="text-[10px] text-[#7A6B99] dark:text-text-faint font-bold">VS</span>
+                            <span className="text-sm font-semibold text-[#3D1A6B] dark:text-white">{m.eq2}</span>
+                            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: equipoLogos[m.eq2]?.color || '#6B7280' }} />
+                          </div>
+                          <div className="flex items-center gap-3 mt-1 text-[11px] text-[#7A6B99] dark:text-white/50">
+                            <span>⏰ {m.hora}</span>
+                            <span>📍 {m.lugar}</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
           )}
         </div>
