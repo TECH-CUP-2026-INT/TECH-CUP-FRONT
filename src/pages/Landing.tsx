@@ -118,7 +118,7 @@ export default function Landing() {
   }, [nextFeature])
 
   return (
-    <div className="min-h-screen bg-[#F0F8FF] dark:bg-[#0A0614]">
+    <div className="min-h-screen bg-[#E5ECE9] dark:bg-[#0A0614]">
       <Navbar />
 
       {/* Hero */}
@@ -449,5 +449,6 @@ export default function Landing() {
     </div>
   )
 }
+
 
 

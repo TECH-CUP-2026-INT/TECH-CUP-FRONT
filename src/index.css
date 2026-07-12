@@ -53,7 +53,7 @@
   /* Light mode overrides */
   :root:not(.dark) body,
   :root:not(.dark) {
-    --color-black: #F0F8FF;
+    --color-black: #E5ECE9;
     --color-purple-black: #F3EEFF;
     --color-surface: #FFFFFF;
     --color-surface-2: #F5F5F5;
@@ -64,7 +64,7 @@
   }
 
   :root:not(.dark) body {
-    background: #F0F8FF;
+    background: #E5ECE9;
     color: #1F1F1F;
   }
 
@@ -90,3 +90,4 @@
   ::-webkit-scrollbar-thumb { background: #33303f; border-radius: 10px; }
   ::-webkit-scrollbar-thumb:hover { background: var(--color-purple-mid); }
 }
+
