@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from '@/lib/auth'
+import { ThemeProvider } from '@/lib/theme'
 import { StarfieldBackground } from '@/components/ui/starfield-bg'
 import Landing from '@/pages/Landing'
 import Dashboard from '@/pages/Dashboard'
@@ -29,6 +30,7 @@ import Campus from '@/pages/Campus'
 export default function App() {
   return (
     <BrowserRouter>
+      <ThemeProvider>
       <AuthProvider>
       <StarfieldBackground className="min-h-screen">
       <Routes>
@@ -62,6 +64,7 @@ export default function App() {
       </Routes>
       </StarfieldBackground>
       </AuthProvider>
+      </ThemeProvider>
     </BrowserRouter>
   )
 }

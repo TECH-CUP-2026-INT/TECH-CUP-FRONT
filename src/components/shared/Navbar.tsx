@@ -4,6 +4,7 @@ import { Menu, User, X, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/lib/auth'
+import { ThemeToggle } from '@/components/ui/theme-toggle'
 
 const links = [
   { href: '/', label: 'Inicio' },
@@ -31,7 +32,7 @@ export default function Navbar() {
     <nav
       className={cn(
         'fixed top-0 left-0 right-0 z-50 py-[18px] transition-all duration-300 border-b border-transparent',
-        scrolled && 'bg-black/82 backdrop-blur-md border-[rgba(255,255,255,0.08)] py-3'
+        scrolled && 'bg-white/80 dark:bg-black/82 backdrop-blur-md border-[rgba(0,0,0,0.06)] dark:border-[rgba(255,255,255,0.08)] py-3'
       )}
     >
       <div className="max-w-[1280px] mx-auto px-8 flex items-center justify-between gap-6">
@@ -67,8 +68,9 @@ export default function Navbar() {
           ))}
         </ul>
 
-        {/* Right — depende de auth */}
+        {/* Right — theme toggle + auth */}
         <div className="hidden md:flex items-center gap-3.5">
+          <ThemeToggle />
           {isAuthenticated && user ? (
             <div className="flex items-center gap-3">
               <Link
@@ -109,7 +111,10 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden bg-black/95 backdrop-blur-md border-t border-border mt-4 py-6 px-8">
+        <div className="md:hidden bg-white/95 dark:bg-black/95 backdrop-blur-md border-t border-border mt-4 py-6 px-8">
+          <div className="flex justify-center mb-4">
+            <ThemeToggle />
+          </div>
           <ul className="flex flex-col items-center gap-5">
             {links.map((link) => (
               <li key={link.href}>

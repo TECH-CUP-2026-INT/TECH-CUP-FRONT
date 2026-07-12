@@ -1,6 +1,7 @@
 "use client"
 
 import { type ReactNode, useEffect, useRef } from "react"
+import { useTheme } from "@/lib/theme"
 
 /* ============================================================
    StarfieldBackground — Fondo de estrellas animado
@@ -143,18 +144,27 @@ function ParticleNetwork() {
 }
 
 export function StarfieldBackground({ children, showLogo = true, className = "", showPlayer = false }: StarfieldBgProps) {
+  const { theme } = useTheme()
+  const isDark = theme === 'dark'
+
   return (
     <div className={"relative min-h-screen overflow-hidden " + className}
-      style={{ background: "radial-gradient(ellipse at bottom, #321b35 0%, #090a0f 100%)" }}
+      style={{
+        background: isDark
+          ? "radial-gradient(ellipse at bottom, #321b35 0%, #090a0f 100%)"
+          : "radial-gradient(ellipse at bottom, #e0d4f5 0%, #f0f0f5 100%)"
+      }}
     >
       {/* Fondo con blur */}
       <div className="absolute inset-0 pointer-events-none" style={{
         background: "url('/bg-logo.png') center/cover no-repeat",
         filter: "blur(4px)",
-        opacity: 0.6,
+        opacity: isDark ? 0.6 : 0.08,
       }} />
       <div className="absolute inset-0 pointer-events-none" style={{
-        background: "radial-gradient(ellipse at bottom, rgba(80,30,100,0.6) 0%, rgba(30,10,50,0.8) 100%)",
+        background: isDark
+          ? "radial-gradient(ellipse at bottom, rgba(80,30,100,0.6) 0%, rgba(30,10,50,0.8) 100%)"
+          : "radial-gradient(ellipse at bottom, rgba(139,92,246,0.08) 0%, rgba(200,180,240,0.15) 100%)",
       }} />
       {/* Particle network canvas */}
       <ParticleNetwork />
@@ -163,7 +173,9 @@ export function StarfieldBackground({ children, showLogo = true, className = "",
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute -inset-[100%] opacity-[0.04]"
           style={{
-            background: "conic-gradient(transparent, rgba(245,166,35,0.3), transparent, rgba(109,40,217,0.2), transparent)",
+            background: isDark
+              ? "conic-gradient(transparent, rgba(245,166,35,0.3), transparent, rgba(109,40,217,0.2), transparent)"
+              : "conic-gradient(transparent, rgba(139,92,246,0.08), transparent, rgba(245,166,35,0.05), transparent)",
             transform: "rotate(258deg)",
           }}
         />
@@ -171,27 +183,32 @@ export function StarfieldBackground({ children, showLogo = true, className = "",
       {/* Linear shine (debajo de los puntos) */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.02]"
         style={{
-          background: "linear-gradient(105deg, transparent 30%, rgba(245,166,35,0.4) 50%, transparent 70%)",
+          background: isDark
+            ? "linear-gradient(105deg, transparent 30%, rgba(245,166,35,0.4) 50%, transparent 70%)"
+            : "linear-gradient(105deg, transparent 30%, rgba(139,92,246,0.1) 50%, transparent 70%)",
         }}
       />
       {/* Puntos dorados y morados (encima) */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.06]"
+      <div className={"absolute inset-0 pointer-events-none " + (isDark ? "opacity-[0.06]" : "opacity-[0.03]")}
         style={{
-          backgroundImage: [
-            "radial-gradient(rgba(245,166,35,0.5) 1px, transparent 1px)",
-            "radial-gradient(rgba(109,40,217,0.4) 1px, transparent 1px)",
-          ].join(", "),
+          backgroundImage: isDark
+            ? ["radial-gradient(rgba(245,166,35,0.5) 1px, transparent 1px)", "radial-gradient(rgba(109,40,217,0.4) 1px, transparent 1px)"].join(", ")
+            : ["radial-gradient(rgba(139,92,246,0.3) 1px, transparent 1px)", "radial-gradient(rgba(245,166,35,0.2) 1px, transparent 1px)"].join(", "),
           backgroundSize: "30px 30px, 30px 30px",
           backgroundPosition: "0 0, 15px 15px",
         }}
       />
-      {/* Gradiente de transición morado */}
+      {/* Gradiente de transición */}
       <div className="absolute inset-0 pointer-events-none" style={{
-        background: "linear-gradient(to top, rgba(59,18,100,0.6) 0%, rgba(22,11,36,0.2) 20%, transparent 50%, rgba(22,11,36,0.4) 85%, rgba(59,18,100,0.5) 100%)",
+        background: isDark
+          ? "linear-gradient(to top, rgba(59,18,100,0.6) 0%, rgba(22,11,36,0.2) 20%, transparent 50%, rgba(22,11,36,0.4) 85%, rgba(59,18,100,0.5) 100%)"
+          : "linear-gradient(to top, rgba(200,180,240,0.3) 0%, rgba(240,235,250,0.1) 20%, transparent 50%, rgba(240,235,250,0.2) 85%, rgba(200,180,240,0.2) 100%)",
       }} />
-      {/* Tinte morado sutil */}
+      {/* Tinte sutil */}
       <div className="absolute inset-0 pointer-events-none" style={{
-        background: "radial-gradient(ellipse at 50% 30%, rgba(109,40,217,0.06) 0%, transparent 60%)",
+        background: isDark
+          ? "radial-gradient(ellipse at 50% 30%, rgba(109,40,217,0.06) 0%, transparent 60%)"
+          : "radial-gradient(ellipse at 50% 30%, rgba(139,92,246,0.04) 0%, transparent 60%)",
       }} />
 
       {/* Jugador animado con copa */}

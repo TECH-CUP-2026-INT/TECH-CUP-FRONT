@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --animate-aurora: aurora 60s linear infinite;
 
@@ -46,6 +48,36 @@
     color: var(--color-gray-light);
     font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
+  }
+
+  /* Light mode overrides */
+  :root:not(.dark) body,
+  :root:not(.dark) {
+    --color-black: #FAFAFA;
+    --color-purple-black: #F3EEFF;
+    --color-surface: #FFFFFF;
+    --color-surface-2: #F5F5F5;
+    --color-border: rgba(0, 0, 0, 0.08);
+    --color-gray-light: #1F1F1F;
+    --color-text-muted: #6B7280;
+    --color-text-faint: #9CA3AF;
+  }
+
+  :root:not(.dark) body {
+    background: #FAFAFA;
+    color: #1F1F1F;
+  }
+
+  :root:not(.dark) ::-webkit-scrollbar-track {
+    background: #E5E7EB;
+  }
+
+  :root:not(.dark) ::-webkit-scrollbar-thumb {
+    background: #9CA3AF;
+  }
+
+  :root:not(.dark) ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-purple-mid);
   }
 
   :focus-visible {

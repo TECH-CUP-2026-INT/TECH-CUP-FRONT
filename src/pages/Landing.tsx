@@ -1,13 +1,20 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import Navbar from '@/components/shared/Navbar'
 import Footer from '@/components/shared/Footer'
-import { AuroraBackground } from '@/components/ui/aurora-background'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { SpotlightCard } from '@/components/ui/spotlight-card'
 import { Marquee } from '@/components/ui/marquee'
+import { ThreeDCarousel } from '@/components/ui/three-d-carousel'
 import { torneos } from '@/data/torneos'
+
+const heroImages = [
+  { src: '/images/landing-arquero2.png', alt: 'Acción en la cancha — arquero en movimiento' },
+  { src: '/images/landing-futbol2.png', alt: 'Jugada ofensiva — fútbol universitario' },
+  { src: '/images/landing-futbol3.png', alt: 'Competencia y pasión en el campo' },
+]
 
 const features = [
   { icon:'🏆', title:'Torneos organizados', desc:'Compite en torneos internos con reglas claras y justas.' },
@@ -17,46 +24,124 @@ const features = [
 ]
 
 export default function Landing() {
+  const [featuredIdx, setFeaturedIdx] = useState(0)
   const destacados = torneos.filter(t => t.estado !== 'closed').slice(0, 3)
 
+  useEffect(() => {
+    const t = setInterval(() => setFeaturedIdx(i => (i + 1) % heroImages.length), 3500)
+    return () => clearInterval(t)
+  }, [])
+
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-[#F5F0FF] dark:bg-[#190D2B]">
       <Navbar />
 
-      {/* Hero con Aurora Background */}
-      <AuroraBackground>
-        <div className="relative w-full max-w-[1280px] mx-auto px-8 pt-[130px] pb-[70px] overflow-hidden">
-          
-          {/* Grid dots background */}
-          <div className="absolute inset-0 opacity-30 pointer-events-none" 
+      {/* Hero */}
+      <section className="relative overflow-hidden">
+
+        {/* Blurred background image — full bleed */}
+        <div className="absolute inset-0 pointer-events-none">
+          <img
+            src="/images/landing-arquero2.png"
+            alt=""
+            className="w-full h-full object-cover
+              opacity-40 dark:opacity-30"
+            style={{ filter: 'blur(70px) saturate(1.6)' }}
+            draggable={false}
+          />
+          {/* Overlay adaptativo */}
+          <div className="absolute inset-0
+            bg-white/50 dark:bg-[#190D2B]/50" />
+        </div>
+
+        {/* Diagonal ribbons — cintas inclinadas a la derecha */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          {/* Ribbon 1 */}
+          <div className="absolute -top-[10%] -right-[10%] w-[60%] h-[35%] origin-top-right
+            opacity-[0.06] dark:opacity-[0.07]"
+            style={{
+              background: 'linear-gradient(135deg, transparent 30%, #E7AD30 50%, transparent 70%)',
+              transform: 'skewX(-18deg)',
+            }}
+          />
+          {/* Ribbon 2 */}
+          <div className="absolute top-[20%] -right-[5%] w-[50%] h-[25%]
+            opacity-[0.04] dark:opacity-[0.05]"
+            style={{
+              background: 'linear-gradient(135deg, transparent 25%, #8B5CF6 45%, #E7AD30 55%, transparent 75%)',
+              transform: 'skewX(-22deg)',
+            }}
+          />
+          {/* Ribbon 3 */}
+          <div className="absolute top-[40%] -left-[5%] w-[55%] h-[20%]
+            opacity-[0.05] dark:opacity-[0.06]"
+            style={{
+              background: 'linear-gradient(115deg, transparent 20%, #E7AD30 40%, #8B5CF6 55%, transparent 75%)',
+              transform: 'skewX(-15deg)',
+            }}
+          />
+          {/* Ribbon 4 */}
+          <div className="absolute bottom-[5%] -right-[8%] w-[65%] h-[30%]
+            opacity-[0.03] dark:opacity-[0.04]"
+            style={{
+              background: 'linear-gradient(115deg, transparent 20%, #A78BFA 40%, #E7AD30 60%, transparent 80%)',
+              transform: 'skewX(-20deg)',
+            }}
+          />
+          {/* Ribbon 5 */}
+          <div className="absolute top-[5%] -left-[15%] w-[45%] h-[40%]
+            opacity-[0.02] dark:opacity-[0.03]"
+            style={{
+              background: 'linear-gradient(115deg, transparent 15%, #8B5CF6 35%, transparent 65%)',
+              transform: 'skewX(-25deg)',
+            }}
+          />
+        </div>
+
+        {/* Radial glow overlays */}
+        <div className="absolute inset-0 pointer-events-none
+          opacity-60 dark:opacity-100"
+          style={{
+            background: 'radial-gradient(ellipse at 30% 40%, rgba(139,92,246,0.15) 0%, transparent 60%)'
+          }}
+        />
+        <div className="absolute inset-0 pointer-events-none
+          opacity-40 dark:opacity-100"
+          style={{
+            background: 'radial-gradient(ellipse at 70% 60%, rgba(231,173,48,0.05) 0%, transparent 50%)'
+          }}
+        />
+
+        <div className="relative w-full max-w-[1400px] mx-auto px-8 pt-[95px] pb-10 min-h-[620px] flex items-start">
+
+        {/* Grid dots background */}
+          <div className="absolute inset-0 opacity-10 dark:opacity-15 pointer-events-none" 
                style={{
-                 backgroundImage: 'radial-gradient(rgba(255,255,255,.12) 1px, transparent 1px)',
-                 backgroundSize: '24px 24px',
-                 maskImage: 'radial-gradient(600px 500px at 78% 30%, black 10%, transparent 70%)',
-                 WebkitMaskImage: 'radial-gradient(600px 500px at 78% 30%, black 10%, transparent 70%)'
+                 backgroundImage: 'radial-gradient(rgba(139,92,246,.15) 1px, transparent 1px)',
+                 backgroundSize: '30px 30px',
                }} 
           />
-          
-          {/* Diagonal stripes decorativas */}
-          <div className="absolute right-[-8%] top-[-10%] w-[60%] h-[130%] pointer-events-none opacity-40"
-               style={{ background: 'repeating-linear-gradient(115deg, rgba(245,166,35,.08) 0 3px, transparent 3px 34px)' }} 
-          />
 
-          {/* Decorative rings de fondo (detrás de todo) */}
+          {/* Carrusel 3D de fondo — interactúa con el texto */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <ThreeDCarousel images={heroImages} />
+          </div>
+
+          {/* Decorative rings de fondo */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
-              className="absolute top-[5%] left-[-10%] w-[60%] h-[80%] rounded-full border border-white/5 max-lg:hidden"
+              className="absolute top-[5%] left-[-10%] w-[60%] h-[80%] rounded-full border border-[#8B5CF6]/10 dark:border-white/5 max-lg:hidden"
             />
             <motion.div
               animate={{ rotate: -360 }}
               transition={{ duration: 35, repeat: Infinity, ease: 'linear' }}
-              className="absolute bottom-[10%] right-[-5%] w-[50%] h-[60%] rounded-full border border-gold/10 max-lg:hidden"
+              className="absolute bottom-[10%] right-[-5%] w-[50%] h-[60%] rounded-full border border-[#E7AD30]/15 dark:border-gold/10 max-lg:hidden"
             />
           </div>
 
-          <div className="grid grid-cols-[1.05fr_0.95fr] gap-10 items-center max-lg:grid-cols-1 max-lg:text-center relative z-[2]">
+          <div className="grid grid-cols-[1fr_1.2fr] gap-14 items-center w-full max-lg:grid-cols-1 max-lg:text-center relative z-[2]">
             
             {/* Left */}
             <motion.div
@@ -64,26 +149,23 @@ export default function Landing() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.8, ease: 'easeInOut' }}
             >
-              {/* Eyebrow badge */}
-              <motion.span
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.4, duration: 0.5 }}
-                className="inline-flex items-center gap-2 text-[11.5px] font-bold tracking-[1.6px] uppercase text-gold bg-gold/10 border border-gold/30 px-3.5 py-1.5 rounded-full mb-[22px]"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
-                Torneo universitario oficial
-              </motion.span>
-              
-              {/* Title con text reveal */}
-              <div className="overflow-hidden mb-[18px]">
+              {/* Title */}
+              <div className="overflow-hidden mb-6">
                 <motion.h1
                   initial={{ y: 100 }}
                   animate={{ y: 0 }}
                   transition={{ delay: 0.5, duration: 0.6, ease: 'easeOut' }}
-                  className="font-[family-name:var(--font-display-alt)] font-bold text-[clamp(52px,7vw,92px)] leading-[.92] tracking-[.5px] uppercase"
+                  className="font-[family-name:var(--font-display-alt)] font-bold text-[clamp(52px,7vw,92px)] leading-[.92] tracking-[.5px] uppercase italic"
                 >
-                  TECH<span className="text-gold">CUP</span>
+                  <span className="text-[#2D1B4E] dark:text-[#F7EDE2]">TECH</span>
+                  <span
+                    style={{
+                      background: 'linear-gradient(135deg, #A5610A 0%, #BD7712 25%, #E7AD30 50%, #FBC946 75%, #FBD559 100%)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      backgroundClip: 'text',
+                    }}
+                  >CUP</span>
                 </motion.h1>
               </div>
               
@@ -92,7 +174,7 @@ export default function Landing() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.7, duration: 0.5 }}
-                className="font-[family-name:var(--font-display)] text-[clamp(16px,2vw,21px)] font-semibold tracking-[.4px] uppercase text-gray-light leading-tight mb-[22px]"
+                className="font-[family-name:var(--font-display)] text-[clamp(16px,2vw,21px)] font-semibold tracking-[.4px] uppercase text-[#5B4A7A] dark:text-gray-light leading-tight mb-5"
               >
                 Torneos de fútbol de la decanatura de<br />
                 <span className="text-gold">Ingeniería de Sistemas</span>
@@ -103,9 +185,9 @@ export default function Landing() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.9, duration: 0.5 }}
-                className="text-base leading-relaxed text-text-muted max-w-[480px] mb-8 max-lg:mx-auto"
+                className="text-base leading-relaxed text-[#7A6B99] dark:text-text-muted max-w-[520px] mb-10 max-lg:mx-auto"
               >
-                La competencia que conecta talento, pasión y tecnología. Vive la experiencia de representar a tu equipo y dejar tu huella en la cancha.
+                La pagina que conecta talento, pasión y tecnología. Vive la experiencia de representar a tu equipo y dejar tu huella en la cancha.
               </motion.p>
               
               {/* CTA Buttons */}
@@ -119,162 +201,70 @@ export default function Landing() {
                   Inscribe tu equipo 
                   <span className="group-hover:translate-x-1 transition-transform inline-block">→</span>
                 </Button>
-                <Link to="/torneos" className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm text-white border border-white/20 font-bold text-sm px-6 py-3 hover:bg-white/20 hover:scale-105 transition-all duration-300">
+                <Link to="/torneos" className="inline-flex items-center gap-2 rounded-full
+                  bg-[#E8E0F5] text-[#4B2D7A] border border-[#C4B0E0]
+                  dark:bg-white/10 dark:text-white dark:border-white/20
+                  backdrop-blur-sm font-bold text-sm px-6 py-3 hover:scale-105 transition-all duration-300">
                   Ver torneos activos
                 </Link>
               </motion.div>
             </motion.div>
 
-            {/* Right — Foto de futbolista + anillos + logo integrados */}
+            {/* Right — marco luminoso con carrusel detrás */}
             <motion.div
               initial={{ opacity: 0, scale: 0.85 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.4, duration: 0.8, ease: 'easeOut' }}
-              className="relative aspect-[4/5] max-w-[420px] mx-auto w-full"
+              className="relative h-[400px] max-w-[600px] mx-auto w-full -mt-6"
             >
               {/* Glow de fondo */}
-              <div className="absolute inset-[2%] rounded-2xl bg-purple-mid/25 blur-[80px] animate-pulse" />
+              <div className="absolute inset-[2%] rounded-2xl bg-purple-mid/20 dark:bg-purple-mid/25 blur-[80px] animate-pulse" />
               
               {/* Ring exterior */}
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 35, repeat: Infinity, ease: 'linear' }}
-                className="absolute inset-0 rounded-2xl border border-white/10"
+                className="absolute inset-0 rounded-2xl border border-[#C4B0E0] dark:border-white/10"
               />
               
               {/* Ring medio */}
               <motion.div
                 animate={{ rotate: -360 }}
                 transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
-                className="absolute inset-[8%] rounded-2xl border border-gold/15"
+                className="absolute inset-[8%] rounded-2xl border border-[#E7AD30]/30 dark:border-gold/15"
               />
 
-              {/* Foto del futbolista */}
-              <div className="absolute inset-[4%] rounded-2xl overflow-hidden border border-white/10 shadow-[0_20px_80px_-20px_rgba(76,29,149,.6)]">
-                <img
-                  src="/hero-soccer.jpg"
-                  alt="Futbolista TechCup"
-                  className="w-full h-full object-cover scale-110 hover:scale-125 transition-transform duration-[8s] ease-out"
-                />
-                {/* Overlay gradiente */}
-                <div className="absolute inset-0 bg-gradient-to-t from-purple-black/80 via-purple-black/30 to-transparent" />
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-black/40 via-transparent to-purple-black/40" />
-                
-                {/* Logo TechCup flotando sobre la foto */}
-                <motion.div
-                  animate={{ scale: [1, 1.08, 1], opacity: [0.8, 1, 0.8] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                  className="absolute bottom-4 right-4 w-14 h-14 rounded-xl bg-purple-black/80 backdrop-blur-sm border border-gold/30 flex items-center justify-center p-2"
-                >
-                  <img src="/assets/logo.png" alt="" className="w-full h-full object-contain" />
-                </motion.div>
+              {/* Featured card — imagen grande que cambia cada segundos */}
+              <div className="absolute inset-[10%] rounded-2xl overflow-hidden z-[1]">
+                <AnimatePresence mode="wait">
+                  <motion.img
+                    key={featuredIdx}
+                    src={heroImages[featuredIdx].src}
+                    alt={heroImages[featuredIdx].alt}
+                    initial={{ opacity: 0, scale: 1.1 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1] }}
+                    className="w-full h-full object-contain"
+                    style={{
+                      borderRadius: '1.2em',
+                      boxShadow: '0 10px 40px rgba(0,0,0,0.3), 0 0 40px rgba(231,173,48,0.08)',
+                    }}
+                  />
+                </AnimatePresence>
               </div>
-              
-              {/* Línea decorativa inferior */}
-              <div className="absolute -bottom-1 left-[10%] right-[10%] h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent rounded-full" />
 
-              {/* Ball de fútbol */}
+              {/* Logo TechCup */}
               <motion.div
-                animate={{ y: [0, -12, 0] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-                className="absolute w-[60px] h-[60px] bottom-[2%] left-[-8%] rounded-full bg-[radial-gradient(circle_at_35%_30%,#fff,#d8d8dc_60%,#b9b9c0)] shadow-[0_18px_40px_-8px_rgba(0,0,0,.6)]"
+                animate={{ scale: [1, 1.08, 1], opacity: [0.8, 1, 0.8] }}
+                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                className="absolute bottom-4 right-4 w-14 h-14 rounded-xl bg-purple-black/80 backdrop-blur-sm border border-gold/30 flex items-center justify-center p-2 z-10"
               >
-                <div className="absolute inset-[14%] rounded-full bg-[linear-gradient(0deg,transparent_46%,#1a1a1a_46%_54%,transparent_54%),linear-gradient(90deg,transparent_46%,#1a1a1a_46%_54%,transparent_54%)] opacity-55" />
+                <img src="/assets/logo.png" alt="" className="w-full h-full object-contain" />
               </motion.div>
-
-              {/* Sparks flotando */}
-              {[
-                { top:'4%', right:'8%', size:6, delay:0 },
-                { top:'50%', right:'2%', size:4, delay:0.8 },
-                { bottom:'20%', right:'25%', size:5, delay:1.5 },
-                { top:'30%', left:'2%', size:3, delay:2.5 },
-                { bottom:'50%', right:'5%', size:5, delay:0.5 },
-                { top:'12%', left:'15%', size:3, delay:1.8 },
-              ].map((spark, i) => (
-                <motion.div
-                  key={i}
-                  className="absolute rounded-full bg-gold"
-                  style={{
-                    width: spark.size,
-                    height: spark.size,
-                    top: spark.top,
-                    bottom: spark.bottom,
-                    left: spark.left,
-                    right: spark.right,
-                  }}
-                  animate={{
-                    opacity: [0.5, 1, 0.5],
-                    scale: [0.8, 1.4, 0.8],
-                    boxShadow: ['0 0 10px 2px rgba(245,166,35,.5)', '0 0 20px 6px rgba(245,166,35,.9)', '0 0 10px 2px rgba(245,166,35,.5)'],
-                  }}
-                  transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: spark.delay }}
-                />
-              ))}
             </motion.div>
 
           </div>
-        </div>
-      </AuroraBackground>
-
-      {/* Results Ticker — cinta de resultados (ARRIBA del grid) */}
-      <section className="py-5 relative overflow-hidden z-[3] mt-3">
-        {/* Background con glow morado y dorado */}
-        <div className="absolute inset-0 bg-black/60" />
-        <div className="absolute left-[10%] top-[-80%] w-[500px] h-[500px] rounded-full bg-purple-mid/25 blur-[150px] pointer-events-none" />
-        <div className="absolute right-[10%] bottom-[-80%] w-[400px] h-[400px] rounded-full bg-gold/20 blur-[120px] pointer-events-none" />
-        
-        <div className="relative border-y border-gold/20 py-2.5">
-          {/* Antes: glow en esquinas */}
-          <div className="absolute top-0 left-[10%] w-[80%] h-[1px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
-          
-          <div className="flex items-center gap-4 absolute left-0 top-0 bottom-0 z-10 bg-gradient-to-r from-black via-black/80 to-transparent px-6">
-            <span className="flex items-center gap-2 text-gold font-bold text-xs uppercase tracking-wider whitespace-nowrap">
-              <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
-              EN VIVO
-            </span>
-          </div>
-          
-          <Marquee speed={28} className="ml-24">
-            {[
-              { eq1:'Ing. Sistemas', eq2:'Ing. Civil', score:'3 - 1', estado:'Final', color:'#22C55E' },
-              { eq1:'Ing. Industrial', eq2:'Ing. Sistemas', score:'0 - 2', estado:'Final', color:'#F59E0B' },
-              { eq1:'Ing. Mecánica', eq2:'Ing. Eléctrica', score:'1 - 1', estado:'42\'', color:'#3B82F6' },
-              { eq1:'Ing. Sistemas', eq2:'Ing. Industrial', score:'-', estado:'Sáb 8PM', color:'#22C55E' },
-              { eq1:'Ing. Civil', eq2:'Ing. Mecánica', score:'-', estado:'Dom 5PM', color:'#EF4444' },
-              { eq1:'Ciberseguridad', eq2:'IA', score:'4 - 2', estado:'Final', color:'#8B5CF6' },
-              { eq1:'Ing. Estadística', eq2:'Ing. Sistemas', score:'0 - 0', estado:'18\'', color:'#06B6D4' },
-            ].map((m, i) => (
-              <div
-                key={i}
-                className="flex items-center gap-3 px-4 py-1.5 rounded-xl bg-white/5 border border-white/10 whitespace-nowrap hover:bg-white/10 hover:border-gold/30 transition-all"
-              >
-                <span className="font-semibold text-sm flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full" style={{ backgroundColor: m.color }} />
-                  {m.eq1}
-                </span>
-                <span className="text-[10px] text-text-faint font-bold">VS</span>
-                <span className="font-semibold text-sm flex items-center gap-1.5">
-                  {m.eq2}
-                  <span className="w-2 h-2 rounded-full" style={{ backgroundColor: m.color }} />
-                </span>
-                <span className="w-px h-4 bg-border mx-0.5" />
-                <span className={`font-bold text-sm min-w-[32px] text-center ${
-                  m.estado === 'Final' ? 'text-text-faint' 
-                  : m.estado.includes("'") ? 'text-gold' 
-                  : 'text-purple-mid'
-                }`}>
-                  {m.score}
-                </span>
-                <span className={`text-[9px] uppercase font-bold px-1.5 py-0.5 rounded-full ${
-                  m.estado === 'Final' ? 'bg-white/10 text-text-faint' 
-                  : m.estado.includes("'") ? 'bg-gold/20 text-gold animate-pulse' 
-                  : 'bg-purple-mid/20 text-purple-mid'
-                }`}>
-                  {m.estado}
-                </span>
-              </div>
-            ))}
-          </Marquee>
         </div>
       </section>
 
@@ -375,6 +365,88 @@ export default function Landing() {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Últimos Partidos — cinta de resultados mejorada */}
+      <section className="py-12 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[#F0EAFA]/50 dark:bg-black/40" />
+        <div className="absolute left-[5%] top-[-60%] w-[400px] h-[400px] rounded-full bg-purple-mid/15 blur-[120px] pointer-events-none" />
+        <div className="absolute right-[5%] bottom-[-60%] w-[300px] h-[300px] rounded-full bg-gold/10 blur-[100px] pointer-events-none" />
+        <div className="absolute top-0 left-[5%] right-[5%] h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+
+        <div className="max-w-[1280px] mx-auto px-8 relative">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <span className="w-1 h-6 rounded-full bg-gold" />
+              <div>
+                <span className="text-[11px] font-bold tracking-[1.4px] uppercase text-gold">Últimos partidos</span>
+                <h2 className="font-[family-name:var(--font-display)] text-xl uppercase tracking-[.5px] text-[#4B2D7A] dark:text-gray-light">
+                  Resultados <span className="text-gold">en vivo</span>
+                </h2>
+              </div>
+            </div>
+            <span className="hidden md:flex items-center gap-2 text-[11px] font-bold tracking-[1px] uppercase text-gold bg-gold/10 border border-gold/30 px-3 py-1.5 rounded-full">
+              <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
+              Actualizado ahora
+            </span>
+          </div>
+
+          {/* Partidos — Marquee */}
+          <Marquee speed={35} pauseOnHover={true}>
+            {[
+              { eq1:'Ing. Sistemas', eq2:'Ing. Civil', score:'3 - 1', estado:'Final', color:'#22C55E' },
+              { eq1:'Ing. Industrial', eq2:'Ing. Sistemas', score:'0 - 2', estado:'Final', color:'#F59E0B' },
+              { eq1:'Ing. Mecánica', eq2:'Ing. Eléctrica', score:'1 - 1', estado:'42\'', color:'#3B82F6' },
+              { eq1:'Ing. Sistemas', eq2:'Ing. Industrial', score:'-', estado:'Sáb 8PM', color:'#22C55E' },
+              { eq1:'Ing. Civil', eq2:'Ing. Mecánica', score:'-', estado:'Dom 5PM', color:'#EF4444' },
+              { eq1:'Ciberseguridad', eq2:'IA', score:'4 - 2', estado:'Final', color:'#8B5CF6' },
+              { eq1:'Ing. Estadística', eq2:'Ing. Sistemas', score:'0 - 0', estado:'18\'', color:'#06B6D4' },
+              { eq1:'Ing. Química', eq2:'Ing. Industrial', score:'2 - 1', estado:'Final', color:'#EC4899' },
+            ].map((m, i) => (
+              <div
+                key={i}
+                className="group relative overflow-hidden rounded-xl min-w-[240px]
+                  bg-white/70 dark:bg-white/5
+                  border border-[#E2D5F0] dark:border-white/10
+                  hover:border-gold/30 dark:hover:border-gold/30
+                  transition-all duration-300 p-3.5"
+              >
+                <div className="absolute -inset-[50%] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  style={{ background: 'radial-gradient(circle at 50% 50%, rgba(231,173,48,0.06), transparent 60%)' }}
+                />
+                <div className="flex items-center justify-between mb-2.5">
+                  <span className={`text-[9px] font-bold uppercase tracking-[.6px] px-2 py-0.5 rounded-full ${m.estado === 'Final' ? 'bg-[#E8E0F5] text-[#6B4D9E] dark:bg-white/10 dark:text-text-faint' : m.estado.includes("'") ? 'bg-gold/15 text-gold dark:bg-gold/20 animate-pulse' : 'bg-purple-mid/15 text-purple-mid'}`}>
+                    {m.estado}
+                  </span>
+                  <span className="text-[9px] text-[#9B8AB5] dark:text-text-faint font-medium">
+                    {m.estado === 'Final' ? 'FINAL' : m.estado.includes("'") ? 'EN VIVO' : 'PRÓXIMO'}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex flex-col items-center gap-1 flex-1 min-w-0">
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold" style={{ backgroundColor: m.color + '20', color: m.color }}>
+                      {m.eq1.split(' ').pop()?.substring(0, 3) || m.eq1.substring(0, 3)}
+                    </div>
+                    <span className="text-[11px] font-semibold text-[#4B2D7A] dark:text-gray-light text-center leading-tight truncate w-full">{m.eq1}</span>
+                  </div>
+                  <div className="flex flex-col items-center px-1">
+                    <span className={`text-lg font-black leading-none ${m.estado === 'Final' ? 'text-[#4B2D7A] dark:text-gray-light' : m.estado.includes("'") ? 'text-gold' : 'text-purple-mid'}`}>
+                      {m.score}
+                    </span>
+                    <span className="text-[8px] text-[#9B8AB5] dark:text-text-faint font-bold uppercase mt-0.5">VS</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-1 flex-1 min-w-0">
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold" style={{ backgroundColor: m.color + '20', color: m.color }}>
+                      {m.eq2.split(' ').pop()?.substring(0, 3) || m.eq2.substring(0, 3)}
+                    </div>
+                    <span className="text-[11px] font-semibold text-[#4B2D7A] dark:text-gray-light text-center leading-tight truncate w-full">{m.eq2}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </Marquee>
         </div>
       </section>
 
