@@ -274,9 +274,6 @@ export default function Landing() {
         <div className="absolute right-[-5%] bottom-[-10%] w-[600px] h-[600px] rounded-full bg-gold/20 blur-[150px] pointer-events-none" />
         <div className="absolute top-[30%] left-[50%] w-[400px] h-[400px] rounded-full bg-purple-deep/15 blur-[120px] pointer-events-none" />
         
-        {/* Líneas decorativas */}
-        <div className="absolute top-0 left-[5%] right-[5%] h-[1px] bg-gradient-to-r from-transparent via-purple-mid/40 to-transparent" />
-        
         <div className="max-w-[1280px] mx-auto px-8 relative">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -307,7 +304,6 @@ export default function Landing() {
         <div className="absolute bottom-[5%] right-[5%] w-[600px] h-[600px] rounded-full bg-gold/20 blur-[150px] pointer-events-none" />
         <div className="absolute top-[50%] left-[50%] w-[400px] h-[400px] rounded-full bg-purple-mid/15 blur-[120px] pointer-events-none" />
         <div className="absolute top-[80%] left-[10%] w-[300px] h-[300px] rounded-full bg-gold/10 blur-[100px] pointer-events-none" />
-        <div className="absolute top-0 left-[10%] right-[10%] h-[1px] bg-gradient-to-r from-transparent via-purple-mid/40 to-transparent" />
         
         <div className="max-w-[1280px] mx-auto px-8 relative">
           <div className="grid grid-cols-[0.8fr_1.6fr] gap-10 mb-10 items-end max-lg:grid-cols-1">
@@ -372,8 +368,7 @@ export default function Landing() {
       <section className="py-12 relative overflow-hidden">
         <div className="absolute left-[5%] top-[-60%] w-[400px] h-[400px] rounded-full bg-purple-mid/15 blur-[120px] pointer-events-none" />
         <div className="absolute right-[5%] bottom-[-60%] w-[300px] h-[300px] rounded-full bg-gold/10 blur-[100px] pointer-events-none" />
-        <div className="absolute top-0 left-[5%] right-[5%] h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-
+        
         <div className="max-w-[1280px] mx-auto px-8 relative">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
