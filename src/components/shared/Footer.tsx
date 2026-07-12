@@ -19,7 +19,7 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-[13.5px] text-text-muted leading-relaxed mt-3.5 max-w-[260px]">
-              Plataforma oficial de torneos de fútbol de la Decanatura de Ingeniería de Sistemas.
+              Generado por y para estudiantes.
             </p>
           </div>
 

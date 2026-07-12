@@ -370,7 +370,6 @@ export default function Landing() {
 
       {/* Últimos Partidos — cinta de resultados mejorada */}
       <section className="py-12 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[#F0EAFA]/50 dark:bg-black/40" />
         <div className="absolute left-[5%] top-[-60%] w-[400px] h-[400px] rounded-full bg-purple-mid/15 blur-[120px] pointer-events-none" />
         <div className="absolute right-[5%] bottom-[-60%] w-[300px] h-[300px] rounded-full bg-gold/10 blur-[100px] pointer-events-none" />
         <div className="absolute top-0 left-[5%] right-[5%] h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
@@ -408,9 +407,9 @@ export default function Landing() {
               <div
                 key={i}
                 className="group relative overflow-hidden rounded-xl min-w-[240px]
-                  bg-white/70 dark:bg-white/5
-                  border border-[#E2D5F0] dark:border-white/10
-                  hover:border-gold/30 dark:hover:border-gold/30
+                  bg-surface/80 backdrop-blur-sm
+                  border border-border/60
+                  hover:border-gold/40
                   transition-all duration-300 p-3.5"
               >
                 <div className="absolute -inset-[50%] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
