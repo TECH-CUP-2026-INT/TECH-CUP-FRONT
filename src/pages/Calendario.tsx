@@ -157,13 +157,17 @@ function CalendarioContent() {
                           </div>
                         </div>
                         <div className="w-px h-12 bg-black/10 dark:bg-white/10 max-md:hidden" />
-                        {/* Teams with logos */}
-                        <div className="flex-1 flex items-center gap-2 max-md:justify-center">
-                          <span className="text-lg">{logo1.emoji}</span>
-                          <span className="font-semibold text-sm text-[#3D1A6B] dark:text-white">{p.eq1}</span>
-                          <span className="text-[10px] text-[#7A6B99] dark:text-text-faint font-bold mx-1">VS</span>
-                          <span className="font-semibold text-sm text-[#3D1A6B] dark:text-white">{p.eq2}</span>
-                          <span className="text-lg">{logo2.emoji}</span>
+                        {/* Teams with colored dots */}
+                        <div className="flex-1 flex items-center gap-3 max-md:justify-center">
+                          <div className="flex flex-col items-center gap-0.5">
+                            <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: logo1.color }} />
+                            <span className="font-semibold text-sm text-[#3D1A6B] dark:text-white">{p.eq1}</span>
+                          </div>
+                          <span className="text-[10px] text-[#7A6B99] dark:text-text-faint font-bold">VS</span>
+                          <div className="flex flex-col items-center gap-0.5">
+                            <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: logo2.color }} />
+                            <span className="font-semibold text-sm text-[#3D1A6B] dark:text-white">{p.eq2}</span>
+                          </div>
                         </div>
                       </div>
                     </button>
