@@ -156,9 +156,9 @@ function CalendarioContent() {
                             <span className="text-[10px] font-bold text-gold">{p.hora}</span>
                           </div>
                         </div>
-                        <div className="w-px h-12 bg-black/10 dark:bg-white/10 max-md:hidden" />
-                        {/* Teams with colored dots */}
-                        <div className="flex-1 flex items-center gap-3 max-md:justify-center">
+                        <div className="w-px self-stretch bg-black/10 dark:bg-white/10 max-md:hidden" />
+                        {/* Teams with colored dots — centrado vertical */}
+                        <div className="flex-1 flex items-center justify-center gap-3 max-md:justify-center">
                           <div className="flex flex-col items-center gap-0.5">
                             <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: logo1.color }} />
                             <span className="font-semibold text-sm text-[#3D1A6B] dark:text-white">{p.eq1}</span>
