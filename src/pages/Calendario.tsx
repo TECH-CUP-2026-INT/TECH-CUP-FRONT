@@ -156,7 +156,7 @@ function CalendarioContent() {
                             <span className="text-[10px] font-bold text-gold">{p.hora}</span>
                           </div>
                         </div>
-                        <div className="w-px self-stretch bg-black/10 dark:bg-white/10 max-md:hidden" />
+                        <div className="w-[2px] self-stretch bg-[#D4C8E8]/40 dark:bg-white/10 rounded-full max-md:hidden" />
                         {/* Teams with colored dots — centrado vertical */}
                         <div className="flex-1 flex items-center justify-center gap-3 max-md:justify-center">
                           <div className="flex flex-col items-center gap-0.5">
