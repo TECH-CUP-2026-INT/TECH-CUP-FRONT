@@ -118,7 +118,7 @@ export default function Landing() {
   }, [nextFeature])
 
   return (
-    <div className="min-h-screen bg-[#F5F0FF] dark:bg-[#0A0614]">
+    <div className="min-h-screen bg-[#F0F8FF] dark:bg-[#0A0614]">
       <Navbar />
 
       {/* Hero */}
@@ -159,7 +159,7 @@ export default function Landing() {
             <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.8, ease: 'easeInOut' }}>
               <div className="overflow-hidden mb-6">
                 <motion.h1 initial={{ y: 100 }} animate={{ y: 0 }} transition={{ delay: 0.5, duration: 0.6, ease: 'easeOut' }} className="font-[family-name:var(--font-display-alt)] font-bold text-[clamp(52px,7vw,92px)] leading-[.92] tracking-[.5px] uppercase italic">
-                  <span className="text-[#2D1B4E] dark:text-[#F7EDE2]">TECH</span>
+                  <span className="text-[#3D1A6B] dark:text-[#F7EDE2]">TECH</span>
                   <span style={{ background: 'linear-gradient(135deg, #A5610A 0%, #BD7712 25%, #F5A623 50%, #FBC946 75%, #FBD559 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>CUP</span>
                 </motion.h1>
               </div>
@@ -201,7 +201,7 @@ export default function Landing() {
         <div className="absolute left-[-10%] top-[-20%] w-[700px] h-[700px] rounded-full bg-purple-mid/20 blur-[180px] pointer-events-none" />
         <div className="absolute right-[-5%] bottom-[-10%] w-[600px] h-[600px] rounded-full bg-gold/20 blur-[150px] pointer-events-none" />
         <div className="max-w-[1280px] mx-auto px-8 relative">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }} className="bg-black/5 dark:bg-black/30 backdrop-blur-sm border border-black/10 dark:border-white/5 rounded-2xl p-[30px] overflow-hidden">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }} className="bg-[#E8DFF5]/70 dark:bg-black/30 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-white/5 rounded-2xl p-[30px] overflow-hidden">
             <div className="flex gap-6 max-lg:flex-col">
               {/* Imagen grande */}
               <div className="flex-[1.6] relative min-h-[320px] rounded-xl overflow-hidden">
@@ -275,19 +275,19 @@ export default function Landing() {
             {/* Right — Tournament cards */}
             <div>
               {/* Header toolbar */}
-              <div className="flex items-center justify-between mb-4 pb-3 border-b border-black/10 dark:border-white/5">
+              <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#D4C8E8]/40 dark:border-white/5">
                 <h3 className="font-[family-name:var(--font-display)] text-lg uppercase text-[#4B2D7A] dark:text-white">Todos los torneos</h3>
                 <div className="flex items-center gap-3">
                   <span className="text-[11px] text-text-muted dark:text-text-faint">6 torneos encontrados</span>
                   <div className="relative">
-                    <select className="appearance-none bg-white/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-lg px-2.5 py-1.5 pr-7 text-[11px] text-[#4B2D7A] dark:text-gray-light cursor-pointer focus:outline-none focus:border-gold/50">
+                    <select className="appearance-none bg-white/5 dark:bg-white/5 border border-[#D4C8E8]/40 dark:border-white/10 rounded-lg px-2.5 py-1.5 pr-7 text-[11px] text-[#4B2D7A] dark:text-gray-light cursor-pointer focus:outline-none focus:border-gold/50">
                       <option>Más recientes</option>
                       <option>Más antiguos</option>
                       <option>Nombre</option>
                     </select>
                     <svg className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-text-muted pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/></svg>
                   </div>
-                  <div className="flex border border-black/10 dark:border-white/10 rounded-lg overflow-hidden">
+                  <div className="flex border border-[#D4C8E8]/40 dark:border-white/10 rounded-lg overflow-hidden">
                     <button className="p-1.5 bg-purple-mid text-white"><svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z"/></svg></button>
                     <button className="p-1.5 bg-white/5 dark:bg-white/5 text-text-muted hover:text-white transition-colors"><svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg></button>
                   </div>
@@ -419,7 +419,7 @@ export default function Landing() {
               { eq1:'Ing. Estadística', eq2:'Ing. Sistemas', score:'0 - 0', estado:'18\'', color:'#06B6D4' },
               { eq1:'Ing. Química', eq2:'Ing. Industrial', score:'2 - 1', estado:'Final', color:'#EC4899' },
             ].map((m, i) => (
-              <div key={i} className="group relative overflow-hidden rounded-xl min-w-[240px] bg-black/5 dark:bg-black/30 backdrop-blur-sm border border-black/10 dark:border-white/5 hover:border-gold/40 transition-all duration-300 p-3.5">
+              <div key={i} className="group relative overflow-hidden rounded-xl min-w-[240px] bg-[#E8DFF5]/70 dark:bg-black/30 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-white/5 hover:border-gold/40 transition-all duration-300 p-3.5">
                 <div className="absolute -inset-[50%] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ background: 'radial-gradient(circle at 50% 50%, rgba(245,166,35,0.06), transparent 60%)' }} />
                 <div className="flex items-center justify-between mb-2.5">
                   <span className={`text-[9px] font-bold uppercase tracking-[.6px] px-2 py-0.5 rounded-full ${m.estado === 'Final' ? 'bg-[#E8E0F5] text-[#6B4D9E] dark:bg-white/10 dark:text-text-faint' : m.estado.includes("'") ? 'bg-gold/15 text-gold dark:bg-gold/20 animate-pulse' : 'bg-purple-mid/15 text-purple-mid'}`}>{m.estado}</span>
@@ -449,3 +449,5 @@ export default function Landing() {
     </div>
   )
 }
+
+

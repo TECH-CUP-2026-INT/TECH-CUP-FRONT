@@ -39,7 +39,7 @@ function generarDiasMes(mes: number, año: number) {
 }
 
 function CalendarioContent() {
-  const [mes, setMes] = useState(6)
+  const [mes, setMes] = useState(4) // MAY
   const [año] = useState(2026)
   const [vista, setVista] = useState<'calendario' | 'lista'>('lista')
   const [selectedMatch, setSelectedMatch] = useState<typeof partidos[0] | null>(null)
@@ -51,7 +51,7 @@ function CalendarioContent() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-[#F5F0FF] dark:bg-[#190D2B]">
+      <section className="relative overflow-hidden bg-[#F0F8FF] dark:bg-[#190D2B]">
         <div className="absolute inset-0 pointer-events-none">
           <img src="/hero-stadium.jpg" alt="" className="w-full h-full object-cover opacity-20 dark:opacity-15" style={{ filter: 'blur(50px) saturate(1.4)' }} />
           <div className="absolute inset-0 bg-white/40 dark:bg-[#190D2B]/50" />
@@ -66,7 +66,7 @@ function CalendarioContent() {
               <CalendarDays size={14} /> Calendario {año}
             </motion.span>
             <motion.h1 initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:0.3}} className="font-[family-name:var(--font-display-alt)] font-bold text-[clamp(28px,4vw,48px)] leading-[.92] tracking-[.5px] uppercase italic mb-4">
-              <span className="text-[#2D1B4E] dark:text-[#F7EDE2]">Calendario</span> <span className="text-gold">de Partidos</span>
+              <span className="text-[#3D1A6B] dark:text-[#F7EDE2]">Calendario</span> <span className="text-gold">de Partidos</span>
             </motion.h1>
             <motion.p initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.5}} className="text-base leading-relaxed text-[#7A6B99] dark:text-text-muted">Consultá la programación de partidos, filtrá por torneo y seguí la acción en vivo.</motion.p>
           </div>
@@ -74,7 +74,7 @@ function CalendarioContent() {
       </section>
 
       {/* Content */}
-      <section className="py-12 pb-[100px] relative overflow-hidden bg-[#F5F0FF] dark:bg-[#190D2B]">
+      <section className="py-12 pb-[100px] relative overflow-hidden bg-[#F0F8FF] dark:bg-[#190D2B]">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-[10%] right-[-10%] w-[600px] h-[600px] rounded-full bg-purple-mid/15 dark:bg-purple-mid/20 blur-[180px]" />
           <div className="absolute bottom-[5%] left-[-10%] w-[500px] h-[500px] rounded-full bg-gold/15 dark:bg-gold/20 blur-[150px]" />
@@ -84,24 +84,24 @@ function CalendarioContent() {
           <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
             <div className="flex items-center gap-3">
               <button onClick={()=>setVista('lista')}
-                className={`rounded-full px-5 py-2 text-sm font-semibold transition-all ${vista==='lista'?'bg-purple-mid text-white':'bg-black/5 dark:bg-black/30 border border-black/10 dark:border-white/10 text-[#2D1B4E] dark:text-gray-light hover:border-purple-mid'}`}>Lista</button>
+                className={`rounded-full px-5 py-2 text-sm font-semibold transition-all ${vista==='lista'?'bg-purple-mid text-white':'bg-[#E8DFF5]/70 dark:bg-black/30 border border-[#D4C8E8]/40 dark:border-white/10 text-[#3D1A6B] dark:text-gray-light hover:border-purple-mid'}`}>Lista</button>
               <button onClick={()=>setVista('calendario')}
-                className={`rounded-full px-5 py-2 text-sm font-semibold transition-all ${vista==='calendario'?'bg-purple-mid text-white':'bg-black/5 dark:bg-black/30 border border-black/10 dark:border-white/10 text-[#2D1B4E] dark:text-gray-light hover:border-purple-mid'}`}>Calendario</button>
+                className={`rounded-full px-5 py-2 text-sm font-semibold transition-all ${vista==='calendario'?'bg-purple-mid text-white':'bg-[#E8DFF5]/70 dark:bg-black/30 border border-[#D4C8E8]/40 dark:border-white/10 text-[#3D1A6B] dark:text-gray-light hover:border-purple-mid'}`}>Calendario</button>
             </div>
             {vista==='calendario' && (
               <div className="flex items-center gap-3">
                 <button onClick={()=>setMes(m=>m-1)} disabled={mes===0}
-                  className="w-9 h-9 rounded-lg border border-black/10 dark:border-white/10 bg-black/5 dark:bg-black/30 text-[#2D1B4E] dark:text-gray-light flex items-center justify-center hover:border-purple-mid disabled:opacity-30 transition-all"><ChevronLeft size={18} /></button>
-                <span className="font-[family-name:var(--font-display)] text-lg uppercase min-w-[140px] text-center text-[#2D1B4E] dark:text-white">{nombreMes} {año}</span>
+                  className="w-9 h-9 rounded-lg border border-[#D4C8E8]/40 dark:border-white/10 bg-[#E8DFF5]/70 dark:bg-black/30 text-[#3D1A6B] dark:text-gray-light flex items-center justify-center hover:border-purple-mid disabled:opacity-30 transition-all"><ChevronLeft size={18} /></button>
+                <span className="font-[family-name:var(--font-display)] text-lg uppercase min-w-[140px] text-center text-[#3D1A6B] dark:text-white">{nombreMes} {año}</span>
                 <button onClick={()=>setMes(m=>m+1)} disabled={mes===11}
-                  className="w-9 h-9 rounded-lg border border-black/10 dark:border-white/10 bg-black/5 dark:bg-black/30 text-[#2D1B4E] dark:text-gray-light flex items-center justify-center hover:border-purple-mid disabled:opacity-30 transition-all"><ChevronRight size={18} /></button>
+                  className="w-9 h-9 rounded-lg border border-[#D4C8E8]/40 dark:border-white/10 bg-[#E8DFF5]/70 dark:bg-black/30 text-[#3D1A6B] dark:text-gray-light flex items-center justify-center hover:border-purple-mid disabled:opacity-30 transition-all"><ChevronRight size={18} /></button>
               </div>
             )}
           </div>
 
           {/* Calendar view */}
           {vista==='calendario' && (
-            <div className="bg-black/5 dark:bg-black/30 border border-black/10 dark:border-white/5 rounded-2xl p-6 mb-8">
+            <div className="bg-[#E8DFF5]/70 dark:bg-black/30 border border-[#D4C8E8]/40 dark:border-white/5 rounded-2xl p-6 mb-8">
               <div className="grid grid-cols-7 gap-2">
                 {DIAS_SEMANA.map(d=>(
                   <div key={d} className="text-center text-[11px] text-[#7A6B99] dark:text-text-faint font-semibold uppercase tracking-[.5px] py-2">{d}</div>
@@ -110,12 +110,11 @@ function CalendarioContent() {
                   <div key={i} className="aspect-square flex items-center justify-center">
                     {d ? (
                       <div className={`w-full h-full rounded-xl flex flex-col items-center justify-center text-sm transition-all ${
-                        d.tienePartido ? 'bg-purple-mid/20 border border-purple-mid/40 text-[#2D1B4E] dark:text-white font-bold cursor-pointer hover:bg-purple-mid/30'
-                        : d.hoy ? 'bg-gold/15 border border-gold/30 text-gold font-bold'
+                        d.tienePartido ? 'bg-gold/15 border border-gold/30 text-gold font-bold cursor-pointer hover:bg-gold/25 shadow-sm'
+                        : d.hoy ? 'bg-purple-mid/20 border border-purple-mid/40 text-[#3D1A6B] dark:text-white font-bold'
                         : 'text-[#7A6B99] dark:text-text-muted hover:bg-black/10 dark:hover:bg-white/5'
                       }`}>
                         <span>{d.dia}</span>
-                        {d.tienePartido && <span className="w-1 h-1 rounded-full bg-gold mt-1" />}
                       </div>
                     ) : <span />}
                   </div>
@@ -132,7 +131,7 @@ function CalendarioContent() {
           <div className="grid grid-cols-[1fr_1.2fr] gap-6 items-start max-lg:grid-cols-1">
             {/* Left: Lista de partidos */}
             <div>
-              <h2 className="font-[family-name:var(--font-display)] text-xl uppercase tracking-[.5px] mb-5 text-[#2D1B4E] dark:text-white">
+              <h2 className="font-[family-name:var(--font-display)] text-xl uppercase tracking-[.5px] mb-5 text-[#3D1A6B] dark:text-white">
                 Próximos <span className="text-gold">partidos</span>
               </h2>
               <div className="flex flex-col gap-3">
@@ -146,20 +145,20 @@ function CalendarioContent() {
                   return (
                     <button key={i} onClick={() => setSelectedMatch(p)}
                       className={`text-left w-full rounded-2xl border transition-all duration-200 overflow-hidden
-                        ${isSelected ? 'border-gold/50 ring-1 ring-gold/20 bg-black/10 dark:bg-black/40' : 'border-black/10 dark:border-white/5 bg-black/5 dark:bg-black/30 hover:border-purple-mid/50'}`}>
+                        ${isSelected ? 'border-gold/50 ring-1 ring-gold/20 bg-black/10 dark:bg-black/40' : 'border-[#D4C8E8]/40 dark:border-white/5 bg-[#E8DFF5]/70 dark:bg-black/30 hover:border-purple-mid/50'}`}>
                       <div className="flex items-center gap-3 p-4 max-md:flex-col max-md:text-center">
                         {/* Date */}
                         <div className="flex flex-col items-center min-w-[50px]">
-                          <span className="font-[family-name:var(--font-display)] text-2xl leading-none text-[#2D1B4E] dark:text-white">{p.dia}</span>
+                          <span className="font-[family-name:var(--font-display)] text-2xl leading-none text-[#3D1A6B] dark:text-white">{p.dia}</span>
                           <span className="text-[10px] text-[#7A6B99] dark:text-text-muted uppercase font-semibold tracking-wider">{p.mes}</span>
                         </div>
                         <div className="w-px h-10 bg-black/10 dark:bg-white/10 max-md:hidden" />
                         {/* Teams with logos */}
                         <div className="flex-1 flex items-center gap-2 max-md:justify-center">
                           <span className="text-lg">{logo1.emoji}</span>
-                          <span className="font-semibold text-sm text-[#2D1B4E] dark:text-white">{p.eq1}</span>
+                          <span className="font-semibold text-sm text-[#3D1A6B] dark:text-white">{p.eq1}</span>
                           <span className="text-[10px] text-[#7A6B99] dark:text-text-faint font-bold mx-1">VS</span>
-                          <span className="font-semibold text-sm text-[#2D1B4E] dark:text-white">{p.eq2}</span>
+                          <span className="font-semibold text-sm text-[#3D1A6B] dark:text-white">{p.eq2}</span>
                           <span className="text-lg">{logo2.emoji}</span>
                         </div>
                         {/* Time */}
@@ -179,7 +178,7 @@ function CalendarioContent() {
               {selectedMatch ? (
                 <AnimatePresence mode="wait">
                   <motion.div key={selectedMatch.dia + selectedMatch.eq1} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }}
-                    className="rounded-2xl overflow-hidden border border-black/10 dark:border-white/5 bg-black/5 dark:bg-black/30">
+                    className="rounded-2xl overflow-hidden border border-[#D4C8E8]/40 dark:border-white/5 bg-[#E8DFF5]/70 dark:bg-black/30">
                     {/* Medalla / Moneda dorada con el día */}
                     <div className="relative h-[220px] overflow-hidden flex items-center justify-center bg-gradient-to-br from-[#2E0953] to-[#190D2B]">
                       <div className="absolute inset-0 opacity-20" style={{ background: 'radial-gradient(ellipse at 50% 40%, #C8851A 0%, transparent 60%)' }} />
@@ -214,11 +213,11 @@ function CalendarioContent() {
                       <div className="flex items-start gap-2 text-[13px] text-[#7A6B99] dark:text-white/60">
                         <MapPin size={14} className="mt-0.5 flex-shrink-0" />
                         <div>
-                          <p className="font-semibold text-[#2D1B4E] dark:text-white">{selectedMatch.lugar}</p>
+                          <p className="font-semibold text-[#3D1A6B] dark:text-white">{selectedMatch.lugar}</p>
                           <p className="mt-1">{selectedCancha?.desc || 'Cancha universitaria equipada para la competencia.'}</p>
                         </div>
                       </div>
-                      <div className="flex gap-3 pt-3 border-t border-black/10 dark:border-white/10">
+                      <div className="flex gap-3 pt-3 border-t border-[#D4C8E8]/40 dark:border-white/10">
                         <Badge className="rounded-full text-[10px] px-3 py-1 h-auto bg-purple-mid/20 text-purple-mid border border-purple-mid/30">Próximo</Badge>
                         <span className="text-xs text-[#7A6B99] dark:text-text-muted self-center">Torneo: TechCup 2026</span>
                       </div>
@@ -226,7 +225,7 @@ function CalendarioContent() {
                   </motion.div>
                 </AnimatePresence>
               ) : (
-                <div className="rounded-2xl border border-dashed border-black/10 dark:border-white/10 p-10 text-center">
+                <div className="rounded-2xl border border-dashed border-[#D4C8E8]/40 dark:border-white/10 p-10 text-center">
                   <CalendarDays size={40} className="mx-auto text-[#7A6B99] dark:text-text-faint mb-3" />
                   <p className="text-sm text-[#7A6B99] dark:text-text-muted">Seleccioná un partido para ver los detalles</p>
                 </div>
@@ -258,10 +257,12 @@ export default function Calendario() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F5F0FF] dark:bg-[#190D2B]">
+    <div className="min-h-screen bg-[#F0F8FF] dark:bg-[#190D2B]">
       <Navbar />
       <CalendarioContent />
       <Footer />
     </div>
   )
 }
+
+

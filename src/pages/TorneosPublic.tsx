@@ -45,7 +45,7 @@ function TorneosContent() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-[#F5F0FF] dark:bg-[#190D2B]">
+      <section className="relative overflow-hidden bg-[#F0F8FF] dark:bg-[#190D2B]">
         <div className="absolute inset-0 pointer-events-none">
           <img src="/banner-soccer.jpg" alt="" className="w-full h-full object-cover opacity-20 dark:opacity-15" style={{ filter: 'blur(50px) saturate(1.4)' }} />
           <div className="absolute inset-0 bg-white/40 dark:bg-[#190D2B]/50" />
@@ -70,7 +70,7 @@ function TorneosContent() {
               <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" /> Torneos
             </motion.span>
             <motion.h1 initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:0.3}} className="font-[family-name:var(--font-display-alt)] font-bold text-[clamp(42px,6vw,72px)] leading-[.92] tracking-[.5px] uppercase italic mb-4">
-              <span className="text-[#2D1B4E] dark:text-[#F7EDE2]">Torneos</span> <span className="text-gold">y Equipos</span>
+              <span className="text-[#3D1A6B] dark:text-[#F7EDE2]">Torneos</span> <span className="text-gold">y Equipos</span>
             </motion.h1>
             <motion.p initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.5}} className="text-base leading-relaxed text-[#7A6B99] dark:text-text-muted max-w-[560px] mx-auto">
               Descubre los torneos disponibles, explora los equipos inscritos y sé parte de la competencia más emocionante de Ingeniería de Sistemas.
@@ -87,7 +87,7 @@ function TorneosContent() {
       </section>
 
       {/* Content */}
-      <section className="py-12 pb-[100px] relative overflow-hidden bg-[#F5F0FF] dark:bg-[#190D2B]">
+      <section className="py-12 pb-[100px] relative overflow-hidden bg-[#F0F8FF] dark:bg-[#190D2B]">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-[10%] left-[-5%] w-[600px] h-[600px] rounded-full bg-purple-mid/15 dark:bg-purple-mid/20 blur-[180px]" />
           <div className="absolute bottom-[10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-gold/15 dark:bg-gold/20 blur-[150px]" />
@@ -97,16 +97,16 @@ function TorneosContent() {
           {/* Filters */}
           <motion.div initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:0.6}}
             className="grid grid-cols-[repeat(3,160px)_1fr_auto] gap-3 items-end mb-8 max-lg:grid-cols-2 max-sm:grid-cols-1
-              bg-black/5 dark:bg-black/30 border border-black/10 dark:border-white/5 rounded-2xl p-5">
+              bg-[#E8DFF5]/70 dark:bg-black/30 border border-[#D4C8E8]/40 dark:border-white/5 rounded-2xl p-5">
             <div>
               <label className="block text-[11px] text-[#7A6B99] dark:text-text-faint font-semibold uppercase tracking-[.4px] mb-1.5">Estado</label>
               <Select value={filterEstado} onValueChange={v=>{setFilterEstado(v);setPage(1)}}>
-                <SelectTrigger className="bg-black/5 dark:bg-black/20 border border-black/10 dark:border-white/10 text-[#2D1B4E] dark:text-gray-light rounded-lg">
+                <SelectTrigger className="bg-[#E8DFF5]/70 dark:bg-black/20 border border-[#D4C8E8]/40 dark:border-white/10 text-[#3D1A6B] dark:text-gray-light rounded-lg">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-white dark:bg-[#1F1F28] border border-black/10 dark:border-white/10">
+                <SelectContent className="bg-white dark:bg-[#1F1F28] border border-[#D4C8E8]/40 dark:border-white/10">
                   {[{value:'todos',label:'Todos'},{value:'live',label:'En curso'},{value:'upcoming',label:'Próximo'},{value:'closed',label:'Finalizado'}].map(e=>
-                    <SelectItem key={e.value} value={e.value} className="text-[#2D1B4E] dark:text-gray-light">{e.label}</SelectItem>
+                    <SelectItem key={e.value} value={e.value} className="text-[#3D1A6B] dark:text-gray-light">{e.label}</SelectItem>
                   )}
                 </SelectContent>
               </Select>
@@ -114,25 +114,25 @@ function TorneosContent() {
             <div>
               <label className="block text-[11px] text-[#7A6B99] dark:text-text-faint font-semibold uppercase tracking-[.4px] mb-1.5">Semestre</label>
               <Select value={filterSemestre} onValueChange={v=>{setFilterSemestre(v);setPage(1)}}>
-                <SelectTrigger className="bg-black/5 dark:bg-black/20 border border-black/10 dark:border-white/10 text-[#2D1B4E] dark:text-gray-light rounded-lg">
+                <SelectTrigger className="bg-[#E8DFF5]/70 dark:bg-black/20 border border-[#D4C8E8]/40 dark:border-white/10 text-[#3D1A6B] dark:text-gray-light rounded-lg">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-white dark:bg-[#1F1F28] border border-black/10 dark:border-white/10">
-                  <SelectItem value="todos" className="text-[#2D1B4E] dark:text-gray-light">Todos</SelectItem>
-                  {semestres.map(s=><SelectItem key={s} value={s} className="text-[#2D1B4E] dark:text-gray-light">{s}</SelectItem>)}
+                <SelectContent className="bg-white dark:bg-[#1F1F28] border border-[#D4C8E8]/40 dark:border-white/10">
+                  <SelectItem value="todos" className="text-[#3D1A6B] dark:text-gray-light">Todos</SelectItem>
+                  {semestres.map(s=><SelectItem key={s} value={s} className="text-[#3D1A6B] dark:text-gray-light">{s}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>
             <div>
               <label className="block text-[11px] text-[#7A6B99] dark:text-text-faint font-semibold uppercase tracking-[.4px] mb-1.5">Categoría</label>
               <Select value={filterCategoria} onValueChange={v=>{setFilterCategoria(v);setPage(1)}}>
-                <SelectTrigger className="bg-black/5 dark:bg-black/20 border border-black/10 dark:border-white/10 text-[#2D1B4E] dark:text-gray-light rounded-lg">
+                <SelectTrigger className="bg-[#E8DFF5]/70 dark:bg-black/20 border border-[#D4C8E8]/40 dark:border-white/10 text-[#3D1A6B] dark:text-gray-light rounded-lg">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-white dark:bg-[#1F1F28] border border-black/10 dark:border-white/10">
-                  <SelectItem value="todos" className="text-[#2D1B4E] dark:text-gray-light">Todas</SelectItem>
-                  <SelectItem value="Fútbol 11" className="text-[#2D1B4E] dark:text-gray-light">Fútbol 11</SelectItem>
-                  <SelectItem value="Futsal" className="text-[#2D1B4E] dark:text-gray-light">Futsal</SelectItem>
+                <SelectContent className="bg-white dark:bg-[#1F1F28] border border-[#D4C8E8]/40 dark:border-white/10">
+                  <SelectItem value="todos" className="text-[#3D1A6B] dark:text-gray-light">Todas</SelectItem>
+                  <SelectItem value="Fútbol 11" className="text-[#3D1A6B] dark:text-gray-light">Fútbol 11</SelectItem>
+                  <SelectItem value="Futsal" className="text-[#3D1A6B] dark:text-gray-light">Futsal</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -141,7 +141,7 @@ function TorneosContent() {
               <div className="relative">
                 <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#7A6B99] dark:text-text-faint" />
                 <input type="text" placeholder="Ej. TechCup 2024" value={filterSearch} onChange={e=>{setFilterSearch(e.target.value);setPage(1)}}
-                  className="w-full bg-black/5 dark:bg-black/20 border border-black/10 dark:border-white/10 text-[#2D1B4E] dark:text-gray-light rounded-lg py-2.5 pl-9 pr-3 text-[13.5px] outline-none focus:border-purple-mid placeholder:text-[#9B8AB5] dark:placeholder:text-text-faint" />
+                  className="w-full bg-[#E8DFF5]/70 dark:bg-black/20 border border-[#D4C8E8]/40 dark:border-white/10 text-[#3D1A6B] dark:text-gray-light rounded-lg py-2.5 pl-9 pr-3 text-[13.5px] outline-none focus:border-purple-mid placeholder:text-[#9B8AB5] dark:placeholder:text-text-faint" />
               </div>
             </div>
             <Button variant="outline" size="sm" onClick={clearFilters}
@@ -151,17 +151,17 @@ function TorneosContent() {
           </motion.div>
 
           {/* Toolbar */}
-          <div className="flex items-center justify-between mb-6 pb-4 border-b border-black/10 dark:border-white/5 flex-wrap gap-3">
-            <h2 className="font-[family-name:var(--font-display)] text-lg uppercase text-[#2D1B4E] dark:text-white">Todos los torneos</h2>
+          <div className="flex items-center justify-between mb-6 pb-4 border-b border-[#D4C8E8]/40 dark:border-white/5 flex-wrap gap-3">
+            <h2 className="font-[family-name:var(--font-display)] text-lg uppercase text-[#3D1A6B] dark:text-white">Todos los torneos</h2>
             <div className="flex items-center gap-3.5 text-[13px] text-[#7A6B99] dark:text-text-muted">
-              <span className="bg-black/5 dark:bg-black/30 border border-black/10 dark:border-white/5 rounded-full px-4 py-1.5">{filtered.length} torneos encontrados</span>
+              <span className="bg-[#E8DFF5]/70 dark:bg-black/30 border border-[#D4C8E8]/40 dark:border-white/5 rounded-full px-4 py-1.5">{filtered.length} torneos encontrados</span>
               <div className="flex gap-1">
                 <button onClick={()=>setViewMode('grid')}
-                  className={`w-8 h-8 rounded-lg border flex items-center justify-center transition-colors ${viewMode==='grid'?'bg-purple-mid text-white border-purple-mid':'border-black/10 dark:border-white/10 text-[#7A6B99] dark:text-text-muted hover:border-purple-mid'}`}>
+                  className={`w-8 h-8 rounded-lg border flex items-center justify-center transition-colors ${viewMode==='grid'?'bg-purple-mid text-white border-purple-mid':'border-[#D4C8E8]/40 dark:border-white/10 text-[#7A6B99] dark:text-text-muted hover:border-purple-mid'}`}>
                   <LayoutGrid size={15} />
                 </button>
                 <button onClick={()=>setViewMode('list')}
-                  className={`w-8 h-8 rounded-lg border flex items-center justify-center transition-colors ${viewMode==='list'?'bg-purple-mid text-white border-purple-mid':'border-black/10 dark:border-white/10 text-[#7A6B99] dark:text-text-muted hover:border-purple-mid'}`}>
+                  className={`w-8 h-8 rounded-lg border flex items-center justify-center transition-colors ${viewMode==='list'?'bg-purple-mid text-white border-purple-mid':'border-[#D4C8E8]/40 dark:border-white/10 text-[#7A6B99] dark:text-text-muted hover:border-purple-mid'}`}>
                   <List size={15} />
                 </button>
               </div>
@@ -181,13 +181,13 @@ function TorneosContent() {
           {totalPages > 1 && (
             <div className="flex justify-center items-center gap-2 mt-10">
               <button onClick={()=>setPage(p=>Math.max(1,p-1))} disabled={page===1}
-                className="w-[38px] h-[38px] rounded-lg border border-black/10 dark:border-white/10 bg-black/5 dark:bg-black/30 text-[#2D1B4E] dark:text-gray-light text-sm font-semibold disabled:opacity-40 disabled:cursor-default hover:border-purple-mid hover:text-purple-mid transition-all" aria-label="Anterior">«</button>
+                className="w-[38px] h-[38px] rounded-lg border border-[#D4C8E8]/40 dark:border-white/10 bg-[#E8DFF5]/70 dark:bg-black/30 text-[#3D1A6B] dark:text-gray-light text-sm font-semibold disabled:opacity-40 disabled:cursor-default hover:border-purple-mid hover:text-purple-mid transition-all" aria-label="Anterior">«</button>
               {Array.from({length:totalPages},(_,i)=>i+1).map(p=>(
                 <button key={p} onClick={()=>setPage(p)}
-                  className={`w-[38px] h-[38px] rounded-lg border text-sm font-semibold transition-all ${p===page?'bg-purple-mid text-white border-purple-mid shadow-lg shadow-purple-mid/30':'border-black/10 dark:border-white/10 bg-black/5 dark:bg-black/30 text-[#2D1B4E] dark:text-gray-light hover:border-purple-mid hover:text-purple-mid'}`}>{p}</button>
+                  className={`w-[38px] h-[38px] rounded-lg border text-sm font-semibold transition-all ${p===page?'bg-purple-mid text-white border-purple-mid shadow-lg shadow-purple-mid/30':'border-[#D4C8E8]/40 dark:border-white/10 bg-[#E8DFF5]/70 dark:bg-black/30 text-[#3D1A6B] dark:text-gray-light hover:border-purple-mid hover:text-purple-mid'}`}>{p}</button>
               ))}
               <button onClick={()=>setPage(p=>Math.min(totalPages,p+1))} disabled={page===totalPages}
-                className="w-[38px] h-[38px] rounded-lg border border-black/10 dark:border-white/10 bg-black/5 dark:bg-black/30 text-[#2D1B4E] dark:text-gray-light text-sm font-semibold disabled:opacity-40 disabled:cursor-default hover:border-purple-mid hover:text-purple-mid transition-all" aria-label="Siguiente">»</button>
+                className="w-[38px] h-[38px] rounded-lg border border-[#D4C8E8]/40 dark:border-white/10 bg-[#E8DFF5]/70 dark:bg-black/30 text-[#3D1A6B] dark:text-gray-light text-sm font-semibold disabled:opacity-40 disabled:cursor-default hover:border-purple-mid hover:text-purple-mid transition-all" aria-label="Siguiente">»</button>
             </div>
           )}
 
@@ -195,7 +195,7 @@ function TorneosContent() {
           {modalTournament && (
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => setModalTournament(null)}>
               <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-              <div className="relative max-w-2xl w-full bg-white dark:bg-[#1a1a24] rounded-2xl overflow-hidden border border-black/10 dark:border-white/10 shadow-2xl" onClick={e => e.stopPropagation()}>
+              <div className="relative max-w-2xl w-full bg-white dark:bg-[#1a1a24] rounded-2xl overflow-hidden border border-[#D4C8E8]/40 dark:border-white/10 shadow-2xl" onClick={e => e.stopPropagation()}>
                 <button onClick={() => setModalTournament(null)} className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center hover:bg-gold transition-colors">✕</button>
                 <div className="relative h-[220px] overflow-hidden">
                   <img src={`/images/fondo-${((modalTournament.id - 1) % 6) + 1}.png`} alt="" className="w-full h-full object-cover" />
@@ -211,10 +211,10 @@ function TorneosContent() {
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                     {modalTournament.fecha}
                   </div>
-                  <div className="flex gap-6 pt-4 border-t border-black/10 dark:border-white/10">
-                    <div><span className="text-[11px] text-[#7A6B99] dark:text-white/50">Equipos</span><p className="text-lg font-bold text-[#2D1B4E] dark:text-white">{modalTournament.equipos}</p></div>
-                    <div><span className="text-[11px] text-[#7A6B99] dark:text-white/50">Jugadores</span><p className="text-lg font-bold text-[#2D1B4E] dark:text-white">{modalTournament.jugadores}</p></div>
-                    <div><span className="text-[11px] text-[#7A6B99] dark:text-white/50">Canchas</span><p className="text-lg font-bold text-[#2D1B4E] dark:text-white">{modalTournament.canchas}</p></div>
+                  <div className="flex gap-6 pt-4 border-t border-[#D4C8E8]/40 dark:border-white/10">
+                    <div><span className="text-[11px] text-[#7A6B99] dark:text-white/50">Equipos</span><p className="text-lg font-bold text-[#3D1A6B] dark:text-white">{modalTournament.equipos}</p></div>
+                    <div><span className="text-[11px] text-[#7A6B99] dark:text-white/50">Jugadores</span><p className="text-lg font-bold text-[#3D1A6B] dark:text-white">{modalTournament.jugadores}</p></div>
+                    <div><span className="text-[11px] text-[#7A6B99] dark:text-white/50">Canchas</span><p className="text-lg font-bold text-[#3D1A6B] dark:text-white">{modalTournament.canchas}</p></div>
                   </div>
                 </div>
               </div>
@@ -245,7 +245,7 @@ export default function TorneosPublic() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F5F0FF] dark:bg-[#190D2B]">
+    <div className="min-h-screen bg-[#F0F8FF] dark:bg-[#190D2B]">
       <Navbar />
       <TorneosContent />
       <Footer />
@@ -262,7 +262,7 @@ function TorneoCard({ torneo: t, onClick }: { torneo: Torneo; onClick: () => voi
 
   return (
     <button onClick={onClick} className="block group w-full text-left">
-      <div className="relative overflow-hidden rounded-2xl border border-black/10 dark:border-white/5 bg-black/5 dark:bg-black/30">
+      <div className="relative overflow-hidden rounded-2xl border border-[#D4C8E8]/40 dark:border-white/5 bg-[#E8DFF5]/70 dark:bg-black/30">
         <div className="absolute inset-0">
           <img src={imgSrc} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0A0614] via-[#0A0614]/50 to-transparent" />
@@ -295,3 +295,5 @@ function TorneoCard({ torneo: t, onClick }: { torneo: Torneo; onClick: () => voi
     </button>
   )
 }
+
+

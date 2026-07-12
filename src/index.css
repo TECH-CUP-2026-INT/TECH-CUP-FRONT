@@ -53,7 +53,7 @@
   /* Light mode overrides */
   :root:not(.dark) body,
   :root:not(.dark) {
-    --color-black: #FAFAFA;
+    --color-black: #F0F8FF;
     --color-purple-black: #F3EEFF;
     --color-surface: #FFFFFF;
     --color-surface-2: #F5F5F5;
@@ -64,7 +64,7 @@
   }
 
   :root:not(.dark) body {
-    background: #FAFAFA;
+    background: #F0F8FF;
     color: #1F1F1F;
   }
 
