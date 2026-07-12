@@ -10,6 +10,7 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select'
 import { Search, RefreshCw, LayoutGrid, List } from 'lucide-react'
+import { ThreeDCarousel } from '@/components/ui/three-d-carousel'
 import { torneos, type Torneo } from '@/data/torneos'
 
 const PAGE_SIZE = 6
@@ -53,6 +54,16 @@ function TorneosContent() {
           <div className="absolute -top-[10%] -right-[10%] w-[60%] h-[35%] origin-top-right opacity-[0.06] dark:opacity-[0.07]" style={{ background: 'linear-gradient(135deg, transparent 30%, #C8851A 50%, transparent 70%)', transform: 'skewX(-18deg)' }} />
           <div className="absolute top-[40%] -left-[5%] w-[55%] h-[20%] opacity-[0.05] dark:opacity-[0.06]" style={{ background: 'linear-gradient(115deg, transparent 20%, #C8851A 40%, #8B5CF6 55%, transparent 75%)', transform: 'skewX(-15deg)' }} />
         </div>
+
+        {/* 3D Carousel de fondo */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <ThreeDCarousel images={[
+            { src: '/images/fondo-1.png', alt: '' },
+            { src: '/images/fondo-2.png', alt: '' },
+            { src: '/images/fondo-3.png', alt: '' },
+          ]} />
+        </div>
+
         <div className="relative w-full max-w-[1280px] mx-auto px-8 pt-[130px] pb-[80px]">
           <div className="text-center max-w-[700px] mx-auto">
             <motion.span initial={{opacity:0,y:-10}} animate={{opacity:1,y:0}} transition={{delay:0.2}} className="inline-flex items-center gap-2 text-[11.5px] font-bold tracking-[1.6px] uppercase text-gold bg-gold/10 border border-gold/30 px-3.5 py-1.5 rounded-full mb-[22px]">
@@ -64,6 +75,13 @@ function TorneosContent() {
             <motion.p initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.5}} className="text-base leading-relaxed text-[#7A6B99] dark:text-text-muted max-w-[560px] mx-auto">
               Descubre los torneos disponibles, explora los equipos inscritos y sé parte de la competencia más emocionante de Ingeniería de Sistemas.
             </motion.p>
+            <motion.div initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{delay:0.7}} className="flex items-center justify-center gap-6 mt-5 text-[13px] text-[#7A6B99] dark:text-text-muted">
+              <span><strong className="text-gold">{torneos.length}</strong> torneos</span>
+              <span className="w-px h-4 bg-black/10 dark:bg-white/10" />
+              <span><strong className="text-gold">{torneos.reduce((a,t)=>a+t.equipos,0)}</strong> equipos</span>
+              <span className="w-px h-4 bg-black/10 dark:bg-white/10" />
+              <span><strong className="text-gold">{torneos.reduce((a,t)=>a+t.jugadores,0)}+</strong> jugadores</span>
+            </motion.div>
           </div>
         </div>
       </section>
