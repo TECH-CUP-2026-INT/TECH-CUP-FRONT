@@ -114,6 +114,7 @@ function CalendarioContent() {
                         : d.hoy ? 'bg-purple-mid/20 border border-purple-mid/40 text-[#3D1A6B] dark:text-white font-bold'
                         : 'text-[#7A6B99] dark:text-text-muted hover:bg-black/10 dark:hover:bg-white/5'
                       }`}>
+                        {d.tienePartido && <img src="/images/copa-coin.png" alt="" className="w-4 h-4 object-contain mb-0.5 opacity-70" />}
                         <span>{d.dia}</span>
                       </div>
                     ) : <span />}
