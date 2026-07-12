@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { useLocation, Link } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Navbar from '@/components/shared/Navbar'
 import Sidebar from '@/components/shared/Sidebar'
@@ -21,6 +21,7 @@ function TorneosContent() {
   const [filterSearch, setFilterSearch] = useState('')
   const [page, setPage] = useState(1)
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
+  const [modalTournament, setModalTournament] = useState<Torneo | null>(null)
 
   const filtered = useMemo(() => {
     return torneos.filter(t => {
@@ -153,7 +154,7 @@ function TorneosContent() {
           <div className="grid grid-cols-3 max-xl:grid-cols-2 max-sm:grid-cols-1 gap-5 mb-10">
             {paged.map((t,i)=>(
               <motion.div key={t.id} initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:i*0.05,duration:0.3}}>
-                <TorneoCard torneo={t} />
+                <TorneoCard torneo={t} onClick={() => setModalTournament(t)} />
               </motion.div>
             ))}
           </div>
@@ -169,6 +170,36 @@ function TorneosContent() {
               ))}
               <button onClick={()=>setPage(p=>Math.min(totalPages,p+1))} disabled={page===totalPages}
                 className="w-[38px] h-[38px] rounded-lg border border-black/10 dark:border-white/10 bg-black/5 dark:bg-black/30 text-[#2D1B4E] dark:text-gray-light text-sm font-semibold disabled:opacity-40 disabled:cursor-default hover:border-purple-mid hover:text-purple-mid transition-all" aria-label="Siguiente">»</button>
+            </div>
+          )}
+
+          {/* Modal flotante */}
+          {modalTournament && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => setModalTournament(null)}>
+              <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+              <div className="relative max-w-2xl w-full bg-white dark:bg-[#1a1a24] rounded-2xl overflow-hidden border border-black/10 dark:border-white/10 shadow-2xl" onClick={e => e.stopPropagation()}>
+                <button onClick={() => setModalTournament(null)} className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center hover:bg-gold transition-colors">✕</button>
+                <div className="relative h-[220px] overflow-hidden">
+                  <img src={`/images/fondo-${((modalTournament.id - 1) % 6) + 1}.png`} alt="" className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0A0614] via-[#0A0614]/40 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6">
+                    <span className="text-[10px] tracking-[1.2px] text-gold font-bold uppercase">{modalTournament.tag}</span>
+                    <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase text-white leading-tight mt-1">{modalTournament.nombre}</h2>
+                  </div>
+                </div>
+                <div className="p-6 space-y-4">
+                  <p className="text-[13px] text-[#7A6B99] dark:text-white/60">Ingeniería de Sistemas</p>
+                  <div className="flex items-center gap-2 text-[13px] text-[#7A6B99] dark:text-white/50">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    {modalTournament.fecha}
+                  </div>
+                  <div className="flex gap-6 pt-4 border-t border-black/10 dark:border-white/10">
+                    <div><span className="text-[11px] text-[#7A6B99] dark:text-white/50">Equipos</span><p className="text-lg font-bold text-[#2D1B4E] dark:text-white">{modalTournament.equipos}</p></div>
+                    <div><span className="text-[11px] text-[#7A6B99] dark:text-white/50">Jugadores</span><p className="text-lg font-bold text-[#2D1B4E] dark:text-white">{modalTournament.jugadores}</p></div>
+                    <div><span className="text-[11px] text-[#7A6B99] dark:text-white/50">Canchas</span><p className="text-lg font-bold text-[#2D1B4E] dark:text-white">{modalTournament.canchas}</p></div>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
         </div>
@@ -204,7 +235,7 @@ export default function TorneosPublic() {
   )
 }
 
-function TorneoCard({ torneo: t }: { torneo: Torneo }) {
+function TorneoCard({ torneo: t, onClick }: { torneo: Torneo; onClick: () => void }) {
   const badgeText = t.estado === 'live' ? 'En curso' : t.estado === 'upcoming' ? 'Próximo' : 'Finalizado'
   const badgeStyle = t.estado === 'live' ? 'bg-purple-mid text-white'
     : t.estado === 'upcoming' ? 'bg-gold/20 text-gold border border-gold/40'
@@ -212,7 +243,7 @@ function TorneoCard({ torneo: t }: { torneo: Torneo }) {
   const imgSrc = `/images/fondo-${((t.id - 1) % 6) + 1}.png`
 
   return (
-    <Link to={`/torneo/${t.id}`} className="block group">
+    <button onClick={onClick} className="block group w-full text-left">
       <div className="relative overflow-hidden rounded-2xl border border-black/10 dark:border-white/5 bg-black/5 dark:bg-black/30">
         <div className="absolute inset-0">
           <img src={imgSrc} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
@@ -243,6 +274,6 @@ function TorneoCard({ torneo: t }: { torneo: Torneo }) {
           </div>
         </div>
       </div>
-    </Link>
+    </button>
   )
 }
