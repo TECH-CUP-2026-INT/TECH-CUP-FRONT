@@ -127,7 +127,8 @@ function CalendarioContent() {
             </div>
           )}
 
-          {/* Lista + Detalle — dos columnas */}
+          {vista === 'lista' && (
+          /* Lista + Detalle — dos columnas */
           <div className="grid grid-cols-[1fr_1.2fr] gap-6 items-start max-lg:grid-cols-1">
             {/* Left: Lista de partidos */}
             <div>
@@ -235,6 +236,7 @@ function CalendarioContent() {
               )}
             </div>
           </div>
+          )}
         </div>
       </section>
     </>
@@ -267,6 +269,7 @@ export default function Calendario() {
     </div>
   )
 }
+
 
 
 
