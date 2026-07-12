@@ -1,14 +1,11 @@
-import { useState, useMemo, type ReactNode } from 'react'
+import { useState, useMemo } from 'react'
 import { useLocation, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Navbar from '@/components/shared/Navbar'
 import Sidebar from '@/components/shared/Sidebar'
 import AppTopbar from '@/components/shared/AppTopbar'
 import Footer from '@/components/shared/Footer'
-import { AuroraBackground } from '@/components/ui/aurora-background'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { SpotlightCard } from '@/components/ui/spotlight-card'
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select'
@@ -45,77 +42,133 @@ function TorneosContent() {
 
   return (
     <>
-      <AuroraBackground>
-        <div className="relative w-full max-w-[1280px] mx-auto px-8 pt-[160px] pb-[100px] overflow-hidden">
-          <div className="absolute inset-0 opacity-30 pointer-events-none" style={{backgroundImage:'radial-gradient(rgba(255,255,255,.12) 1px, transparent 1px)',backgroundSize:'24px 24px',maskImage:'radial-gradient(600px 500px at 50% 30%, black 10%, transparent 70%)',WebkitMaskImage:'radial-gradient(600px 500px at 50% 30%, black 10%, transparent 70%)'}} />
-          <div className="absolute inset-0 opacity-10 pointer-events-none overflow-hidden">
-            <img src="/banner-soccer.jpg" alt="" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-black/80 to-transparent" />
-          </div>
-          <div className="relative z-[2] text-center max-w-[700px] mx-auto">
-            <motion.span initial={{opacity:0,y:-10}} animate={{opacity:1,y:0}} transition={{delay:0.2}} className="inline-flex items-center gap-2 text-[11.5px] font-bold tracking-[1.6px] uppercase text-gold bg-gold/10 border border-gold/30 px-3.5 py-1.5 rounded-full mb-[22px]"><span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" /> Explora la competencia</motion.span>
-            <motion.h1 initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:0.3}} className="font-[family-name:var(--font-display)] font-bold text-[clamp(42px,6vw,72px)] leading-[.92] tracking-[.5px] uppercase mb-4">Torneos <span className="text-gold">y Equipos</span></motion.h1>
-            <motion.p initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.5}} className="text-base leading-relaxed text-text-muted max-w-[560px] mx-auto">Descubre los torneos disponibles, explora los equipos inscritos y sé parte de la competencia más emocionante de Ingeniería de Sistemas.</motion.p>
+      {/* Hero */}
+      <section className="relative overflow-hidden bg-[#F5F0FF] dark:bg-[#190D2B]">
+        <div className="absolute inset-0 pointer-events-none">
+          <img src="/banner-soccer.jpg" alt="" className="w-full h-full object-cover opacity-20 dark:opacity-15" style={{ filter: 'blur(50px) saturate(1.4)' }} />
+          <div className="absolute inset-0 bg-white/40 dark:bg-[#190D2B]/50" />
+        </div>
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute -top-[10%] -right-[10%] w-[60%] h-[35%] origin-top-right opacity-[0.06] dark:opacity-[0.07]" style={{ background: 'linear-gradient(135deg, transparent 30%, #C8851A 50%, transparent 70%)', transform: 'skewX(-18deg)' }} />
+          <div className="absolute top-[40%] -left-[5%] w-[55%] h-[20%] opacity-[0.05] dark:opacity-[0.06]" style={{ background: 'linear-gradient(115deg, transparent 20%, #C8851A 40%, #8B5CF6 55%, transparent 75%)', transform: 'skewX(-15deg)' }} />
+        </div>
+        <div className="relative w-full max-w-[1280px] mx-auto px-8 pt-[130px] pb-[80px]">
+          <div className="text-center max-w-[700px] mx-auto">
+            <motion.span initial={{opacity:0,y:-10}} animate={{opacity:1,y:0}} transition={{delay:0.2}} className="inline-flex items-center gap-2 text-[11.5px] font-bold tracking-[1.6px] uppercase text-gold bg-gold/10 border border-gold/30 px-3.5 py-1.5 rounded-full mb-[22px]">
+              <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" /> Torneos
+            </motion.span>
+            <motion.h1 initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:0.3}} className="font-[family-name:var(--font-display-alt)] font-bold text-[clamp(42px,6vw,72px)] leading-[.92] tracking-[.5px] uppercase italic mb-4">
+              <span className="text-[#2D1B4E] dark:text-[#F7EDE2]">Torneos</span> <span className="text-gold">y Equipos</span>
+            </motion.h1>
+            <motion.p initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.5}} className="text-base leading-relaxed text-[#7A6B99] dark:text-text-muted max-w-[560px] mx-auto">
+              Descubre los torneos disponibles, explora los equipos inscritos y sé parte de la competencia más emocionante de Ingeniería de Sistemas.
+            </motion.p>
           </div>
         </div>
-      </AuroraBackground>
+      </section>
 
-      <section className="py-14 pb-[100px] relative">
-        <div className="absolute top-[10%] left-[-5%] w-[600px] h-[600px] rounded-full bg-purple-mid/20 blur-[180px] pointer-events-none" />
-        <div className="absolute bottom-[10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-gold/20 blur-[150px] pointer-events-none" />
-        <div className="absolute top-[50%] left-[30%] w-[350px] h-[350px] rounded-full bg-purple-deep/15 blur-[120px] pointer-events-none" />
+      {/* Content */}
+      <section className="py-12 pb-[100px] relative overflow-hidden bg-[#F5F0FF] dark:bg-[#190D2B]">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-[10%] left-[-5%] w-[600px] h-[600px] rounded-full bg-purple-mid/15 dark:bg-purple-mid/20 blur-[180px]" />
+          <div className="absolute bottom-[10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-gold/15 dark:bg-gold/20 blur-[150px]" />
+        </div>
+
         <div className="max-w-[1280px] mx-auto px-8 relative">
-          <motion.div initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:0.6}} className="grid grid-cols-[repeat(3,160px)_1fr_auto] gap-3 items-end mb-[30px] max-lg:grid-cols-2 max-sm:grid-cols-1 bg-surface/50 backdrop-blur-sm border border-border/60 rounded-2xl p-5">
-            <div><label className="block text-[11px] text-text-faint font-semibold uppercase tracking-[.4px] mb-1.5">Estado</label>
-              <Select value={filterEstado} onValueChange={v=>{setFilterEstado(v);setPage(1)}}><SelectTrigger className="bg-surface border-border text-white rounded-lg"><SelectValue /></SelectTrigger>
-                <SelectContent className="bg-surface border-border text-white">
-                  {[{value:'todos',label:'Todos'},{value:'live',label:'En curso'},{value:'upcoming',label:'Próximo'},{value:'closed',label:'Finalizado'}].map(e=><SelectItem key={e.value} value={e.value}>{e.label}</SelectItem>)}
-                </SelectContent></Select></div>
-            <div><label className="block text-[11px] text-text-faint font-semibold uppercase tracking-[.4px] mb-1.5">Semestre</label>
-              <Select value={filterSemestre} onValueChange={v=>{setFilterSemestre(v);setPage(1)}}><SelectTrigger className="bg-surface border-border text-white rounded-lg"><SelectValue /></SelectTrigger>
-                <SelectContent className="bg-surface border-border text-white">
-                  <SelectItem value="todos">Todos</SelectItem>
-                  {semestres.map(s=><SelectItem key={s} value={s}>{s}</SelectItem>)}
-                </SelectContent></Select></div>
-            <div><label className="block text-[11px] text-text-faint font-semibold uppercase tracking-[.4px] mb-1.5">Categoría</label>
-              <Select value={filterCategoria} onValueChange={v=>{setFilterCategoria(v);setPage(1)}}><SelectTrigger className="bg-surface border-border text-white rounded-lg"><SelectValue /></SelectTrigger>
-                <SelectContent className="bg-surface border-border text-white">
-                  <SelectItem value="todos">Todas</SelectItem>
-                  <SelectItem value="Fútbol 11">Fútbol 11</SelectItem>
-                  <SelectItem value="Futsal">Futsal</SelectItem>
-                </SelectContent></Select></div>
-            <div><label className="block text-[11px] text-text-faint font-semibold uppercase tracking-[.4px] mb-1.5">Buscar</label>
-              <div className="relative"><Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-faint" />
-                <input type="text" placeholder="Ej. TechCup 2024" value={filterSearch} onChange={e=>{setFilterSearch(e.target.value);setPage(1)}} className="w-full bg-surface border border-border text-white rounded-lg py-2.5 pl-9 pr-3 text-[13.5px] outline-none focus:border-purple-mid placeholder:text-text-faint" /></div></div>
-            <Button variant="outline" size="sm" onClick={clearFilters} className="border-gold text-gold rounded-full hover:bg-gold/10 self-end mb-0.5"><RefreshCw size={14} /> Limpiar</Button>
+          {/* Filters */}
+          <motion.div initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:0.6}}
+            className="grid grid-cols-[repeat(3,160px)_1fr_auto] gap-3 items-end mb-8 max-lg:grid-cols-2 max-sm:grid-cols-1
+              bg-black/5 dark:bg-black/30 border border-black/10 dark:border-white/5 rounded-2xl p-5">
+            <div>
+              <label className="block text-[11px] text-[#7A6B99] dark:text-text-faint font-semibold uppercase tracking-[.4px] mb-1.5">Estado</label>
+              <Select value={filterEstado} onValueChange={v=>{setFilterEstado(v);setPage(1)}}>
+                <SelectTrigger className="bg-black/5 dark:bg-black/20 border border-black/10 dark:border-white/10 text-[#2D1B4E] dark:text-gray-light rounded-lg">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-white dark:bg-[#1F1F28] border border-black/10 dark:border-white/10">
+                  {[{value:'todos',label:'Todos'},{value:'live',label:'En curso'},{value:'upcoming',label:'Próximo'},{value:'closed',label:'Finalizado'}].map(e=>
+                    <SelectItem key={e.value} value={e.value} className="text-[#2D1B4E] dark:text-gray-light">{e.label}</SelectItem>
+                  )}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="block text-[11px] text-[#7A6B99] dark:text-text-faint font-semibold uppercase tracking-[.4px] mb-1.5">Semestre</label>
+              <Select value={filterSemestre} onValueChange={v=>{setFilterSemestre(v);setPage(1)}}>
+                <SelectTrigger className="bg-black/5 dark:bg-black/20 border border-black/10 dark:border-white/10 text-[#2D1B4E] dark:text-gray-light rounded-lg">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-white dark:bg-[#1F1F28] border border-black/10 dark:border-white/10">
+                  <SelectItem value="todos" className="text-[#2D1B4E] dark:text-gray-light">Todos</SelectItem>
+                  {semestres.map(s=><SelectItem key={s} value={s} className="text-[#2D1B4E] dark:text-gray-light">{s}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="block text-[11px] text-[#7A6B99] dark:text-text-faint font-semibold uppercase tracking-[.4px] mb-1.5">Categoría</label>
+              <Select value={filterCategoria} onValueChange={v=>{setFilterCategoria(v);setPage(1)}}>
+                <SelectTrigger className="bg-black/5 dark:bg-black/20 border border-black/10 dark:border-white/10 text-[#2D1B4E] dark:text-gray-light rounded-lg">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-white dark:bg-[#1F1F28] border border-black/10 dark:border-white/10">
+                  <SelectItem value="todos" className="text-[#2D1B4E] dark:text-gray-light">Todas</SelectItem>
+                  <SelectItem value="Fútbol 11" className="text-[#2D1B4E] dark:text-gray-light">Fútbol 11</SelectItem>
+                  <SelectItem value="Futsal" className="text-[#2D1B4E] dark:text-gray-light">Futsal</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="block text-[11px] text-[#7A6B99] dark:text-text-faint font-semibold uppercase tracking-[.4px] mb-1.5">Buscar</label>
+              <div className="relative">
+                <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#7A6B99] dark:text-text-faint" />
+                <input type="text" placeholder="Ej. TechCup 2024" value={filterSearch} onChange={e=>{setFilterSearch(e.target.value);setPage(1)}}
+                  className="w-full bg-black/5 dark:bg-black/20 border border-black/10 dark:border-white/10 text-[#2D1B4E] dark:text-gray-light rounded-lg py-2.5 pl-9 pr-3 text-[13.5px] outline-none focus:border-purple-mid placeholder:text-[#9B8AB5] dark:placeholder:text-text-faint" />
+              </div>
+            </div>
+            <Button variant="outline" size="sm" onClick={clearFilters}
+              className="border-gold text-gold rounded-full hover:bg-gold/10 self-end mb-0.5">
+              <RefreshCw size={14} /> Limpiar
+            </Button>
           </motion.div>
 
-          <div className="flex items-center justify-between mb-[22px] flex-wrap gap-3">
-            <h2 className="text-[17px] font-semibold">Todos los torneos</h2>
-            <div className="flex items-center gap-3.5 text-[13px] text-text-muted">
-              <span className="bg-surface/50 border border-border/60 rounded-full px-4 py-1.5">{filtered.length} torneos encontrados</span>
+          {/* Toolbar */}
+          <div className="flex items-center justify-between mb-6 pb-4 border-b border-black/10 dark:border-white/5 flex-wrap gap-3">
+            <h2 className="font-[family-name:var(--font-display)] text-lg uppercase text-[#2D1B4E] dark:text-white">Todos los torneos</h2>
+            <div className="flex items-center gap-3.5 text-[13px] text-[#7A6B99] dark:text-text-muted">
+              <span className="bg-black/5 dark:bg-black/30 border border-black/10 dark:border-white/5 rounded-full px-4 py-1.5">{filtered.length} torneos encontrados</span>
               <div className="flex gap-1">
-                <button onClick={()=>setViewMode('grid')} className={`w-8 h-8 rounded-lg border border-border flex items-center justify-center transition-colors ${viewMode==='grid'?'bg-purple-mid text-white border-purple-mid':'bg-surface text-text-muted hover:border-purple-mid'}`}><LayoutGrid size={15} /></button>
-                <button onClick={()=>setViewMode('list')} className={`w-8 h-8 rounded-lg border border-border flex items-center justify-center transition-colors ${viewMode==='list'?'bg-purple-mid text-white border-purple-mid':'bg-surface text-text-muted hover:border-purple-mid'}`}><List size={15} /></button>
+                <button onClick={()=>setViewMode('grid')}
+                  className={`w-8 h-8 rounded-lg border flex items-center justify-center transition-colors ${viewMode==='grid'?'bg-purple-mid text-white border-purple-mid':'border-black/10 dark:border-white/10 text-[#7A6B99] dark:text-text-muted hover:border-purple-mid'}`}>
+                  <LayoutGrid size={15} />
+                </button>
+                <button onClick={()=>setViewMode('list')}
+                  className={`w-8 h-8 rounded-lg border flex items-center justify-center transition-colors ${viewMode==='list'?'bg-purple-mid text-white border-purple-mid':'border-black/10 dark:border-white/10 text-[#7A6B99] dark:text-text-muted hover:border-purple-mid'}`}>
+                  <List size={15} />
+                </button>
               </div>
             </div>
           </div>
 
-          <div className={viewMode==='grid'?'grid grid-cols-3 max-xl:grid-cols-2 max-sm:grid-cols-1 gap-5 mb-10':'flex flex-col gap-3 mb-10'}>
+          {/* Torneo cards grid */}
+          <div className="grid grid-cols-3 max-xl:grid-cols-2 max-sm:grid-cols-1 gap-5 mb-10">
             {paged.map((t,i)=>(
               <motion.div key={t.id} initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:i*0.05,duration:0.3}}>
-                <TorneoCard torneo={t} listMode={viewMode==='list'} />
+                <TorneoCard torneo={t} />
               </motion.div>
             ))}
           </div>
 
+          {/* Pagination */}
           {totalPages > 1 && (
-            <div className="flex justify-center items-center gap-2">
-              <button onClick={()=>setPage(p=>Math.max(1,p-1))} disabled={page===1} className="w-[38px] h-[38px] rounded-lg border border-border bg-surface text-gray-light text-sm font-semibold disabled:opacity-40 disabled:cursor-default hover:border-purple-mid hover:text-purple-mid transition-all" aria-label="Anterior">«</button>
+            <div className="flex justify-center items-center gap-2 mt-10">
+              <button onClick={()=>setPage(p=>Math.max(1,p-1))} disabled={page===1}
+                className="w-[38px] h-[38px] rounded-lg border border-black/10 dark:border-white/10 bg-black/5 dark:bg-black/30 text-[#2D1B4E] dark:text-gray-light text-sm font-semibold disabled:opacity-40 disabled:cursor-default hover:border-purple-mid hover:text-purple-mid transition-all" aria-label="Anterior">«</button>
               {Array.from({length:totalPages},(_,i)=>i+1).map(p=>(
-                <button key={p} onClick={()=>setPage(p)} className={`w-[38px] h-[38px] rounded-lg border text-sm font-semibold transition-all ${p===page?'bg-purple-mid text-white border-purple-mid shadow-lg shadow-purple-mid/30':'border-border bg-surface text-gray-light hover:border-purple-mid hover:text-purple-mid'}`}>{p}</button>
+                <button key={p} onClick={()=>setPage(p)}
+                  className={`w-[38px] h-[38px] rounded-lg border text-sm font-semibold transition-all ${p===page?'bg-purple-mid text-white border-purple-mid shadow-lg shadow-purple-mid/30':'border-black/10 dark:border-white/10 bg-black/5 dark:bg-black/30 text-[#2D1B4E] dark:text-gray-light hover:border-purple-mid hover:text-purple-mid'}`}>{p}</button>
               ))}
-              <button onClick={()=>setPage(p=>Math.min(totalPages,p+1))} disabled={page===totalPages} className="w-[38px] h-[38px] rounded-lg border border-border bg-surface text-gray-light text-sm font-semibold disabled:opacity-40 disabled:cursor-default hover:border-purple-mid hover:text-purple-mid transition-all" aria-label="Siguiente">»</button>
+              <button onClick={()=>setPage(p=>Math.min(totalPages,p+1))} disabled={page===totalPages}
+                className="w-[38px] h-[38px] rounded-lg border border-black/10 dark:border-white/10 bg-black/5 dark:bg-black/30 text-[#2D1B4E] dark:text-gray-light text-sm font-semibold disabled:opacity-40 disabled:cursor-default hover:border-purple-mid hover:text-purple-mid transition-all" aria-label="Siguiente">»</button>
             </div>
           )}
         </div>
@@ -134,16 +187,16 @@ export default function TorneosPublic() {
       <div className="min-h-screen bg-black flex">
         <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         <div className="min-w-0 flex-1">
-        <AppTopbar title="Torneos y Equipos" onMenuClick={() => setSidebarOpen(true)} />
-        <TorneosContent />
-        <Footer />
-      </div>
+          <AppTopbar title="Torneos y Equipos" onMenuClick={() => setSidebarOpen(true)} />
+          <TorneosContent />
+          <Footer />
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-[#F5F0FF] dark:bg-[#190D2B]">
       <Navbar />
       <TorneosContent />
       <Footer />
@@ -151,51 +204,45 @@ export default function TorneosPublic() {
   )
 }
 
-function TorneoCard({ torneo: t, listMode }: { torneo: Torneo; listMode: boolean }) {
-  const badgeClass = t.estado === 'live' ? 'bg-purple-mid text-white' 
-    : t.estado === 'upcoming' ? 'bg-gold/15 text-gold border border-gold/50' 
-    : 'bg-white/10 text-text-muted border border-white/15'
+function TorneoCard({ torneo: t }: { torneo: Torneo }) {
   const badgeText = t.estado === 'live' ? 'En curso' : t.estado === 'upcoming' ? 'Próximo' : 'Finalizado'
-  const mediaBg = t.estado === 'closed' ? 'bg-gradient-to-br from-[#2a2a33] to-[#16161c]' : 'bg-gradient-to-br from-purple-deep to-[#180d29]'
+  const badgeStyle = t.estado === 'live' ? 'bg-purple-mid text-white'
+    : t.estado === 'upcoming' ? 'bg-gold/20 text-gold border border-gold/40'
+    : 'bg-white/15 text-white border border-white/20 backdrop-blur-sm'
+  const imgSrc = `/images/fondo-${((t.id - 1) % 6) + 1}.png`
 
   return (
-    <SpotlightCard accent={t.estado === 'live' ? 'gold' : t.estado === 'upcoming' ? 'purple' : 'gold'} className={`bg-surface border border-border rounded-2xl ${listMode ? 'flex' : ''}`}>
-      {listMode ? (
-        <><div className={`w-[200px] min-h-[150px] flex-shrink-0 flex items-center justify-center relative ${mediaBg} rounded-l-2xl`}>
-            <Badge className={`absolute top-3.5 left-3.5 rounded-full text-[11px] font-bold uppercase tracking-[.4px] px-3 py-1 h-auto z-10 ${badgeClass}`}>{badgeText}</Badge>
-            <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#F5A623" strokeWidth="1.4" className="opacity-90"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 01-10 0V4z"/></svg>
+    <Link to={`/torneo/${t.id}`} className="block group">
+      <div className="relative overflow-hidden rounded-2xl border border-black/10 dark:border-white/5 bg-black/5 dark:bg-black/30">
+        <div className="absolute inset-0">
+          <img src={imgSrc} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0A0614] via-[#0A0614]/50 to-transparent" />
+        </div>
+        <div className="relative h-full min-h-[280px] flex flex-col justify-between p-5 z-10">
+          <div>
+            <span className={`inline-block rounded-full text-[10px] font-bold uppercase tracking-[.4px] px-2.5 py-0.5 mb-2 ${badgeStyle}`}>{badgeText}</span>
+            <span className="block text-[10px] tracking-[1.2px] text-gold font-bold uppercase mb-1">{t.tag}</span>
+            <h3 className="font-[family-name:var(--font-display)] text-xl uppercase text-white leading-tight">{t.nombre}</h3>
+            <p className="text-[12px] text-white/60 mt-1">Ingeniería de Sistemas</p>
           </div>
-          <div className="p-5 flex-1">
-            <span className="text-[10.5px] tracking-[1px] text-text-faint font-bold uppercase">{t.tag}</span>
-            <h3 className="font-[family-name:var(--font-display)] text-xl uppercase mt-1 mb-1">{t.nombre}</h3>
-            <p className="text-xs text-text-muted mb-2">Ingeniería de Sistemas</p>
-            <div className="text-xs text-text-muted flex items-center gap-1.5 mb-3">📅 {t.fecha}</div>
-            <div className="flex gap-4 mb-4 flex-wrap">
-              <span className="text-xs text-text-muted">👤 <b className="text-white">{t.equipos}</b> equipos</span>
-              <span className="text-xs text-text-muted">👥 <b className="text-white">{t.jugadores}</b> jugadores</span>
-              <span className="text-xs text-text-muted">🛡 <b className="text-white">{t.canchas}</b> canchas</span>
+          <div>
+            <div className="flex items-center gap-2 text-[11px] text-white/50 mb-3">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              {t.fecha}
             </div>
-            <Link to={`/torneo/${t.id}`}><Button className={`rounded-full text-xs py-2 h-auto ${t.estado === 'closed' ? 'bg-transparent text-gold border border-gold hover:bg-gold/10' : 'bg-gold text-[#1A1206] hover:bg-gold-dark'}`}>{t.estado === 'closed' ? 'Ver resumen' : 'Ver detalles'}</Button></Link>
-          </div></>
-      ) : (
-        <div><div className={`h-[150px] flex items-center justify-center relative ${mediaBg} rounded-t-2xl overflow-hidden`}>
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-purple-black/20" />
-            <Badge className={`absolute top-3.5 left-3.5 rounded-full text-[11px] font-bold uppercase tracking-[.4px] px-3 py-1 h-auto z-10 ${badgeClass}`}>{badgeText}</Badge>
-            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#F5A623" strokeWidth="1.4" className="opacity-90 relative z-10"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 01-10 0V4z"/></svg>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <span className="text-[11px] text-white/60"><strong className="text-white/90">{t.equipos}</strong> Equipos</span>
+                <span className="text-[11px] text-white/60"><strong className="text-white/90">{t.jugadores}</strong> Jugadores</span>
+                <span className="text-[11px] text-white/60"><strong className="text-white/90">{t.canchas}</strong> Canchas</span>
+              </div>
+              <span className="text-[11px] font-bold text-gold bg-gold/10 border border-gold/30 px-3 py-1 rounded-full group-hover:bg-gold/20 transition-colors">
+                {t.estado === 'closed' ? 'Ver resumen' : 'Ver detalles'}
+              </span>
+            </div>
           </div>
-          <div className="p-5">
-            <span className="text-[10.5px] tracking-[1px] text-text-faint font-bold uppercase">{t.tag}</span>
-            <h3 className="font-[family-name:var(--font-display)] text-xl uppercase mt-1 mb-1">{t.nombre}</h3>
-            <p className="text-xs text-text-muted mb-2">Ingeniería de Sistemas</p>
-            <div className="text-xs text-text-muted flex items-center gap-1.5 mb-3">📅 {t.fecha}</div>
-            <div className="flex gap-4 mb-4 flex-wrap">
-              <span className="text-xs text-text-muted">👤 <b className="text-white">{t.equipos}</b> equipos</span>
-              <span className="text-xs text-text-muted">👥 <b className="text-white">{t.jugadores}</b> jugadores</span>
-              <span className="text-xs text-text-muted">🛡 <b className="text-white">{t.canchas}</b> canchas</span>
-            </div>
-            <Link to={`/torneo/${t.id}`}><Button className={`rounded-full w-full text-xs py-2 h-auto ${t.estado === 'closed' ? 'bg-transparent text-gold border border-gold hover:bg-gold/10' : 'bg-gold text-[#1A1206] hover:bg-gold-dark'}`}>{t.estado === 'closed' ? 'Ver resumen' : 'Ver detalles'}</Button></Link>
-          </div></div>
-      )}
-    </SpotlightCard>
+        </div>
+      </div>
+    </Link>
   )
 }
