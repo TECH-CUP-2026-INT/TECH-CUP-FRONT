@@ -194,6 +194,21 @@ export default function Landing() {
             </motion.div>
           </div>
         </div>
+
+        {/* Texto inferior derecha — encima de todo */}
+        <div className="absolute bottom-8 right-8 z-20 max-w-[360px] text-right max-md:hidden">
+          <p className="font-[family-name:var(--font-display)] text-4xl uppercase leading-[1.1] mb-4 text-white drop-shadow-lg">
+            La pasión nos <span className="text-gold">conecta</span>
+          </p>
+          <p className="text-sm text-white/70 leading-relaxed drop-shadow">
+            Iniciá sesión y viví la emoción del torneo universitario más importante de Ingeniería de Sistemas.
+          </p>
+          <div className="flex items-center gap-3 mt-6 justify-end">
+            <div className="w-8 h-[2px] rounded-full bg-gold/20" />
+            <div className="w-8 h-[2px] rounded-full bg-purple-mid/40" />
+            <div className="w-8 h-[2px] rounded-full bg-gold/60" />
+          </div>
+        </div>
       </section>
 
       {/* Features — Carrusel con escenas CSS */}
