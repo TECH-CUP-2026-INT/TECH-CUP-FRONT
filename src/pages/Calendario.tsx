@@ -147,12 +147,16 @@ function CalendarioContent() {
                       className={`text-left w-full rounded-2xl border transition-all duration-200 overflow-hidden
                         ${isSelected ? 'border-gold/50 ring-1 ring-gold/20 bg-black/10 dark:bg-black/40' : 'border-[#D4C8E8]/40 dark:border-white/5 bg-[#E8DFF5]/70 dark:bg-black/30 hover:border-purple-mid/50'}`}>
                       <div className="flex items-center gap-3 p-4 max-md:flex-col max-md:text-center">
-                        {/* Date */}
+                        {/* Date + Time */}
                         <div className="flex flex-col items-center min-w-[50px]">
                           <span className="font-[family-name:var(--font-display)] text-2xl leading-none text-[#3D1A6B] dark:text-white">{p.dia}</span>
                           <span className="text-[10px] text-[#7A6B99] dark:text-text-muted uppercase font-semibold tracking-wider">{p.mes}</span>
+                          <div className="flex items-center gap-1 mt-1.5">
+                            <Clock size={11} className="text-gold" />
+                            <span className="text-[10px] font-bold text-gold">{p.hora}</span>
+                          </div>
                         </div>
-                        <div className="w-px h-10 bg-black/10 dark:bg-white/10 max-md:hidden" />
+                        <div className="w-px h-12 bg-black/10 dark:bg-white/10 max-md:hidden" />
                         {/* Teams with logos */}
                         <div className="flex-1 flex items-center gap-2 max-md:justify-center">
                           <span className="text-lg">{logo1.emoji}</span>
@@ -160,11 +164,6 @@ function CalendarioContent() {
                           <span className="text-[10px] text-[#7A6B99] dark:text-text-faint font-bold mx-1">VS</span>
                           <span className="font-semibold text-sm text-[#3D1A6B] dark:text-white">{p.eq2}</span>
                           <span className="text-lg">{logo2.emoji}</span>
-                        </div>
-                        {/* Time */}
-                        <div className="flex items-center gap-2">
-                          <Clock size={13} className="text-gold" />
-                          <span className="text-xs font-bold text-gold">{p.hora}</span>
                         </div>
                       </div>
                     </button>
