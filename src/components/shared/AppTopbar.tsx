@@ -107,26 +107,34 @@ export default function AppTopbar({ title, onMenuClick }: AppTopbarProps) {
         </div>
       </header>
 
-      {/* Notificaciones panel */}
+      {/* Notificaciones — modal flotante */}
       <AnimatePresence>
         {notifOpen && (
-          <>
-            <div className="fixed inset-0 z-30" onClick={() => setNotifOpen(false)} />
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4"
+            onClick={() => setNotifOpen(false)}
+          >
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
             <motion.div
-              initial={{ x: '100%', opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: '100%', opacity: 0 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="fixed right-0 top-0 bottom-0 z-40 w-[380px] max-w-[90vw] bg-black/95 backdrop-blur-xl border-l border-border flex flex-col"
+              initial={{ opacity: 0, y: -10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              className="relative w-full max-w-md bg-black/95 dark:bg-[#1a1a24] border border-[#D4C8E8]/40 dark:border-white/10 rounded-2xl overflow-hidden shadow-2xl"
+              onClick={e => e.stopPropagation()}
             >
-              <div className="flex items-center justify-between px-4 py-3 border-b border-border">
-                <h2 className="text-sm font-bold flex items-center gap-2">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 003.4 0"/></svg>
+              <div className="flex items-center justify-between px-5 py-4 border-b border-[#D4C8E8]/40 dark:border-white/10">
+                <h2 className="text-sm font-bold flex items-center gap-2 text-white">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gold"><path d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 003.4 0"/></svg>
                   Notificaciones
                 </h2>
-                <button onClick={() => setNotifOpen(false)} className="text-gray-light hover:text-red-400 transition-colors p-1"><X size={18} /></button>
+                <button onClick={() => setNotifOpen(false)} className="w-7 h-7 rounded-full bg-black/40 text-white flex items-center justify-center hover:bg-gold transition-colors"><X size={14} /></button>
               </div>
-              <div className="flex-1 overflow-y-auto">
+              <div className="max-h-[60vh] overflow-y-auto">
                 {[
                   { title: 'Partido en 2 horas', desc: 'Tigres FC vs IA Warriors — Cancha Principal', time: 'Hace 5 min', color: '#22C55E' },
                   { title: 'Inscripción aprobada', desc: 'TechCup 2026-II — Ya estás inscrito', time: 'Hace 1 hora', color: '#8B5CF6' },
@@ -134,7 +142,7 @@ export default function AppTopbar({ title, onMenuClick }: AppTopbarProps) {
                   { title: 'Recordatorio de pago', desc: 'Tienes un pago pendiente por $20.000', time: 'Ayer', color: '#F59E0B' },
                   { title: 'Cambio de horario', desc: 'Partido Sistemas FC vs Code United movido a las 9PM', time: 'Ayer', color: '#EF4444' },
                 ].map((n, i) => (
-                  <button key={i} className="w-full flex items-start gap-3 px-4 py-3.5 hover:bg-white/5 transition-colors border-b border-border/50 text-left">
+                  <button key={i} className="w-full flex items-start gap-3 px-5 py-3.5 hover:bg-white/5 transition-colors text-left border-b border-[#D4C8E8]/20 dark:border-white/5">
                     <div className="w-2 h-2 rounded-full mt-1.5 flex-shrink-0" style={{ backgroundColor: n.color }} />
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-semibold text-white">{n.title}</p>
@@ -143,10 +151,12 @@ export default function AppTopbar({ title, onMenuClick }: AppTopbarProps) {
                     </div>
                   </button>
                 ))}
-                {notifOpen && <div className="px-4 py-6 text-center"><p className="text-xs text-text-muted">— No hay más notificaciones —</p></div>}
+              </div>
+              <div className="px-5 py-3 text-center border-t border-[#D4C8E8]/20 dark:border-white/5">
+                <p className="text-xs text-text-muted">— No hay más notificaciones —</p>
               </div>
             </motion.div>
-          </>
+          </motion.div>
         )}
       </AnimatePresence>
 
