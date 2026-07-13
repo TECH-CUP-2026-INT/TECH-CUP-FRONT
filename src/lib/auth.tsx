@@ -1,14 +1,17 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
 
+export type UserRole = 'capitan' | 'jugador' | 'arbitro' | 'admin'
+
 interface User {
   name: string
   email: string
   avatar: string
+  role: UserRole
 }
 
 interface AuthContextType {
   user: User | null
-  login: (email: string) => void
+  login: (email: string, role: UserRole) => void
   logout: () => void
   isAuthenticated: boolean
 }
@@ -30,12 +33,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
-  const login = (email: string) => {
+  const login = (email: string, role: UserRole = 'jugador') => {
     const name = email.split('@')[0].replace(/[._]/g, ' ')
     const newUser: User = {
       name: name.charAt(0).toUpperCase() + name.slice(1),
       email,
       avatar: `https://i.pravatar.cc/72?img=${Math.floor(Math.random() * 70) + 1}`,
+      role,
     }
     setUser(newUser)
     localStorage.setItem('techcup_user', JSON.stringify(newUser))

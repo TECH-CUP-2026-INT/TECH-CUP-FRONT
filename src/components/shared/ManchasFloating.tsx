@@ -50,8 +50,8 @@ export default function ManchasFloating() {
         {open ? (
           <X size={24} className="text-white mx-auto mt-4" />
         ) : (
-          <div className="w-full h-full p-1.5 flex items-center justify-center bg-gradient-to-br from-purple-700 to-purple-900">
-            <img src="/manchas-callcenter.png" alt="ManchasBot" className="w-full h-full object-contain drop-shadow-lg" />
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-700 to-purple-900">
+            <img src="/manchas-callcenter.png" alt="ManchasBot" className="w-14 h-14 object-contain scale-125 drop-shadow-lg" />
           </div>
         )}
       </button>

@@ -170,7 +170,8 @@ export default function SoccerField3D({
             {/* Campo */}
             <div className="absolute inset-0" style={{ transform: "rotateX(90deg) translateZ(0)", transformOrigin: "50% 50%", backfaceVisibility: "hidden" }}>
               <div className="absolute" style={{ width: "80%", left: "10%", height: "100%", background: "rgba(0,0,0,0.3)", transform: "rotateX(90deg) translateZ(-10px)", boxShadow: "0 0 40px 30px #000" }} />
-              <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.2), transparent), repeating-linear-gradient(65deg, #2a7a35 0px, #2a7a35 25px, #328c3e 25px, #328c3e 50px)" }} />
+              <div className="absolute inset-0" style={{ backgroundImage: 'url(/canchas.jpeg)', backgroundSize: 'cover', backgroundPosition: 'center center', opacity: 0.85 }} />
+              <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.15), transparent), repeating-linear-gradient(65deg, transparent 0px, transparent 25px, rgba(0,0,0,0.08) 25px, rgba(0,0,0,0.08) 50px)" }} />
               <svg viewBox="0 0 600 700" className="absolute inset-0 w-full h-full" style={{ zIndex: 4 }}>
                 <filter id="g3d"><feDropShadow dx="0" dy="0" stdDeviation="1" floodColor="white" floodOpacity="0.15" /></filter>
                 <rect x="24" y="28" width="552" height="644" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="3" filter="url(#g3d)" />

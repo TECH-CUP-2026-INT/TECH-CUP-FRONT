@@ -1,12 +1,10 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import Sidebar from '@/components/shared/Sidebar'
-import AppTopbar from '@/components/shared/AppTopbar'
-import Footer from '@/components/shared/Footer'
+import { useNavigate, Link } from 'react-router-dom'
+import DashboardLayout from '@/components/shared/DashboardLayout'
 import { cn } from '@/lib/utils'
 import { canchas, type Cancha } from '@/data/campus'
 import { partidos } from '@/data/partidos'
-import { MapPin, Sun, Moon, CloudRain, ShieldCheck, Wrench, Users, Clock, Fence, Lightbulb, Warehouse, Star } from 'lucide-react'
+import { MapPin, ShieldCheck, Wrench, Users, Clock, Fence, Lightbulb, Warehouse, Star, Eye } from 'lucide-react'
 
 type Filtro = 'todas' | 'disponible' | 'ocupado' | 'mantenimiento'
 
@@ -50,7 +48,6 @@ function Rating({ rating }: { rating: number }) {
 }
 
 export default function Campus() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [filtro, setFiltro] = useState<Filtro>('todas')
   const navigate = useNavigate()
 
@@ -63,26 +60,13 @@ export default function Campus() {
     : []
 
   return (
-    <div className="min-h-screen bg-black">
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+    <DashboardLayout title="Campus Deportivo">
+      <main className="p-8 pb-[60px] max-md:p-5 relative">
 
-      <div className="min-w-0">
-        <AppTopbar title="Campus Deportivo" onMenuClick={() => setSidebarOpen(true)} />
-
-        <main className="p-8 pb-[60px] max-md:p-5 relative">
-          {/* Background glow */}
-          <div className="fixed top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full bg-green-500/10 blur-[150px] pointer-events-none" />
-          <div className="fixed bottom-[-5%] right-[-5%] w-[450px] h-[450px] rounded-full bg-gold/10 blur-[120px] pointer-events-none" />
-
-          {/* Header */}
-          <section className="rounded-2xl p-8 max-md:p-6 mb-[26px] relative overflow-hidden border border-white/10">
-            <div className="absolute inset-0 bg-gradient-to-br from-green-950/60 via-black to-purple-black/40" />
-            <div
-              className="absolute inset-0 opacity-[0.04]"
-              style={{
-                backgroundImage: 'radial-gradient(circle at 25% 50%, rgba(34,197,94,.8) 0%, transparent 50%), radial-gradient(circle at 75% 50%, rgba(212,175,55,.4) 0%, transparent 50%)',
-              }}
-            />
+          {/* Header con foto real */}
+          <section className="rounded-2xl p-8 max-md:p-6 mb-[26px] relative overflow-hidden border border-green-500/20 min-h-[240px]">
+            <img src="/canchas.jpeg" alt="Campus" className="absolute inset-0 w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
             <div className="relative z-10">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-xl bg-green-500/15 border border-green-500/20 flex items-center justify-center">
@@ -132,7 +116,7 @@ export default function Campus() {
             ))}
           </div>
 
-          {/* Grid de canchas */}
+          {/* Grid de canchas - solo horario y división */}
           <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-[26px]">
             {filtradas.map((cancha) => {
               const Icon = estadoIcon[cancha.estado]
@@ -141,7 +125,7 @@ export default function Campus() {
                 <div
                   key={cancha.id}
                   className={cn(
-                    'rounded-2xl border p-5 relative overflow-hidden transition-all hover:border-white/20 group cursor-pointer',
+                    'rounded-2xl border p-4 relative overflow-hidden transition-all hover:border-white/30 group cursor-pointer',
                     isOccupied
                       ? 'bg-gradient-to-br from-red-950/20 via-black to-black border-red-900/30'
                       : cancha.estado === 'mantenimiento'
@@ -150,85 +134,59 @@ export default function Campus() {
                   )}
                   onClick={() => isOccupied && navigate(`/partido/1`)}
                 >
-                  {/* Status glow */}
                   <div className={cn(
-                    'absolute top-[-30%] right-[-20%] w-[200px] h-[200px] rounded-full blur-[80px] pointer-events-none opacity-30',
+                    'absolute top-[-30%] right-[-20%] w-[150px] h-[150px] rounded-full blur-[70px] pointer-events-none opacity-25',
                     isOccupied ? 'bg-red-500' : cancha.estado === 'mantenimiento' ? 'bg-amber-500' : 'bg-green-500'
                   )} />
 
                   <div className="relative z-10">
-                    {/* Header */}
-                    <div className="flex items-start justify-between mb-3">
+                    {/* Header: nombre + división + estado */}
+                    <div className="flex items-center justify-between mb-2">
                       <div>
-                        <h3 className="font-semibold text-base">{cancha.nombre}</h3>
-                        <div className="flex items-center gap-1 text-xs text-text-muted mt-0.5">
-                          <MapPin size={12} />
-                          {cancha.ubicacion}
+                        <h3 className="font-semibold text-sm">{cancha.nombre}</h3>
+                        <div className="flex items-center gap-1 text-[11px] text-text-muted mt-0.5">
+                          <MapPin size={11} /> {cancha.ubicacion} · {cancha.tipo}
                         </div>
                       </div>
                       <span className={cn(
-                        'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-[.4px] border',
+                        'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-[.3px] border',
                         estadoColor[cancha.estado]
                       )}>
-                        <Icon size={12} />
+                        <Icon size={10} />
                         {cancha.estado}
                       </span>
                     </div>
 
-                    {/* Tipo + rating */}
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs text-text-muted bg-white/5 px-2 py-1 rounded-md">{cancha.tipo}</span>
-                      <Rating rating={cancha.rating} />
-                    </div>
-
-                    {/* Características */}
-                    <div className="flex items-center gap-3 mb-3">
-                      {cancha.iluminacion && (
-                        <span className="flex items-center gap-1 text-[11px] text-text-faint">
-                          <Lightbulb size={12} className="text-yellow-500" /> Iluminada
-                        </span>
-                      )}
-                      {cancha.techada && (
-                        <span className="flex items-center gap-1 text-[11px] text-text-faint">
-                          <Warehouse size={12} className="text-blue-400" /> Techada
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Partido actual (ocupada) */}
+                    {/* Partido actual - solo horario */}
                     {cancha.partidoActual && (
-                      <div className="mt-2 pt-3 border-t border-white/10">
-                        <p className="text-[11px] text-text-faint uppercase tracking-[.4px] mb-2 font-semibold">EN CURSO</p>
-                        <div className="flex items-center gap-2 text-sm font-semibold">
-                          <span className="text-red-400">{cancha.partidoActual.eq1}</span>
-                          <span className="text-text-faint text-xs">vs</span>
-                          <span className="text-blue-400">{cancha.partidoActual.eq2}</span>
+                      <div className="mt-2 pt-2 border-t border-white/10">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-1.5 text-xs">
+                            <span className={isOccupied ? 'text-red-400' : 'text-gold'}>{cancha.partidoActual.eq1}</span>
+                            <span className="text-text-faint">vs</span>
+                            <span className="text-blue-400">{cancha.partidoActual.eq2}</span>
+                          </div>
+                          <span className="text-xs text-gold font-semibold">{cancha.partidoActual.hora}</span>
                         </div>
-                        <div className="flex items-center gap-3 mt-1">
-                          <span className="flex items-center gap-1 text-[11px] text-text-muted">
-                            <Clock size={11} /> {cancha.partidoActual.hora}
-                          </span>
-                          <span className="text-[11px] text-gold">{cancha.partidoActual.jornada}</span>
-                        </div>
+                        <span className="text-[10px] text-text-muted">{cancha.partidoActual.jornada}</span>
                       </div>
                     )}
 
-                    {/* Próximos */}
+                    {/* Próximos horarios */}
                     {cancha.proximos && cancha.proximos.length > 0 && (
-                      <div className="mt-2 pt-3 border-t border-white/10">
-                        <p className="text-[11px] text-text-faint uppercase tracking-[.4px] mb-1.5 font-semibold">PRÓXIMOS</p>
+                      <div className="mt-2 pt-2 border-t border-white/10">
                         {cancha.proximos.map((p, i) => (
-                          <div key={i} className="flex items-center justify-between text-xs text-text-muted">
-                            <span>{p.eq1} vs {p.eq2}</span>
-                            <span className="text-gold">{p.hora}</span>
+                          <div key={i} className="flex items-center justify-between text-xs text-text-muted py-0.5">
+                            <span className="text-[11px]">{p.eq1} vs {p.eq2}</span>
+                            <span className="text-gold text-[11px] font-medium">{p.hora}</span>
                           </div>
                         ))}
                       </div>
                     )}
 
-                    {/* Click hint si está ocupada */}
+                    {/* Click hint */}
                     {isOccupied && (
-                      <div className="mt-3 text-[11px] text-text-faint font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="mt-2 text-[10px] text-text-faint opacity-0 group-hover:opacity-100 transition-opacity">
                         Click para ver el partido →
                       </div>
                     )}
@@ -319,9 +277,6 @@ export default function Campus() {
             </span>
           </div>
         </main>
-
-        <Footer />
-      </div>
-    </div>
+    </DashboardLayout>
   )
 }

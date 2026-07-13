@@ -1,12 +1,12 @@
 import { useState } from 'react'
-import { motion } from 'framer-motion'
-import Sidebar from '@/components/shared/Sidebar'
-import AppTopbar from '@/components/shared/AppTopbar'
-import Footer from '@/components/shared/Footer'
+import { motion, AnimatePresence } from 'framer-motion'
+import DashboardLayout from '@/components/shared/DashboardLayout'
 import { SpotlightCard } from '@/components/ui/spotlight-card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Swords, Shield, Calendar, Trophy, Camera } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { useAuth } from '@/lib/auth'
+import { Swords, Shield, Calendar, Trophy, Camera, X, Lock, CheckCircle } from 'lucide-react'
 
 type Tab = 'informacion' | 'estadisticas' | 'historial'
 
@@ -25,20 +25,27 @@ const historial = [
 ]
 
 export default function Perfil() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [tab, setTab] = useState<Tab>('informacion')
+  const { user } = useAuth()
+  const [editingProfile, setEditingProfile] = useState(false)
+  const [editName, setEditName] = useState(user?.name || '')
+  const [editProgram, setEditProgram] = useState('Ing. Sistemas')
+  const [editSemester, setEditSemester] = useState('6')
+  const [editSaved, setEditSaved] = useState(false)
+
+  const handleSaveProfile = () => {
+    if (user) {
+      const updated = { ...user, name: editName }
+      localStorage.setItem('techcup_user', JSON.stringify(updated))
+    }
+    localStorage.setItem('techcup_profile', JSON.stringify({ name: editName, program: editProgram, semester: editSemester }))
+    setEditSaved(true)
+    setTimeout(() => { setEditSaved(false); setEditingProfile(false) }, 1500)
+  }
 
   return (
-    <div className="min-h-screen bg-black">
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      
-      <div className="fixed top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-purple-mid/15 blur-[150px] pointer-events-none" />
-      <div className="fixed bottom-[-5%] left-[-5%] w-[450px] h-[450px] rounded-full bg-gold/15 blur-[120px] pointer-events-none" />
-
-      <div className="relative z-10">
-        <AppTopbar title="Perfil deportivo" onMenuClick={() => setSidebarOpen(true)} />
-
-        <main className="max-w-[900px] mx-auto px-8 py-8 pb-[60px]">
+    <DashboardLayout title="Perfil deportivo">
+      <main className="max-w-[900px] mx-auto px-8 py-8 pb-[60px]">
           {/* Header perfil */}
           <SpotlightCard accent="gold" className="bg-surface border border-border rounded-2xl p-8 mb-6">
             <div className="flex items-center gap-6 max-md:flex-col max-md:text-center">
@@ -67,7 +74,7 @@ export default function Perfil() {
               </div>
 
               <div className="flex gap-2 max-md:flex-wrap max-md:justify-center">
-                <Button size="sm" className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark text-xs h-auto py-2 px-4">
+                <Button size="sm" onClick={() => { setEditingProfile(true); setEditName(user?.name || '') }} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark text-xs h-auto py-2 px-4">
                   Editar perfil
                 </Button>
                 <Button size="sm" variant="outline" className="rounded-full border-gold text-gold hover:bg-gold/10 text-xs h-auto py-2 px-4">
@@ -169,8 +176,78 @@ export default function Perfil() {
           )}
         </main>
 
-        <Footer />
-      </div>
-    </div>
+      {/* Modal editar perfil */}
+      <AnimatePresence>
+        {editingProfile && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+            onClick={() => setEditingProfile(false)}
+          >
+            <motion.div initial={{ opacity: 0, scale: 0.92, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.92, y: 20 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className="bg-gradient-to-br from-purple-deep2 to-purple-black border border-gold/30 rounded-3xl w-full max-w-lg shadow-2xl shadow-purple-900/40 p-6"
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="font-[family-name:var(--font-display)] text-xl uppercase tracking-[.5px] text-white">Editar <span className="text-gold">perfil</span></h2>
+                <button onClick={() => setEditingProfile(false)} className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-red-500/20 transition-colors">
+                  <X size={16} className="text-gray-light" />
+                </button>
+              </div>
+
+              <div className="flex items-center gap-4 mb-6">
+                <div className="relative">
+                  <div className="w-16 h-16 rounded-full overflow-hidden ring-2 ring-gold/40">
+                    <img src={user?.avatar || 'https://i.pravatar.cc/150?img=13'} alt="" className="w-full h-full object-cover" />
+                  </div>
+                  <button className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-purple-mid border-2 border-black flex items-center justify-center"><Camera size={10} className="text-white" /></button>
+                </div>
+                <div className="text-sm">
+                  <p className="font-semibold text-white">{user?.name || 'Usuario'}</p>
+                  <p className="text-xs text-gold/60 capitalize">{user?.role || 'jugador'}</p>
+                </div>
+              </div>
+
+              <div className="space-y-4 mb-6">
+                <div>
+                  <label className="block text-xs text-gold/60 font-semibold uppercase tracking-[.4px] mb-1.5">Nombre completo</label>
+                  <Input value={editName} onChange={e => setEditName(e.target.value)} className="bg-black/40 border-gold/20 text-white rounded-xl h-11 focus-visible:border-gold" />
+                </div>
+                <div className="relative">
+                  <label className="block text-xs text-gold/60 font-semibold uppercase tracking-[.4px] mb-1.5">Correo</label>
+                  <Input defaultValue={user?.email || 'correo@escuelaing.edu.co'} className="bg-black/40 border-gold/20 text-white/60 rounded-xl h-11 pr-10" disabled />
+                  <Lock size={14} className="absolute right-3 top-[38px] text-text-faint" />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs text-gold/60 font-semibold uppercase tracking-[.4px] mb-1.5">Programa</label>
+                    <select value={editProgram} onChange={e => setEditProgram(e.target.value)} className="w-full bg-black/40 border border-gold/20 text-white rounded-xl h-11 px-3 text-sm outline-none focus:border-gold">
+                      <option>Ing. Sistemas</option><option>Ing. Industrial</option><option>Ing. Civil</option><option>Matemáticas</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gold/60 font-semibold uppercase tracking-[.4px] mb-1.5">Semestre</label>
+                    <select value={editSemester} onChange={e => setEditSemester(e.target.value)} className="w-full bg-black/40 border border-gold/20 text-white rounded-xl h-11 px-3 text-sm outline-none focus:border-gold">
+                      {[1,2,3,4,5,6,7,8,9,10].map(s => <option key={s} value={s}>{s}°</option>)}
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              {editSaved && (
+                <div className="flex items-center gap-2 text-sm text-green-400 bg-green-500/10 border border-green-500/20 rounded-xl px-4 py-3 mb-4">
+                  <CheckCircle size={16} /> Cambios guardados
+                </div>
+              )}
+
+              <div className="flex gap-3 justify-end">
+                <Button variant="outline" onClick={() => setEditingProfile(false)} className="rounded-full border-gold/30 text-gold hover:bg-gold/10 h-11 px-6 text-sm">Cancelar</Button>
+                <Button onClick={handleSaveProfile} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold h-11 px-6 text-sm">Guardar cambios</Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </DashboardLayout>
   )
 }

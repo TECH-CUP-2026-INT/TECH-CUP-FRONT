@@ -15,6 +15,7 @@ import {
 interface AppTopbarProps {
   title: string
   sidebarOpen?: boolean
+  sidebarCollapsed?: boolean
   onMenuClick: () => void
 }
 
@@ -28,7 +29,7 @@ const messages: Record<number, { text: string; me: boolean }[]> = {
   2: [{ text: '¡Hola! Soy ManchasBot 🤖 ¿En qué puedo ayudarte?', me: false }, { text: '¿Cómo me inscribo en un torneo?', me: true }, { text: 'Para inscribirte, tu capitán debe completar el registro del equipo y cargar el comprobante de pago. El organizador revisa y aprueba la inscripción.', me: false }],
 }
 
-export default function AppTopbar({ title, sidebarOpen, onMenuClick }: AppTopbarProps) {
+export default function AppTopbar({ title, sidebarOpen, sidebarCollapsed, onMenuClick }: AppTopbarProps) {
   const navigate = useNavigate()
   const { user } = useAuth()
   const [chatOpen, setChatOpen] = useState(false)
@@ -52,7 +53,8 @@ export default function AppTopbar({ title, sidebarOpen, onMenuClick }: AppTopbar
   return (
     <>
       <div className="h-[64px]" /> {/* spacer para fixed header */}
-      <header className={`fixed top-0 z-50 flex items-center justify-between px-8 py-[18px] bg-black/85 backdrop-blur-md border-b border-border max-md:px-4 transition-all duration-300 ${sidebarOpen ? 'left-[260px] right-0' : 'left-0 right-0'}`}>
+      <header className="fixed top-0 z-50 flex items-center justify-between px-8 py-[18px] bg-black/85 backdrop-blur-md border-b border-border max-md:px-4 transition-all duration-300 right-0"
+        style={{ left: sidebarOpen ? (sidebarCollapsed ? '72px' : '260px') : '0px' }}>
         <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple-mid/60 to-transparent" />
         
         <div className="flex items-center gap-3">

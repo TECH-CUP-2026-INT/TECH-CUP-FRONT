@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import Sidebar from '@/components/shared/Sidebar'
-import AppTopbar from '@/components/shared/AppTopbar'
+import DashboardLayout from '@/components/shared/DashboardLayout'
 import { Button } from '@/components/ui/button'
 
 type Evento = { min: string; icon: string; desc: string; equipo: string }
@@ -25,7 +24,6 @@ const jugadores = {
 }
 
 export default function Arbitraje() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [segundos, setSegundos] = useState(0)
   const [corriendo, setCorriendo] = useState(false)
   const [golA, setGolA] = useState(0)
@@ -33,9 +31,10 @@ export default function Arbitraje() {
   const [eventos, setEventos] = useState<Evento[]>([])
   const [finalizado, setFinalizado] = useState(false)
   const [flash, setFlash] = useState('')
-  const [modalAccion, setModalAccion] = useState<Accion>(null)
+  const [showModal, setShowModal] = useState(false)
   const [equipoSel, setEquipoSel] = useState<'A' | 'B'>('A')
   const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null)
+  const [step, setStep] = useState<'player' | 'action'>('player')
   const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined)
 
   useEffect(() => {
@@ -54,20 +53,27 @@ export default function Arbitraje() {
     setTimeout(() => setFlash(''), 600)
   }, [segundos])
 
-  const handleAccion = (accion: Accion) => {
-    if (!accion) return
-    const nombres: Record<string, string> = { golA: 'Gol', golB: 'Gol', amarilla: '🟨 Amarilla', roja: '🟥 Roja', sust: '🔄 Sustitución' }
+  const handleAccion = (tipo: string) => {
     const equipo = equipoSel === 'A' ? 'Tigres FC' : 'Sistemas FC'
     const jug = jugadores[equipoSel].find(j => j.nombre === selectedPlayer)
     const jugText = jug ? ` · ${jug.nombre} #${jug.dorsal}` : ''
 
-    if (accion === 'golA') { setGolA(g => g + 1); addEvent('⚽', `Gol ${equipo}${jugText}`, equipo) }
-    else if (accion === 'golB') { setGolB(g => g + 1); addEvent('⚽', `Gol ${equipo}${jugText}`, equipo) }
-    else if (accion === 'amarilla') addEvent('🟨', `Amarilla ${equipo}${jugText}`, equipo)
-    else if (accion === 'roja') addEvent('🟥', `Roja ${equipo}${jugText}`, equipo)
-    else if (accion === 'sust') addEvent('🔄', `Sustitución ${equipo}${jugText}`, equipo)
+    if (tipo === 'gol') { 
+      const eq = equipoSel === 'A' ? 'golA' : 'golB'
+      if (eq === 'golA') setGolA(g => g + 1); else setGolB(g => g + 1)
+      addEvent('⚽', `Gol ${equipo}${jugText}`, equipo)
+    } else if (tipo === 'amarilla') addEvent('🟨', `Amarilla ${equipo}${jugText}`, equipo)
+    else if (tipo === 'roja') addEvent('🟥', `Roja ${equipo}${jugText}`, equipo)
+    else if (tipo === 'sust') addEvent('🔄', `Sustitución ${equipo}${jugText}`, equipo)
 
-    setModalAccion(null); setSelectedPlayer(null)
+    setShowModal(false); setSelectedPlayer(null); setStep('player')
+  }
+
+  const selectTeam = (eq: 'A' | 'B') => {
+    setEquipoSel(eq)
+    setSelectedPlayer(null)
+    setStep('player')
+    setShowModal(true)
   }
 
   const formatTime = (s: number) => {
@@ -80,10 +86,8 @@ export default function Arbitraje() {
   }
 
   return (
-    <div className="min-h-screen bg-black flex">
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <div className="min-w-0 flex-1 flex flex-col">
-        <AppTopbar title="Arbitraje en vivo" onMenuClick={() => setSidebarOpen(true)} />
+    <DashboardLayout title="Arbitraje en vivo">
+      <div className="flex flex-col min-h-full">
 
         {/* Scoreboard */}
         <div className="bg-gradient-to-b from-purple-black to-black border-b border-gold/20 py-4 px-4">
@@ -124,25 +128,60 @@ export default function Arbitraje() {
             className="fixed inset-0 pointer-events-none z-50 flex items-center justify-center text-8xl">{flash === '⚽' ? '⚽' : flash === '🟨' ? '🟨' : flash === '🟥' ? '🟥' : '🔄'}</motion.div>
         )}</AnimatePresence>
 
-        {/* Botones */}
-        <div className="flex-1 p-4 max-w-3xl mx-auto w-full overflow-y-auto">
-          <div className="grid grid-cols-2 gap-2 mb-2">
-            <button onClick={() => { setEquipoSel('A'); setModalAccion('golA') }}
-              className="h-16 rounded-xl bg-gradient-to-b from-green-600 to-green-800 text-white font-bold text-base border-2 border-green-500/30 active:scale-95 transition-all flex items-center justify-center gap-2">
-              <span className="text-2xl">⚽</span> GOL TIGRES
-            </button>
-            <button onClick={() => { setEquipoSel('B'); setModalAccion('golB') }}
-              className="h-16 rounded-xl bg-gradient-to-b from-purple-600 to-purple-800 text-white font-bold text-base border-2 border-purple-500/30 active:scale-95 transition-all flex items-center justify-center gap-2">
-              <span className="text-2xl">⚽</span> GOL SISTEMAS
-            </button>
-          </div>
-          <div className="grid grid-cols-3 gap-2 mb-2">
-            <button onClick={() => { setEquipoSel('A'); setModalAccion('amarilla') }}
-              className="h-14 rounded-xl bg-yellow-600/20 border-2 border-yellow-500/40 text-yellow-300 font-bold text-sm active:scale-95 transition-all flex flex-col items-center justify-center"><span className="text-xl">🟨</span> Amarilla</button>
-            <button onClick={() => { setEquipoSel('B'); setModalAccion('roja') }}
-              className="h-14 rounded-xl bg-red-600/20 border-2 border-red-500/40 text-red-300 font-bold text-sm active:scale-95 transition-all flex flex-col items-center justify-center"><span className="text-xl">🟥</span> Roja</button>
-            <button onClick={() => { setEquipoSel('A'); setModalAccion('sust') }}
-              className="h-14 rounded-xl bg-blue-600/20 border-2 border-blue-500/40 text-blue-300 font-bold text-sm active:scale-95 transition-all flex flex-col items-center justify-center"><span className="text-xl">🔄</span> Sustitución</button>
+        {/* Alineación visual: ambos equipos con sus jugadores */}
+        <div className="flex-1 p-4 max-w-4xl mx-auto w-full overflow-y-auto">
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            {/* Tigres FC */}
+            <div>
+              <div className="flex items-center gap-2 mb-3 px-2">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center text-sm font-black text-white">T</div>
+                <div>
+                  <p className="text-sm font-bold text-green-400">Tigres FC</p>
+                  <p className="text-[10px] text-text-muted">0 goles</p>
+                </div>
+              </div>
+              <div className="space-y-2">
+                {jugadores.A.map((j, i) => (
+                  <button key={j.nombre} onClick={() => { selectTeam('A'); setSelectedPlayer(j.nombre); setStep('action') }}
+                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-green-950/20 border border-green-500/20 hover:border-green-400/50 hover:bg-green-900/30 active:scale-[0.97] transition-all group">
+                    <div className="w-9 h-9 rounded-full overflow-hidden ring-2 ring-green-500/30 flex-shrink-0">
+                      <img src={`https://i.pravatar.cc/72?img=${i + 30}`} alt="" className="w-full h-full object-cover" />
+                    </div>
+                    <div className="text-left flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-white group-hover:text-green-300 transition-colors truncate">{j.nombre}</p>
+                      <p className="text-[10px] text-text-muted">#{j.dorsal} · {j.pos}</p>
+                    </div>
+                    <span className="text-green-500/30 group-hover:text-green-400/60 transition-colors text-xs">⚽</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Sistemas FC */}
+            <div>
+              <div className="flex items-center gap-2 mb-3 px-2">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center text-sm font-black text-white">S</div>
+                <div>
+                  <p className="text-sm font-bold text-purple-400">Sistemas FC</p>
+                  <p className="text-[10px] text-text-muted">0 goles</p>
+                </div>
+              </div>
+              <div className="space-y-2">
+                {jugadores.B.map((j, i) => (
+                  <button key={j.nombre} onClick={() => { selectTeam('B'); setSelectedPlayer(j.nombre); setStep('action') }}
+                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-purple-950/20 border border-purple-500/20 hover:border-purple-400/50 hover:bg-purple-900/30 active:scale-[0.97] transition-all group">
+                    <div className="w-9 h-9 rounded-full overflow-hidden ring-2 ring-purple-500/30 flex-shrink-0">
+                      <img src={`https://i.pravatar.cc/72?img=${i + 40}`} alt="" className="w-full h-full object-cover" />
+                    </div>
+                    <div className="text-left flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-white group-hover:text-purple-300 transition-colors truncate">{j.nombre}</p>
+                      <p className="text-[10px] text-text-muted">#{j.dorsal} · {j.pos}</p>
+                    </div>
+                    <span className="text-purple-500/30 group-hover:text-purple-400/60 transition-colors text-xs">⚽</span>
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
           <div className="grid grid-cols-2 gap-2 mb-3">
             <button onClick={() => setCorriendo(!corriendo)}
@@ -180,46 +219,80 @@ export default function Arbitraje() {
         </div>
       </div>
 
-      {/* Modal selector de jugador */}
+      {/* Modal flotante: elegir jugador → elegir acción */}
       <AnimatePresence>
-        {modalAccion && (
+        {showModal && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
-            onClick={() => setModalAccion(null)}>
+            onClick={() => { setShowModal(false); setStep('player'); setSelectedPlayer(null) }}>
             <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }}
-              className="bg-surface border border-border rounded-2xl p-6 w-full max-w-sm" onClick={e => e.stopPropagation()}>
-              <h3 className="font-[family-name:var(--font-display)] text-lg uppercase mb-1">
-                {modalAccion === 'golA' || modalAccion === 'golB' ? '⚽ Anotador' :
-                 modalAccion === 'amarilla' ? '🟨 Jugador amonestado' :
-                 modalAccion === 'roja' ? '🟥 Jugador expulsado' : '🔄 Sustitución'}
-              </h3>
-              <p className="text-xs text-text-muted mb-4">
-                {equipoSel === 'A' ? 'Tigres FC' : 'Sistemas FC'}
-              </p>
-              <div className="space-y-1 mb-4 max-h-[250px] overflow-y-auto">
-                {jugadores[equipoSel].map(j => (
-                  <button key={j.nombre} onClick={() => setSelectedPlayer(j.nombre)}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all ${
-                      selectedPlayer === j.nombre ? 'bg-purple-mid/30 border border-purple-mid/50 text-white' : 'bg-white/5 border border-transparent text-gray-light hover:bg-white/10'
-                    }`}>
-                    <span className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-deep to-purple-black border border-gold/30 flex items-center justify-center text-xs font-bold text-gold">{j.dorsal}</span>
-                    <div className="text-left">
-                      <p className="text-sm">{j.nombre}</p>
-                      <p className="text-[10px] text-text-muted uppercase">{j.pos}</p>
+              className="bg-gradient-to-br from-purple-deep2 to-purple-black border border-gold/30 rounded-3xl p-6 w-full max-w-md shadow-2xl shadow-purple-900/40"
+              onClick={e => e.stopPropagation()}>
+
+              {/* Step 1: Seleccionar jugador */}
+              {step === 'player' && (
+                <>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-[family-name:var(--font-display)] text-lg uppercase text-white">Elegí un <span className="text-gold">jugador</span></h3>
+                    <span className="text-xs text-gold/60 bg-gold/10 px-3 py-1 rounded-full">{equipoSel === 'A' ? 'Tigres FC' : 'Sistemas FC'}</span>
+                  </div>
+                  <div className="space-y-2 mb-4 max-h-[320px] overflow-y-auto">
+                    {jugadores[equipoSel].map((j, i) => (
+                      <button key={j.nombre} onClick={() => { setSelectedPlayer(j.nombre); setStep('action') }}
+                        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+                          selectedPlayer === j.nombre ? 'bg-purple-mid/30 border border-purple-mid/50 text-white' : 'bg-white/5 border border-transparent text-gray-light hover:bg-white/10 hover:border-gold/30'
+                        }`}>
+                        <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-gold/30 flex-shrink-0">
+                          <img src={`https://i.pravatar.cc/72?img=${i + 10}`} alt="" className="w-full h-full object-cover" />
+                        </div>
+                        <div className="text-left flex-1">
+                          <p className="text-sm font-semibold text-white">{j.nombre}</p>
+                          <p className="text-[10px] text-text-muted uppercase">#{j.dorsal} · {j.pos}</p>
+                        </div>
+                        <span className="text-gold/40 text-xs">→</span>
+                      </button>
+                    ))}
+                  </div>
+                  <Button variant="outline" onClick={() => { setShowModal(false); setSelectedPlayer(null) }}
+                    className="w-full rounded-full border-gold/30 text-gold hover:bg-gold/10 h-11 text-sm">Cancelar</Button>
+                </>
+              )}
+
+              {/* Step 2: Elegir acción */}
+              {step === 'action' && selectedPlayer && (
+                <>
+                  <div className="text-center mb-5">
+                    <div className="w-16 h-16 mx-auto rounded-full overflow-hidden ring-2 ring-gold/40 mb-2">
+                      <img src={`https://i.pravatar.cc/100?img=${jugadores[equipoSel].findIndex(j => j.nombre === selectedPlayer) + 10}`} alt="" className="w-full h-full object-cover" />
                     </div>
-                  </button>
-                ))}
-              </div>
-              <div className="flex gap-2">
-                <Button variant="outline" onClick={() => { setModalAccion(null); setSelectedPlayer(null) }}
-                  className="flex-1 rounded-full border-border text-gray-light hover:bg-white/5 h-11 text-sm">Cancelar</Button>
-                <Button onClick={() => handleAccion(modalAccion)}
-                  className="flex-1 rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-11 text-sm font-bold">Confirmar</Button>
-              </div>
+                    <p className="text-white font-bold">{selectedPlayer}</p>
+                    <p className="text-xs text-text-muted">#{jugadores[equipoSel].find(j => j.nombre === selectedPlayer)?.dorsal} · {equipoSel === 'A' ? 'Tigres FC' : 'Sistemas FC'}</p>
+                  </div>
+                  <h3 className="font-[family-name:var(--font-display)] text-base uppercase text-center text-white mb-4">¿Qué <span className="text-gold">acción</span>?</h3>
+                  <div className="grid grid-cols-2 gap-3 mb-4">
+                    <button onClick={() => handleAccion('gol')} className="h-16 rounded-xl bg-gradient-to-br from-green-600 to-green-800 border-2 border-green-500/40 text-white font-bold text-sm active:scale-95 transition-all flex flex-col items-center justify-center shadow-lg shadow-green-900/30">
+                      <span className="text-2xl">⚽</span> Gol
+                    </button>
+                    <button onClick={() => handleAccion('amarilla')} className="h-16 rounded-xl bg-gradient-to-br from-yellow-600 to-yellow-800 border-2 border-yellow-500/40 text-yellow-200 font-bold text-sm active:scale-95 transition-all flex flex-col items-center justify-center shadow-lg shadow-yellow-900/30">
+                      <span className="text-2xl">🟨</span> Amarilla
+                    </button>
+                    <button onClick={() => handleAccion('roja')} className="h-16 rounded-xl bg-gradient-to-br from-red-600 to-red-800 border-2 border-red-500/40 text-red-200 font-bold text-sm active:scale-95 transition-all flex flex-col items-center justify-center shadow-lg shadow-red-900/30">
+                      <span className="text-2xl">🟥</span> Roja
+                    </button>
+                    <button onClick={() => handleAccion('sust')} className="h-16 rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 border-2 border-blue-500/40 text-blue-200 font-bold text-sm active:scale-95 transition-all flex flex-col items-center justify-center shadow-lg shadow-blue-900/30">
+                      <span className="text-2xl">🔄</span> Sustitución
+                    </button>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button variant="outline" onClick={() => setStep('player')} className="flex-1 rounded-full border-gold/30 text-gold hover:bg-gold/10 h-10 text-xs">← Cambiar jugador</Button>
+                    <Button variant="outline" onClick={() => { setShowModal(false); setSelectedPlayer(null); setStep('player') }} className="flex-1 rounded-full border-border text-gray-light hover:bg-white/5 h-10 text-xs">Cancelar</Button>
+                  </div>
+                </>
+              )}
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </DashboardLayout>
   )
 }

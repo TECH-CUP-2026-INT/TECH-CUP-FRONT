@@ -16,16 +16,26 @@ const partidos = [
   { id: 4, eq1: 'Sistemas FC', eq2: 'Tigres FC', fecha: '18 MAY', hora: '8:00 PM', cancha: 'Cancha 1', estado: 'final', resultado: '2 - 1', torneo: 'TechCup 2024-I' },
 ]
 
+const SIDEBAR_KEY = 'techcup_sidebar_collapsed'
+
 export default function RefereeDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(true)
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    const stored = localStorage.getItem(SIDEBAR_KEY)
+    return stored ? JSON.parse(stored) : false
+  })
   const navigate = useNavigate()
+
+  const handleCollapse = (val: boolean) => {
+    setSidebarCollapsed(val)
+    localStorage.setItem(SIDEBAR_KEY, JSON.stringify(val))
+  }
 
   const sidebarWidth = sidebarOpen ? (sidebarCollapsed ? '72px' : '260px') : '0px'
 
   return (
     <div className="min-h-screen bg-black flex">
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} collapsed={sidebarCollapsed} onCollapse={setSidebarCollapsed} />
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} collapsed={sidebarCollapsed} onCollapse={handleCollapse} />
       <div className="min-w-0 flex-1 transition-all duration-300" style={{ marginLeft: sidebarWidth }}>
         <AppTopbar title="Panel de árbitro" sidebarOpen={sidebarOpen} onMenuClick={() => setSidebarOpen(true)} />
         

@@ -2,9 +2,8 @@ import { useState, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Navbar from '@/components/shared/Navbar'
-import Sidebar from '@/components/shared/Sidebar'
-import AppTopbar from '@/components/shared/AppTopbar'
 import Footer from '@/components/shared/Footer'
+import DashboardLayout from '@/components/shared/DashboardLayout'
 import { Button } from '@/components/ui/button'
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
@@ -366,18 +365,12 @@ function TorneosContent() {
 export default function TorneosPublic() {
   const location = useLocation()
   const isPrivate = location.pathname.startsWith('/app')
-  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   if (isPrivate) {
     return (
-      <div className="min-h-screen bg-black flex">
-        <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        <div className="min-w-0 flex-1">
-          <AppTopbar title="Torneos y Equipos" onMenuClick={() => setSidebarOpen(true)} />
-          <TorneosContent />
-          <Footer />
-        </div>
-      </div>
+      <DashboardLayout title="Torneos y Equipos">
+        <TorneosContent />
+      </DashboardLayout>
     )
   }
 

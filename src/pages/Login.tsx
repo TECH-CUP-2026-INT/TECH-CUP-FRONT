@@ -98,7 +98,7 @@ export default function Login() {
               </h1>
               <p className="text-sm text-text-muted mb-4">Iniciá sesión para acceder a tu cuenta.</p>
 
-              <form onSubmit={e => { e.preventDefault(); login(email, ''); navigate(selectedRole === 'arbitro' ? '/arbitro/dashboard' : `/dashboard/${selectedRole}`) }} className="space-y-4">
+              <form onSubmit={e => { e.preventDefault(); login(email, selectedRole as import('@/lib/auth').UserRole); navigate(selectedRole === 'arbitro' ? '/arbitro/dashboard' : `/dashboard/${selectedRole}`) }} className="space-y-4">
                 <div className="space-y-2">
                   <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Correo electrónico</Label>
                   <div className="relative">

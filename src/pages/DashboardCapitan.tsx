@@ -9,21 +9,31 @@ import { InteractiveHoverButton } from '@/components/ui/interactive-hover-button
 import ManchasFloating from '@/components/shared/ManchasFloating'
 import { partidos, posiciones } from '@/data/partidos'
 
+const SIDEBAR_KEY = 'techcup_sidebar_collapsed'
+
 export default function DashboardCapitan() {
   const [sidebarOpen, setSidebarOpen] = useState(true)
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    const stored = localStorage.getItem(SIDEBAR_KEY)
+    return stored ? JSON.parse(stored) : false
+  })
   const [posExpandida, setPosExpandida] = useState(false)
   const [calExpandido, setCalExpandido] = useState(false)
   const navigate = useNavigate()
+
+  const handleCollapse = (val: boolean) => {
+    setSidebarCollapsed(val)
+    localStorage.setItem(SIDEBAR_KEY, JSON.stringify(val))
+  }
 
   const sidebarWidth = sidebarOpen ? (sidebarCollapsed ? '72px' : '260px') : '0px'
 
   return (
     <div className="min-h-screen bg-black">
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} collapsed={sidebarCollapsed} onCollapse={setSidebarCollapsed} />
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} collapsed={sidebarCollapsed} onCollapse={handleCollapse} />
 
       <div className={`min-w-0 transition-all duration-300`} style={{ marginLeft: sidebarWidth }}>
-        <AppTopbar title="Panel Capitán" sidebarOpen={sidebarOpen} onMenuClick={() => setSidebarOpen(true)} />
+        <AppTopbar title="Panel Capitán" sidebarOpen={sidebarOpen} sidebarCollapsed={sidebarCollapsed} onMenuClick={() => setSidebarOpen(true)} />
 
         <main className="p-8 pb-[60px] max-md:p-5 relative">
           <div className="fixed top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-purple-mid/15 blur-[150px] pointer-events-none" />

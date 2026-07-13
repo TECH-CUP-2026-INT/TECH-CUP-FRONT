@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import Sidebar from '@/components/shared/Sidebar'
-import AppTopbar from '@/components/shared/AppTopbar'
-import Footer from '@/components/shared/Footer'
+import DashboardLayout from '@/components/shared/DashboardLayout'
 import { SpotlightCard } from '@/components/ui/spotlight-card'
 import { Button } from '@/components/ui/button'
 import { TrendingUp, Trophy } from 'lucide-react'
@@ -23,17 +21,9 @@ const partidosStats = [
 ]
 
 export default function Estadisticas() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-
   return (
-    <div className="min-h-screen bg-black">
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <div className="fixed top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-purple-mid/15 blur-[150px] pointer-events-none" />
-      <div className="fixed bottom-[-5%] left-[-5%] w-[450px] h-[450px] rounded-full bg-gold/15 blur-[120px] pointer-events-none" />
-      <div className="min-w-0 relative z-10">
-        <AppTopbar title="Estadísticas" onMenuClick={() => setSidebarOpen(true)} />
-
-        <main className="max-w-[900px] mx-auto px-8 py-8 pb-[60px]">
+    <DashboardLayout title="Estadísticas">
+      <main className="max-w-[900px] mx-auto px-8 py-8 pb-[60px]">
           {/* Header */}
           <div className="flex items-center gap-4 mb-8 max-md:flex-col max-md:text-center">
             <div className="w-16 h-16 rounded-full overflow-hidden ring-2 ring-gold/40 ring-offset-2 ring-offset-black">
@@ -116,8 +106,6 @@ export default function Estadisticas() {
             </div>
           </SpotlightCard>
         </main>
-        <Footer />
-      </div>
-    </div>
+    </DashboardLayout>
   )
 }

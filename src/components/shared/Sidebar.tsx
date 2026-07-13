@@ -1,22 +1,26 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, useMemo } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { cn } from '@/lib/utils'
+import { useAuth, type UserRole } from '@/lib/auth'
 import {
-  Home, Trophy, Calendar, Sword, BarChart3, ShieldCheck, MapPin, HelpCircle, ChevronDown, X, PanelLeftClose, PanelLeft, User
+  Home, Trophy, Calendar, Sword, BarChart3, ShieldCheck, MapPin, HelpCircle, ChevronDown, X, PanelLeftClose, PanelLeft, User, Swords, ClipboardCheck, Users
 } from 'lucide-react'
 
-const items = [
-  { id:'inicio',      icon: Home,         label:'Inicio',            href:'/dashboard' },
-  { id:'torneos',     icon: Trophy,       label:'Torneos y Equipos', href:'/app/torneos' },
-  { id:'calendario',  icon: Calendar,     label:'Calendario',        href:'/app/calendario' },
-  { id:'partidos',    icon: Sword,        label:'Mis partidos',     href:'/mis-partidos' },
-  { id:'mi-equipo',   icon: Trophy,        label:'Mi equipo',        href:'/mi-equipo' },
-  { id:'perfil',      icon: User,         label:'Perfil',            href:'/perfil' },
-  { id:'estadisticas',icon: BarChart3,    label:'Estadísticas',      href:'/estadisticas' },
-  { id:'reglamento',  icon: ShieldCheck,  label:'Reglamento',        href:'/reglamento' },
-  { id:'campus',      icon: MapPin,       label:'Campus',            href:'/campus' },
-  { id:'soporte',     icon: HelpCircle,   label:'Soporte',           href:'/soporte' },
-  { id:'arbitraje',   icon: ShieldCheck,  label:'Arbitraje',         href:'/arbitraje' },
+type NavItem = { id:string; icon:typeof Home; label:string; href:string; roles?: UserRole[] }
+
+const allItems: NavItem[] = [
+  { id:'inicio',      icon: Home,          label:'Inicio',            href:'/dashboard',          roles:['capitan','jugador','admin'] },
+  { id:'torneos',     icon: Trophy,        label:'Torneos y Equipos', href:'/app/torneos' },
+  { id:'calendario',  icon: Calendar,      label:'Calendario',        href:'/app/calendario' },
+  { id:'partidos',    icon: Sword,         label:'Mis partidos',     href:'/mis-partidos',       roles:['capitan','jugador'] },
+  { id:'mi-equipo',   icon: Users,         label:'Mi equipo',        href:'/mi-equipo',          roles:['capitan','jugador'] },
+  { id:'perfil',      icon: User,          label:'Perfil',            href:'/perfil' },
+  { id:'estadisticas',icon: BarChart3,     label:'Estadísticas',      href:'/estadisticas' },
+  { id:'arbitraje',   icon: ClipboardCheck,label:'Arbitraje',         href:'/arbitraje',          roles:['arbitro'] },
+  { id:'arbitro-db',  icon: Home,          label:'Panel Árbitro',    href:'/arbitro/dashboard',  roles:['arbitro'] },
+  { id:'admin-panel', icon: ShieldCheck,   label:'Panel Admin',      href:'/dashboard/admin',    roles:['admin'] },
+  { id:'campus',      icon: MapPin,        label:'Campus',            href:'/campus' },
+  { id:'soporte',     icon: HelpCircle,    label:'Soporte',           href:'/soporte' },
 ]
 
 interface SidebarProps {
@@ -29,9 +33,21 @@ interface SidebarProps {
 export default function Sidebar({ open, onClose, collapsed: collapsedProp, onCollapse }: SidebarProps) {
   const { pathname } = useLocation()
   const navigate = useNavigate()
+  const { user } = useAuth()
   const sidebarRef = useRef<HTMLDivElement>(null)
   const [hovered, setHovered] = useState(false)
   const [collapsed, setCollapsed] = useState(collapsedProp ?? false)
+
+  const items = useMemo(() => {
+    const role = user?.role
+    return allItems.filter(item => !item.roles || (role && item.roles.includes(role))).map(item => {
+      if (item.id === 'inicio' && role) {
+        const roleRoute = role === 'arbitro' ? '/arbitro/dashboard' : role === 'admin' ? '/dashboard/admin' : `/dashboard/${role}`
+        return { ...item, href: roleRoute }
+      }
+      return item
+    })
+  }, [user?.role])
 
   const handleCollapse = () => {
     const newVal = !collapsed
@@ -39,14 +55,15 @@ export default function Sidebar({ open, onClose, collapsed: collapsedProp, onCol
     onCollapse?.(newVal)
   }
 
-  const activeId = pathname.startsWith('/dashboard') ? 'inicio'
+  const activeId = pathname.startsWith('/dashboard') || pathname === '/' ? 'inicio'
     : pathname.startsWith('/app/torneos') || pathname.startsWith('/torneos') ? 'torneos'
     : pathname.startsWith('/app/calendario') || pathname.startsWith('/calendario') ? 'calendario'
     : pathname.startsWith('/mis-partidos') ? 'partidos'
     : pathname.startsWith('/estadisticas') ? 'estadisticas'
     : pathname.startsWith('/mi-equipo') ? 'mi-equipo'
     : pathname.startsWith('/perfil') ? 'perfil'
-    : pathname.startsWith('/arbitraje') || pathname.startsWith('/arbitro') ? 'arbitraje'
+    : pathname.startsWith('/arbitraje') ? 'arbitraje'
+    : pathname.startsWith('/arbitro') ? 'arbitro-db'
     : pathname.startsWith('/calendario') ? 'calendario'
     : pathname.slice(1).split('/')[0] || 'inicio'
 
@@ -72,10 +89,9 @@ export default function Sidebar({ open, onClose, collapsed: collapsedProp, onCol
   }, [])
 
   const isVisible = open || showOnHover
-  const sideCollapsed = collapsed && !hovered
+  const sideCollapsed = collapsed
 
   const handleNavigate = () => {
-    onClose()
     setShowOnHover(false)
   }
 
@@ -156,8 +172,8 @@ export default function Sidebar({ open, onClose, collapsed: collapsedProp, onCol
           </ul>
         </nav>
 
-        {/* Promo */}
-        {!sideCollapsed && (
+        {/* Promo — solo capitán */}
+        {!sideCollapsed && user?.role === 'capitan' && (
           <div className="mx-3 mt-3 rounded-2xl p-4 bg-gradient-to-br from-purple-deep to-purple-black border border-white/10">
             <p className="font-[family-name:var(--font-display)] text-sm leading-tight uppercase mb-3">
               ¡Lleva a tu equipo <span className="text-gold">a la gloria!</span>
@@ -169,21 +185,21 @@ export default function Sidebar({ open, onClose, collapsed: collapsedProp, onCol
         )}
 
         {/* Profile */}
-        <div className={cn('mt-3 pt-3 border-t border-border flex items-center gap-2.5 cursor-pointer group', sideCollapsed ? 'justify-center px-2' : 'px-3')}>
+        <Link to="/perfil" className={cn('mt-3 pt-3 border-t border-border flex items-center gap-2.5 cursor-pointer group', sideCollapsed ? 'justify-center px-2' : 'px-3')} onClick={handleNavigate}>
           <div className="relative">
-            <img src="https://i.pravatar.cc/72?img=13" alt="Avatar" className={cn('rounded-full object-cover border-2 border-transparent group-hover:border-gold transition-colors', sideCollapsed ? 'w-9 h-9' : 'w-[38px] h-[38px]')} />
+            <img src={user?.avatar || 'https://i.pravatar.cc/72?img=13'} alt="Avatar" className={cn('rounded-full object-cover border-2 border-transparent group-hover:border-gold transition-colors', sideCollapsed ? 'w-9 h-9' : 'w-[38px] h-[38px]')} />
             <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-green-500 border-2 border-black" />
           </div>
           {!sideCollapsed && (
             <>
               <div className="flex-1 leading-tight min-w-0">
-                <b className="text-[13px] block truncate">Juan Camilo Rivera</b>
-                <span className="text-[11.5px] text-text-muted">Estudiante</span>
+                <b className="text-[13px] block truncate">{user?.name || 'Juan Camilo Rivera'}</b>
+                <span className="text-[11.5px] text-text-muted capitalize">{user?.role || 'Estudiante'}</span>
               </div>
               <ChevronDown size={16} className="flex-shrink-0 text-gray-light" />
             </>
           )}
-        </div>
+        </Link>
       </aside>
 
       <style>{`

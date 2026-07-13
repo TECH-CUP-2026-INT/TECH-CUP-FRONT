@@ -2,9 +2,8 @@ import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import Navbar from '@/components/shared/Navbar'
-import Sidebar from '@/components/shared/Sidebar'
-import AppTopbar from '@/components/shared/AppTopbar'
 import Footer from '@/components/shared/Footer'
+import DashboardLayout from '@/components/shared/DashboardLayout'
 import { Badge } from '@/components/ui/badge'
 import { partidos } from '@/data/partidos'
 import { CalendarDays, MapPin, Clock, ChevronLeft, ChevronRight, X } from 'lucide-react'
@@ -286,18 +285,12 @@ function CalendarioContent() {
 export default function Calendario() {
   const location = useLocation()
   const isPrivate = location.pathname.startsWith('/app')
-  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   if (isPrivate) {
     return (
-      <div className="min-h-screen bg-black flex">
-        <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        <div className="min-w-0 flex-1">
-          <AppTopbar title="Calendario" onMenuClick={() => setSidebarOpen(true)} />
-          <CalendarioContent />
-          <Footer />
-        </div>
-      </div>
+      <DashboardLayout title="Calendario">
+        <CalendarioContent />
+      </DashboardLayout>
     )
   }
 

@@ -1,17 +1,15 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import Sidebar from '@/components/shared/Sidebar'
-import AppTopbar from '@/components/shared/AppTopbar'
-import Footer from '@/components/shared/Footer'
+import DashboardLayout from '@/components/shared/DashboardLayout'
 import { FutPlayerCard } from '@/components/cards/FutPlayerCard'
 import { SpotlightCard } from '@/components/ui/spotlight-card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Swords, Calendar, BarChart3, MessageSquare, Plus, X, Edit3, Users, Clock, Goal, ShieldAlert } from 'lucide-react'
+import { Swords, Calendar, BarChart3, Plus, X, Edit3, Users, Clock, Goal, ShieldAlert } from 'lucide-react'
 
-type Tab = 'plantilla' | 'calendario' | 'estadisticas' | 'chat'
+type Tab = 'plantilla' | 'calendario' | 'estadisticas'
 
 interface Jugador {
   id: number
@@ -61,14 +59,8 @@ export default function MiEquipo() {
   const eliminar = (id: number) => setJugadores(jugadores.filter(j => j.id !== id))
 
   return (
-    <div className="min-h-screen bg-black">
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <div className="fixed top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-purple-mid/15 blur-[150px] pointer-events-none" />
-      <div className="fixed bottom-[-5%] left-[-5%] w-[450px] h-[450px] rounded-full bg-gold/15 blur-[120px] pointer-events-none" />
-      <div className="relative z-10">
-        <AppTopbar title="Mi equipo" onMenuClick={() => setSidebarOpen(true)} />
-
-        <main className="max-w-[1000px] mx-auto px-8 py-8 pb-[60px]">
+    <DashboardLayout title="Mi equipo">
+      <main className="max-w-[1000px] mx-auto px-8 py-8 pb-[60px]">
           {/* Header equipo */}
           <SpotlightCard accent="gold" className="bg-surface border border-border rounded-2xl p-6 mb-6">
             <div className="flex items-center gap-5 max-md:flex-col max-md:text-center">
@@ -92,12 +84,12 @@ export default function MiEquipo() {
 
           {/* Tabs */}
           <div className="flex items-center gap-1 bg-surface/50 border border-border/60 rounded-2xl p-1 mb-6 overflow-x-auto">
-            {(['plantilla','calendario','estadisticas','chat'] as Tab[]).map(t => (
+            {(['plantilla','calendario','estadisticas'] as Tab[]).map(t => (
               <button key={t} onClick={() => setTab(t)}
                 className={`flex items-center gap-2 py-2.5 px-4 rounded-xl text-sm font-semibold capitalize whitespace-nowrap transition-all ${
                   tab === t ? 'bg-purple-mid text-white shadow-lg shadow-purple-mid/25' : 'text-text-muted hover:text-white'
                 }`}>
-                {t === 'plantilla' ? <Swords size={16} /> : t === 'calendario' ? <Calendar size={16} /> : t === 'estadisticas' ? <BarChart3 size={16} /> : <MessageSquare size={16} />}
+                {t === 'plantilla' ? <Swords size={16} /> : t === 'calendario' ? <Calendar size={16} /> : <BarChart3 size={16} />}
                 {t}
               </button>
             ))}
@@ -172,8 +164,6 @@ export default function MiEquipo() {
             </div>
           )}
         </main>
-        <Footer />
-      </div>
 
       {/* Modal detalle jugador */}
       <AnimatePresence>
@@ -215,6 +205,6 @@ export default function MiEquipo() {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </DashboardLayout>
   )
 }

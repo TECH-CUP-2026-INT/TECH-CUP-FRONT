@@ -65,18 +65,68 @@ function ContactoContent() {
         <div className="max-w-[1280px] mx-auto px-8 relative">
           <div className="grid grid-cols-[1.2fr_1fr] gap-10 items-start max-lg:grid-cols-1">
             <motion.div initial={{opacity:0,x:-20}} animate={{opacity:1,x:0}} transition={{delay:0.4}}>
-              <SpotlightCard accent="gold" className="bg-surface border border-border rounded-2xl p-8">
-                <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase tracking-[.5px] mb-1">Envíanos un <span className="text-gold">mensaje</span></h2>
-                <p className="text-sm text-text-muted mb-8">Completá el formulario y nos pondremos en contacto.</p>
-                <form onSubmit={handleSubmit} className="space-y-5">
-                  <div className="grid grid-cols-2 gap-4 max-sm:grid-cols-1">
-                    <div><label className="block text-xs text-text-faint font-semibold uppercase tracking-[.4px] mb-2">Nombre</label><Input placeholder="Tu nombre" required className="bg-black border-border text-white placeholder:text-text-faint rounded-xl focus-visible:border-gold" /></div>
-                    <div><label className="block text-xs text-text-faint font-semibold uppercase tracking-[.4px] mb-2">Correo</label><Input type="email" placeholder="correo@escuelaing.edu.co" required className="bg-black border-border text-white placeholder:text-text-faint rounded-xl focus-visible:border-gold" /></div>
+              <SpotlightCard accent="gold" className="bg-gradient-to-br from-purple-deep2/70 to-purple-black/80 border border-gold/20 rounded-2xl p-8 shadow-lg shadow-purple-900/20">
+                <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase tracking-[.5px] mb-1 text-white">Medios de <span className="text-gold">pago</span></h2>
+                <p className="text-sm text-text-muted mb-8">Elegí el método que prefieras para pagar la inscripción de tu equipo.</p>
+                
+                <div className="space-y-4">
+                  {/* Nequi */}
+                  <div className="flex items-center gap-4 p-4 rounded-xl bg-black/40 backdrop-blur-sm border border-purple-mid/20 hover:border-purple-mid/40 transition-all group">
+                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center flex-shrink-0 shadow-lg shadow-red-500/20">
+                      <span className="text-2xl font-black text-white">N</span>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-bold text-white">Nequi</p>
+                      <p className="text-xs text-text-muted">Código QR o número de celular</p>
+                      <p className="text-xs text-gold font-semibold mt-0.5">310 123 4567</p>
+                    </div>
+                    <img src="https://play-lh.googleusercontent.com/4fUjQPE7VXnNiYIfldPpAY12h0wTYyW_YOFVrA4nNrBcUwmLy9G-QYISk6HPSsr5QQ" alt="Nequi" className="w-10 h-10 rounded-lg object-contain bg-white/10 p-1" />
                   </div>
-                  <div><label className="block text-xs text-text-faint font-semibold uppercase tracking-[.4px] mb-2">Asunto</label><Input placeholder="¿Sobre qué querés hablar?" required className="bg-black border-border text-white placeholder:text-text-faint rounded-xl focus-visible:border-gold" /></div>
-                  <div><label className="block text-xs text-text-faint font-semibold uppercase tracking-[.4px] mb-2">Mensaje</label><textarea rows={5} placeholder="Escribí tu mensaje acá..." required className="w-full bg-black border border-border text-white placeholder:text-text-faint rounded-xl p-3 text-sm outline-none focus-visible:border-gold resize-none" /></div>
-                  <Button type="submit" className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold px-8 py-3 h-auto text-sm w-full">{sent ? <>✓ Mensaje enviado</> : <><Send size={16} /> Enviar mensaje</>}</Button>
-                </form>
+
+                  {/* PSE */}
+                  <div className="flex items-center gap-4 p-4 rounded-xl bg-black/40 backdrop-blur-sm border border-purple-mid/20 hover:border-purple-mid/40 transition-all group">
+                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-500/20">
+                      <span className="text-xl font-black text-white">PSE</span>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-bold text-white">PSE</p>
+                      <p className="text-xs text-text-muted">Transferencia desde cualquier banco</p>
+                      <p className="text-xs text-gold font-semibold mt-0.5">Disponible 24/7</p>
+                    </div>
+                    <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-lg">🏦</div>
+                  </div>
+
+                  {/* Bancolombia */}
+                  <div className="flex items-center gap-4 p-4 rounded-xl bg-black/40 backdrop-blur-sm border border-purple-mid/20 hover:border-purple-mid/40 transition-all group">
+                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-yellow-500 to-yellow-700 flex items-center justify-center flex-shrink-0 shadow-lg shadow-yellow-500/20">
+                      <span className="text-xl font-black text-[#003A70]">B</span>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-bold text-white">Bancolombia</p>
+                      <p className="text-xs text-text-muted">Cuenta de ahorros</p>
+                      <p className="text-xs text-gold font-semibold mt-0.5">000-123456-78</p>
+                    </div>
+                    <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-lg">💳</div>
+                  </div>
+
+                  {/* Efectivo */}
+                  <div className="flex items-center gap-4 p-4 rounded-xl bg-black/40 backdrop-blur-sm border border-purple-mid/20 hover:border-purple-mid/40 transition-all group">
+                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-green-600 to-green-800 flex items-center justify-center flex-shrink-0 shadow-lg shadow-green-500/20">
+                      <span className="text-xl font-black text-white">$</span>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-bold text-white">Efectivo</p>
+                      <p className="text-xs text-text-muted">Pago presencial en la Escuela</p>
+                      <p className="text-xs text-gold font-semibold mt-0.5">Oficina de Bienestar</p>
+                    </div>
+                    <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-lg">🏛️</div>
+                  </div>
+                </div>
+
+                <div className="mt-6 p-4 rounded-xl bg-gold/5 border border-gold/20 text-center">
+                  <p className="text-xs text-text-muted">💰 <strong className="text-gold">Costo de inscripción:</strong> <span className="text-white font-bold">$20.000 COP</span> por equipo</p>
+                  <p className="text-xs text-text-faint mt-1">El pago cubre la participación de todo el equipo en el torneo.</p>
+                </div>
               </SpotlightCard>
             </motion.div>
 
