@@ -185,12 +185,13 @@ export default function DashboardAdmin() {
     { id:2, nombre:'Laura Medina', email:'laura.medina@gmail.com', telefono:'3007654321', estado:'activo' as const, partidosAsignados:2 },
     { id:3, nombre:'Andrés Ruiz', email:'andres.ruiz@gmail.com', telefono:'3009876543', estado:'inactivo' as const, partidosAsignados:0 },
   ])
-  const [listaEquiposLog, setListaEquiposLog] = useState([
-    { id:1, nombre:'Tigres FC', emoji:'🐯', refrigerio:'entregado' as const, kit:'entregado' as const, cancha:'Cancha Principal Sede Norte' },
-    { id:2, nombre:'IA Warriors', emoji:'🦁', refrigerio:'entregado' as const, kit:'pendiente' as const, cancha:'Cancha Principal Sede Norte' },
-    { id:3, nombre:'Code United', emoji:'💻', refrigerio:'pendiente' as const, kit:'pendiente' as const, cancha:'Cancha Principal Sede Norte 2' },
-    { id:4, nombre:'Sistemas FC', emoji:'⚙️', refrigerio:'no-asignado' as const, kit:'no-asignado' as const, cancha:'Cancha Principal Sede Norte 2' },
-    { id:5, nombre:'Dragones FC', emoji:'🐉', refrigerio:'pendiente' as const, kit:'entregado' as const, cancha:'Auditorio Principal Sede Norte' },
+  type EquipoLog = { id:number; nombre:string; emoji:string; refrigerio:'entregado'|'pendiente'|'no-asignado'; kit:'entregado'|'pendiente'|'no-asignado'; cancha:string }
+  const [listaEquiposLog, setListaEquiposLog] = useState<EquipoLog[]>([
+    { id:1, nombre:'Tigres FC', emoji:'🐯', refrigerio:'entregado', kit:'entregado', cancha:'Cancha Principal Sede Norte' },
+    { id:2, nombre:'IA Warriors', emoji:'🦁', refrigerio:'entregado', kit:'pendiente', cancha:'Cancha Principal Sede Norte' },
+    { id:3, nombre:'Code United', emoji:'💻', refrigerio:'pendiente', kit:'pendiente', cancha:'Cancha Principal Sede Norte 2' },
+    { id:4, nombre:'Sistemas FC', emoji:'⚙️', refrigerio:'no-asignado', kit:'no-asignado', cancha:'Cancha Principal Sede Norte 2' },
+    { id:5, nombre:'Dragones FC', emoji:'🐉', refrigerio:'pendiente', kit:'entregado', cancha:'Auditorio Principal Sede Norte' },
   ])
   const [solicitudes, setSolicitudes] = useState<Solicitud[]>([
     { id:1, jugador:'Jorge Hernández', posicion:'Defensor', estado:'pendiente' },

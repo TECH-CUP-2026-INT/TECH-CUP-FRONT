@@ -10,6 +10,7 @@ import ManchasFloating from '@/components/shared/ManchasFloating'
 import { partidos, posiciones } from '@/data/partidos'
 import { Input } from '@/components/ui/input'
 import { torneos, type Torneo } from '@/data/torneos'
+import { Badge } from '@/components/ui/badge'
 import { CalendarDays, MapPin, Users, Trophy, Clock, Download } from 'lucide-react'
 
 const SIDEBAR_KEY = 'techcup_sidebar_collapsed'
