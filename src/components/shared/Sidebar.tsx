@@ -22,14 +22,22 @@ const items = [
 interface SidebarProps {
   open: boolean
   onClose: () => void
+  collapsed?: boolean
+  onCollapse?: (collapsed: boolean) => void
 }
 
-export default function Sidebar({ open, onClose }: SidebarProps) {
+export default function Sidebar({ open, onClose, collapsed: collapsedProp, onCollapse }: SidebarProps) {
   const { pathname } = useLocation()
   const navigate = useNavigate()
   const sidebarRef = useRef<HTMLDivElement>(null)
   const [hovered, setHovered] = useState(false)
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useState(collapsedProp ?? false)
+
+  const handleCollapse = () => {
+    const newVal = !collapsed
+    setCollapsed(newVal)
+    onCollapse?.(newVal)
+  }
 
   const activeId = pathname.startsWith('/dashboard') ? 'inicio'
     : pathname.startsWith('/app/torneos') || pathname.startsWith('/torneos') ? 'torneos'
@@ -73,9 +81,9 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
 
   return (
     <>
-      {/* Overlay cuando se abre manualmente */}
+      {/* Overlay solo en mobile — en desktop el contenido se corre */}
       {open && (
-        <div className="fixed inset-0 bg-black/60 z-40" onClick={onClose} />
+        <div className="fixed inset-0 bg-black/60 z-40 lg:hidden" onClick={onClose} />
       )}
 
       <aside
@@ -83,18 +91,18 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
         onMouseEnter={() => { setHovered(true); setShowOnHover(true); clearTimeout(hideTimer.current) }}
         onMouseLeave={() => { setHovered(false); hideTimer.current = setTimeout(() => setShowOnHover(false), 500) }}
         className={cn(
-          'bg-black border-r border-border flex flex-col py-5 fixed left-0 top-0 h-screen z-50 transition-all duration-300 overflow-hidden shadow-2xl shadow-black/50',
+          'bg-black/90 backdrop-blur-md border-r border-border flex flex-col py-5 fixed left-0 top-0 h-screen z-[60] transition-all duration-300 overflow-hidden shadow-2xl shadow-black/50',
           isVisible ? 'translate-x-0' : '-translate-x-full',
           sideCollapsed ? 'w-[72px]' : 'w-[260px]'
         )}
       >
         {/* Header */}
         <div className={cn('flex items-center pb-5', sideCollapsed ? 'justify-center px-2' : 'justify-between px-3')}>
-          <Link to="/dashboard" className="flex items-center gap-2.5" onClick={handleNavigate}>
-            <div className="w-[34px] h-[34px] rounded-lg overflow-hidden bg-purple-black flex-shrink-0">
-              <img src="/assets/logo.png" alt="TechCup" className="w-full h-full object-cover" />
-            </div>
-            {!sideCollapsed && (
+          {!sideCollapsed && (
+            <Link to="/dashboard" className="flex items-center gap-2.5" onClick={handleNavigate}>
+              <div className="w-[34px] h-[34px] rounded-lg overflow-hidden bg-purple-black flex-shrink-0">
+                <img src="/assets/logo.png" alt="TechCup" className="w-full h-full object-cover" />
+              </div>
               <div className="flex flex-col leading-none">
                 <span className="font-[family-name:var(--font-display)] font-bold text-lg tracking-[.5px]">
                   TECH<span className="text-gold">CUP</span>
@@ -103,12 +111,12 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
                   FÚTBOL · ING. SISTEMAS
                 </span>
               </div>
-            )}
-          </Link>
+            </Link>
+          )}
           <div className="flex items-center gap-1">
             <button
               className="text-gray-light hover:text-gold transition-colors p-1"
-              onClick={() => setCollapsed(!collapsed)}
+              onClick={handleCollapse}
               aria-label="Colapsar"
             >
               {collapsed ? <PanelLeft size={16} /> : <PanelLeftClose size={16} />}

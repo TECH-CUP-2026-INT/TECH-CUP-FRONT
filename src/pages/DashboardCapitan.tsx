@@ -6,20 +6,24 @@ import Footer from '@/components/shared/Footer'
 import { Button } from '@/components/ui/button'
 import { SpotlightCard } from '@/components/ui/spotlight-card'
 import { InteractiveHoverButton } from '@/components/ui/interactive-hover-button'
+import ManchasFloating from '@/components/shared/ManchasFloating'
 import { partidos, posiciones } from '@/data/partidos'
 
 export default function DashboardCapitan() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [posExpandida, setPosExpandida] = useState(false)
   const [calExpandido, setCalExpandido] = useState(false)
   const navigate = useNavigate()
 
+  const sidebarWidth = sidebarOpen ? (sidebarCollapsed ? '72px' : '260px') : '0px'
+
   return (
     <div className="min-h-screen bg-black">
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} collapsed={sidebarCollapsed} onCollapse={setSidebarCollapsed} />
 
-      <div className="min-w-0">
-        <AppTopbar title="Panel Capitán" onMenuClick={() => setSidebarOpen(true)} />
+      <div className={`min-w-0 transition-all duration-300`} style={{ marginLeft: sidebarWidth }}>
+        <AppTopbar title="Panel Capitán" sidebarOpen={sidebarOpen} onMenuClick={() => setSidebarOpen(true)} />
 
         <main className="p-8 pb-[60px] max-md:p-5 relative">
           <div className="fixed top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-purple-mid/15 blur-[150px] pointer-events-none" />
@@ -128,6 +132,7 @@ export default function DashboardCapitan() {
 
         <Footer />
       </div>
+      <ManchasFloating />
     </div>
   )
 }

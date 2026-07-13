@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import Sidebar from '@/components/shared/Sidebar'
 import AppTopbar from '@/components/shared/AppTopbar'
 import Footer from '@/components/shared/Footer'
+import ManchasFloating from '@/components/shared/ManchasFloating'
 import { SpotlightCard } from '@/components/ui/spotlight-card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -16,14 +17,17 @@ const partidos = [
 ]
 
 export default function RefereeDashboard() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const navigate = useNavigate()
+
+  const sidebarWidth = sidebarOpen ? (sidebarCollapsed ? '72px' : '260px') : '0px'
 
   return (
     <div className="min-h-screen bg-black flex">
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <div className="min-w-0 flex-1">
-        <AppTopbar title="Panel de árbitro" onMenuClick={() => setSidebarOpen(true)} />
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} collapsed={sidebarCollapsed} onCollapse={setSidebarCollapsed} />
+      <div className="min-w-0 flex-1 transition-all duration-300" style={{ marginLeft: sidebarWidth }}>
+        <AppTopbar title="Panel de árbitro" sidebarOpen={sidebarOpen} onMenuClick={() => setSidebarOpen(true)} />
         
         <div className="fixed top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-purple-mid/15 blur-[150px] pointer-events-none" />
         <div className="fixed bottom-[-5%] left-[-5%] w-[450px] h-[450px] rounded-full bg-gold/15 blur-[120px] pointer-events-none" />
@@ -102,6 +106,7 @@ export default function RefereeDashboard() {
         </main>
         <Footer />
       </div>
+      <ManchasFloating />
     </div>
   )
 }
