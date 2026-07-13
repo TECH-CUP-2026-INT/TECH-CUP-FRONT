@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Menu, Send, Paperclip, X, Search, Plus } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
+import { useAuth } from '@/lib/auth'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,11 +35,19 @@ const messages: Record<number, { text: string; me: boolean }[]> = {
 
 export default function AppTopbar({ title, onMenuClick }: AppTopbarProps) {
   const navigate = useNavigate()
+  const { user } = useAuth()
   const [chatOpen, setChatOpen] = useState(false)
   const [notifOpen, setNotifOpen] = useState(false)
   const [selectedChat, setSelectedChat] = useState<number | null>(null)
   const [input, setInput] = useState('')
   const activeConv = conversations.find(c => c.id === selectedChat)
+
+  const greeting = useMemo(() => {
+    const stored = localStorage.getItem('techcup_user')
+    const storedUser = stored ? JSON.parse(stored) : null
+    const name = user?.name?.split(' ')[0] || storedUser?.name?.split(' ')[0] || ''
+    return name ? `Hola, ${name} 👋` : `Hola 👋`
+  }, [user])
 
   const handleSend = () => {
     if (!input.trim()) return
@@ -59,6 +68,7 @@ export default function AppTopbar({ title, onMenuClick }: AppTopbarProps) {
         </div>
 
         <div className="flex items-center gap-[18px]">
+          <span className="text-[14px] text-text-muted font-medium hidden md:block">{greeting}</span>
           <button
             onClick={() => setChatOpen(!chatOpen)}
             className={`relative p-1.5 rounded-lg transition-all ${

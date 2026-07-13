@@ -10,7 +10,8 @@
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
-    background:radial-gradient(ellipse at 50% 0%, #241a3b 0%, #0f0a1a 60%);
+    overflow:hidden;
+    background:transparent;
     min-height:100vh;
     font-family:'Inter',sans-serif;
     color:#fff;
@@ -19,7 +20,9 @@
     justify-content:center;
     padding:50px 20px;
   }
-  .wrap{width:100%;max-width:1000px;}
+  .wrap{width:100%;max-width:1000px;position:relative;z-index:1;}
+  .vid-bg{display:none;}
+  .vid-overlay{display:none;}
 
   /* ---------- HERO ---------- */
   .hero{
@@ -28,7 +31,9 @@
     border-radius:16px;
     overflow:hidden;
     margin-bottom:22px;
-    background:linear-gradient(160deg,#1c1330,#100a1e);
+    background:rgba(0,0,0,0.25);
+    backdrop-filter:blur(4px);
+    -webkit-backdrop-filter:blur(4px);
     border:1px solid rgba(255,255,255,0.12);
     display:flex;
     align-items:center;
@@ -110,7 +115,9 @@
     aspect-ratio:1200/669;
     border-radius:16px;
     overflow:hidden;
-    background:rgba(255,255,255,0.04);
+    background:rgba(0,0,0,0.2);
+    backdrop-filter:blur(3px);
+    -webkit-backdrop-filter:blur(3px);
     border:1px solid rgba(255,255,255,0.12);
   }
   .base{
@@ -268,6 +275,7 @@
 </style>
 </head>
 <body>
+
 <div class="wrap">
 
   <div class="hero" id="hero">
@@ -394,7 +402,7 @@
       z.classList.add('selected');
       selected = z.dataset.role;
       showHero(selected);
-      continueBtn.classList.add('ready');
+      window.parent.postMessage({ type: "roleSelected", role: selected }, "*");
     });
   });
 

@@ -4,6 +4,9 @@ import { ThemeProvider } from '@/lib/theme'
 import { StarfieldBackground } from '@/components/ui/starfield-bg'
 import Landing from '@/pages/Landing'
 import Dashboard from '@/pages/Dashboard'
+import DashboardCapitan from '@/pages/DashboardCapitan'
+import DashboardJugador from '@/pages/DashboardJugador'
+import DashboardAdmin from '@/pages/DashboardAdmin'
 import TorneosPublic from '@/pages/TorneosPublic'
 import Calendario from '@/pages/Calendario'
 import Contacto from '@/pages/Contacto'
@@ -60,6 +63,9 @@ export default function App() {
         <Route path="/llaves" element={<Llaves />} />
         <Route path="/registro" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard/capitan" element={<DashboardCapitan />} />
+        <Route path="/dashboard/jugador" element={<DashboardJugador />} />
+        <Route path="/dashboard/admin" element={<DashboardAdmin />} />
         <Route path="/campus" element={<Campus />} />
       </Routes>
       </StarfieldBackground>
