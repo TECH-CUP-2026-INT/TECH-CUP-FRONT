@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button'
@@ -19,11 +19,20 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState('')
   const [step, setStep] = useState<'role' | 'login'>('role')
-  const [selectedRole, setSelectedRole] = useState<string | null>(null)
-  const [hoveredRole, setHoveredRole] = useState<string | null>(null)
+  const [selectedRole, setSelectedRole] = useState<string>('jugador')
   const navigate = useNavigate()
   const { login } = useAuth()
-  const activeRole = roles.find(r => r.id === (hoveredRole || selectedRole))
+
+  useEffect(() => {
+    const handler = (e: MessageEvent) => {
+      if (e.data?.type === 'roleSelected') {
+        setSelectedRole(e.data.role)
+        setStep('login')
+      }
+    }
+    window.addEventListener('message', handler)
+    return () => window.removeEventListener('message', handler)
+  }, [])
 
   return (
     <div className="min-h-screen bg-black flex">
@@ -32,56 +41,21 @@ export default function Login() {
         <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 80% 55% at 20% 15%, rgba(212,175,55,0.22) 0%, transparent 65%), radial-gradient(ellipse 65% 55% at 80% 85%, rgba(147,51,234,0.13) 0%, transparent 55%)' }} />
         <div className="relative w-full max-w-[460px]">
           {step === 'role' ? (
-            /* Step 1: Role Selector */
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-              <div className="text-center mb-6">
-                <h1 className="font-[family-name:var(--font-display)] text-4xl uppercase tracking-[.5px] text-white">
-                  TECH<span className="text-gold">CUP</span>
-                </h1>
-                <p className="text-sm text-text-muted mt-2">Elegí tu rol para continuar</p>
-              </div>
-
-              <div style={{ display: 'flex', gap: '8px' }}>
-                {roles.map((role, idx) => (
-                  <button key={role.id} onClick={() => { setSelectedRole(role.id); setStep('login') }}
-                    onMouseEnter={() => setHoveredRole(role.id)} onMouseLeave={() => setHoveredRole(null)}
-                    className="group relative flex-1 overflow-hidden rounded-2xl cursor-pointer border-none p-0"
-                    style={{ aspectRatio: '1200/669', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.12)' }}>
-                    {/* Light glow */}
-                    <span className="absolute left-1/2 bottom-0 w-[130%] h-[55%] rounded-full pointer-events-none"
-                      style={{ transform: 'translateX(-50%)', filter: 'blur(30px)', opacity: 0, background: `radial-gradient(ellipse, ${role.color}, transparent 70%)`, transition: 'opacity .45s ease' }}
-                      onMouseEnter={e => e.currentTarget.style.opacity = '0.55'}
-                      onMouseLeave={e => e.currentTarget.style.opacity = '0'} />
-                    {/* Spot overlay */}
-                    <span className="absolute inset-0 pointer-events-none"
-                      style={{ opacity: 0, transition: 'opacity .45s ease', background: `linear-gradient(135deg, ${role.color}11, transparent 60%)` }} />
-                    {/* Content */}
-                    <div className="relative inset-0 flex flex-col justify-between p-3 pointer-events-none" style={{ position: 'absolute', inset: 0 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span className="text-[9px] uppercase tracking-wider text-white/50 opacity-0 group-hover:opacity-100 transition-opacity">{role.tag}</span>
-                        <span className="w-1.5 h-1.5 rounded-full border border-white/40 flex-shrink-0" style={{ background: role.color, boxShadow: `0 0 6px ${role.color}` }} />
-                      </div>
-                      <div style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.18)', backdropFilter: 'blur(14px)', borderRadius: '10px', padding: '8px 10px', transform: 'translateY(8px)', opacity: 0, transition: 'transform .4s ease, opacity .4s ease' }}
-                        className="group-hover:translate-y-0 group-hover:opacity-100">
-                        <p className="font-bold text-white text-xs uppercase tracking-[.02em] m-0">{role.name}</p>
-                        <p className="text-[9px] text-white/60 leading-relaxed m-0">{role.desc}</p>
-                      </div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </motion.div>
+            /* Step 1: Role Selector — exact HTML */
+            <div className="w-full" style={{ height: '80vh', maxHeight: '600px' }}>
+              <iframe src="/selector-poses.html" className="w-full h-full rounded-2xl border-0" />
+            </div>
           ) : (
             /* Step 2: Login form */
             <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} className="space-y-5">
               <button onClick={() => setStep('role')} className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-gold transition-colors mb-3">
-                <ArrowLeft size={16} /> Cambiar rol
+                <ArrowLeft size={16} /> Elegir otro rol
               </button>
               <div className="flex items-center gap-3 mb-2 p-3 rounded-xl bg-white/[0.04] border border-white/10">
-                <img src={roles.find(r => r.id === selectedRole)?.img || ''} alt="" className="w-10 h-10 object-contain" />
+                <img src={`/images/${selectedRole}.png`} alt="" className="w-10 h-10 object-contain" />
                 <div>
                   <p className="text-xs text-white/50 uppercase tracking-wider">Rol seleccionado</p>
-                  <p className="text-sm font-bold text-white">{roles.find(r => r.id === selectedRole)?.name}</p>
+                  <p className="text-sm font-bold text-white">{selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)}</p>
                 </div>
               </div>
               <h1 className="font-[family-name:var(--font-display)] text-3xl uppercase tracking-[.5px] text-white mb-1">
@@ -129,18 +103,46 @@ export default function Login() {
         </div>
       </div>
 
-      {/* Right — Preview */}
-      <div className="hidden lg:flex flex-1 relative items-center justify-center overflow-hidden">
-        <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 30% 40%, rgba(200,133,26,0.12) 0%, transparent 60%), radial-gradient(ellipse at 70% 60%, rgba(109,40,217,0.08) 0%, transparent 50%), #0A0614' }} />
-        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,.08) 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
-        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }} className="relative text-center max-w-[400px]">
-          <div className="relative w-full aspect-[3/4] max-w-[320px] mx-auto">
-            <div className="absolute inset-0 bg-purple-mid/20 blur-[80px] rounded-full animate-pulse" />
-            <img src={activeRole?.img || '/images/capitan.png'} alt="" className="relative z-10 w-full h-full object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)]" />
+      {/* Right — Video + overlay */}
+      <div className="hidden lg:flex w-[62%] relative overflow-hidden"
+        style={{
+          maskImage: "linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 20%, rgba(0,0,0,1) 50%)",
+          WebkitMaskImage: "linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 20%, rgba(0,0,0,1) 50%)",
+        }}>
+        {/* Background video */}
+        <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover"
+          style={{ objectPosition: "center center" }}>
+          <source src="/hero-video.mp4" type="video/mp4" />
+        </video>
+        {/* Grid dots */}
+        <div className="absolute inset-0 opacity-20"
+          style={{
+            backgroundImage: 'radial-gradient(rgba(255,255,255,.1) 1px, transparent 1px)',
+            backgroundSize: '30px 30px',
+          }}
+        />
+        {/* Overlay gradiente */}
+        <div className="absolute inset-0 bg-gradient-to-l from-purple-black/95 via-purple-black/70 to-transparent" />
+        
+        {/* Texto superpuesto */}
+        <div className="relative z-10 flex flex-col justify-center items-start p-16 lg:p-20">
+          <div className="max-w-[420px]">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-xl overflow-hidden bg-purple-black shadow-lg shadow-gold/20">
+                <img src="/assets/logo.png" alt="" className="w-full h-full object-cover" />
+              </div>
+              <span className="font-[family-name:var(--font-display)] text-2xl tracking-[1px]">
+                TECH<span className="text-gold">CUP</span>
+              </span>
+            </div>
+            <h2 className="font-[family-name:var(--font-display)] text-[clamp(28px,3.5vw,52px)] uppercase leading-[.92] tracking-[.5px]">
+              La pasión nos <span className="text-gold">conecta</span>
+            </h2>
+            <p className="text-sm text-text-muted mt-4 leading-relaxed">
+              Iniciá sesión y viví la emoción del torneo universitario más importante de Ingeniería de Sistemas.
+            </p>
           </div>
-          <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mt-4 text-white">{activeRole?.name || 'Capitán'}</h2>
-          <p className="text-sm text-text-muted mt-1 max-w-[300px] mx-auto">{activeRole?.desc || ''}</p>
-        </motion.div>
+        </div>
       </div>
     </div>
   )
