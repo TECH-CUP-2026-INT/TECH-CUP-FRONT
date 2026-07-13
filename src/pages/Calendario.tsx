@@ -6,6 +6,7 @@ import Footer from '@/components/shared/Footer'
 import DashboardLayout from '@/components/shared/DashboardLayout'
 import { Badge } from '@/components/ui/badge'
 import { partidos } from '@/data/partidos'
+import { torneos, type Torneo } from '@/data/torneos'
 import { CalendarDays, MapPin, Clock, ChevronLeft, ChevronRight, X } from 'lucide-react'
 
 const DIAS_SEMANA = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom']
@@ -37,15 +38,27 @@ function generarDiasMes(mes: number, año: number) {
   return dias
 }
 
+const equiposList = [
+  { nom: 'Tigres FC', emoji: '🐯', color: '#EF4444' },
+  { nom: 'Sistemas FC', emoji: '⚙️', color: '#22C55E' },
+  { nom: 'Code United', emoji: '🔵', color: '#3B82F6' },
+  { nom: 'IA Warriors', emoji: '🦁', color: '#8B5CF6' },
+  { nom: 'Dragones FC', emoji: '🐉', color: '#F97316' },
+  { nom: 'Los Bits', emoji: '⚡', color: '#F5A623' },
+  { nom: 'Titanes', emoji: '🛡️', color: '#14B8A6' },
+  { nom: 'Fénix', emoji: '🔥', color: '#EC4899' },
+]
+
 function CalendarioContent() {
-  const [mes, setMes] = useState(4) // MAY
+  const [mes, setMes] = useState(4)
   const [año] = useState(2026)
   const [vista, setVista] = useState<'calendario' | 'lista'>('lista')
   const [selectedMatch, setSelectedMatch] = useState<typeof partidos[0] | null>(null)
+  const [torneoModal, setTorneoModal] = useState<Torneo | null>(null)
+  const [modalTab, setModalTab] = useState('info')
   const [calendarDayMatches, setCalendarDayMatches] = useState<typeof partidos | null>(null)
   const dias = generarDiasMes(mes, año)
   const nombreMes = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'][mes]
-
   const selectedCancha = selectedMatch ? canchaFotos[selectedMatch.lugar] : null
 
   return (
@@ -109,7 +122,7 @@ function CalendarioContent() {
                 {dias.map((d,i)=>(
                   <div key={i} className="aspect-square flex items-center justify-center">
                     {d ? (
-                      <button onClick={() => { if (d.tienePartido) { const matches = partidos.filter(p => p.dia === d.dia); setCalendarDayMatches(matches.length > 0 ? matches : null); } }}
+                      <button onClick={() => { if (d.tienePartido) { const matches = partidos.filter(p => p.dia === d.dia); setCalendarDayMatches(matches); const active = torneos.find(t => t.estado === 'live') || torneos[0]; setTorneoModal(active); setModalTab('info') } }}
                         className={`w-full h-full rounded-xl flex flex-col items-center justify-center text-sm transition-all ${
                         d.tienePartido ? 'bg-gold/15 border border-gold/30 text-gold font-bold cursor-pointer hover:bg-gold/25 shadow-sm'
                         : d.hoy ? 'bg-purple-mid/20 border border-purple-mid/40 text-[#3D1A6B] dark:text-white font-bold'
@@ -130,7 +143,6 @@ function CalendarioContent() {
           )}
 
           {vista === 'lista' && (
-          /* Lista + Detalle — dos columnas */
           <div className="grid grid-cols-[1fr_1.2fr] gap-6 items-start max-lg:grid-cols-1">
             {/* Left: Lista de partidos */}
             <div>
@@ -150,17 +162,12 @@ function CalendarioContent() {
                       className={`text-left w-full rounded-2xl border transition-all duration-200 overflow-hidden
                         ${isSelected ? 'border-gold/50 ring-1 ring-gold/20 bg-black/10 dark:bg-black/40' : 'border-[#D4C8E8]/40 dark:border-white/5 bg-[#E8DFF5]/70 dark:bg-black/30 hover:border-purple-mid/50'}`}>
                       <div className="flex items-center gap-3 p-4 max-md:flex-col max-md:text-center">
-                        {/* Date + Time */}
                         <div className="flex flex-col items-center min-w-[50px]">
                           <span className="font-[family-name:var(--font-display)] text-2xl leading-none text-[#3D1A6B] dark:text-white">{p.dia}</span>
                           <span className="text-[10px] text-[#7A6B99] dark:text-text-muted uppercase font-semibold tracking-wider">{p.mes}</span>
-                          <div className="flex items-center gap-1 mt-1.5">
-                            <Clock size={11} className="text-gold" />
-                            <span className="text-[10px] font-bold text-gold">{p.hora}</span>
-                          </div>
+                          <div className="flex items-center gap-1 mt-1.5"><Clock size={11} className="text-gold" /><span className="text-[10px] font-bold text-gold">{p.hora}</span></div>
                         </div>
                         <div className="w-[2px] self-stretch bg-[#D4C8E8]/40 dark:bg-white/10 rounded-full max-md:hidden" />
-                        {/* Teams with colored dots — centrado vertical */}
                         <div className="flex-1 flex items-center justify-center gap-3 max-md:justify-center">
                           <div className="flex flex-col items-center gap-0.5">
                             <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: logo1.color }} />
@@ -179,42 +186,37 @@ function CalendarioContent() {
               </div>
             </div>
 
-            {/* Right: Detalle del partido */}
+            {/* Right: Detalle */}
             <div className="sticky top-24">
               {selectedMatch ? (
                 <AnimatePresence mode="wait">
                   <motion.div key={selectedMatch.dia + selectedMatch.eq1} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }}
                     className="rounded-2xl overflow-hidden border border-[#D4C8E8]/40 dark:border-white/5 bg-[#E8DFF5]/70 dark:bg-black/30">
-                    {/* Medalla / Moneda dorada con el día */}
-                    <div className="relative h-[220px] overflow-hidden flex items-center justify-center bg-gradient-to-br from-[#2E0953] to-[#190D2B]">
-                      <div className="absolute inset-0 opacity-20" style={{ background: 'radial-gradient(ellipse at 50% 40%, #C8851A 0%, transparent 60%)' }} />
-                      <button onClick={() => setSelectedMatch(null)} className="absolute top-3 right-3 z-10 w-7 h-7 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center hover:bg-gold transition-colors">
-                        <X size={14} />
-                      </button>
-                      {/* Gold coin/medal */}
-                      <div className="relative flex flex-col items-center">
-                        <div className="w-24 h-24 rounded-full flex items-center justify-center border-4 border-gold/60 shadow-[0_0_40px_rgba(200,133,26,0.3)] bg-gold/10"
-                          style={{
-                            background: 'radial-gradient(circle at 35% 30%, rgba(200,133,26,0.3), rgba(200,133,26,0.05))',
-                          }}>
-                          <span className="font-[family-name:var(--font-display)] text-5xl text-gold">{selectedMatch.dia}</span>
+                    <div className="relative h-[280px] overflow-hidden flex items-center justify-center bg-gradient-to-br from-[#2E0953] to-[#190D2B]">
+                      <img src="/cancha-juego.png" alt="" className="absolute inset-0 w-full h-full object-cover" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0A0614] via-[#0A0614]/60 to-transparent" />
+                      <div className="absolute inset-0 opacity-20" style={{ background: 'radial-gradient(at 50% 40%, rgb(200, 133, 26) 0%, transparent 60%)' }} />
+                      <button onClick={() => setSelectedMatch(null)} className="absolute top-3 right-3 z-10 w-7 h-7 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center hover:bg-gold transition-colors"><X size={14} /></button>
+                      <div className="relative w-full h-full flex flex-col justify-between p-5 z-10">
+                        <div>
+                          <span className="inline-block rounded-full text-[10px] font-bold uppercase tracking-[.4px] px-2.5 py-0.5 mb-2 bg-white/15 text-white border border-white/20 backdrop-blur-sm">Próximo</span>
+                          <span className="block text-[10px] tracking-[1.2px] text-gold font-bold uppercase mb-1">Torneo oficial</span>
+                          <h3 className="font-[family-name:var(--font-display)] text-xl uppercase text-white leading-tight">{selectedMatch.eq1} vs {selectedMatch.eq2}</h3>
+                          <p className="text-[12px] text-white/60 mt-1">{selectedMatch.dia} de {selectedMatch.mes} • {selectedMatch.hora}</p>
                         </div>
-                        <span className="text-xs text-gold/70 uppercase font-semibold tracking-wider mt-2">{selectedMatch.mes}</span>
-                      </div>
-                      {/* Teams on sides */}
-                      <div className="absolute bottom-0 left-0 right-0 p-4 flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <span className="text-xl">{equipoLogos[selectedMatch.eq1]?.emoji || '⚽'}</span>
-                          <span className="text-sm font-semibold text-white">{selectedMatch.eq1}</span>
-                        </div>
-                        <span className="text-[10px] text-gold font-bold px-2">VS</span>
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm font-semibold text-white">{selectedMatch.eq2}</span>
-                          <span className="text-xl">{equipoLogos[selectedMatch.eq2]?.emoji || '⚽'}</span>
+                        <div>
+                          <div className="flex items-center gap-2 text-[11px] text-white/50 mb-3"><MapPin size={14} /> {selectedMatch.lugar}</div>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <span className="text-[11px] text-white/60"><strong className="text-white/90">{equipoLogos[selectedMatch.eq1]?.emoji || '⚽'}</strong> {selectedMatch.eq1}</span>
+                              <span className="text-[10px] text-gold font-bold">VS</span>
+                              <span className="text-[11px] text-white/60"><strong className="text-white/90">{equipoLogos[selectedMatch.eq2]?.emoji || '⚽'}</strong> {selectedMatch.eq2}</span>
+                            </div>
+                            <span className="text-[11px] font-bold text-gold bg-gold/10 border border-gold/30 px-3 py-1 rounded-full transition-colors">Ver partido</span>
+                          </div>
                         </div>
                       </div>
                     </div>
-                    {/* Description */}
                     <div className="p-5 space-y-4">
                       <div className="flex items-start gap-2 text-[13px] text-[#7A6B99] dark:text-white/60">
                         <MapPin size={14} className="mt-0.5 flex-shrink-0" />
@@ -237,46 +239,117 @@ function CalendarioContent() {
                 </div>
               )}
             </div>
+          </div>
+          )}
+        </div>
 
-            {/* Modal al hacer clic en día del calendario */}
-            {calendarDayMatches && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => setCalendarDayMatches(null)}>
-                <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-                <div className="relative max-w-md w-full bg-white dark:bg-[#1a1a24] rounded-2xl overflow-hidden border border-[#D4C8E8]/40 dark:border-white/10 shadow-2xl" onClick={e => e.stopPropagation()}>
-                  <button onClick={() => setCalendarDayMatches(null)} className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center hover:bg-gold transition-colors">✕</button>
-                  <div className="relative h-[180px] overflow-hidden">
-                    <img src="/images/copa-coin.png" alt="" className="w-full h-full object-contain p-8 opacity-30" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0A0614] via-[#0A0614]/40 to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 p-5">
-                      <span className="text-[10px] tracking-[1.2px] text-gold font-bold uppercase">Partidos</span>
-                      <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase text-white leading-tight mt-1">{calendarDayMatches[0]?.dia} de {calendarDayMatches[0]?.mes}</h2>
+        {/* ═══════════════ MODAL DETALLE TORNEO (FUERA DEL BLOQUE vista) ═══════════════ */}
+        {torneoModal && (() => {
+          const t = torneoModal
+          const isUpcoming = t.estado === 'upcoming'
+          return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => { setTorneoModal(null); setCalendarDayMatches(null) }}>
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+            <div className="relative max-w-2xl w-full bg-white dark:bg-[#1a1a24] rounded-2xl overflow-hidden border border-[#D4C8E8]/40 dark:border-white/10 shadow-2xl" onClick={e => e.stopPropagation()}>
+              <button onClick={() => { setTorneoModal(null); setCalendarDayMatches(null) }} className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center hover:bg-gold">✕</button>
+              <div className="relative h-[200px] overflow-hidden">
+                <img src="/cancha-juego.png" alt="" className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0A0614] via-[#0A0614]/60 to-transparent" />
+                <div className="absolute inset-0 opacity-20" style={{ background: 'radial-gradient(at 50% 40%, rgb(200, 133, 26) 0%, transparent 60%)' }} />
+                <div className="absolute bottom-0 left-0 right-0 p-5">
+                  <span className="inline-block rounded-full text-[10px] font-bold uppercase tracking-[.4px] px-2.5 py-0.5 mb-2 bg-white/15 text-white border border-white/20 backdrop-blur-sm">
+                    {t.estado === 'live' ? 'En curso' : t.estado === 'upcoming' ? 'Próximo' : 'Finalizado'}
+                  </span>
+                  <span className="block text-[10px] tracking-[1.2px] text-gold font-bold uppercase mb-1">{t.tag}</span>
+                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase text-white leading-tight">{t.nombre}</h2>
+                  <p className="text-[12px] text-white/60 mt-1">{t.categoria} — {t.semestre}</p>
+                </div>
+              </div>
+              <div className="flex border-b border-[#D4C8E8]/40 dark:border-white/10">
+                <button onClick={() => setModalTab('info')}
+                  className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'info' ? 'text-gold border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold'}`}>Info</button>
+                <button onClick={() => setModalTab('partidos')}
+                  className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'partidos' ? 'text-gold border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold'}`}>Partidos</button>
+                <button onClick={() => setModalTab('equipos')}
+                  className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'equipos' ? 'text-gold border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold'}`}>Equipos</button>
+                {!isUpcoming && <button onClick={() => setModalTab('tablero')}
+                  className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'tablero' ? 'text-gold border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold'}`}>Tablero</button>}
+              </div>
+              <div className="p-5 max-h-[50vh] overflow-y-auto">
+                {modalTab === 'info' && (
+                  <div className="space-y-4">
+                    <h4 className="text-[13px] font-semibold text-[#3D1A6B] dark:text-white">Información del torneo</h4>
+                    <div className="flex items-center gap-2 text-[13px] text-[#7A6B99] dark:text-white/50">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                      {t.fecha}
+                    </div>
+                    <div className="flex gap-6 pt-4 border-t border-[#D4C8E8]/40 dark:border-white/10">
+                      <div><span className="text-[11px] text-[#7A6B99] dark:text-white/50">Equipos</span><p className="text-lg font-bold text-[#3D1A6B] dark:text-white">{t.equipos}</p></div>
+                      <div><span className="text-[11px] text-[#7A6B99] dark:text-white/50">Jugadores</span><p className="text-lg font-bold text-[#3D1A6B] dark:text-white">{t.jugadores}</p></div>
+                      <div><span className="text-[11px] text-[#7A6B99] dark:text-white/50">Canchas</span><p className="text-lg font-bold text-[#3D1A6B] dark:text-white">{t.canchas}</p></div>
                     </div>
                   </div>
-                  <div className="p-5 space-y-3 max-h-[300px] overflow-y-auto">
-                    {calendarDayMatches.map((m, i) => (
+                )}
+                {modalTab === 'partidos' && (
+                  <div className="space-y-3">
+                    <h4 className="text-[13px] font-semibold text-[#3D1A6B] dark:text-white">Partidos del día {calendarDayMatches?.[0]?.dia} de {calendarDayMatches?.[0]?.mes}</h4>
+                    {calendarDayMatches?.map((m, i) => (
                       <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-[#E8DFF5]/50 dark:bg-white/5 border border-[#D4C8E8]/40 dark:border-white/10">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2">
-                            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: equipoLogos[m.eq1]?.color || '#6B7280' }} />
-                            <span className="text-sm font-semibold text-[#3D1A6B] dark:text-white">{m.eq1}</span>
-                            <span className="text-[10px] text-[#7A6B99] dark:text-text-faint font-bold">VS</span>
-                            <span className="text-sm font-semibold text-[#3D1A6B] dark:text-white">{m.eq2}</span>
-                            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: equipoLogos[m.eq2]?.color || '#6B7280' }} />
-                          </div>
-                          <div className="flex items-center gap-3 mt-1 text-[11px] text-[#7A6B99] dark:text-white/50">
-                            <span>⏰ {m.hora}</span>
-                            <span>📍 {m.lugar}</span>
-                          </div>
+                        <span className="w-2 h-2 rounded-full" style={{ backgroundColor: equipoLogos[m.eq1]?.color || '#6B7280' }} />
+                        <span className="text-sm font-semibold text-[#3D1A6B] dark:text-white">{m.eq1}</span>
+                        <span className="text-[10px] text-[#7A6B99] dark:text-text-faint font-bold">VS</span>
+                        <span className="text-sm font-semibold text-[#3D1A6B] dark:text-white">{m.eq2}</span>
+                        <span className="w-2 h-2 rounded-full" style={{ backgroundColor: equipoLogos[m.eq2]?.color || '#6B7280' }} />
+                        <div className="ml-auto text-[10px] text-[#7A6B99] dark:text-white/50 text-right">
+                          <div>⏰ {m.hora}</div>
+                          <div>📍 {m.lugar.slice(0, 20)}...</div>
                         </div>
                       </div>
                     ))}
                   </div>
-                </div>
+                )}
+                {modalTab === 'equipos' && (
+                  <div className="grid grid-cols-2 max-sm:grid-cols-1 gap-3">
+                    {equiposList.map(eq => (
+                      <div key={eq.nom} className="flex items-center gap-3 p-3 rounded-xl bg-[#E8DFF5]/50 dark:bg-white/5 border border-[#D4C8E8]/40 dark:border-white/10 hover:border-gold/30 transition-all">
+                        <span className="text-2xl">{eq.emoji}</span>
+                        <span className="font-semibold text-[13px] text-[#3D1A6B] dark:text-white">{eq.nom}</span>
+                        <span className="w-3 h-3 rounded-full ml-auto" style={{ backgroundColor: eq.color }} />
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {modalTab === 'tablero' && !isUpcoming && (
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[1px] text-[#7A6B99] dark:text-text-faint pb-2 border-b border-[#D4C8E8]/40 dark:border-white/10">
+                      <span className="w-6 text-center">#</span><span className="flex-1">Equipo</span><span className="w-8 text-center">PJ</span><span className="w-8 text-center">DG</span><span className="w-8 text-center">PTS</span>
+                    </div>
+                    {[
+                      { pos: 1, nom: 'Tigres FC', emoji: '🐯', pj: 12, dg: 18, pts: 28 },
+                      { pos: 2, nom: 'Code United', emoji: '🔵', pj: 12, dg: 12, pts: 25 },
+                      { pos: 3, nom: 'IA Warriors', emoji: '🦁', pj: 12, dg: 8, pts: 24 },
+                      { pos: 4, nom: 'Sistemas FC', emoji: '⚙️', pj: 12, dg: 4, pts: 20 },
+                      { pos: 5, nom: 'Dragones FC', emoji: '🐉', pj: 12, dg: -2, pts: 16 },
+                      { pos: 6, nom: 'Los Bits', emoji: '⚡', pj: 12, dg: -6, pts: 12 },
+                      { pos: 7, nom: 'Titanes', emoji: '🛡️', pj: 12, dg: -12, pts: 8 },
+                      { pos: 8, nom: 'Fénix', emoji: '🔥', pj: 12, dg: -22, pts: 4 },
+                    ].map((eq, i) => (
+                      <div key={i} className={`flex items-center gap-2 p-2.5 rounded-xl ${i < 4 ? 'bg-[#E8DFF5]/50 dark:bg-white/5' : ''} border border-[#D4C8E8]/40 dark:border-white/10`}>
+                        <span className="w-6 text-center text-[11px] font-bold text-[#7A6B99] dark:text-text-faint">{eq.pos}</span>
+                        <span className="text-base">{eq.emoji}</span>
+                        <span className="flex-1 text-xs font-semibold text-[#3D1A6B] dark:text-white truncate">{eq.nom}</span>
+                        <span className="w-8 text-center text-[11px] text-[#7A6B99] dark:text-white/60">{eq.pj}</span>
+                        <span className={`w-8 text-center text-[11px] font-mono ${eq.dg >= 0 ? 'text-green-500' : 'text-red-400'}`}>{eq.dg > 0 ? '+' : ''}{eq.dg}</span>
+                        <span className="w-8 text-center text-xs font-bold text-gold">{eq.pts}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-            )}
+            </div>
           </div>
-          )}
-        </div>
+          )
+        })()}
       </section>
     </>
   )
@@ -302,7 +375,3 @@ export default function Calendario() {
     </div>
   )
 }
-
-
-
-

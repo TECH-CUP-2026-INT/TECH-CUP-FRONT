@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select'
-import { Search, RefreshCw, LayoutGrid, List } from 'lucide-react'
+import { Search, RefreshCw, LayoutGrid, List, CalendarDays, MapPin, Clock, Download } from 'lucide-react'
 import { ThreeDCarousel } from '@/components/ui/three-d-carousel'
 import { torneos, type Torneo } from '@/data/torneos'
 
@@ -22,6 +22,7 @@ function TorneosContent() {
   const [page, setPage] = useState(1)
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const [modalTournament, setModalTournament] = useState<Torneo | null>(null)
+  const [modalTab, setModalTab] = useState('info')
 
   const filtered = useMemo(() => {
     return torneos.filter(t => {
@@ -192,12 +193,13 @@ function TorneosContent() {
 
           {/* Modal flotante con tabs */}
           {modalTournament && (() => {
-            const [tab, setTab] = useState('info')
             const t = modalTournament
             const imgSrc = `/images/fondo-${((t.id - 1) % 6) + 1}.png`
             const isClosed = t.estado === 'closed'
             const isUpcoming = t.estado === 'upcoming'
             const isLive = t.estado === 'live'
+            // Reset tab when opening different tournament
+            if (!['info','equipos','calendario','tabla','llaves'].includes(modalTab)) setModalTab('info')
 
             const equiposList = [
               { nom: 'Tigres FC', emoji: '🐯', color: '#EF4444' },
@@ -215,140 +217,158 @@ function TorneosContent() {
               <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
               <div className="relative max-w-2xl w-full bg-white dark:bg-[#1a1a24] rounded-2xl overflow-hidden border border-[#D4C8E8]/40 dark:border-white/10 shadow-2xl" onClick={e => e.stopPropagation()}>
                 <button onClick={() => setModalTournament(null)} className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center hover:bg-gold transition-colors">✕</button>
-                {/* Header image */}
+                {/* Header con cancha */}
                 <div className="relative h-[200px] overflow-hidden">
-                  <img src={imgSrc} alt="" className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0A0614] via-[#0A0614]/40 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-5">
-                    <span className="text-[10px] tracking-[1.2px] text-gold font-bold uppercase">{t.tag}</span>
-                    <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase text-white leading-tight mt-1">{t.nombre}</h2>
+                  <img src="/cancha-juego.png" alt="" className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0A0614] via-[#0A0614]/60 to-transparent" />
+                  <div className="absolute inset-0 opacity-20" style={{ background: 'radial-gradient(at 50% 40%, rgb(200, 133, 26) 0%, transparent 60%)' }} />
+                <div className="absolute bottom-0 left-0 right-0 p-5 flex items-end justify-between">
+                  <div>
+                    <span className="inline-block rounded-full text-[10px] font-bold uppercase tracking-[.4px] px-2.5 py-0.5 mb-2 bg-white/15 text-white border border-white/20 backdrop-blur-sm">
+                      {t.estado === 'live' ? 'En curso' : t.estado === 'upcoming' ? 'Próximo' : 'Finalizado'}
+                    </span>
+                    <span className="block text-[10px] tracking-[1.2px] text-gold font-bold uppercase mb-1">{t.tag}</span>
+                    <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase text-white leading-tight">{t.nombre}</h2>
+                    <p className="text-[12px] text-white/60 mt-1">{t.categoria} — {t.semestre}</p>
                   </div>
+                  <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gold/20 text-gold border border-gold/40 hover:bg-gold/30 text-[10px] font-bold transition-all flex-shrink-0">
+                    <Download size={12} /> Reglamento
+                  </button>
+                </div>
                 </div>
 
-                {/* Tabs */}
+                {/* Tabs como DetalleTorneo */}
                 <div className="flex border-b border-[#D4C8E8]/40 dark:border-white/10">
-                  <button onClick={() => setTab('info')} className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${tab === 'info' ? 'text-gold border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold'}`}>Info</button>
-                  {isClosed && <button onClick={() => setTab('llaves')} className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${tab === 'llaves' ? 'text-gold border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold'}`}>Llaves</button>}
-                  {!isUpcoming && <button onClick={() => setTab('tablero')} className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${tab === 'tablero' ? 'text-gold border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold'}`}>Tablero</button>}
+                  <button onClick={() => setModalTab('info')}
+                    className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'info' ? 'text-gold border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold'}`}>Información</button>
+                  <button onClick={() => setModalTab('equipos')}
+                    className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'equipos' ? 'text-gold border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold'}`}>Equipos</button>
+                  <button onClick={() => setModalTab('calendario')}
+                    className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'calendario' ? 'text-gold border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold'}`}>Calendario</button>
+                  <button onClick={() => setModalTab('tabla')}
+                    className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'tabla' ? 'text-gold border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold'}`}>Tabla</button>
+                  {!isUpcoming && <button onClick={() => setModalTab('llaves')}
+                    className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'llaves' ? 'text-gold border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold'}`}>Llaves</button>}
                 </div>
 
-                {/* Content */}
+                {/* Content estandarizado como DetalleTorneo */}
                 <div className="p-5 max-h-[50vh] overflow-y-auto">
-                  {tab === 'info' && (
-                    <div className="space-y-4">
-                      <p className="text-[13px] text-[#7A6B99] dark:text-white/60">Ingeniería de Sistemas</p>
-                      <div className="flex items-center gap-2 text-[13px] text-[#7A6B99] dark:text-white/50">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                        {t.fecha}
-                      </div>
-                      <div className="flex gap-6 pt-4 border-t border-[#D4C8E8]/40 dark:border-white/10">
-                        <div><span className="text-[11px] text-[#7A6B99] dark:text-white/50">Equipos</span><p className="text-lg font-bold text-[#3D1A6B] dark:text-white">{t.equipos}</p></div>
-                        <div><span className="text-[11px] text-[#7A6B99] dark:text-white/50">Jugadores</span><p className="text-lg font-bold text-[#3D1A6B] dark:text-white">{t.jugadores}</p></div>
-                        <div><span className="text-[11px] text-[#7A6B99] dark:text-white/50">Canchas</span><p className="text-lg font-bold text-[#3D1A6B] dark:text-white">{t.canchas}</p></div>
-                      </div>
-                      {isUpcoming && <div className="p-4 rounded-xl bg-gold/10 border border-gold/30 text-center"><p className="text-sm text-gold font-bold">📅 Próximamente — Inscripciones abiertas</p></div>}
-                      {isLive && <div className="p-4 rounded-xl bg-purple-mid/20 border border-purple-mid/40 text-center"><p className="text-sm text-purple-mid font-bold animate-pulse">🔴 En curso — ¡Seguí la acción!</p></div>}
-                    </div>
-                  )}
-
-                  {tab === 'llaves' && isClosed && (
-                    <div className="space-y-5">
-                      {/* Cuartos */}
-                      <div><h4 className="text-[11px] font-bold uppercase tracking-[1.2px] text-gold mb-3">Cuartos de final</h4>
-                        <div className="grid grid-cols-2 gap-3">
-                          {[
-                            [equiposList[0], equiposList[1], '2 - 1', equiposList[0]],
-                            [equiposList[2], equiposList[3], '3 - 0', equiposList[2]],
-                            [equiposList[4], equiposList[5], '2 - 2', equiposList[4]],
-                            [equiposList[6], equiposList[7], '1 - 0', equiposList[6]],
-                          ].map(([eq1, eq2, res, winner], i) => (
-                            <div key={i} className="p-3 rounded-xl bg-[#E8DFF5]/50 dark:bg-white/5 border border-[#D4C8E8]/40 dark:border-white/10">
-                              <div className={`flex items-center gap-2 ${winner === eq1 ? 'opacity-100' : 'opacity-60'}`}>
-                                <span className="text-lg">{eq1.emoji}</span>
-                                <span className="text-xs font-semibold flex-1 text-[#3D1A6B] dark:text-white">{eq1.nom}</span>
-                                <span className="text-xs font-bold text-gold">{res.split(' - ')[0]}</span>
-                              </div>
-                              <div className="flex items-center justify-center text-[8px] text-[#7A6B99] dark:text-text-faint uppercase py-1">VS</div>
-                              <div className={`flex items-center gap-2 ${winner === eq2 ? 'opacity-100' : 'opacity-60'}`}>
-                                <span className="text-lg">{eq2.emoji}</span>
-                                <span className="text-xs font-semibold flex-1 text-[#3D1A6B] dark:text-white">{eq2.nom}</span>
-                                <span className="text-xs font-bold text-gold">{res.split(' - ')[1]}</span>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                      {/* Semifinal */}
-                      <div><h4 className="text-[11px] font-bold uppercase tracking-[1.2px] text-gold mb-3">Semifinales</h4>
-                        <div className="grid grid-cols-2 gap-3">
-                          {[
-                            [equiposList[0], equiposList[2], '2 - 1', equiposList[0]],
-                            [equiposList[4], equiposList[6], '3 - 2', equiposList[6]],
-                          ].map(([eq1, eq2, res, winner], i) => (
-                            <div key={i} className="p-3 rounded-xl bg-[#E8DFF5]/50 dark:bg-white/5 border border-[#D4C8E8]/40 dark:border-white/10">
-                              <div className={`flex items-center gap-2 ${winner === eq1 ? 'opacity-100' : 'opacity-60'}`}>
-                                <span className="text-lg">{eq1.emoji}</span>
-                                <span className="text-xs font-semibold flex-1 text-[#3D1A6B] dark:text-white">{eq1.nom}</span>
-                                <span className="text-xs font-bold text-gold">{res.split(' - ')[0]}</span>
-                              </div>
-                              <div className="flex items-center justify-center text-[8px] text-text-faint uppercase py-1">VS</div>
-                              <div className={`flex items-center gap-2 ${winner === eq2 ? 'opacity-100' : 'opacity-60'}`}>
-                                <span className="text-lg">{eq2.emoji}</span>
-                                <span className="text-xs font-semibold flex-1 text-[#3D1A6B] dark:text-white">{eq2.nom}</span>
-                                <span className="text-xs font-bold text-gold">{res.split(' - ')[1]}</span>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                      {/* Final */}
-                      <div><h4 className="text-[11px] font-bold uppercase tracking-[1.2px] text-gold mb-3">Final</h4>
-                        <div className="p-4 rounded-xl bg-gold/10 border border-gold/30">
-                          <div className="flex items-center gap-3">
-                            <span className="text-2xl">{equiposList[0].emoji}</span>
-                            <span className="text-sm font-bold flex-1 text-[#3D1A6B] dark:text-white">Tigres FC</span>
-                            <span className="text-lg font-bold text-gold">🏆 3</span>
-                          </div>
-                          <div className="flex items-center justify-center text-[10px] text-gold uppercase font-bold py-1">VS</div>
-                          <div className="flex items-center gap-3 opacity-60">
-                            <span className="text-2xl">{equiposList[6].emoji}</span>
-                            <span className="text-sm font-bold flex-1 text-[#3D1A6B] dark:text-white">Titanes</span>
-                            <span className="text-lg font-bold text-text-muted">1</span>
-                          </div>
-                          <div className="mt-3 text-center"><span className="text-[10px] text-gold font-bold uppercase bg-gold/20 px-3 py-1 rounded-full">🏆 Campeón: Tigres FC</span></div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {tab === 'tablero' && !isUpcoming && (
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[1px] text-[#7A6B99] dark:text-text-faint pb-2 border-b border-[#D4C8E8]/40 dark:border-white/10">
-                        <span className="w-6 text-center">#</span>
-                        <span className="flex-1">Equipo</span>
-                        <span className="w-8 text-center">PJ</span>
-                        <span className="w-8 text-center">DG</span>
-                        <span className="w-8 text-center">PTS</span>
-                      </div>
+                  {modalTab === 'info' && (
+                    <div className="grid grid-cols-2 max-md:grid-cols-1 gap-4">
                       {[
-                        { pos: 1, nom: 'Tigres FC', emoji: '🐯', color: '#EF4444', pj: 12, dg: 18, pts: 28 },
-                        { pos: 2, nom: 'Code United', emoji: '🔵', color: '#3B82F6', pj: 12, dg: 12, pts: 25 },
-                        { pos: 3, nom: 'IA Warriors', emoji: '🦁', color: '#8B5CF6', pj: 12, dg: 8, pts: 24 },
-                        { pos: 4, nom: 'Sistemas FC', emoji: '⚙️', color: '#22C55E', pj: 12, dg: 4, pts: 20 },
-                        { pos: 5, nom: 'Dragones FC', emoji: '🐉', color: '#F97316', pj: 12, dg: -2, pts: 16 },
-                        { pos: 6, nom: 'Los Bits', emoji: '⚡', color: '#F5A623', pj: 12, dg: -6, pts: 12 },
-                        { pos: 7, nom: 'Titanes', emoji: '🛡️', color: '#14B8A6', pj: 12, dg: -12, pts: 8 },
-                        { pos: 8, nom: 'Fénix', emoji: '🔥', color: '#EC4899', pj: 12, dg: -22, pts: 4 },
-                      ].map((eq, i) => (
-                        <div key={i} className={`flex items-center gap-2 p-2.5 rounded-xl ${i < 4 ? 'bg-[#E8DFF5]/50 dark:bg-white/5' : ''} border border-[#D4C8E8]/40 dark:border-white/10`}>
-                          <span className="w-6 text-center text-[11px] font-bold text-[#7A6B99] dark:text-text-faint">{eq.pos}</span>
-                          <span className="text-base">{eq.emoji}</span>
-                          <span className="flex-1 text-xs font-semibold text-[#3D1A6B] dark:text-white truncate">{eq.nom}</span>
-                          <span className="w-8 text-center text-[11px] text-[#7A6B99] dark:text-white/60">{eq.pj}</span>
-                          <span className="w-8 text-center text-[11px] font-mono" style={{ color: eq.dg >= 0 ? '#22C55E' : '#EF4444' }}>{eq.dg > 0 ? '+' : ''}{eq.dg}</span>
-                          <span className="w-8 text-center text-xs font-bold text-gold">{eq.pts}</span>
+                        { label: 'Formato', value: 'Todos contra todos + Eliminatorias' },
+                        { label: 'Categoría', value: t.categoria },
+                        { label: 'Duración', value: t.fecha },
+                        { label: 'Equipos', value: `${t.equipos} equipos — ${t.jugadores} jugadores` },
+                        { label: 'Canchas', value: `${t.canchas} canchas` },
+                        { label: 'Estado', value: t.estado === 'live' ? '🔴 En curso' : t.estado === 'upcoming' ? '📅 Próximo' : '✅ Finalizado' },
+                      ].map((info, i) => (
+                        <div key={i} className="bg-[#E8DFF5]/50 dark:bg-white/5 border border-[#D4C8E8]/40 dark:border-white/10 rounded-xl p-4">
+                          <p className="text-[10px] text-[#7A6B99] dark:text-text-faint uppercase tracking-[.4px] font-semibold mb-1">{info.label}</p>
+                          <p className="text-sm font-semibold text-[#3D1A6B] dark:text-white">{info.value}</p>
                         </div>
                       ))}
+                    </div>
+                  )}
+
+                  {modalTab === 'equipos' && (
+                    <div className="grid grid-cols-2 max-sm:grid-cols-1 gap-3">
+                      {equiposList.map(eq => (
+                        <div key={eq.nom} className="flex items-center gap-3 p-3 rounded-xl bg-[#E8DFF5]/50 dark:bg-white/5 border border-[#D4C8E8]/40 dark:border-white/10 hover:border-gold/30 transition-all">
+                          <span className="text-2xl">{eq.emoji}</span>
+                          <span className="font-semibold text-[13px] text-[#3D1A6B] dark:text-white">{eq.nom}</span>
+                          <span className="w-3 h-3 rounded-full ml-auto" style={{ backgroundColor: eq.color }} />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {modalTab === 'calendario' && (
+                    <div className="space-y-3">
+                      <p className="text-xs text-[#7A6B99] dark:text-text-muted mb-4">Calendario de partidos del torneo</p>
+                      {[
+                        { dia:'24', mes:'MAY', eq1:'Tigres FC', emoji1:'🐯', eq2:'IA Warriors', emoji2:'🦁', hora:'8:00 PM', lugar:'Cancha Principal Sede Norte', resultado:'3 - 1' },
+                        { dia:'24', mes:'MAY', eq1:'Code United', emoji1:'💻', eq2:'Sistemas FC', emoji2:'⚙️', hora:'9:30 PM', lugar:'Cancha Principal Sede Norte', resultado:'2 - 2' },
+                        { dia:'25', mes:'MAY', eq1:'Dragones FC', emoji1:'🐉', eq2:'Los Bits', emoji2:'⚡', hora:'5:00 PM', lugar:'Auditorio Principal Sede Norte' },
+                        { dia:'28', mes:'MAY', eq1:'Titanes', emoji1:'🛡️', eq2:'Fénix', emoji2:'🔥', hora:'7:00 PM', lugar:'Cancha Principal Sede Norte 2' },
+                        { dia:'30', mes:'MAY', eq1:'Tigres FC', emoji1:'🐯', eq2:'Code United', emoji2:'💻', hora:'8:00 PM', lugar:'Cancha Principal Sede Norte' },
+                      ].map((m, i) => (
+                        <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-[#E8DFF5]/50 dark:bg-white/5 border border-[#D4C8E8]/40 dark:border-white/10 hover:border-gold/30 transition-all">
+                          <div className="w-[44px] text-center flex-shrink-0">
+                            <b className="block font-[family-name:var(--font-display)] text-base text-[#3D1A6B] dark:text-white">{m.dia}</b>
+                            <span className="text-[8px] text-[#7A6B99] dark:text-text-faint uppercase">{m.mes}</span>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-1.5 text-[12.5px]">
+                              <span>{m.emoji1}</span>
+                              <span className="font-semibold text-[#3D1A6B] dark:text-white truncate">{m.eq1}</span>
+                              <span className="text-[9px] text-[#7A6B99] dark:text-text-faint font-bold">VS</span>
+                              <span className="font-semibold text-[#3D1A6B] dark:text-white truncate">{m.eq2}</span>
+                              <span>{m.emoji2}</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-[10px] text-[#7A6B99] dark:text-white/50 mt-0.5">
+                              <Clock size={10} /> {m.hora}
+                              <MapPin size={10} /> {m.lugar.slice(0, 18)}...
+                            </div>
+                          </div>
+                          {m.resultado && <span className="text-sm font-bold text-gold">{m.resultado}</span>}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {modalTab === 'tabla' && !isUpcoming && (
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm">
+                        <thead><tr className="text-[10px] text-[#7A6B99] dark:text-text-faint uppercase tracking-[.5px] border-b border-[#D4C8E8]/40 dark:border-white/10">
+                          <th className="text-left py-3 px-4">#</th><th className="text-left py-3 px-4">Equipo</th><th className="text-center py-3 px-3">PJ</th><th className="text-center py-3 px-3">G</th><th className="text-center py-3 px-3">E</th><th className="text-center py-3 px-3">P</th><th className="text-center py-3 px-3">DG</th><th className="text-right py-3 px-4">Pts</th>
+                        </tr></thead>
+                        <tbody>
+                          {[
+                            { eq: 'Tigres FC', emoji: '🐯', pj: 12, g: 9, e: 2, p: 1, dg: 18, pts: 29 },
+                            { eq: 'Code United', emoji: '🔵', pj: 12, g: 8, e: 2, p: 2, dg: 12, pts: 26 },
+                            { eq: 'IA Warriors', emoji: '🦁', pj: 12, g: 7, e: 3, p: 2, dg: 8, pts: 24 },
+                            { eq: 'Sistemas FC', emoji: '⚙️', pj: 12, g: 6, e: 2, p: 4, dg: 4, pts: 20 },
+                          ].map((r, i) => (
+                            <tr key={i} className="border-t border-[#D4C8E8]/40 dark:border-white/10 hover:bg-white/5">
+                              <td className="py-3 px-4 text-[#7A6B99] dark:text-text-muted w-8">{i + 1}</td>
+                              <td className="py-3 px-4 font-semibold text-[#3D1A6B] dark:text-white">{i === 0 ? '🏆 ' : ''}{r.emoji} {r.eq}</td>
+                              <td className="py-3 px-3 text-center text-[#7A6B99] dark:text-white/60">{r.pj}</td>
+                              <td className="py-3 px-3 text-center text-green-500">{r.g}</td>
+                              <td className="py-3 px-3 text-center text-yellow-400">{r.e}</td>
+                              <td className="py-3 px-3 text-center text-red-400">{r.p}</td>
+                              <td className="py-3 px-3 text-center text-green-400">+{r.dg}</td>
+                              <td className="py-3 px-4 text-right font-bold text-gold">{r.pts}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                  {modalTab === 'llaves' && !isUpcoming && (
+                    <div>
+                      <p className="text-sm text-[#7A6B99] dark:text-text-muted mb-4">Fase eliminatoria del torneo</p>
+                      <div className="bg-[#E8DFF5]/50 dark:bg-white/5 border border-[#D4C8E8]/40 dark:border-white/10 rounded-2xl p-6 overflow-x-auto">
+                        <div className="flex items-center justify-center gap-8 min-w-[500px]">
+                          <div className="space-y-4">
+                            <div className="p-3 rounded-xl bg-white/5 border border-white/10"><span className="text-sm font-semibold text-[#3D1A6B] dark:text-white">🐯 Tigres FC <span className="text-gold">2</span></span></div>
+                            <div className="p-3 rounded-xl bg-white/5 border border-white/10"><span className="text-sm font-semibold text-[#3D1A6B] dark:text-white">⚙️ Sistemas FC <span className="text-gold">1</span></span></div>
+                            <div className="text-center text-[10px] text-[#7A6B99] dark:text-text-faint uppercase tracking-wider mt-1">Cuartos</div>
+                          </div>
+                          <div className="text-gold text-2xl">⟶</div>
+                          <div className="space-y-4">
+                            <div className="p-3 rounded-xl border border-gold/30 bg-gold/10"><span className="text-sm font-semibold text-[#3D1A6B] dark:text-white">🐯 Tigres FC <span className="text-gold">1</span></span></div>
+                            <div className="p-3 rounded-xl bg-white/5 border border-white/10"><span className="text-sm font-semibold text-[#3D1A6B] dark:text-white">🔵 Code United <span className="text-gold">0</span></span></div>
+                            <div className="text-center text-[10px] text-[#7A6B99] dark:text-text-faint uppercase tracking-wider mt-1">Semifinal</div>
+                          </div>
+                          <div className="text-gold text-2xl">⟶</div>
+                          <div className="space-y-4">
+                            <div className="p-4 rounded-xl bg-gradient-to-b from-gold/20 to-gold/5 border border-gold/40"><span className="text-sm font-semibold text-[#3D1A6B] dark:text-white">🏆🐯 Tigres FC <span className="text-gold">3</span></span></div>
+                            <div className="text-center text-[10px] text-[#7A6B99] dark:text-text-faint uppercase tracking-wider mt-1">Final</div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>

@@ -15,7 +15,14 @@ export interface Cancha {
     eq1: string
     eq2: string
   }[]
-  rating: number // 1-5 estado del césped
+  divisiones?: {
+    nombre: string
+    eq1: string
+    eq2: string
+    hora: string
+    resultado?: string
+  }[]
+  rating: number
   iluminacion: boolean
   techada: boolean
 }
@@ -35,6 +42,12 @@ export const canchas: Cancha[] = [
     },
     proximos: [
       { hora: '9:30 PM', eq1: 'Code United', eq2: 'Sistemas FC' },
+    ],
+    divisiones: [
+      { nombre: 'Cancha 1', eq1: 'Tigres FC', eq2: 'IA Warriors', hora: '8:00 PM', resultado: '3 - 1' },
+      { nombre: 'Cancha 2', eq1: 'Code United', eq2: 'Sistemas FC', hora: '8:00 PM', resultado: '2 - 2' },
+      { nombre: 'Cancha 3', eq1: 'Dragones FC', eq2: 'Los Bits', hora: '8:00 PM' },
+      { nombre: 'Cancha 4', eq1: 'Titanes', eq2: 'Fénix', hora: '8:00 PM' },
     ],
     rating: 4,
     iluminacion: true,
