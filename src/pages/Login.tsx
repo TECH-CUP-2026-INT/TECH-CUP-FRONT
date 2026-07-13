@@ -41,23 +41,31 @@ export default function Login() {
                 <p className="text-sm text-text-muted mt-2">Elegí tu rol para continuar</p>
               </div>
 
-              <div className="grid grid-cols-4 gap-2">
-                {roles.map(role => (
+              <div style={{ display: 'flex', gap: '8px' }}>
+                {roles.map((role, idx) => (
                   <button key={role.id} onClick={() => { setSelectedRole(role.id); setStep('login') }}
                     onMouseEnter={() => setHoveredRole(role.id)} onMouseLeave={() => setHoveredRole(null)}
-                    className="group relative overflow-hidden rounded-2xl p-4 text-left transition-all duration-300
-                      border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] hover:border-white/20
-                      hover:scale-[1.02] cursor-pointer">
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                      style={{ background: `radial-gradient(circle at 50% 100%, ${role.color}22, transparent 70%)` }} />
-                    <div className="relative z-10">
-                      <img src={role.img} alt="" className="w-full h-16 object-contain mb-1" draggable={false} />
-                      <div className="flex items-center gap-2 justify-between">
-                        <span className="text-[10px] text-white/50 uppercase tracking-wider">Rol</span>
-                        <span className="w-2 h-2 rounded-full border border-white/40" style={{ background: role.color, boxShadow: `0 0 6px ${role.color}` }} />
+                    className="group relative flex-1 overflow-hidden rounded-2xl cursor-pointer border-none p-0"
+                    style={{ aspectRatio: '1200/669', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.12)' }}>
+                    {/* Light glow */}
+                    <span className="absolute left-1/2 bottom-0 w-[130%] h-[55%] rounded-full pointer-events-none"
+                      style={{ transform: 'translateX(-50%)', filter: 'blur(30px)', opacity: 0, background: `radial-gradient(ellipse, ${role.color}, transparent 70%)`, transition: 'opacity .45s ease' }}
+                      onMouseEnter={e => e.currentTarget.style.opacity = '0.55'}
+                      onMouseLeave={e => e.currentTarget.style.opacity = '0'} />
+                    {/* Spot overlay */}
+                    <span className="absolute inset-0 pointer-events-none"
+                      style={{ opacity: 0, transition: 'opacity .45s ease', background: `linear-gradient(135deg, ${role.color}11, transparent 60%)` }} />
+                    {/* Content */}
+                    <div className="relative inset-0 flex flex-col justify-between p-3 pointer-events-none" style={{ position: 'absolute', inset: 0 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <span className="text-[9px] uppercase tracking-wider text-white/50 opacity-0 group-hover:opacity-100 transition-opacity">{role.tag}</span>
+                        <span className="w-1.5 h-1.5 rounded-full border border-white/40 flex-shrink-0" style={{ background: role.color, boxShadow: `0 0 6px ${role.color}` }} />
                       </div>
-                      <p className="font-bold text-white text-sm mt-1">{role.name}</p>
-                      <p className="text-[11px] text-white/50 mt-0.5">{role.desc}</p>
+                      <div style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.18)', backdropFilter: 'blur(14px)', borderRadius: '10px', padding: '8px 10px', transform: 'translateY(8px)', opacity: 0, transition: 'transform .4s ease, opacity .4s ease' }}
+                        className="group-hover:translate-y-0 group-hover:opacity-100">
+                        <p className="font-bold text-white text-xs uppercase tracking-[.02em] m-0">{role.name}</p>
+                        <p className="text-[9px] text-white/60 leading-relaxed m-0">{role.desc}</p>
+                      </div>
                     </div>
                   </button>
                 ))}
