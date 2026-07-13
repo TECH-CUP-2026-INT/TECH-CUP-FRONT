@@ -35,6 +35,7 @@ const messages: Record<number, { text: string; me: boolean }[]> = {
 export default function AppTopbar({ title, onMenuClick }: AppTopbarProps) {
   const navigate = useNavigate()
   const [chatOpen, setChatOpen] = useState(false)
+  const [notifOpen, setNotifOpen] = useState(false)
   const [selectedChat, setSelectedChat] = useState<number | null>(null)
   const [input, setInput] = useState('')
   const activeConv = conversations.find(c => c.id === selectedChat)
@@ -70,8 +71,13 @@ export default function AppTopbar({ title, onMenuClick }: AppTopbarProps) {
             <svg width="18" height="18" viewBox="0 0 24 24" fill={chatOpen ? "white" : "none"} stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2v10z"/></svg>
           </button>
 
-          <button className="relative text-gray-light bg-transparent border-none p-0 hover:text-gold transition-colors group" aria-label="Notificaciones">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="group-hover:fill-gold/20 transition-all"><path d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 003.4 0"/></svg>
+          <button onClick={() => { setNotifOpen(!notifOpen); if (!notifOpen) setChatOpen(false); }}
+            className={`relative p-1.5 rounded-lg transition-all ${
+              notifOpen
+                ? 'bg-purple-mid text-white border border-purple-mid'
+                : 'bg-transparent text-gray-light border border-transparent hover:border-purple-mid/40 hover:bg-purple-mid/10'
+            }`} aria-label="Notificaciones">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill={notifOpen ? "white" : "none"} stroke="currentColor" strokeWidth="1.5"><path d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 003.4 0"/></svg>
             <span className="absolute -top-[5px] -right-[7px] bg-purple-mid text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center ring-2 ring-black">3</span>
           </button>
 
@@ -100,6 +106,49 @@ export default function AppTopbar({ title, onMenuClick }: AppTopbarProps) {
           </DropdownMenu>
         </div>
       </header>
+
+      {/* Notificaciones panel */}
+      <AnimatePresence>
+        {notifOpen && (
+          <>
+            <div className="fixed inset-0 z-30" onClick={() => setNotifOpen(false)} />
+            <motion.div
+              initial={{ x: '100%', opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: '100%', opacity: 0 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className="fixed right-0 top-0 bottom-0 z-40 w-[380px] max-w-[90vw] bg-black/95 backdrop-blur-xl border-l border-border flex flex-col"
+            >
+              <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+                <h2 className="text-sm font-bold flex items-center gap-2">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 003.4 0"/></svg>
+                  Notificaciones
+                </h2>
+                <button onClick={() => setNotifOpen(false)} className="text-gray-light hover:text-red-400 transition-colors p-1"><X size={18} /></button>
+              </div>
+              <div className="flex-1 overflow-y-auto">
+                {[
+                  { title: 'Partido en 2 horas', desc: 'Tigres FC vs IA Warriors — Cancha Principal', time: 'Hace 5 min', color: '#22C55E' },
+                  { title: 'Inscripción aprobada', desc: 'TechCup 2026-II — Ya estás inscrito', time: 'Hace 1 hora', color: '#8B5CF6' },
+                  { title: 'Nuevo mensaje de Carlos', desc: 'Nos vemos en la cancha mañana', time: 'Hace 3 horas', color: '#3B82F6' },
+                  { title: 'Recordatorio de pago', desc: 'Tienes un pago pendiente por $20.000', time: 'Ayer', color: '#F59E0B' },
+                  { title: 'Cambio de horario', desc: 'Partido Sistemas FC vs Code United movido a las 9PM', time: 'Ayer', color: '#EF4444' },
+                ].map((n, i) => (
+                  <button key={i} className="w-full flex items-start gap-3 px-4 py-3.5 hover:bg-white/5 transition-colors border-b border-border/50 text-left">
+                    <div className="w-2 h-2 rounded-full mt-1.5 flex-shrink-0" style={{ backgroundColor: n.color }} />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-white">{n.title}</p>
+                      <p className="text-xs text-text-muted mt-0.5">{n.desc}</p>
+                      <p className="text-[10px] text-text-faint mt-1">{n.time}</p>
+                    </div>
+                  </button>
+                ))}
+                {notifOpen && <div className="px-4 py-6 text-center"><p className="text-xs text-text-muted">— No hay más notificaciones —</p></div>}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* Chat panel */}
       <AnimatePresence>
