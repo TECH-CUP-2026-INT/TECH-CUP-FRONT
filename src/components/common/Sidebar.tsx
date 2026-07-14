@@ -42,7 +42,7 @@ export default function Sidebar({ open, onClose, collapsed: collapsedProp, onCol
     const role = user?.role
     return allItems.filter(item => !item.roles || (role && item.roles.includes(role))).map(item => {
       if (item.id === 'inicio' && role) {
-        const roleRoute = role === 'arbitro' ? '/arbitro/dashboard' : role === 'admin' ? '/dashboard/admin' : `/dashboard/${role}`
+        const roleRoute = role === 'arbitro' ? '/arbitro/dashboard' : role === 'organizador' ? '/dashboard/admin' : `/dashboard/${role}`
         return { ...item, href: roleRoute }
       }
       return item
@@ -173,7 +173,7 @@ export default function Sidebar({ open, onClose, collapsed: collapsedProp, onCol
         </nav>
 
         {/* Promo — solo capitán */}
-        {!sideCollapsed && user?.role === 'capitan' && (
+        {!sideCollapsed && user?.isCaptain && (
           <div className="mx-3 mt-3 rounded-2xl p-4 bg-gradient-to-br from-purple-deep to-purple-black border border-white/10">
             <p className="font-[family-name:var(--font-display)] text-sm leading-tight uppercase mb-3">
               ¡Lleva a tu equipo <span className="text-gold">a la gloria!</span>
