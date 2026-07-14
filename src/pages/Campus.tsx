@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import DashboardLayout from '@/components/shared/DashboardLayout'
-import { Badge } from '@/components/ui/badge'
+import DashboardLayout from '@/components/common/DashboardLayout'
+import { Badge } from '@/components/common/badge'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MapPin, Users, Clock, Trophy, Fence, Goal, ShieldCheck, X, Activity } from 'lucide-react'
 
@@ -96,45 +96,10 @@ export default function Campus() {
               Simultáneo · 8:00 PM
             </span>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {divisiones.map((d, i) => (
-              <div key={i}
-                className="rounded-2xl border border-white/10 p-5 relative overflow-hidden transition-all hover:border-gold/30 group cursor-pointer bg-gradient-to-br from-purple-950/20 via-black to-black"
-                onClick={() => setMatchModal({ eq1: d.eq1, eq2: d.eq2, hora: d.hora, resultado: d.resultado })}>
-                <div className="absolute top-[-30%] right-[-20%] w-[150px] h-[150px] rounded-full blur-[70px] pointer-events-none opacity-25 bg-gold" />
-                <div className="relative z-10">
-                  <div className="flex items-center justify-between mb-2">
-                    <div>
-                      <h3 className="font-semibold text-sm text-white">{d.nombre}</h3>
-                      <div className="flex items-center gap-1 text-[11px] text-white/50 mt-0.5">
-                        <MapPin size={11} /> Sede Norte · Cancha Principal
-                      </div>
-                    </div>
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-[.3px] border text-red-400 bg-red-500/10 border-red-500/20">
-                      <Users size={10} /> en vivo
-                    </span>
-                  </div>
-                  <div className="mt-3 pt-3 border-t border-white/10">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1.5 text-xs">
-                        <span className="text-red-400 font-semibold">{d.eq1}</span>
-                        <span className="text-white/30 font-bold">VS</span>
-                        <span className="text-blue-400 font-semibold">{d.eq2}</span>
-                      </div>
-                      <span className="text-xs text-gold font-semibold">{d.hora}</span>
-                    </div>
-                    {d.resultado && (
-                      <div className="mt-1 text-center">
-                        <span className="text-sm font-bold text-gold">{d.resultado}</span>
-                      </div>
-                    )}
-                  </div>
-                  <div className="mt-2 text-[10px] text-white/30 opacity-0 group-hover:opacity-100 transition-opacity">
-                    Click para ver el partido →
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div className="rounded-2xl border border-white/10 p-6 bg-black/40 backdrop-blur-sm">
+            <p className="text-sm text-white/80 leading-relaxed">
+              Solo se realizan torneos en la cancha principal, este se divide en 4 partes para jugar varios partidos a la vez.
+            </p>
           </div>
         </section>
 

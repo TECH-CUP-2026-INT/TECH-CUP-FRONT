@@ -1,13 +1,16 @@
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import Navbar from '@/components/shared/Navbar'
-import Footer from '@/components/shared/Footer'
-import DashboardLayout from '@/components/shared/DashboardLayout'
-import { Badge } from '@/components/ui/badge'
-import { partidos } from '@/data/partidos'
-import { torneos, type Torneo } from '@/data/torneos'
+import Navbar from '@/components/common/Navbar'
+import Footer from '@/components/common/Footer'
+import DashboardLayout from '@/components/common/DashboardLayout'
+import { Badge } from '@/components/common/badge'
+import { partidos } from '@/services/partidos'
+import { torneos, type Torneo } from '@/services/torneos'
 import { CalendarDays, MapPin, Clock, ChevronLeft, ChevronRight, X } from 'lucide-react'
+import TournamentCalendar from '@/components/TournamentCalendar'
+import CalendarFilters from '@/components/CalendarFilters'
+import UpcomingMatches from '@/components/UpcomingMatches'
 
 const DIAS_SEMANA = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom']
 
@@ -52,7 +55,7 @@ const equiposList = [
 function CalendarioContent() {
   const [mes, setMes] = useState(4)
   const [año] = useState(2026)
-  const [vista, setVista] = useState<'calendario' | 'lista'>('lista')
+  const [vista, setVista] = useState<'calendario' | 'lista'>('calendario')
   const [selectedMatch, setSelectedMatch] = useState<typeof partidos[0] | null>(null)
   const [torneoModal, setTorneoModal] = useState<Torneo | null>(null)
   const [modalTab, setModalTab] = useState('info')
@@ -74,7 +77,29 @@ function CalendarioContent() {
           <div className="absolute top-[40%] -left-[5%] w-[55%] h-[20%] opacity-[0.05] dark:opacity-[0.06]" style={{ background: 'linear-gradient(115deg, transparent 20%, #C8851A 40%, #8B5CF6 55%, transparent 75%)', transform: 'skewX(-15deg)' }} />
         </div>
         <div className="relative w-full max-w-[1280px] mx-auto px-8 pt-[130px] pb-[80px]">
-          <div className="text-center max-w-[600px] mx-auto">
+          {/* Carrusel de fondo — logos */}
+          <div className="absolute left-0 right-0 bottom-0 overflow-hidden pointer-events-none" style={{ opacity: 0.12, height: '55%' }}>
+            <div className="flex gap-6 items-center animate-scroll" style={{ width: 'max-content', filter: 'blur(2px)' }}>
+              {[...Array(8)].flatMap(() => [
+                { src:'/images/logos-equipos/logo1.png' },
+                { src:'/images/logos-equipos/logo2.png' },
+                { src:'/images/logos-equipos/logo3.png' },
+                { src:'/images/logos-equipos/logo4.png' },
+              ]).map((logo, i) => (
+                <img key={i} src={logo.src} alt="" className="object-contain" style={{ width: `${60 + (i % 4) * 12}px`, height: `${60 + (i % 4) * 12}px`, transform: `translateY(${(i % 4) * 4 - 6}px)` }} />
+              ))}
+            </div>
+          </div>
+          <style>{`
+            @keyframes scroll {
+              0% { transform: translateX(0); }
+              100% { transform: translateX(-50%); }
+            }
+            .animate-scroll {
+              animation: scroll 60s linear infinite;
+            }
+          `}</style>
+          <div className="text-center max-w-[600px] mx-auto relative z-10">
             <motion.span initial={{opacity:0,y:-10}} animate={{opacity:1,y:0}} transition={{delay:0.2}} className="inline-flex items-center gap-2 text-[11.5px] font-bold tracking-[1.6px] uppercase text-gold bg-gold/10 border border-gold/30 px-3.5 py-1.5 rounded-full mb-[22px]">
               <CalendarDays size={14} /> Calendario {año}
             </motion.span>
@@ -96,10 +121,10 @@ function CalendarioContent() {
           {/* Toolbar */}
           <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
             <div className="flex items-center gap-3">
-              <button onClick={()=>setVista('lista')}
-                className={`rounded-full px-5 py-2 text-sm font-semibold transition-all ${vista==='lista'?'bg-purple-mid text-white':'bg-[#E8DFF5]/70 dark:bg-black/30 border border-[#D4C8E8]/40 dark:border-white/10 text-[#3D1A6B] dark:text-gray-light hover:border-purple-mid'}`}>Lista</button>
               <button onClick={()=>setVista('calendario')}
                 className={`rounded-full px-5 py-2 text-sm font-semibold transition-all ${vista==='calendario'?'bg-purple-mid text-white':'bg-[#E8DFF5]/70 dark:bg-black/30 border border-[#D4C8E8]/40 dark:border-white/10 text-[#3D1A6B] dark:text-gray-light hover:border-purple-mid'}`}>Calendario</button>
+              <button onClick={()=>setVista('lista')}
+                className={`rounded-full px-5 py-2 text-sm font-semibold transition-all ${vista==='lista'?'bg-purple-mid text-white':'bg-[#E8DFF5]/70 dark:bg-black/30 border border-[#D4C8E8]/40 dark:border-white/10 text-[#3D1A6B] dark:text-gray-light hover:border-purple-mid'}`}>Lista</button>
             </div>
             {vista==='calendario' && (
               <div className="flex items-center gap-3">
@@ -112,32 +137,19 @@ function CalendarioContent() {
             )}
           </div>
 
-          {/* Calendar view */}
+          {/* Calendar view — two columns */}
           {vista==='calendario' && (
-            <div className="bg-[#E8DFF5]/70 dark:bg-black/30 border border-[#D4C8E8]/40 dark:border-white/5 rounded-2xl p-6 mb-8">
-              <div className="grid grid-cols-7 gap-2">
-                {DIAS_SEMANA.map(d=>(
-                  <div key={d} className="text-center text-[11px] text-[#7A6B99] dark:text-text-faint font-semibold uppercase tracking-[.5px] py-2">{d}</div>
-                ))}
-                {dias.map((d,i)=>(
-                  <div key={i} className="aspect-square flex items-center justify-center">
-                    {d ? (
-                      <button onClick={() => { if (d.tienePartido) { const matches = partidos.filter(p => p.dia === d.dia); setCalendarDayMatches(matches); const active = torneos.find(t => t.estado === 'live') || torneos[0]; setTorneoModal(active); setModalTab('info') } }}
-                        className={`w-full h-full rounded-xl flex flex-col items-center justify-center text-sm transition-all ${
-                        d.tienePartido ? 'bg-gold/15 border border-gold/30 text-gold font-bold cursor-pointer hover:bg-gold/25 shadow-sm'
-                        : d.hoy ? 'bg-purple-mid/20 border border-purple-mid/40 text-[#3D1A6B] dark:text-white font-bold'
-                        : 'text-[#7A6B99] dark:text-text-muted'
-                      }`}>
-                        {d.tienePartido && <img src="/images/copa-coin.png" alt="" className="w-4 h-4 object-contain mb-0.5 opacity-70" />}
-                        <span>{d.dia}</span>
-                      </button>
-                    ) : <span />}
-                  </div>
-                ))}
+            <div className="grid grid-cols-[1fr_260px] gap-4 items-start max-lg:grid-cols-1">
+              <div className="rounded-2xl overflow-hidden border border-[#D4C8E8]/40 dark:border-white/5">
+                <TournamentCalendar />
               </div>
-              <div className="flex items-center gap-4 mt-4 text-xs text-[#7A6B99] dark:text-text-muted">
-                <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-gold" /> Partido programado</span>
-                <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-purple-mid" /> Hoy</span>
+              <div className="flex flex-col gap-4">
+                <div className="rounded-2xl overflow-hidden border border-[#D4C8E8]/40 dark:border-white/5">
+                  <CalendarFilters />
+                </div>
+                <div className="rounded-2xl overflow-hidden border border-[#D4C8E8]/40 dark:border-white/5">
+                  <UpcomingMatches />
+                </div>
               </div>
             </div>
           )}
@@ -250,7 +262,7 @@ function CalendarioContent() {
           return (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => { setTorneoModal(null); setCalendarDayMatches(null) }}>
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-            <div className="relative max-w-2xl w-full bg-white dark:bg-[#1a1a24] rounded-2xl overflow-hidden border border-[#D4C8E8]/40 dark:border-white/10 shadow-2xl" onClick={e => e.stopPropagation()}>
+            <div className="relative max-w-2xl w-full bg-white dark:bg-[#1D0E33] rounded-2xl overflow-hidden border border-[#D4C8E8]/40 dark:border-white/10 shadow-2xl" onClick={e => e.stopPropagation()}>
               <button onClick={() => { setTorneoModal(null); setCalendarDayMatches(null) }} className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center hover:bg-gold">✕</button>
               <div className="relative h-[200px] overflow-hidden">
                 <img src="/cancha-juego.png" alt="" className="w-full h-full object-cover" />

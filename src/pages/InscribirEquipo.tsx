@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import Sidebar from '@/components/shared/Sidebar'
-import AppTopbar from '@/components/shared/AppTopbar'
-import Footer from '@/components/shared/Footer'
-import { SpotlightCard } from '@/components/ui/spotlight-card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import Sidebar from '@/components/common/Sidebar'
+import AppTopbar from '@/components/common/AppTopbar'
+import Footer from '@/components/common/Footer'
+import { SpotlightCard } from '@/components/common/spotlight-card'
+import { Badge } from '@/components/common/badge'
+import { Button } from '@/components/common/button'
 import { ArrowLeft, ArrowRight, Check, Upload, FileText, Clock, DollarSign, Users } from 'lucide-react'
 
 const torneos = [

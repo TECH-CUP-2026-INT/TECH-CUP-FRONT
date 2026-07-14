@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import Sidebar from '@/components/shared/Sidebar'
-import AppTopbar from '@/components/shared/AppTopbar'
-import Footer from '@/components/shared/Footer'
-import { Badge } from '@/components/ui/badge'
-import { SpotlightCard } from '@/components/ui/spotlight-card'
+import Sidebar from '@/components/common/Sidebar'
+import AppTopbar from '@/components/common/AppTopbar'
+import Footer from '@/components/common/Footer'
+import { Badge } from '@/components/common/badge'
+import { SpotlightCard } from '@/components/common/spotlight-card'
 import { CalendarDays, MapPin, Clock, Trophy, Swords, Shirt } from 'lucide-react'
-import { partidos } from '@/data/partidos'
-import SoccerField3D from '@/components/cards/SoccerField3D'
+import { partidos } from '@/services/partidos'
+import SoccerField3D from '@/components/employees/SoccerField3D'
 
 interface TeamInfo {
   name: string

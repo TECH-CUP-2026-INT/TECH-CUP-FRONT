@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import Sidebar from '@/components/shared/Sidebar'
-import AppTopbar from '@/components/shared/AppTopbar'
-import Footer from '@/components/shared/Footer'
-import { Button } from '@/components/ui/button'
-import { SpotlightCard } from '@/components/ui/spotlight-card'
-import { InteractiveHoverButton } from '@/components/ui/interactive-hover-button'
-import { Badge } from '@/components/ui/badge'
-import ManchasFloating from '@/components/shared/ManchasFloating'
-import { partidos, posiciones } from '@/data/partidos'
+import Sidebar from '@/components/common/Sidebar'
+import AppTopbar from '@/components/common/AppTopbar'
+import Footer from '@/components/common/Footer'
+import { Button } from '@/components/common/button'
+import { SpotlightCard } from '@/components/common/spotlight-card'
+import { InteractiveHoverButton } from '@/components/common/interactive-hover-button'
+import { Badge } from '@/components/common/badge'
+import ManchasFloating from '@/components/common/ManchasFloating'
+import { partidos, posiciones } from '@/services/partidos'
 import {
   Trophy, CalendarDays, MapPin, Users, Clock, ShieldCheck,
   ClipboardList, ChevronRight, Medal, Shirt, Apple, Package,

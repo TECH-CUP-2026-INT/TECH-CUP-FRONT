@@ -1,16 +1,16 @@
 import { useState, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import Navbar from '@/components/shared/Navbar'
-import Footer from '@/components/shared/Footer'
-import DashboardLayout from '@/components/shared/DashboardLayout'
-import { Button } from '@/components/ui/button'
+import Navbar from '@/components/common/Navbar'
+import Footer from '@/components/common/Footer'
+import DashboardLayout from '@/components/common/DashboardLayout'
+import { Button } from '@/components/common/button'
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
-} from '@/components/ui/select'
+} from '@/components/common/select'
 import { Search, RefreshCw, LayoutGrid, List, CalendarDays, MapPin, Clock, Download } from 'lucide-react'
-import { ThreeDCarousel } from '@/components/ui/three-d-carousel'
-import { torneos, type Torneo } from '@/data/torneos'
+import { ThreeDCarousel } from '@/components/common/three-d-carousel'
+import { torneos, type Torneo } from '@/services/torneos'
 
 const PAGE_SIZE = 6
 
@@ -65,7 +65,28 @@ function TorneosContent() {
         </div>
 
         <div className="relative w-full max-w-[1280px] mx-auto px-8 pt-[130px] pb-[80px]">
-          <div className="text-center max-w-[700px] mx-auto">
+          {/* Carrusel de fondo — fotos */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ opacity: 0.12 }}>
+            <div className="flex gap-6 items-center animate-scroll" style={{ width: 'max-content', filter: 'blur(2px)' }}>
+              {[...Array(8)].flatMap(() => [
+                { src:'/images/fondo-1.png' },
+                { src:'/images/fondo-2.png' },
+                { src:'/images/fondo-3.png' },
+              ]).map((img, i) => (
+                <img key={i} src={img.src} alt="" className="object-cover" style={{ width: `${140 + (i % 3) * 20}px`, height: `${160 + (i % 3) * 24}px`, transform: `translateY(${(i % 3) * 5 - 5}px)` }} />
+              ))}
+            </div>
+          </div>
+          <style>{`
+            @keyframes scroll {
+              0% { transform: translateX(0); }
+              100% { transform: translateX(-50%); }
+            }
+            .animate-scroll {
+              animation: scroll 60s linear infinite;
+            }
+          `}</style>
+          <div className="text-center max-w-[700px] mx-auto relative z-10">
             <motion.span initial={{opacity:0,y:-10}} animate={{opacity:1,y:0}} transition={{delay:0.2}} className="inline-flex items-center gap-2 text-[11.5px] font-bold tracking-[1.6px] uppercase text-gold bg-gold/10 border border-gold/30 px-3.5 py-1.5 rounded-full mb-[22px]">
               <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" /> Torneos
             </motion.span>
@@ -215,7 +236,7 @@ function TorneosContent() {
             return (
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => setModalTournament(null)}>
               <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-              <div className="relative max-w-2xl w-full bg-white dark:bg-[#1a1a24] rounded-2xl overflow-hidden border border-[#D4C8E8]/40 dark:border-white/10 shadow-2xl" onClick={e => e.stopPropagation()}>
+              <div className="relative max-w-2xl w-full bg-white dark:bg-[#1D0E33] rounded-2xl overflow-hidden border border-[#D4C8E8]/40 dark:border-white/10 shadow-2xl" onClick={e => e.stopPropagation()}>
                 <button onClick={() => setModalTournament(null)} className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center hover:bg-gold transition-colors">✕</button>
                 {/* Header con cancha */}
                 <div className="relative h-[200px] overflow-hidden">
@@ -412,14 +433,19 @@ function TorneoCard({ torneo: t, onClick }: { torneo: Torneo; onClick: () => voi
 
   return (
     <button onClick={onClick} className="block group w-full text-left">
-      <div className="relative overflow-hidden rounded-2xl border border-[#D4C8E8]/40 dark:border-white/5 bg-[#E8DFF5]/70 dark:bg-black/30">
+      <div className="relative overflow-hidden rounded-2xl border border-[#D4C8E8]/40 dark:border-white/5 bg-[#E8DFF5]/70 dark:bg-black/30 transition-all duration-300 hover:border-[#D4AF37]/60 hover:shadow-[0_0_25px_rgba(212,175,55,0.12)]">
         <div className="absolute inset-0">
           <img src={imgSrc} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0A0614] via-[#0A0614]/50 to-transparent" />
         </div>
+        {/* Overlay hover dorado sutil */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#FFD700]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         <div className="relative h-full min-h-[280px] flex flex-col justify-between p-5 z-10">
           <div>
-            <span className={`inline-block rounded-full text-[10px] font-bold uppercase tracking-[.4px] px-2.5 py-0.5 mb-2 ${badgeStyle}`}>{badgeText}</span>
+            <div className="flex items-center gap-2 mb-2">
+              <span className={`inline-block rounded-full text-[10px] font-bold uppercase tracking-[.4px] px-2.5 py-0.5 ${badgeStyle}`}>{badgeText}</span>
+              {t.estado === 'live' && <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />}
+            </div>
             <span className="block text-[10px] tracking-[1.2px] text-gold font-bold uppercase mb-1">{t.tag}</span>
             <h3 className="font-[family-name:var(--font-display)] text-xl uppercase text-white leading-tight">{t.nombre}</h3>
             <p className="text-[12px] text-white/60 mt-1">Ingeniería de Sistemas</p>
@@ -435,7 +461,7 @@ function TorneoCard({ torneo: t, onClick }: { torneo: Torneo; onClick: () => voi
                 <span className="text-[11px] text-white/60"><strong className="text-white/90">{t.jugadores}</strong> Jugadores</span>
                 <span className="text-[11px] text-white/60"><strong className="text-white/90">{t.canchas}</strong> Canchas</span>
               </div>
-              <span className="text-[11px] font-bold text-gold bg-gold/10 border border-gold/30 px-3 py-1 rounded-full group-hover:bg-gold/20 transition-colors">
+              <span className="text-[11px] font-bold text-gold bg-gold/10 border border-gold/30 px-3 py-1 rounded-full group-hover:bg-gold/20 group-hover:border-gold/60 transition-all duration-300">
                 {t.estado === 'closed' ? 'Ver resumen' : 'Ver detalles'}
               </span>
             </div>

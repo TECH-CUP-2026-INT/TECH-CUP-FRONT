@@ -1,15 +1,15 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Sidebar from '@/components/shared/Sidebar'
+import Sidebar from '@/components/common/Sidebar'
 import { Menu, Send, Paperclip, Smile, Image, ArrowLeft } from 'lucide-react'
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/common/input'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+} from '@/components/common/dropdown-menu'
 
 interface Message {
   id: number

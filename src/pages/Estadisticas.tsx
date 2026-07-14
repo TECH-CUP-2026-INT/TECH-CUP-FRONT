@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import DashboardLayout from '@/components/shared/DashboardLayout'
-import { SpotlightCard } from '@/components/ui/spotlight-card'
-import { Button } from '@/components/ui/button'
+import DashboardLayout from '@/components/common/DashboardLayout'
+import { SpotlightCard } from '@/components/common/spotlight-card'
+import { Button } from '@/components/common/button'
 import { TrendingUp, Trophy } from 'lucide-react'
 
 const stats = [

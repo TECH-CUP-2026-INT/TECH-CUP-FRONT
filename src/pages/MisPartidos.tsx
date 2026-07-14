@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import DashboardLayout from '@/components/shared/DashboardLayout'
-import { SpotlightCard } from '@/components/ui/spotlight-card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import DashboardLayout from '@/components/common/DashboardLayout'
+import { SpotlightCard } from '@/components/common/spotlight-card'
+import { Badge } from '@/components/common/badge'
+import { Button } from '@/components/common/button'
 import { X, MapPin, Clock, Trophy, Swords, CalendarDays, Shirt } from 'lucide-react'
-import SoccerField3D from '@/components/cards/SoccerField3D'
+import SoccerField3D from '@/components/employees/SoccerField3D'
 
 type Tab = 'proximos' | 'envivo' | 'finalizados'
 

@@ -1,18 +1,18 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Checkbox } from '@/components/ui/checkbox'
+import { motion } from 'framer-motion'
+import { Button } from '@/components/common/button'
+import { Input } from '@/components/common/input'
+import { Label } from '@/components/common/label'
+import { Checkbox } from '@/components/common/checkbox'
 import { Eye, EyeOff, Mail, Lock, ArrowLeft } from 'lucide-react'
-import { useAuth } from '@/lib/auth'
+import { useAuth } from '@/hooks/auth/useAuth'
+import TechCupRoleSelector from '@/components/TechCupRoleSelector'
 
 const roles = [
-  { id: 'capitan', name: 'Capitán', desc: 'Alineación y representación del equipo.', color: '#e8bd5f', img: '/images/capitan.png' },
   { id: 'jugador', name: 'Jugador', desc: 'Equipo, partidos y estadísticas.', color: '#7f77dd', img: '/images/jugador.png' },
   { id: 'arbitro', name: 'Árbitro', desc: 'Marcador, tiempo y sanciones en vivo.', color: '#e24b4a', img: '/images/arbitro.png' },
-  { id: 'admin', name: 'Admin', desc: 'Equipos, calendario y configuración.', color: '#3fc8ff', img: '/images/admin.png' },
+  { id: 'organizador', name: 'Organizador', desc: 'Equipos, calendario y configuración.', color: '#3fc8ff', img: '/images/organizador.png' },
 ]
 
 const videos = ['/hero-video.mp4', '/hero-video.mp4']
@@ -28,6 +28,11 @@ export default function Login() {
   const navigate = useNavigate()
   const { login } = useAuth()
 
+  const handleRoleContinue = (role: string) => {
+    setSelectedRole(role)
+    setStep('login')
+  }
+
   const togglePlay = () => {
     if (!videoRef.current) return
     if (isPlaying) videoRef.current.pause()
@@ -40,17 +45,6 @@ export default function Login() {
     setVideoIndex(next)
     setIsPlaying(true)
   }
-
-  useEffect(() => {
-    const handler = (e: MessageEvent) => {
-      if (e.data?.type === 'roleSelected') {
-        setSelectedRole(e.data.role)
-        setStep('login')
-      }
-    }
-    window.addEventListener('message', handler)
-    return () => window.removeEventListener('message', handler)
-  }, [])
 
   return (
     <div className="min-h-screen bg-black flex relative overflow-hidden">
@@ -77,9 +71,7 @@ export default function Login() {
         <div className="relative w-full max-w-[460px]">
           {step === 'role' ? (
             /* Step 1: Role Selector */
-            <div className="w-full rounded-2xl overflow-hidden" style={{ height: '80vh', maxHeight: '600px' }}>
-              <iframe src="/selector-poses.html" className="w-full h-full border-0" />
-            </div>
+            <TechCupRoleSelector onContinue={handleRoleContinue} />
           ) : (
             /* Step 2: Login form */
             <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} className="space-y-5 p-6 rounded-2xl border border-gold/10 bg-purple-deep/20 backdrop-blur-sm">
@@ -98,7 +90,7 @@ export default function Login() {
               </h1>
               <p className="text-sm text-text-muted mb-4">Iniciá sesión para acceder a tu cuenta.</p>
 
-              <form onSubmit={e => { e.preventDefault(); login(email, selectedRole as import('@/lib/auth').UserRole); navigate(selectedRole === 'arbitro' ? '/arbitro/dashboard' : `/dashboard/${selectedRole}`) }} className="space-y-4">
+              <form onSubmit={e => { e.preventDefault(); login(email, selectedRole as import('@/hooks/auth/useAuth').UserRole); navigate(selectedRole === 'arbitro' ? '/arbitro/dashboard' : `/dashboard/${selectedRole}`) }} className="space-y-4">
                 <div className="space-y-2">
                   <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Correo electrónico</Label>
                   <div className="relative">

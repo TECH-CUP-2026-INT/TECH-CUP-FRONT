@@ -1,16 +1,16 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import Sidebar from '@/components/shared/Sidebar'
-import AppTopbar from '@/components/shared/AppTopbar'
-import Footer from '@/components/shared/Footer'
-import { Button } from '@/components/ui/button'
-import { SpotlightCard } from '@/components/ui/spotlight-card'
-import { InteractiveHoverButton } from '@/components/ui/interactive-hover-button'
-import ManchasFloating from '@/components/shared/ManchasFloating'
-import { partidos, posiciones } from '@/data/partidos'
-import { Input } from '@/components/ui/input'
-import { torneos, type Torneo } from '@/data/torneos'
-import { Badge } from '@/components/ui/badge'
+import Sidebar from '@/components/common/Sidebar'
+import AppTopbar from '@/components/common/AppTopbar'
+import Footer from '@/components/common/Footer'
+import { Button } from '@/components/common/button'
+import { SpotlightCard } from '@/components/common/spotlight-card'
+import { InteractiveHoverButton } from '@/components/common/interactive-hover-button'
+import ManchasFloating from '@/components/common/ManchasFloating'
+import { partidos, posiciones } from '@/services/partidos'
+import { Input } from '@/components/common/input'
+import { torneos, type Torneo } from '@/services/torneos'
+import { Badge } from '@/components/common/badge'
 import { CalendarDays, MapPin, Users, Trophy, Clock, Download } from 'lucide-react'
 
 const SIDEBAR_KEY = 'techcup_sidebar_collapsed'
@@ -192,7 +192,7 @@ export default function Dashboard() {
         return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => setTorneoModal(null)}>
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-          <div className="relative max-w-2xl w-full bg-white dark:bg-[#1a1a24] rounded-2xl overflow-hidden border border-white/10 shadow-2xl" onClick={e => e.stopPropagation()}>
+          <div className="relative max-w-2xl w-full bg-white dark:bg-[#1D0E33] rounded-2xl overflow-hidden border border-white/10 shadow-2xl" onClick={e => e.stopPropagation()}>
             <button onClick={() => setTorneoModal(null)} className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center hover:bg-gold"><span className="text-lg">✕</span></button>
             <div className="relative h-[200px] overflow-hidden">
               <img src="/cancha-juego.png" alt="" className="w-full h-full object-cover" />

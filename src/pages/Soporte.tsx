@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import Sidebar from '@/components/shared/Sidebar'
-import AppTopbar from '@/components/shared/AppTopbar'
-import Footer from '@/components/shared/Footer'
-import { SpotlightCard } from '@/components/ui/spotlight-card'
-import { Button } from '@/components/ui/button'
+import Sidebar from '@/components/common/Sidebar'
+import AppTopbar from '@/components/common/AppTopbar'
+import Footer from '@/components/common/Footer'
+import { SpotlightCard } from '@/components/common/spotlight-card'
+import { Button } from '@/components/common/button'
 import { Send, Bot, ArrowUpRight } from 'lucide-react'
 
 const faqs = ['¿Cómo me inscribo?', 'Fechas importantes', 'Proceso de pago', 'Reglamento']

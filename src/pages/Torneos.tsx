@@ -1,15 +1,13 @@
 import { useState, useMemo } from 'react'
-import Sidebar from '@/components/shared/Sidebar'
-import Footer from '@/components/shared/Footer'
-import Topbar from '@/components/shared/Topbar'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { SpotlightCard } from '@/components/ui/spotlight-card'
+import Sidebar from '@/components/common/Sidebar'
+import Footer from '@/components/common/Footer'
+import Topbar from '@/components/common/Topbar'
+import { Button } from '@/components/common/button'
+import { Menu, Search, RefreshCw } from 'lucide-react'
+import { torneos } from '@/services/torneos'
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
-} from '@/components/ui/select'
-import { Menu, Search, RefreshCw, LayoutGrid, List } from 'lucide-react'
-import { torneos, type Torneo } from '@/data/torneos'
+} from '@/components/common/select'
 
 const PAGE_SIZE = 3
 
@@ -20,7 +18,6 @@ export default function Torneos() {
   const [filterCategoria, setFilterCategoria] = useState('todos')
   const [filterSearch, setFilterSearch] = useState('')
   const [page, setPage] = useState(1)
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
 
   const filtered = useMemo(() => {
     return torneos.filter(t => {
@@ -31,9 +28,6 @@ export default function Torneos() {
       return true
     })
   }, [filterEstado, filterSemestre, filterCategoria, filterSearch])
-
-  const totalPages = Math.ceil(filtered.length / PAGE_SIZE)
-  const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
 
   const semestres = [...new Set(torneos.map(t => t.semestre))].sort()
   const estados = [
@@ -128,134 +122,13 @@ export default function Torneos() {
           {/* List header */}
           <div className="flex items-center justify-between mb-[18px] flex-wrap gap-3">
             <h2 className="text-[17px] font-semibold">Todos los torneos</h2>
-            <div className="flex items-center gap-3.5 text-[13px] text-text-muted">
-              <span>{filtered.length} torneos encontrados</span>
-              <div className="flex gap-1">
-                <button
-                  onClick={() => setViewMode('grid')}
-                  className={`w-8 h-8 rounded-lg border border-border flex items-center justify-center ${viewMode === 'grid' ? 'bg-purple-mid text-white border-purple-mid' : 'bg-surface text-text-muted'}`}
-                >
-                  <LayoutGrid size={15} />
-                </button>
-                <button
-                  onClick={() => setViewMode('list')}
-                  className={`w-8 h-8 rounded-lg border border-border flex items-center justify-center ${viewMode === 'list' ? 'bg-purple-mid text-white border-purple-mid' : 'bg-surface text-text-muted'}`}
-                >
-                  <List size={15} />
-                </button>
-              </div>
-            </div>
+            <span className="text-[13px] text-text-muted">{filtered.length} torneos encontrados</span>
           </div>
 
-          {/* Grid / List */}
-          <div className={viewMode === 'grid'
-            ? 'grid grid-cols-3 max-xl:grid-cols-2 max-sm:grid-cols-1 gap-[22px] mb-10'
-            : 'flex flex-col gap-3 mb-10'
-          }>
-            {paged.map(t => (
-              <TorneoCard key={t.id} torneo={t} listMode={viewMode === 'list'} />
-            ))}
-          </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="flex justify-center items-center gap-2">
-              <button
-                onClick={() => setPage(p => Math.max(1, p - 1))}
-                disabled={page === 1}
-                className="w-[34px] h-[34px] rounded-lg border border-border bg-surface text-gray-light text-[13px] font-semibold disabled:opacity-40 disabled:cursor-default hover:border-purple-mid transition-colors"
-                aria-label="Anterior"
-              >«</button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
-                <button
-                  key={p}
-                  onClick={() => setPage(p)}
-                  className={`w-[34px] h-[34px] rounded-lg border text-[13px] font-semibold transition-colors ${
-                    p === page
-                      ? 'bg-purple-mid text-white border-purple-mid'
-                      : 'border-border bg-surface text-gray-light hover:border-purple-mid'
-                  }`}
-                >{p}</button>
-              ))}
-              <button
-                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                disabled={page === totalPages}
-                className="w-[34px] h-[34px] rounded-lg border border-border bg-surface text-gray-light text-[13px] font-semibold disabled:opacity-40 disabled:cursor-default hover:border-purple-mid transition-colors"
-                aria-label="Siguiente"
-              >»</button>
-            </div>
-          )}
         </main>
 
         <Footer />
       </div>
     </div>
-  )
-}
-
-function TorneoCard({ torneo: t, listMode }: { torneo: Torneo; listMode: boolean }) {
-  const badgeClass = t.estado === 'live' ? 'bg-purple-mid text-white' 
-    : t.estado === 'upcoming' ? 'bg-gold/15 text-gold border border-gold/50' 
-    : 'bg-white/10 text-text-muted border border-white/15'
-  const badgeText = t.estado === 'live' ? 'En curso' : t.estado === 'upcoming' ? 'Próximo' : 'Finalizado'
-  const mediaBg = t.estado === 'closed' ? 'bg-gradient-to-br from-[#2a2a33] to-[#16161c]' : 'bg-gradient-to-br from-purple-deep to-[#180d29]'
-
-  return (
-    <SpotlightCard
-      accent={t.estado === 'live' ? 'gold' : t.estado === 'upcoming' ? 'purple' : 'gold'}
-      className={`bg-surface border border-border rounded-2xl ${listMode ? 'flex' : ''}`}
-    >
-      {listMode ? (
-        <>
-          <div className={`w-[180px] min-h-[140px] flex-shrink-0 flex items-center justify-center relative ${mediaBg}`}>
-            <Badge className={`absolute top-3.5 left-3.5 rounded-full text-[11px] font-bold uppercase tracking-[.4px] px-3 py-1 h-auto ${badgeClass}`}>
-              {badgeText}
-            </Badge>
-            <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#F5A623" strokeWidth="1.4" className="opacity-90">
-              <path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 01-10 0V4z"/>
-            </svg>
-          </div>
-          <div className="p-[18px_20px_20px] flex-1">
-            <span className="text-[10.5px] tracking-[1px] text-text-faint font-bold uppercase">{t.tag}</span>
-            <h3 className="font-[family-name:var(--font-display)] text-xl uppercase mt-1.5 mb-0.5">{t.nombre}</h3>
-            {t.sub && <p className="text-[12.5px] text-text-muted mb-2.5">{t.sub}</p>}
-            <div className="text-xs text-text-muted flex items-center gap-1.5 mb-3.5">📅 {t.fecha}</div>
-            <div className="flex gap-4 mb-[18px] flex-wrap">
-              <span className="text-xs text-text-muted">👤 <b className="text-white">{t.equipos}</b> equipos</span>
-              <span className="text-xs text-text-muted">👥 <b className="text-white">{t.jugadores}</b> jugadores</span>
-              <span className="text-xs text-text-muted">🛡 <b className="text-white">{t.canchas}</b> canchas</span>
-            </div>
-            <Button className={`rounded-full w-full text-xs py-2 h-auto ${t.estado === 'closed' ? 'bg-transparent text-gold border border-gold hover:bg-gold/10' : 'bg-gold text-[#1A1206] hover:bg-gold-dark'}`}>
-              {t.estado === 'closed' ? 'Ver resumen' : 'Ver detalles'}
-            </Button>
-          </div>
-        </>
-      ) : (
-        <div className="[&_>_*:first-child]:rounded-t-2xl">
-          <div className={`h-[140px] flex items-center justify-center relative ${mediaBg}`}>
-            <Badge className={`absolute top-3.5 left-3.5 rounded-full text-[11px] font-bold uppercase tracking-[.4px] px-3 py-1 h-auto ${badgeClass}`}>
-              {badgeText}
-            </Badge>
-            <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#F5A623" strokeWidth="1.4" className="opacity-90">
-              <path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 01-10 0V4z"/>
-            </svg>
-          </div>
-          <div className="p-[18px_20px_20px]">
-            <span className="text-[10.5px] tracking-[1px] text-text-faint font-bold uppercase">{t.tag}</span>
-            <h3 className="font-[family-name:var(--font-display)] text-xl uppercase mt-1.5 mb-0.5">{t.nombre}</h3>
-            {t.sub && <p className="text-[12.5px] text-text-muted mb-2.5">{t.sub}</p>}
-            <div className="text-xs text-text-muted flex items-center gap-1.5 mb-3.5">📅 {t.fecha}</div>
-            <div className="flex gap-4 mb-[18px] flex-wrap">
-              <span className="text-xs text-text-muted">👤 <b className="text-white">{t.equipos}</b> equipos</span>
-              <span className="text-xs text-text-muted">👥 <b className="text-white">{t.jugadores}</b> jugadores</span>
-              <span className="text-xs text-text-muted">🛡 <b className="text-white">{t.canchas}</b> canchas</span>
-            </div>
-            <Button className={`rounded-full w-full text-xs py-2 h-auto ${t.estado === 'closed' ? 'bg-transparent text-gold border border-gold hover:bg-gold/10' : 'bg-gold text-[#1A1206] hover:bg-gold-dark'}`}>
-              {t.estado === 'closed' ? 'Ver resumen' : 'Ver detalles'}
-            </Button>
-          </div>
-        </div>
-      )}
-    </SpotlightCard>
   )
 }

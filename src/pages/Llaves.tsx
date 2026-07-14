@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import Sidebar from '@/components/shared/Sidebar'
-import AppTopbar from '@/components/shared/AppTopbar'
-import Footer from '@/components/shared/Footer'
-import { Button } from '@/components/ui/button'
+import Sidebar from '@/components/common/Sidebar'
+import AppTopbar from '@/components/common/AppTopbar'
+import Footer from '@/components/common/Footer'
+import { Button } from '@/components/common/button'
 import { Swords, Shuffle, Edit3 } from 'lucide-react'
 
 type Equipo = { nom: string; emoji: string; color: string }

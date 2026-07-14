@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import DashboardLayout from '@/components/shared/DashboardLayout'
-import { Button } from '@/components/ui/button'
+import DashboardLayout from '@/components/common/DashboardLayout'
+import { Button } from '@/components/common/button'
 
 type Evento = { min: string; icon: string; desc: string; equipo: string }
 type Accion = 'golA' | 'golB' | 'amarilla' | 'roja' | 'sust' | null

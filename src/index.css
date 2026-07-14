@@ -34,8 +34,8 @@
   --color-text-muted: #9B98A8;
   --color-text-faint: #6E6B80;
 
-  --font-display: 'Oswald', 'Arial Narrow', sans-serif;
-  --font-display-alt: 'Archivo Black', 'Oswald', 'Arial Narrow', sans-serif;
+  --font-display: 'Montserrat', 'Oswald', 'Arial Narrow', sans-serif;
+  --font-display-alt: 'Montserrat', 'Archivo Black', 'Oswald', sans-serif;
   --font-body: 'Inter', sans-serif;
 }
 

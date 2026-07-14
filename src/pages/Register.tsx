@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Button } from '@/components/common/button'
+import { Input } from '@/components/common/input'
+import { Label } from '@/components/common/label'
 import { ArrowLeft, ArrowRight, Check, ChevronLeft, Upload, Camera } from 'lucide-react'
 
 type UserType = 'estudiante' | 'graduado' | 'profesor' | 'administrativo' | 'familiar'

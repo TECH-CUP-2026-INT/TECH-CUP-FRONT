@@ -1,15 +1,15 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Sidebar from '@/components/shared/Sidebar'
-import AppTopbar from '@/components/shared/AppTopbar'
-import Footer from '@/components/shared/Footer'
-import { Button } from '@/components/ui/button'
-import { SpotlightCard } from '@/components/ui/spotlight-card'
-import { InteractiveHoverButton } from '@/components/ui/interactive-hover-button'
-import { Badge } from '@/components/ui/badge'
-import ManchasFloating from '@/components/shared/ManchasFloating'
-import { torneos } from '@/data/torneos'
-import SoccerField3D from '@/components/cards/SoccerField3D'
+import Sidebar from '@/components/common/Sidebar'
+import AppTopbar from '@/components/common/AppTopbar'
+import Footer from '@/components/common/Footer'
+import { Button } from '@/components/common/button'
+import { SpotlightCard } from '@/components/common/spotlight-card'
+import { InteractiveHoverButton } from '@/components/common/interactive-hover-button'
+import { Badge } from '@/components/common/badge'
+import ManchasFloating from '@/components/common/ManchasFloating'
+import { torneos } from '@/services/torneos'
+import SoccerField3D from '@/components/employees/SoccerField3D'
 import {
   Trophy, CalendarDays, MapPin, Users, Clock, ShieldCheck,
   ClipboardList, Check, X, Search, UserPlus, Settings, Package,
@@ -253,12 +253,12 @@ export default function DashboardAdmin() {
           <div className="relative h-[140px] rounded-t-2xl overflow-hidden">
             <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${t.colorPrimario}33, ${t.colorSecundario}22)` }} />
             <div className="absolute inset-0 opacity-20" style={{ background: `radial-gradient(at 70% 30%, ${t.colorPrimario} 0%, transparent 60%)` }} />
-            <button onClick={() => setTeamModal(null)} className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center hover:bg-gold transition-colors"><X size={16} /></button>
+            <button onClick={() => setTeamModal(null)} className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm text-gray-900 dark:text-white flex items-center justify-center hover:bg-gold transition-colors"><X size={16} /></button>
             <div className="absolute bottom-0 left-0 right-0 p-6 flex items-end gap-4">
               <span className="text-5xl">{t.emoji}</span>
               <div>
-                <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase text-white leading-tight">{t.nombre}</h2>
-                <div className="flex items-center gap-3 text-[12px] text-white/60 mt-1">
+                <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase text-gray-900 dark:text-white leading-tight">{t.nombre}</h2>
+                <div className="flex items-center gap-3 text-[12px] text-gray-600 dark:text-white/60 mt-1">
                   <span className="flex items-center gap-1"><Medal size={12} /> Capitán: {t.capitan}</span>
                   <span className="w-1 h-1 rounded-full bg-white/20" />
                   <span className="flex items-center gap-1"><Users size={12} /> {t.jugadores.length} jugadores</span>
@@ -268,7 +268,7 @@ export default function DashboardAdmin() {
           </div>
           <div className="grid grid-cols-4 gap-2 px-6 py-4 bg-white/[0.02] border-b border-white/5">
             {[
-              { label:'Total', value:t.jugadores.length, color:'text-white' },
+              { label:'Total', value:t.jugadores.length, color:'text-gray-900 dark:text-white' },
               { label:'🧤 Arqueros', value:t.jugadores.filter(j => j.posicion === 'Arquero').length, color:'text-blue-400' },
               { label:'🛡️ Defensas', value:t.jugadores.filter(j => j.posicion === 'Defensor').length, color:'text-yellow-400' },
               { label:'⚡ Ofensiva', value:t.jugadores.filter(j => j.posicion === 'Mediocampista' || j.posicion === 'Delantero').length, color:'text-green-400' },
@@ -287,7 +287,7 @@ export default function DashboardAdmin() {
                 return (
                   <button key={j.id} onClick={() => openPlayerStats(j.nombre, t.nombre)}
                     className="flex items-center gap-3 p-3 rounded-xl bg-black/40 border border-white/5 hover:border-gold/20 hover:bg-gold/5 transition-all text-left">
-                    <div className="w-9 h-9 rounded-lg flex items-center justify-center font-bold text-sm text-white flex-shrink-0" style={{ backgroundColor: t.colorPrimario + '44' }}>{j.dorsal}</div>
+                    <div className="w-9 h-9 rounded-lg flex items-center justify-center font-bold text-sm text-gray-900 dark:text-white flex-shrink-0" style={{ backgroundColor: t.colorPrimario + '44' }}>{j.dorsal}</div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-1.5">
                         <span className="text-[12.5px] font-semibold">{j.nombre}</span>
@@ -323,7 +323,7 @@ export default function DashboardAdmin() {
           <div className="relative h-[140px] rounded-t-2xl overflow-hidden">
             <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${eq1?.colorPrimario || '#333'}33, ${eq2?.colorPrimario || '#333'}22)` }} />
             <div className="absolute inset-0 opacity-20" style={{ background: 'radial-gradient(at 50% 40%, rgb(200, 133, 26) 0%, transparent 60%)' }} />
-            <button onClick={() => setMatchModal(null)} className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center hover:bg-gold"><X size={16} /></button>
+            <button onClick={() => setMatchModal(null)} className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm text-gray-900 dark:text-white flex items-center justify-center hover:bg-gold"><X size={16} /></button>
             <div className="absolute bottom-0 left-0 right-0 p-6">
               <div className="flex items-center justify-between">
                 <div className="text-center flex-1"><span className="text-3xl">{eq1?.emoji || '⚽'}</span><p className="text-sm font-semibold mt-1">{matchModal.eq1}</p></div>
@@ -337,7 +337,7 @@ export default function DashboardAdmin() {
                 </div>
                 <div className="text-center flex-1"><span className="text-3xl">{eq2?.emoji || '⚽'}</span><p className="text-sm font-semibold mt-1">{matchModal.eq2}</p></div>
               </div>
-              <div className="flex items-center justify-center gap-3 text-[10px] text-white/50 mt-3">
+              <div className="flex items-center justify-center gap-3 text-[10px] text-gray-500 dark:text-white/50 mt-3">
                 <span>📅 {matchModal.fecha}</span><span>⏰ {matchModal.hora}</span><span>📍 {matchModal.lugar}</span>
               </div>
             </div>
@@ -401,12 +401,12 @@ export default function DashboardAdmin() {
         <div className="relative w-full max-w-md rounded-2xl border border-white/10 bg-[#0A0A14] shadow-2xl" onClick={e => e.stopPropagation()}>
           <div className="relative h-[120px] rounded-t-2xl overflow-hidden bg-gradient-to-br from-purple-deep2 to-purple-black">
             <div className="absolute inset-0 opacity-20" style={{ background: 'radial-gradient(at 50% 40%, rgb(200, 133, 26) 0%, transparent 60%)' }} />
-            <button onClick={() => setPlayerModal(null)} className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center hover:bg-gold"><X size={16} /></button>
+            <button onClick={() => setPlayerModal(null)} className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm text-gray-900 dark:text-white flex items-center justify-center hover:bg-gold"><X size={16} /></button>
             <div className="absolute bottom-0 left-0 right-0 p-5 flex items-end gap-4">
               <div className="w-14 h-14 rounded-xl bg-gold/20 border border-gold/30 flex items-center justify-center text-xl font-bold text-gold flex-shrink-0">{p.dorsal}</div>
               <div>
                 <h2 className="text-lg font-bold">{p.nombre}</h2>
-                <div className="flex items-center gap-2 text-[11px] text-white/60">
+                <div className="flex items-center gap-2 text-[11px] text-gray-600 dark:text-white/60">
                   <span>{p.emoji} {p.equipo}</span><span>•</span><span>{POS_ICON[p.posicion] || '⚽'} {p.posicion}</span><span>•</span><span>#{p.dorsal}</span>
                 </div>
               </div>
@@ -426,10 +426,10 @@ export default function DashboardAdmin() {
             ))}
           </div>
           <div className="p-5 space-y-3">
-            <h3 className="text-[12px] font-semibold text-white/60 uppercase tracking-[.5px]">Estadísticas generales</h3>
+            <h3 className="text-[12px] font-semibold text-gray-600 dark:text-white/60 uppercase tracking-[.5px]">Estadísticas generales</h3>
             <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 rounded-xl bg-black/30 border border-white/5"><div className="text-lg font-bold text-white">{p.partidosJugados}</div><div className="text-[10px] text-text-muted">Partidos jugados</div></div>
-              <div className="p-3 rounded-xl bg-black/30 border border-white/5"><div className="text-lg font-bold text-white">{p.goles + p.asistencias}</div><div className="text-[10px] text-text-muted">G+A (contribución)</div></div>
+              <div className="p-3 rounded-xl bg-black/30 border border-white/5"><div className="text-lg font-bold text-gray-900 dark:text-white">{p.partidosJugados}</div><div className="text-[10px] text-text-muted">Partidos jugados</div></div>
+              <div className="p-3 rounded-xl bg-black/30 border border-white/5"><div className="text-lg font-bold text-gray-900 dark:text-white">{p.goles + p.asistencias}</div><div className="text-[10px] text-text-muted">G+A (contribución)</div></div>
               <div className="p-3 rounded-xl bg-black/30 border border-white/5"><div className="text-lg font-bold text-gold">{p.partidosJugados > 0 ? (p.goles / p.partidosJugados).toFixed(2) : '0'}</div><div className="text-[10px] text-text-muted">Goles por partido</div></div>
               <div className="p-3 rounded-xl bg-black/30 border border-white/5"><div className="text-lg font-bold text-gold">{p.partidosJugados > 0 ? (p.asistencias / p.partidosJugados).toFixed(2) : '0'}</div><div className="text-[10px] text-text-muted">Asistencias por partido</div></div>
             </div>
@@ -451,7 +451,7 @@ export default function DashboardAdmin() {
       <div className="fixed inset-0 z-[70] flex items-center justify-center p-4" onClick={() => setLineupModal(null)}
         style={{ background:'rgba(0,0,0,0.7)', backdropFilter:'blur(8px)' }}>
         <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl" onClick={e => e.stopPropagation()}>
-          <button onClick={() => setLineupModal(null)} className="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-black/60 backdrop-blur-sm text-white flex items-center justify-center hover:bg-gold transition-colors"><X size={16} /></button>
+          <button onClick={() => setLineupModal(null)} className="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-black/60 backdrop-blur-sm text-gray-900 dark:text-white flex items-center justify-center hover:bg-gold transition-colors"><X size={16} /></button>
           <SoccerField3D
             homePlayers={homePlayers}
             awayPlayers={homePlayers.map((p, i) => ({ ...p, x: -p.x, z: -p.z }))}
@@ -482,12 +482,12 @@ export default function DashboardAdmin() {
             <div className="absolute inset-0 opacity-20" style={{ background: 'radial-gradient(at 60% 40%, rgb(200, 133, 26) 0%, transparent 60%)' }} />
             <div className="relative z-10 p-8 max-md:p-5">
               <h2 className="font-[family-name:var(--font-display)] uppercase text-2xl leading-tight mb-1">Panel de <span className="text-gold">Administración</span></h2>
-              <p className="text-sm text-white/60 mb-3">Gestión completa: torneos, equipos, partidos, jugadores y logística.</p>
+              <p className="text-sm text-gray-600 dark:text-white/60 mb-3">Gestión completa: torneos, equipos, partidos, jugadores y logística.</p>
               <div className="flex items-center gap-2">
                 {([['admin','Admin', ShieldCheck] as const, ['arbitro','Árbitro', Flag] as const, ['capitan','Capitán', Medal] as const]).map(([id, label, Icon]) => (
                   <button key={id} onClick={() => setRolActivo(id)}
                     className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[11px] font-bold border transition-all ${
-                      rolActivo === id ? 'bg-gold text-[#1A1206] border-gold' : 'bg-white/5 text-white/60 border-white/10 hover:text-white'
+                      rolActivo === id ? 'bg-gold text-[#1A1206] border-gold' : 'bg-white/5 text-gray-600 dark:text-white/60 border-white/10 hover:text-gray-900 dark:text-white'
                     }`}><Icon size={13} /> {label}</button>
                 ))}
               </div>
@@ -501,7 +501,7 @@ export default function DashboardAdmin() {
                 {(['dashboard','inscripciones','arbitros','torneos','logistica'] as AdminTab[]).map(id => (
                   <button key={id} onClick={() => setAdminTab(id)}
                     className={`flex items-center gap-2 px-4 py-2 rounded-lg text-[12.5px] font-semibold transition-all whitespace-nowrap ${
-                      adminTab === id ? 'bg-gold text-[#1A1206]' : 'text-white/60 hover:text-white hover:bg-white/5'
+                      adminTab === id ? 'bg-purple-mid text-white shadow-lg shadow-purple-mid/25' : 'text-gray-600 dark:text-white/60 hover:text-gray-900 dark:text-white hover:bg-white/5'
                     }`}>
                     {id === 'dashboard' ? <Trophy size={16} /> : id === 'inscripciones' ? <ClipboardList size={16} /> : id === 'arbitros' ? <UserPlus size={16} /> : id === 'torneos' ? <CalendarDays size={16} /> : <Package size={16} />}
                     {id.charAt(0).toUpperCase() + id.slice(1)}
@@ -592,7 +592,7 @@ export default function DashboardAdmin() {
                     <h3 className="font-[family-name:var(--font-display)] uppercase text-lg tracking-[.5px]">Solicitudes de <span className="text-gold">inscripción</span></h3>
                     <div className="relative">
                       <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
-                      <input type="text" placeholder="Buscar..." className="bg-white/5 border border-white/10 rounded-lg pl-9 pr-3 py-2 text-[12px] text-white w-[180px] outline-none focus:border-gold/50" />
+                      <input type="text" placeholder="Buscar..." className="bg-white/5 border border-white/10 rounded-lg pl-9 pr-3 py-2 text-[12px] text-gray-900 dark:text-white w-[180px] outline-none focus:border-gold/50" />
                     </div>
                   </div>
                   {listaInscripciones.map(ins => (
@@ -612,7 +612,7 @@ export default function DashboardAdmin() {
                         </div>
                       </button>
                       <div className="flex items-center gap-2">
-                        <Button variant="outline" size="sm" className="rounded-full border-white/20 text-white hover:bg-white/10 text-xs h-8 px-3"><Eye size={12} className="mr-1" /> Comprobante</Button>
+                        <Button variant="outline" size="sm" className="rounded-full border-white/20 text-gray-900 dark:text-white hover:bg-white/10 text-xs h-8 px-3"><Eye size={12} className="mr-1" /> Comprobante</Button>
                         {ins.estado === 'pending' && (
                           <>
                             <Button onClick={() => handleAprobar(ins.id)} size="sm" className="rounded-full bg-green-500/20 text-green-400 border-green-500/30 hover:bg-green-500/30 text-xs h-8 px-3"><Check size={12} className="mr-1" /> Aprobar</Button>
@@ -630,7 +630,7 @@ export default function DashboardAdmin() {
                   <h3 className="font-[family-name:var(--font-display)] uppercase text-lg tracking-[.5px] mb-4">Gestión de <span className="text-gold">árbitros</span></h3>
                   {arbitros.map(a => (
                     <div key={a.id} className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-mid to-gold flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-mid to-gold flex items-center justify-center text-gray-900 dark:text-white font-bold text-lg flex-shrink-0">
                         {a.nombre.split(' ').map(n => n[0]).join('').slice(0, 2)}
                       </div>
                       <div className="flex-1">
@@ -642,7 +642,7 @@ export default function DashboardAdmin() {
                           <Mail size={10} /> {a.email} <Phone size={10} /> {a.telefono} ⚽ {a.partidosAsignados} partidos
                         </div>
                       </div>
-                      <Button variant="outline" size="sm" className="rounded-full border-white/20 text-white hover:bg-white/10 text-xs h-8 px-3"><ShieldCheck size={12} className="mr-1" /> Asignar</Button>
+                      <Button variant="outline" size="sm" className="rounded-full border-white/20 text-gray-900 dark:text-white hover:bg-white/10 text-xs h-8 px-3"><ShieldCheck size={12} className="mr-1" /> Asignar</Button>
                     </div>
                   ))}
                 </div>
@@ -663,7 +663,7 @@ export default function DashboardAdmin() {
                         </div>
                         <div className="text-[11px] text-text-muted mt-1">🏟️ {t.categoria} 📅 {t.fecha} 👥 {t.equipos} equipos</div>
                       </div>
-                      <Button variant="outline" size="sm" className="rounded-full border-white/20 text-white hover:bg-white/10 text-xs h-8 px-3"><Settings size={12} className="mr-1" /> Configurar</Button>
+                      <Button variant="outline" size="sm" className="rounded-full border-white/20 text-gray-900 dark:text-white hover:bg-white/10 text-xs h-8 px-3"><Settings size={12} className="mr-1" /> Configurar</Button>
                     </div>
                   ))}
                 </div>
@@ -699,7 +699,7 @@ export default function DashboardAdmin() {
                 <div className="flex gap-2 mb-4">
                   {partidosDetalle.map(m => (
                     <button key={m.id} onClick={() => { setArbitroMatch(m); setEventosTemp(m.eventos) }}
-                      className={`flex-1 p-2.5 rounded-xl text-center text-[11px] font-semibold border transition-all ${arbitroMatch.id === m.id ? 'bg-gold/20 text-gold border-gold/40' : 'bg-black/30 text-white/60 border-white/10'}`}>
+                      className={`flex-1 p-2.5 rounded-xl text-center text-[11px] font-semibold border transition-all ${arbitroMatch.id === m.id ? 'bg-gold/20 text-gold border-gold/40' : 'bg-black/30 text-gray-600 dark:text-white/60 border-white/10'}`}>
                       {m.eq1} vs {m.eq2}
                     </button>
                   ))}
@@ -742,7 +742,7 @@ export default function DashboardAdmin() {
                     </div>
                   ))}
                 </div>
-                <Button onClick={() => setEventosTemp([])} variant="outline" size="sm" className="w-full mt-4 rounded-full border-white/10 text-white/60 hover:text-white text-xs h-8">
+                <Button onClick={() => setEventosTemp([])} variant="outline" size="sm" className="w-full mt-4 rounded-full border-white/10 text-gray-600 dark:text-white/60 hover:text-gray-900 dark:text-white text-xs h-8">
                   <RefreshCw size={12} className="mr-1" /> Finalizar partido
                 </Button>
               </SpotlightCard>
@@ -761,7 +761,7 @@ export default function DashboardAdmin() {
                     return (
                       <button key={j.id} onClick={() => openPlayerStats(j.nombre, equiposDetalle[0].nombre)}
                         className="w-full flex items-center gap-3 p-2.5 rounded-xl bg-black/30 border border-white/5 hover:border-gold/30 hover:bg-gold/5 transition-all text-left">
-                        <div className="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs text-white flex-shrink-0" style={{ backgroundColor: equiposDetalle[0].colorPrimario + '44' }}>{j.dorsal}</div>
+                        <div className="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs text-gray-900 dark:text-white flex-shrink-0" style={{ backgroundColor: equiposDetalle[0].colorPrimario + '44' }}>{j.dorsal}</div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-1">
                             <span className="text-[12.5px] font-semibold">{j.nombre}</span>
@@ -777,7 +777,7 @@ export default function DashboardAdmin() {
                   <Button className="flex-1 rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark text-[11px] h-8 font-bold">
                     <Swords size={13} className="mr-1" /> Elegir alineación
                   </Button>
-                  <Button variant="outline" className="rounded-full border-white/20 text-white hover:bg-white/10 text-[11px] h-8">
+                  <Button variant="outline" className="rounded-full border-white/20 text-gray-900 dark:text-white hover:bg-white/10 text-[11px] h-8">
                     <UserCheck size={13} className="mr-1" /> Invitar
                   </Button>
                 </div>
@@ -811,10 +811,10 @@ export default function DashboardAdmin() {
           )}
 
           {/* CTA */}
-          <section className="flex items-center justify-between gap-5 p-[26px_30px] rounded-[18px] bg-gradient-to-r from-purple-deep2 to-purple-black border border-white/10 mt-6 max-md:flex-col max-md:items-start">
+          <section className="flex items-center justify-between gap-5 p-[26px_30px] rounded-[18px] bg-black/60 backdrop-blur-sm border border-white/10 mt-6 max-md:flex-col max-md:items-start">
             <div>
-              <h3 className="font-[family-name:var(--font-display)] uppercase text-xl leading-tight mb-1">Configuración del sistema</h3>
-              <p className="text-[13px] text-text-muted">Roles, permisos, categorías y parámetros generales.</p>
+              <h3 className="font-[family-name:var(--font-display)] uppercase text-xl leading-tight mb-1 text-white dark:text-white">Configuración del sistema</h3>
+              <p className="text-[13px] text-white/70 dark:text-text-muted">Roles, permisos, categorías y parámetros generales.</p>
             </div>
             <InteractiveHoverButton onClick={() => navigate('/torneos')}>Ir a configuración</InteractiveHoverButton>
           </section>
@@ -851,25 +851,25 @@ function EventoRegistro({ match, onRegistrar }: { match: MatchDetail; onRegistra
 
   return (
     <div className="space-y-3">
-      <h4 className="text-[12px] font-semibold text-white/60 uppercase tracking-[.5px]">Registrar evento</h4>
+      <h4 className="text-[12px] font-semibold text-gray-600 dark:text-white/60 uppercase tracking-[.5px]">Registrar evento</h4>
       <div className="grid grid-cols-3 gap-2">
         {(['gol','amarilla','roja'] as const).map(t => (
           <button key={t} onClick={() => setTipo(t)}
             className={`p-2.5 rounded-xl text-center text-[10px] font-bold border transition-all ${
               tipo === t ? (t === 'gol' ? 'bg-green-500/20 text-green-400 border-green-500/30' : t === 'amarilla' ? 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30' : 'bg-red-500/20 text-red-400 border-red-500/30')
-              : 'bg-black/30 text-white/60 border-white/10'
+              : 'bg-black/30 text-gray-600 dark:text-white/60 border-white/10'
             }`}>{t === 'gol' ? '⚽ Gol' : t === 'amarilla' ? '🟨 Amarilla' : '🟥 Roja'}</button>
         ))}
       </div>
       <div className="flex gap-2">
         <select value={equipo} onChange={e => setEquipo(e.target.value)}
-          className="flex-1 bg-black/40 border border-white/10 rounded-lg px-3 py-2.5 text-[12px] text-white outline-none focus:border-gold/50">
+          className="flex-1 bg-black/40 border border-white/10 rounded-lg px-3 py-2.5 text-[12px] text-gray-900 dark:text-white outline-none focus:border-gold/50">
           <option value={match.eq1}>{match.eq1}</option>
           <option value={match.eq2}>{match.eq2}</option>
         </select>
       </div>
       <select value={jugador} onChange={e => setJugador(e.target.value)}
-        className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2.5 text-[12px] text-white outline-none focus:border-gold/50">
+        className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2.5 text-[12px] text-gray-900 dark:text-white outline-none focus:border-gold/50">
         <option value="">Seleccionar jugador...</option>
         {allPlayers.filter(j => j.eq === equipo).map(j => (
           <option key={j.id} value={j.nombre}>{j.nombre} (#{j.dorsal})</option>
@@ -877,7 +877,7 @@ function EventoRegistro({ match, onRegistrar }: { match: MatchDetail; onRegistra
       </select>
       <div className="flex gap-2">
         <input type="number" placeholder="Minuto" value={minuto || ''} onChange={e => setMinuto(parseInt(e.target.value) || 0)}
-          className="w-24 bg-black/40 border border-white/10 rounded-lg px-3 py-2.5 text-[12px] text-white outline-none focus:border-gold/50 placeholder:text-white/20" />
+          className="w-24 bg-black/40 border border-white/10 rounded-lg px-3 py-2.5 text-[12px] text-gray-900 dark:text-white outline-none focus:border-gold/50 placeholder:text-white/20" />
         <Button onClick={handleRegister} className="flex-1 rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold text-xs h-9">
           <PlusCircle size={14} className="mr-1" /> Registrar
         </Button>
