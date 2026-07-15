@@ -10,6 +10,7 @@ import { Button } from '@/components/common/button'
 import { Input } from '@/components/common/input'
 import { SpotlightCard } from '@/components/common/spotlight-card'
 import { Send, Mail, MapPin, Phone, MessageCircle, Clock, Plus, X, Save } from 'lucide-react'
+// @ts-expect-error - JSX file without types
 import TechCupHero from '@/components/TechCupHero-contactos'
 
 interface ContactItem {
