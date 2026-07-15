@@ -154,13 +154,16 @@ function CalendarioContent() {
           {vista==='calendario' && (
             <div className="grid grid-cols-[1fr_260px] gap-4 items-start max-lg:grid-cols-1">
               <div className="rounded-2xl overflow-hidden border border-[#D4C8E8]/40 dark:border-white/5">
+                {/* @ts-expect-error - JSX component without types */}
                 <TournamentCalendar partidos={partidos} mes={mes} año={año} onMesChange={(m, a) => { setMes(m); /* año fijo */ }} />
               </div>
               <div className="flex flex-col gap-4">
                 <div className="rounded-2xl overflow-hidden border border-[#D4C8E8]/40 dark:border-white/5">
+                  {/* @ts-expect-error - JSX component without types */}
                   <CalendarFilters mes={mes} año={año} onMesChange={(m, a) => setMes(m)} onFilterChange={(f) => setFiltros(f)} />
                 </div>
                 <div className="rounded-2xl overflow-hidden border border-[#D4C8E8]/40 dark:border-white/5">
+                  {/* @ts-expect-error - JSX component without types */}
                   <UpcomingMatches partidos={partidos} />
                 </div>
               </div>
