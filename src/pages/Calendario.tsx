@@ -7,23 +7,26 @@ import DashboardLayout from '@/components/common/DashboardLayout'
 import { Badge } from '@/components/common/badge'
 import { partidos } from '@/services/partidos'
 import { torneos, type Torneo } from '@/services/torneos'
-import { CalendarDays, MapPin, Clock, ChevronLeft, ChevronRight, X } from 'lucide-react'
+import { CalendarDays, MapPin, Clock, ChevronLeft, ChevronRight, X, Cat, Code2, Cpu, Cog, Flame, HardDrive, Shield, Feather } from 'lucide-react'
+import { TeamLogo } from '@/components/common/TeamLogo'
+import { ThreeDCarousel } from '@/components/common/three-d-carousel'
 import TournamentCalendar from '@/components/TournamentCalendar'
 import CalendarFilters from '@/components/CalendarFilters'
 import UpcomingMatches from '@/components/UpcomingMatches'
 
 const DIAS_SEMANA = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom']
 
-const equipoLogos: Record<string, { emoji: string; color: string }> = {
-  'Tigres FC': { emoji: '🐯', color: '#EF4444' },
-  'IA Warriors': { emoji: '🦁', color: '#8B5CF6' },
-  'Code United': { emoji: '💻', color: '#3B82F6' },
-  'Sistemas FC': { emoji: '⚙️', color: '#22C55E' },
-  'Dragones FC': { emoji: '🐉', color: '#F97316' },
-  'Los Bits': { emoji: '🔢', color: '#EC4899' },
-  'Titanes': { emoji: '🏛️', color: '#A855F7' },
-  'Fénix': { emoji: '🔥', color: '#EAB308' },
+const teamIcons: Record<string, { icon: typeof Cat; color: string }> = {
+  'Tigres FC': { icon: Cat, color: '#EF4444' },
+  'IA Warriors': { icon: Cpu, color: '#8B5CF6' },
+  'Code United': { icon: Code2, color: '#3B82F6' },
+  'Sistemas FC': { icon: Cog, color: '#22C55E' },
+  'Dragones FC': { icon: Flame, color: '#F97316' },
+  'Los Bits': { icon: HardDrive, color: '#EC4899' },
+  'Titanes': { icon: Shield, color: '#A855F7' },
+  'Fénix': { icon: Feather, color: '#EAB308' },
 }
+
 
 const canchaFotos: Record<string, { img: string; desc: string }> = {
   'Cancha Principal Sede Norte': { img: '/hero-stadium.jpg', desc: 'Cancha principal con capacidad para 500 espectadores. Césped sintético de última generación.' },
@@ -42,14 +45,14 @@ function generarDiasMes(mes: number, año: number) {
 }
 
 const equiposList = [
-  { nom: 'Tigres FC', emoji: '🐯', color: '#EF4444' },
-  { nom: 'Sistemas FC', emoji: '⚙️', color: '#22C55E' },
-  { nom: 'Code United', emoji: '🔵', color: '#3B82F6' },
-  { nom: 'IA Warriors', emoji: '🦁', color: '#8B5CF6' },
-  { nom: 'Dragones FC', emoji: '🐉', color: '#F97316' },
-  { nom: 'Los Bits', emoji: '⚡', color: '#F5A623' },
-  { nom: 'Titanes', emoji: '🛡️', color: '#14B8A6' },
-  { nom: 'Fénix', emoji: '🔥', color: '#EC4899' },
+  { nom: 'Tigres FC', icon: Cat,      color: '#EF4444' },
+  { nom: 'Sistemas FC', icon: Cog,     color: '#22C55E' },
+  { nom: 'Code United', icon: Code2,   color: '#3B82F6' },
+  { nom: 'IA Warriors', icon: Cpu,     color: '#8B5CF6' },
+  { nom: 'Dragones FC', icon: Flame,   color: '#F97316' },
+  { nom: 'Los Bits',    icon: HardDrive, color: '#F5A623' },
+  { nom: 'Titanes',     icon: Shield,  color: '#14B8A6' },
+  { nom: 'Fénix',       icon: Feather, color: '#EC4899' },
 ]
 
 function CalendarioContent() {
@@ -60,6 +63,7 @@ function CalendarioContent() {
   const [torneoModal, setTorneoModal] = useState<Torneo | null>(null)
   const [modalTab, setModalTab] = useState('info')
   const [calendarDayMatches, setCalendarDayMatches] = useState<typeof partidos | null>(null)
+  const [filtros, setFiltros] = useState<{ grupo: string; cancha: string; estado: string }>({ grupo: '', cancha: '', estado: '' })
   const dias = generarDiasMes(mes, año)
   const nombreMes = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'][mes]
   const selectedCancha = selectedMatch ? canchaFotos[selectedMatch.lugar] : null
@@ -76,17 +80,26 @@ function CalendarioContent() {
           <div className="absolute -top-[10%] -right-[10%] w-[60%] h-[35%] opacity-[0.06] dark:opacity-[0.07]" style={{ background: 'linear-gradient(135deg, transparent 30%, #C8851A 50%, transparent 70%)', transform: 'skewX(-18deg)' }} />
           <div className="absolute top-[40%] -left-[5%] w-[55%] h-[20%] opacity-[0.05] dark:opacity-[0.06]" style={{ background: 'linear-gradient(115deg, transparent 20%, #C8851A 40%, #8B5CF6 55%, transparent 75%)', transform: 'skewX(-15deg)' }} />
         </div>
+        {/* 3D Carousel de fondo */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <ThreeDCarousel images={[
+            { src: '/images/logo1.png', alt: 'Logo 1' },
+            { src: '/images/logo2.png', alt: 'Logo 2' },
+            { src: '/images/logo3.png', alt: 'Logo 3' },
+            { src: '/images/logo4.png', alt: 'Logo 4' },
+          ]} />
+        </div>
         <div className="relative w-full max-w-[1280px] mx-auto px-8 pt-[130px] pb-[80px]">
-          {/* Carrusel de fondo — logos */}
-          <div className="absolute left-0 right-0 bottom-0 overflow-hidden pointer-events-none" style={{ opacity: 0.12, height: '55%' }}>
+          {/* Carrusel fantasma — arriba y abajo */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ opacity: 0.12 }}>
             <div className="flex gap-6 items-center animate-scroll" style={{ width: 'max-content', filter: 'blur(2px)' }}>
               {[...Array(8)].flatMap(() => [
-                { src:'/images/logos-equipos/logo1.png' },
-                { src:'/images/logos-equipos/logo2.png' },
-                { src:'/images/logos-equipos/logo3.png' },
-                { src:'/images/logos-equipos/logo4.png' },
+                { src:'/images/logo1.png' },
+                { src:'/images/logo2.png' },
+                { src:'/images/logo3.png' },
+                { src:'/images/logo4.png' },
               ]).map((logo, i) => (
-                <img key={i} src={logo.src} alt="" className="object-contain" style={{ width: `${60 + (i % 4) * 12}px`, height: `${60 + (i % 4) * 12}px`, transform: `translateY(${(i % 4) * 4 - 6}px)` }} />
+                <img key={i} src={logo.src} alt="" className="object-cover" style={{ width: `${100 + (i % 4) * 20}px`, height: `${120 + (i % 4) * 24}px`, transform: `translateY(${(i % 4) * 5 - 7}px)` }} />
               ))}
             </div>
           </div>
@@ -141,14 +154,14 @@ function CalendarioContent() {
           {vista==='calendario' && (
             <div className="grid grid-cols-[1fr_260px] gap-4 items-start max-lg:grid-cols-1">
               <div className="rounded-2xl overflow-hidden border border-[#D4C8E8]/40 dark:border-white/5">
-                <TournamentCalendar />
+                <TournamentCalendar partidos={partidos} mes={mes} año={año} onMesChange={(m, a) => { setMes(m); /* año fijo */ }} />
               </div>
               <div className="flex flex-col gap-4">
                 <div className="rounded-2xl overflow-hidden border border-[#D4C8E8]/40 dark:border-white/5">
-                  <CalendarFilters />
+                  <CalendarFilters mes={mes} año={año} onMesChange={(m, a) => setMes(m)} onFilterChange={(f) => setFiltros(f)} />
                 </div>
                 <div className="rounded-2xl overflow-hidden border border-[#D4C8E8]/40 dark:border-white/5">
-                  <UpcomingMatches />
+                  <UpcomingMatches partidos={partidos} />
                 </div>
               </div>
             </div>
@@ -156,7 +169,7 @@ function CalendarioContent() {
 
           {vista === 'lista' && (
           <div className="grid grid-cols-[1fr_1.2fr] gap-6 items-start max-lg:grid-cols-1">
-            {/* Left: Lista de partidos */}
+            {/* Left: Lista de partidos — solo primeros 5 */}
             <div>
               <h2 className="font-[family-name:var(--font-display)] text-xl uppercase tracking-[.5px] mb-5 text-[#3D1A6B] dark:text-white">
                 Próximos <span className="text-gold">partidos</span>
@@ -165,9 +178,9 @@ function CalendarioContent() {
                 {partidos.length === 0 && (
                   <div className="text-center py-16"><CalendarDays size={48} className="mx-auto text-[#7A6B99] dark:text-text-faint mb-4" /><p className="text-[#7A6B99] dark:text-text-muted text-lg">No hay partidos programados aún.</p></div>
                 )}
-                {partidos.map((p,i)=>{
-                  const logo1 = equipoLogos[p.eq1] || { emoji: '⚽', color: '#6B7280' }
-                  const logo2 = equipoLogos[p.eq2] || { emoji: '⚽', color: '#6B7280' }
+                {partidos.slice(0, 5).map((p,i)=>{
+                  const icon1 = teamIcons[p.eq1]?.icon || Cat
+                  const icon2 = teamIcons[p.eq2]?.icon || Cat
                   const isSelected = selectedMatch?.dia === p.dia && selectedMatch?.eq1 === p.eq1
                   return (
                     <button key={i} onClick={() => setSelectedMatch(p)}
@@ -181,13 +194,13 @@ function CalendarioContent() {
                         </div>
                         <div className="w-[2px] self-stretch bg-[#D4C8E8]/40 dark:bg-white/10 rounded-full max-md:hidden" />
                         <div className="flex-1 flex items-center justify-center gap-3 max-md:justify-center">
-                          <div className="flex flex-col items-center gap-0.5">
-                            <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: logo1.color }} />
+                          <div className="flex flex-col items-center gap-1">
+                            <TeamLogo icon={icon1} size={22} bgColor="rgb(231, 178, 58)" iconColor="rgb(58, 42, 5)" />
                             <span className="font-semibold text-sm text-[#3D1A6B] dark:text-white">{p.eq1}</span>
                           </div>
                           <span className="text-[10px] text-[#7A6B99] dark:text-text-faint font-bold">VS</span>
-                          <div className="flex flex-col items-center gap-0.5">
-                            <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: logo2.color }} />
+                          <div className="flex flex-col items-center gap-1">
+                            <TeamLogo icon={icon2} size={22} bgColor="rgb(231, 178, 58)" iconColor="rgb(58, 42, 5)" />
                             <span className="font-semibold text-sm text-[#3D1A6B] dark:text-white">{p.eq2}</span>
                           </div>
                         </div>
@@ -220,9 +233,15 @@ function CalendarioContent() {
                           <div className="flex items-center gap-2 text-[11px] text-white/50 mb-3"><MapPin size={14} /> {selectedMatch.lugar}</div>
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
-                              <span className="text-[11px] text-white/60"><strong className="text-white/90">{equipoLogos[selectedMatch.eq1]?.emoji || '⚽'}</strong> {selectedMatch.eq1}</span>
+                              <div className="flex items-center gap-1.5">
+                                <TeamLogo icon={teamIcons[selectedMatch.eq1]?.icon || Cat} size={22} bgColor="rgb(231, 178, 58)" iconColor="rgb(58, 42, 5)" />
+                                <span className="text-[11px] text-white/60">{selectedMatch.eq1}</span>
+                              </div>
                               <span className="text-[10px] text-gold font-bold">VS</span>
-                              <span className="text-[11px] text-white/60"><strong className="text-white/90">{equipoLogos[selectedMatch.eq2]?.emoji || '⚽'}</strong> {selectedMatch.eq2}</span>
+                              <div className="flex items-center gap-1.5">
+                                <TeamLogo icon={teamIcons[selectedMatch.eq2]?.icon || Cat} size={22} bgColor="rgb(231, 178, 58)" iconColor="rgb(58, 42, 5)" />
+                                <span className="text-[11px] text-white/60">{selectedMatch.eq2}</span>
+                              </div>
                             </div>
                             <span className="text-[11px] font-bold text-gold bg-gold/10 border border-gold/30 px-3 py-1 rounded-full transition-colors">Ver partido</span>
                           </div>
@@ -307,11 +326,11 @@ function CalendarioContent() {
                     <h4 className="text-[13px] font-semibold text-[#3D1A6B] dark:text-white">Partidos del día {calendarDayMatches?.[0]?.dia} de {calendarDayMatches?.[0]?.mes}</h4>
                     {calendarDayMatches?.map((m, i) => (
                       <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-[#E8DFF5]/50 dark:bg-white/5 border border-[#D4C8E8]/40 dark:border-white/10">
-                        <span className="w-2 h-2 rounded-full" style={{ backgroundColor: equipoLogos[m.eq1]?.color || '#6B7280' }} />
+                        <TeamLogo icon={teamIcons[m.eq1]?.icon || Cat} size={20} bgColor="rgb(231, 178, 58)" iconColor="rgb(58, 42, 5)" />
                         <span className="text-sm font-semibold text-[#3D1A6B] dark:text-white">{m.eq1}</span>
                         <span className="text-[10px] text-[#7A6B99] dark:text-text-faint font-bold">VS</span>
                         <span className="text-sm font-semibold text-[#3D1A6B] dark:text-white">{m.eq2}</span>
-                        <span className="w-2 h-2 rounded-full" style={{ backgroundColor: equipoLogos[m.eq2]?.color || '#6B7280' }} />
+                        <TeamLogo icon={teamIcons[m.eq2]?.icon || Cat} size={20} bgColor="rgb(231, 178, 58)" iconColor="rgb(58, 42, 5)" />
                         <div className="ml-auto text-[10px] text-[#7A6B99] dark:text-white/50 text-right">
                           <div>⏰ {m.hora}</div>
                           <div>📍 {m.lugar.slice(0, 20)}...</div>
@@ -324,7 +343,7 @@ function CalendarioContent() {
                   <div className="grid grid-cols-2 max-sm:grid-cols-1 gap-3">
                     {equiposList.map(eq => (
                       <div key={eq.nom} className="flex items-center gap-3 p-3 rounded-xl bg-[#E8DFF5]/50 dark:bg-white/5 border border-[#D4C8E8]/40 dark:border-white/10 hover:border-gold/30 transition-all">
-                        <span className="text-2xl">{eq.emoji}</span>
+                        <TeamLogo icon={eq.icon} size={26} bgColor="rgb(231, 178, 58)" iconColor="rgb(58, 42, 5)" />
                         <span className="font-semibold text-[13px] text-[#3D1A6B] dark:text-white">{eq.nom}</span>
                         <span className="w-3 h-3 rounded-full ml-auto" style={{ backgroundColor: eq.color }} />
                       </div>
@@ -337,18 +356,18 @@ function CalendarioContent() {
                       <span className="w-6 text-center">#</span><span className="flex-1">Equipo</span><span className="w-8 text-center">PJ</span><span className="w-8 text-center">DG</span><span className="w-8 text-center">PTS</span>
                     </div>
                     {[
-                      { pos: 1, nom: 'Tigres FC', emoji: '🐯', pj: 12, dg: 18, pts: 28 },
-                      { pos: 2, nom: 'Code United', emoji: '🔵', pj: 12, dg: 12, pts: 25 },
-                      { pos: 3, nom: 'IA Warriors', emoji: '🦁', pj: 12, dg: 8, pts: 24 },
-                      { pos: 4, nom: 'Sistemas FC', emoji: '⚙️', pj: 12, dg: 4, pts: 20 },
-                      { pos: 5, nom: 'Dragones FC', emoji: '🐉', pj: 12, dg: -2, pts: 16 },
-                      { pos: 6, nom: 'Los Bits', emoji: '⚡', pj: 12, dg: -6, pts: 12 },
-                      { pos: 7, nom: 'Titanes', emoji: '🛡️', pj: 12, dg: -12, pts: 8 },
-                      { pos: 8, nom: 'Fénix', emoji: '🔥', pj: 12, dg: -22, pts: 4 },
+                      { pos: 1, nom: 'Tigres FC', icon: Cat,      pj: 12, dg: 18, pts: 28 },
+                      { pos: 2, nom: 'Code United', icon: Code2,   pj: 12, dg: 12, pts: 25 },
+                      { pos: 3, nom: 'IA Warriors', icon: Cpu,     pj: 12, dg: 8, pts: 24 },
+                      { pos: 4, nom: 'Sistemas FC', icon: Cog,     pj: 12, dg: 4, pts: 20 },
+                      { pos: 5, nom: 'Dragones FC', icon: Flame,   pj: 12, dg: -2, pts: 16 },
+                      { pos: 6, nom: 'Los Bits',    icon: HardDrive, pj: 12, dg: -6, pts: 12 },
+                      { pos: 7, nom: 'Titanes',     icon: Shield,  pj: 12, dg: -12, pts: 8 },
+                      { pos: 8, nom: 'Fénix',       icon: Feather, pj: 12, dg: -22, pts: 4 },
                     ].map((eq, i) => (
                       <div key={i} className={`flex items-center gap-2 p-2.5 rounded-xl ${i < 4 ? 'bg-[#E8DFF5]/50 dark:bg-white/5' : ''} border border-[#D4C8E8]/40 dark:border-white/10`}>
                         <span className="w-6 text-center text-[11px] font-bold text-[#7A6B99] dark:text-text-faint">{eq.pos}</span>
-                        <span className="text-base">{eq.emoji}</span>
+                        <TeamLogo icon={eq.icon} size={20} bgColor="rgb(231, 178, 58)" iconColor="rgb(58, 42, 5)" />
                         <span className="flex-1 text-xs font-semibold text-[#3D1A6B] dark:text-white truncate">{eq.nom}</span>
                         <span className="w-8 text-center text-[11px] text-[#7A6B99] dark:text-white/60">{eq.pj}</span>
                         <span className={`w-8 text-center text-[11px] font-mono ${eq.dg >= 0 ? 'text-green-500' : 'text-red-400'}`}>{eq.dg > 0 ? '+' : ''}{eq.dg}</span>

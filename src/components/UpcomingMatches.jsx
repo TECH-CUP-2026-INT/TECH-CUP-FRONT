@@ -1,11 +1,6 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { MapPin, Shield, Swords, Cat, Code2, Calendar } from "lucide-react";
-
-/**
- * UpcomingMatches
- * Réplica de la tarjeta "Próximos partidos": lista de encuentros
- * con fecha destacada, equipos, hora, badge de grupo y cancha.
- */
 
 const TEAM_ICONS = {
   "IA Warriors": { icon: Swords, bg: "#3B2E63", fg: "#C9B8F5" },
@@ -20,41 +15,10 @@ const GROUP_STYLES = {
   "Grupo C": { bg: "#7C3AED", fg: "#F3EEFF" },
 };
 
-const MATCHES = [
-  {
-    id: 1,
-    month: "MAY",
-    day: 14,
-    weekday: "MAR",
-    time: "12:00",
-    group: "Grupo A",
-    home: "IA Warriors",
-    away: "Code United",
-    court: "Cancha 1",
-  },
-  {
-    id: 2,
-    month: "MAY",
-    day: 15,
-    weekday: "MIÉ",
-    time: "16:00",
-    group: "Grupo B",
-    home: "Tigres FC",
-    away: "Sistemas FC",
-    court: "Cancha 1",
-  },
-  {
-    id: 3,
-    month: "MAY",
-    day: 17,
-    weekday: "VIE",
-    time: "09:00",
-    group: "Grupo A",
-    home: "Tigres FC",
-    away: "Code United",
-    court: "Cancha 1",
-  },
-];
+const TEAM_GROUP = {
+  'Tigres FC': 'B', 'IA Warriors': 'A', 'Code United': 'A',
+  'Sistemas FC': 'B', 'Dragones FC': 'C', 'Los Bits': 'C',
+}
 
 function TeamBadge({ team }) {
   const config = TEAM_ICONS[team] || { icon: Shield, bg: "#2B2B33", fg: "#C9C9D6" };
@@ -140,7 +104,25 @@ function MatchRow({ match }) {
   );
 }
 
-export default function UpcomingMatches() {
+export default function UpcomingMatches({ partidos = [] }) {
+  const navigate = useNavigate()
+  const matches = partidos.slice(0, 3).map((p, idx) => {
+    const grupo = TEAM_GROUP[p.eq1] || 'A'
+    return {
+      id: idx + 1,
+      month: p.mes,
+      day: p.dia,
+      weekday: new Date(2026, 4, p.dia).toLocaleDateString('es', { weekday: 'short' }).toUpperCase().replace('.',''),
+      time: p.hora.replace(' ', ''),
+      group: `Grupo ${grupo}`,
+      home: p.eq1,
+      away: p.eq2,
+      court: p.lugar === 'Cancha Principal Sede Norte' ? 'Cancha 1'
+        : p.lugar === 'Cancha Principal Sede Norte 2' ? 'Cancha 2'
+        : 'Cancha 3',
+    }
+  })
+
   return (
     <div
       className="w-full flex flex-col gap-3 p-[18px] rounded-2xl"
@@ -151,13 +133,14 @@ export default function UpcomingMatches() {
         <button
           className="text-[12.5px] font-medium transition-opacity hover:opacity-80"
           style={{ color: "#E7A93A" }}
+          onClick={() => navigate('/torneos')}
         >
           Ver todos
         </button>
       </div>
 
       <div className="flex flex-col gap-2.5">
-        {MATCHES.map((match) => (
+        {matches.map((match) => (
           <MatchRow key={match.id} match={match} />
         ))}
       </div>
@@ -169,6 +152,7 @@ export default function UpcomingMatches() {
           color: "#E7A93A",
           border: "1px solid #E7A93A",
         }}
+        onClick={() => navigate('/torneos')}
       >
         <Calendar size={15} />
         Ver todo el fixture

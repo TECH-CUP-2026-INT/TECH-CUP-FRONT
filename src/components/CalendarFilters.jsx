@@ -1,27 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { ChevronLeft, ChevronRight, RotateCcw, ChevronDown, SlidersHorizontal } from "lucide-react";
 
-/**
- * CalendarFilters
- * Réplica del panel lateral: mini-calendario mensual con semana
- * seleccionada resaltada, + sección de filtros con selects y
- * botón "Aplicar filtros".
- */
-
 const WEEK_DAYS = ["LUN", "MAR", "MIÉ", "JUE", "VIE", "SÁB", "DOM"];
-
-// Semanas de Mayo 2024 (cada fila = una semana, null = día fuera de mes)
-const WEEKS = [
-  [29, 30, 1, 2, 3, 4, 5],
-  [6, 7, 8, 9, 10, 11, 12],
-  [13, 14, 15, 16, 17, 18, 19], // semana seleccionada
-  [20, 21, 22, 23, 24, 25, 26],
-  [27, 28, 29, 30, 31, 1, 2],
-];
-
-const CURRENT_MONTH_RANGE = [1, 31]; // días del mes vigente (Mayo)
-const SELECTED_WEEK_INDEX = 2;
-const SELECTED_DAY = 14;
+const NOMBRES_MES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 
 function Select({ label, value, options, onChange }) {
   return (
@@ -52,18 +33,52 @@ function Select({ label, value, options, onChange }) {
   );
 }
 
-export default function CalendarFilters() {
+export default function CalendarFilters({ mes = 4, año = 2026, onMesChange, onFilterChange }) {
   const [grupo, setGrupo] = useState("");
   const [cancha, setCancha] = useState("");
   const [estado, setEstado] = useState("");
 
-  const isInCurrentMonth = (day, weekIdx, dayIdx) => {
-    // Primera semana: los primeros días pueden ser del mes anterior si son altos (29,30)
-    if (weekIdx === 0 && day > 20) return false;
-    // Última semana: días bajos después del 31 son del próximo mes
-    if (weekIdx === WEEKS.length - 1 && day < 20) return false;
-    return true;
-  };
+  const primerDia = new Date(año, mes, 1)
+  const primerDiaSemana = (primerDia.getDay() || 7) - 1 // 0=Lu
+  const diasEnMes = new Date(año, mes + 1, 0).getDate()
+  const ultimoDiaMesAnt = new Date(año, mes, 0).getDate()
+
+  const WEEKS = useMemo(() => {
+    const semanas = []
+    let semana = []
+    // Días del mes anterior
+    for (let i = 0; i < primerDiaSemana; i++) {
+      semana.push(ultimoDiaMesAnt - primerDiaSemana + 1 + i)
+    }
+    // Días del mes actual
+    for (let d = 1; d <= diasEnMes; d++) {
+      semana.push(d)
+      if (semana.length === 7) {
+        semanas.push(semana)
+        semana = []
+      }
+    }
+    // Días del mes siguiente
+    if (semana.length > 0) {
+      let next = 1
+      while (semana.length < 7) {
+        semana.push(next++)
+      }
+      semanas.push(semana)
+    }
+    return semanas
+  }, [mes, año, primerDiaSemana, diasEnMes, ultimoDiaMesAnt])
+
+  const today = new Date()
+  const todayDate = today.getDate()
+  const todayMes = today.getMonth()
+  const todayAño = today.getFullYear()
+  const semanaActualIdx = WEEKS.findIndex(week => week.includes(todayDate) && mes === todayMes && año === todayAño)
+  const selectedWeekIdx = semanaActualIdx >= 0 ? semanaActualIdx : Math.min(1, WEEKS.length - 1)
+
+  const aplicarFiltros = () => {
+    onFilterChange?.({ grupo, cancha, estado })
+  }
 
   return (
     <div
@@ -73,17 +88,19 @@ export default function CalendarFilters() {
       {/* ---------- Mini calendario ---------- */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <h2 className="text-[14px] font-semibold text-white">Mayo 2024</h2>
+          <h2 className="text-[14px] font-semibold text-white">{NOMBRES_MES[mes]} {año}</h2>
           <div className="flex items-center gap-1.5">
             <button
               className="p-1 rounded-lg transition-colors"
               style={{ backgroundColor: "#171020", color: "#9C93B5" }}
+              onClick={() => onMesChange?.(mes - 1 < 0 ? 11 : mes - 1, mes - 1 < 0 ? año - 1 : año)}
             >
               <ChevronLeft size={14} />
             </button>
             <button
               className="p-1 rounded-lg transition-colors"
               style={{ backgroundColor: "#171020", color: "#9C93B5" }}
+              onClick={() => onMesChange?.(mes + 1 > 11 ? 0 : mes + 1, mes + 1 > 11 ? año + 1 : año)}
             >
               <ChevronRight size={14} />
             </button>
@@ -106,7 +123,7 @@ export default function CalendarFilters() {
         {/* Filas de semanas */}
         <div className="flex flex-col gap-1">
           {WEEKS.map((week, weekIdx) => {
-            const isSelectedWeek = weekIdx === SELECTED_WEEK_INDEX;
+            const isSelectedWeek = weekIdx === selectedWeekIdx;
             return (
               <div
                 key={weekIdx}
@@ -118,9 +135,8 @@ export default function CalendarFilters() {
                 }}
               >
                 {week.map((day, dayIdx) => {
-                  const inMonth = isInCurrentMonth(day, weekIdx, dayIdx);
-                  const isSelectedDay =
-                    isSelectedWeek && day === SELECTED_DAY && inMonth;
+                  const inMonth = day >= 1 && day <= diasEnMes;
+                  const isToday = day === todayDate && mes === todayMes && año === todayAño;
                   return (
                     <div
                       key={dayIdx}
@@ -131,13 +147,13 @@ export default function CalendarFilters() {
                         style={{
                           width: 26,
                           height: 26,
-                          backgroundColor: isSelectedDay ? "#7C3AED" : "transparent",
-                          color: isSelectedDay
+                          backgroundColor: isToday ? "#7C3AED" : "transparent",
+                          color: isToday
                             ? "#FFFFFF"
                             : inMonth
                             ? "#E9E6F0"
                             : "#4A4358",
-                          fontWeight: isSelectedDay ? 700 : 500,
+                          fontWeight: isToday ? 700 : 500,
                         }}
                       >
                         {day}
@@ -162,6 +178,7 @@ export default function CalendarFilters() {
               setGrupo("");
               setCancha("");
               setEstado("");
+              onFilterChange?.({ grupo: '', cancha: '', estado: '' })
             }}
           >
             <RotateCcw size={13} />
@@ -197,6 +214,7 @@ export default function CalendarFilters() {
             color: "#E7A93A",
             border: "1px solid #E7A93A",
           }}
+          onClick={aplicarFiltros}
         >
           <SlidersHorizontal size={15} />
           Aplicar filtros

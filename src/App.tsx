@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from '@/hooks/auth/useAuth'
 import { ThemeProvider } from '@/configs/theme'
 import { StarfieldBackground } from '@/components/common/starfield-bg'
+
 import Landing from '@/pages/Landing'
 import Dashboard from '@/pages/Dashboard'
 import DashboardJugador from '@/pages/DashboardJugador'

@@ -10,6 +10,7 @@ import { Button } from '@/components/common/button'
 import { Input } from '@/components/common/input'
 import { SpotlightCard } from '@/components/common/spotlight-card'
 import { Send, Mail, MapPin, Phone, MessageCircle, Clock, Plus, X, Save } from 'lucide-react'
+import TechCupHero from '@/components/TechCupHero-contactos'
 
 interface ContactItem {
   id: number
@@ -21,6 +22,7 @@ interface ContactItem {
 
 function ContactoContent() {
   const [sent, setSent] = useState(false)
+  const [showMercadoPago, setShowMercadoPago] = useState(false)
   const [items, setItems] = useState<ContactItem[]>([
     { id: 1, icon: 'mail', label: 'Correo electrónico', value: 'techcup@escuelaing.edu.co', desc: 'Respuesta en 24-48h' },
     { id: 2, icon: 'map', label: 'Ubicación', value: 'Campus Norte · Cancha 1', desc: 'Escuela Colombiana de Ingeniería' },
@@ -49,6 +51,10 @@ function ContactoContent() {
     <>
       <AuroraBackground>
         <div className="relative w-full max-w-[1280px] mx-auto px-8 pt-[160px] pb-[100px] overflow-hidden">
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            <div className="absolute -top-[10%] -right-[10%] w-[60%] h-[35%] opacity-[0.06] dark:opacity-[0.07]" style={{ background: 'linear-gradient(135deg, transparent 30%, #C8851A 50%, transparent 70%)', transform: 'skewX(-18deg)' }} />
+            <div className="absolute top-[40%] -left-[5%] w-[55%] h-[20%] opacity-[0.05] dark:opacity-[0.06]" style={{ background: 'linear-gradient(115deg, transparent 20%, #C8851A 40%, #8B5CF6 55%, transparent 75%)', transform: 'skewX(-15deg)' }} />
+          </div>
           <div className="absolute inset-0 opacity-30 pointer-events-none" style={{backgroundImage:'radial-gradient(rgba(255,255,255,.12) 1px, transparent 1px)',backgroundSize:'24px 24px',maskImage:'radial-gradient(600px 500px at 50% 30%, black 10%, transparent 70%)',WebkitMaskImage:'radial-gradient(600px 500px at 50% 30%, black 10%, transparent 70%)'}} />
           <div className="relative z-[2] text-center max-w-[600px] mx-auto">
             <motion.span initial={{opacity:0,y:-10}} animate={{opacity:1,y:0}} transition={{delay:0.2}} className="inline-flex items-center gap-2 text-[11.5px] font-bold tracking-[1.6px] uppercase text-gold bg-gold/10 border border-gold/30 px-3.5 py-1.5 rounded-full mb-[22px]"><MessageCircle size={14} /> Estamos para ayudarte</motion.span>
@@ -58,137 +64,7 @@ function ContactoContent() {
         </div>
       </AuroraBackground>
 
-      <section className="py-14 pb-[100px] relative">
-        <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-purple-mid/20 blur-[180px] pointer-events-none" />
-        <div className="absolute bottom-[10%] left-[-5%] w-[500px] h-[500px] rounded-full bg-gold/20 blur-[150px] pointer-events-none" />
-        <div className="absolute top-[40%] left-[30%] w-[350px] h-[350px] rounded-full bg-purple-deep/15 blur-[120px] pointer-events-none" />
-        <div className="max-w-[1280px] mx-auto px-8 relative">
-          <div className="grid grid-cols-[1.2fr_1fr] gap-10 items-start max-lg:grid-cols-1">
-            <motion.div initial={{opacity:0,x:-20}} animate={{opacity:1,x:0}} transition={{delay:0.4}}>
-              <SpotlightCard accent="gold" className="bg-gradient-to-br from-purple-deep2/70 to-purple-black/80 border border-gold/20 rounded-2xl p-8 shadow-lg shadow-purple-900/20">
-                <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase tracking-[.5px] mb-1 text-white">Medios de <span className="text-gold">pago</span></h2>
-                <p className="text-sm text-text-muted mb-8">Elegí el método que prefieras para pagar la inscripción de tu equipo.</p>
-                
-                <div className="space-y-4">
-                  {/* Nequi */}
-                  <div className="flex items-center gap-4 p-4 rounded-xl bg-black/40 backdrop-blur-sm border border-purple-mid/20 hover:border-purple-mid/40 transition-all group">
-                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center flex-shrink-0 shadow-lg shadow-red-500/20">
-                      <span className="text-2xl font-black text-white">N</span>
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-sm font-bold text-white">Nequi</p>
-                      <p className="text-xs text-text-muted">Código QR o número de celular</p>
-                      <p className="text-xs text-gold font-semibold mt-0.5">310 123 4567</p>
-                    </div>
-                    <img src="https://play-lh.googleusercontent.com/4fUjQPE7VXnNiYIfldPpAY12h0wTYyW_YOFVrA4nNrBcUwmLy9G-QYISk6HPSsr5QQ" alt="Nequi" className="w-10 h-10 rounded-lg object-contain bg-white/10 p-1" />
-                  </div>
-
-                  {/* PSE */}
-                  <div className="flex items-center gap-4 p-4 rounded-xl bg-black/40 backdrop-blur-sm border border-purple-mid/20 hover:border-purple-mid/40 transition-all group">
-                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-500/20">
-                      <span className="text-xl font-black text-white">PSE</span>
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-sm font-bold text-white">PSE</p>
-                      <p className="text-xs text-text-muted">Transferencia desde cualquier banco</p>
-                      <p className="text-xs text-gold font-semibold mt-0.5">Disponible 24/7</p>
-                    </div>
-                    <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-lg">🏦</div>
-                  </div>
-
-                  {/* Bancolombia */}
-                  <div className="flex items-center gap-4 p-4 rounded-xl bg-black/40 backdrop-blur-sm border border-purple-mid/20 hover:border-purple-mid/40 transition-all group">
-                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-yellow-500 to-yellow-700 flex items-center justify-center flex-shrink-0 shadow-lg shadow-yellow-500/20">
-                      <span className="text-xl font-black text-[#003A70]">B</span>
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-sm font-bold text-white">Bancolombia</p>
-                      <p className="text-xs text-text-muted">Cuenta de ahorros</p>
-                      <p className="text-xs text-gold font-semibold mt-0.5">000-123456-78</p>
-                    </div>
-                    <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-lg">💳</div>
-                  </div>
-
-                  {/* Efectivo */}
-                  <div className="flex items-center gap-4 p-4 rounded-xl bg-black/40 backdrop-blur-sm border border-purple-mid/20 hover:border-purple-mid/40 transition-all group">
-                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-green-600 to-green-800 flex items-center justify-center flex-shrink-0 shadow-lg shadow-green-500/20">
-                      <span className="text-xl font-black text-white">$</span>
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-sm font-bold text-white">Efectivo</p>
-                      <p className="text-xs text-text-muted">Pago presencial en la Escuela</p>
-                      <p className="text-xs text-gold font-semibold mt-0.5">Oficina de Bienestar</p>
-                    </div>
-                    <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-lg">🏛️</div>
-                  </div>
-                </div>
-
-                <div className="mt-6 p-4 rounded-xl bg-gold/5 border border-gold/20 text-center">
-                  <p className="text-xs text-text-muted">💰 <strong className="text-gold">Costo de inscripción:</strong> <span className="text-white font-bold">$20.000 COP</span> por equipo</p>
-                  <p className="text-xs text-text-faint mt-1">El pago cubre la participación de todo el equipo en el torneo.</p>
-                </div>
-              </SpotlightCard>
-            </motion.div>
-
-            <motion.div initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} transition={{delay:0.5}} className="space-y-4">
-              <div className="flex items-center justify-between">
-                <p className="text-xs text-text-faint uppercase tracking-[.4px] font-semibold">Información de contacto</p>
-                <button onClick={() => setEditing(!editing)} className="text-xs text-gold hover:text-gold-dark font-semibold flex items-center gap-1">
-                  {editing ? <Save size={14} /> : <Plus size={14} />} {editing ? 'Guardar' : 'Editar'}
-                </button>
-              </div>
-
-              {items.map(item => (
-                <SpotlightCard key={item.id} accent={item.id % 2 === 0 ? 'gold' : 'purple'} className="bg-surface border border-border rounded-2xl p-5 relative group">
-                  {editing && (
-                    <button onClick={() => removeItem(item.id)} className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center hover:bg-red-500/40 transition-colors z-10">
-                      <X size={12} className="text-red-400" />
-                    </button>
-                  )}
-                  <div className="flex items-start gap-4">
-                    <span className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 bg-purple-mid/20 border border-purple-mid/30 text-gold">
-                      {iconMap[item.icon] || <Mail size={18} />}
-                    </span>
-                    <div className="flex-1">
-                      {editing ? (
-                        <div className="space-y-2">
-                          <input value={item.label} onChange={e => setItems(items.map(i => i.id === item.id ? {...i, label: e.target.value} : i))} className="w-full bg-black border border-border text-white text-xs rounded-lg px-3 py-1.5 outline-none focus:border-gold" />
-                          <input value={item.value} onChange={e => setItems(items.map(i => i.id === item.id ? {...i, value: e.target.value} : i))} className="w-full bg-black border border-border text-white text-sm rounded-lg px-3 py-1.5 outline-none focus:border-gold" />
-                          <input value={item.desc} onChange={e => setItems(items.map(i => i.id === item.id ? {...i, desc: e.target.value} : i))} className="w-full bg-black border border-border text-white text-xs rounded-lg px-3 py-1.5 outline-none focus:border-gold" />
-                        </div>
-                      ) : (
-                        <>
-                          <p className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">{item.label}</p>
-                          <p className="text-sm font-semibold mt-0.5">{item.value}</p>
-                          <p className="text-xs text-text-muted mt-0.5">{item.desc}</p>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                </SpotlightCard>
-              ))}
-
-              {editing && (
-                <SpotlightCard accent="gold" className="bg-surface border border-dashed border-gold/30 rounded-2xl p-5">
-                  <p className="text-xs text-gold font-semibold uppercase tracking-[.4px] mb-3">Agregar nuevo contacto</p>
-                  <div className="space-y-2 mb-3">
-                    <input placeholder="Nombre (ej. WhatsApp)" value={newItem.label} onChange={e => setNewItem({...newItem, label: e.target.value})} className="w-full bg-black border border-border text-white text-sm rounded-lg px-3 py-2 outline-none focus:border-gold placeholder:text-text-faint" />
-                    <input placeholder="Valor (ej. +57 301 234 5678)" value={newItem.value} onChange={e => setNewItem({...newItem, value: e.target.value})} className="w-full bg-black border border-border text-white text-sm rounded-lg px-3 py-2 outline-none focus:border-gold placeholder:text-text-faint" />
-                    <input placeholder="Descripción (ej. Solo texto)" value={newItem.desc} onChange={e => setNewItem({...newItem, desc: e.target.value})} className="w-full bg-black border border-border text-white text-xs rounded-lg px-3 py-2 outline-none focus:border-gold placeholder:text-text-faint" />
-                  </div>
-                  <Button onClick={addItem} size="sm" className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark text-xs h-auto py-1.5 px-4 w-full">
-                    <Plus size={14} /> Agregar
-                  </Button>
-                </SpotlightCard>
-              )}
-              <SpotlightCard accent="purple" className="bg-gradient-to-br from-purple-deep/20 to-purple-black/30 border border-purple-mid/20 rounded-2xl p-6 text-center">
-                <p className="font-[family-name:var(--font-display)] text-lg uppercase">🐾 "La pasión nos une,<br />la <span className="text-gold">ingeniería</span> nos impulsa."</p>
-                <p className="text-xs text-text-muted mt-2">— Manchas, mascota oficial TechCup</p>
-              </SpotlightCard>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+      <TechCupHero />
     </>
   )
 }

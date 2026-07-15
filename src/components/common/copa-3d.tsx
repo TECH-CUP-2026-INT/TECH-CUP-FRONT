@@ -5,7 +5,7 @@ export function Copa3D() {
       <div
         className="absolute inset-[8%] rounded-full pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse at 50% 40%, rgba(200,133,26,0.35) 0%, rgba(200,133,26,0.08) 40%, transparent 70%)',
+          background: 'radial-gradient(ellipse at 50% 40%, rgba(139,92,246,0.35) 0%, rgba(139,92,246,0.08) 40%, transparent 70%)',
           filter: 'blur(40px)',
           animation: 'copa-glow 4s ease-in-out infinite alternate',
         }}
@@ -15,7 +15,7 @@ export function Copa3D() {
       <div
         className="absolute inset-[15%] rounded-full pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse at 50% 50%, rgba(245,166,35,0.2) 0%, transparent 60%)',
+          background: 'radial-gradient(ellipse at 50% 50%, rgba(124,58,237,0.2) 0%, transparent 60%)',
           filter: 'blur(60px)',
           animation: 'copa-glow 4s ease-in-out 1s infinite alternate',
         }}
@@ -69,7 +69,7 @@ export function Copa3D() {
           style={{
             width: `${2 + (i % 3)}px`,
             height: `${2 + (i % 3)}px`,
-            background: `rgba(200,133,26,${0.3 + (i % 3) * 0.15})`,
+            background: `rgba(139,92,246,${0.3 + (i % 3) * 0.15})`,
             left: `${15 + i * 14}%`,
             top: `${20 + (i % 2) * 50}%`,
             animation: `copa-particle ${3 + i * 0.5}s ease-in-out ${i * 0.4}s infinite alternate`,

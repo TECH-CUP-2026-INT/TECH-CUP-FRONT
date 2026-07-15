@@ -20,8 +20,9 @@ interface AppTopbarProps {
 }
 
 const conversations = [
-  { id: 1, name: 'Sistemas FC', avatar: 'https://i.pravatar.cc/72?img=11', lastMsg: '¿A qué hora es el partido?', unread: 2, online: true },
-  { id: 2, name: 'ManchasBot', avatar: '/manchas-callcenter.png', lastMsg: '¡Hola! ¿En qué puedo ayudarte?', unread: 0, online: true, isSoporte: true },
+  { id: 1, name: 'Tigres FC', avatar: 'https://i.pravatar.cc/72?img=11', lastMsg: '¿A qué hora es el partido?', unread: 2, online: true, isTeam: true },
+  { id: 2, name: 'Sistemas FC', avatar: 'https://i.pravatar.cc/72?img=8', lastMsg: 'Entrenamiento mañana 7AM', unread: 0, online: false, isTeam: true },
+  { id: 3, name: 'ManchasBot', avatar: '/manchas-callcenter.png', lastMsg: '¡Hola! ¿En qué puedo ayudarte?', unread: 0, online: true, isSoporte: true },
 ]
 
 const messages: Record<number, { text: string; me: boolean }[]> = {
@@ -34,8 +35,10 @@ export default function AppTopbar({ title, sidebarOpen, sidebarCollapsed, onMenu
   const { user } = useAuth()
   const [chatOpen, setChatOpen] = useState(false)
   const [notifOpen, setNotifOpen] = useState(false)
+  const [notifSettings, setNotifSettings] = useState(false)
   const [selectedChat, setSelectedChat] = useState<number | null>(null)
   const [input, setInput] = useState('')
+  const [notifTeams, setNotifTeams] = useState<Record<string, boolean>>({ 'Tigres FC': true, 'Sistemas FC': true, 'Code United': false, 'IA Warriors': false, 'Dragones FC': false, 'Los Bits': false })
   const activeConv = conversations.find(c => c.id === selectedChat)
 
   const greeting = useMemo(() => {
@@ -114,56 +117,107 @@ export default function AppTopbar({ title, sidebarOpen, sidebarCollapsed, onMenu
         </div>
       </header>
 
-      {/* Notificaciones — modal flotante */}
+      {/* Notificaciones — slide-in derecho como el chat */}
       <AnimatePresence>
         {notifOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4"
-            onClick={() => setNotifOpen(false)}
-          >
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+          <>
+            <div className="fixed inset-0 z-[65]" onClick={() => setNotifOpen(false)} />
             <motion.div
-              initial={{ opacity: 0, y: -10, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -10, scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-              className="relative w-full max-w-md bg-[#1e0d33] border border-white/10 rounded-2xl overflow-hidden shadow-2xl"
-              onClick={e => e.stopPropagation()}
+              initial={{ x: '100%', opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: '100%', opacity: 0 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className="fixed right-0 top-0 bottom-0 z-[70] w-[380px] max-w-[90vw] bg-[#1e0d33] border-l border-white/10 flex flex-col"
             >
-              <div className="flex items-center justify-between px-5 py-4 border-b border-[#D4C8E8]/40 dark:border-white/10">
-                <h2 className="text-sm font-bold flex items-center gap-2 text-white">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gold"><path d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 003.4 0"/></svg>
-                  Notificaciones
-                </h2>
-                <button onClick={() => setNotifOpen(false)} className="w-7 h-7 rounded-full bg-black/40 text-white flex items-center justify-center hover:bg-gold transition-colors"><X size={14} /></button>
-              </div>
-              <div className="max-h-[60vh] overflow-y-auto">
-                {[
-                  { title: 'Partido en 2 horas', desc: 'Tigres FC vs IA Warriors — Cancha Principal', time: 'Hace 5 min', color: '#22C55E' },
-                  { title: 'Inscripción aprobada', desc: 'TechCup 2026-II — Ya estás inscrito', time: 'Hace 1 hora', color: '#8B5CF6' },
-                  { title: 'Nuevo mensaje de Carlos', desc: 'Nos vemos en la cancha mañana', time: 'Hace 3 horas', color: '#3B82F6' },
-                  { title: 'Recordatorio de pago', desc: 'Tienes un pago pendiente por $20.000', time: 'Ayer', color: '#F59E0B' },
-                  { title: 'Cambio de horario', desc: 'Partido Sistemas FC vs Code United movido a las 9PM', time: 'Ayer', color: '#EF4444' },
-                ].map((n, i) => (
-                  <button key={i} className="w-full flex items-start gap-3 px-5 py-3.5 hover:bg-white/5 transition-colors text-left border-b border-[#D4C8E8]/20 dark:border-white/5">
-                    <div className="w-2 h-2 rounded-full mt-1.5 flex-shrink-0" style={{ backgroundColor: n.color }} />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-white">{n.title}</p>
-                      <p className="text-xs text-text-muted mt-0.5">{n.desc}</p>
-                      <p className="text-[10px] text-text-faint mt-1">{n.time}</p>
+              {!notifSettings ? (
+                /* ─── Lista de notificaciones ─── */
+                <>
+                  <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+                    <h2 className="text-sm font-bold flex items-center gap-2">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gold"><path d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 003.4 0"/></svg>
+                      Notificaciones
+                    </h2>
+                    <div className="flex items-center gap-1">
+                      <button onClick={() => setNotifSettings(true)} className="text-gray-light hover:text-gold transition-colors p-1.5 rounded-lg hover:bg-white/5" title="Configurar notificaciones">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                      </button>
+                      <button onClick={() => setNotifOpen(false)} className="text-gray-light hover:text-red-400 transition-colors p-1"><X size={18} /></button>
                     </div>
-                  </button>
-                ))}
-              </div>
-              <div className="px-5 py-3 text-center border-t border-[#D4C8E8]/20 dark:border-white/5">
-                <p className="text-xs text-text-muted">— No hay más notificaciones —</p>
-              </div>
+                  </div>
+                  <div className="flex-1 overflow-y-auto">
+                    {[
+                      { title: 'Partido en 2 horas', desc: 'Tigres FC vs IA Warriors — Cancha Principal', time: 'Hace 5 min', color: '#22C55E' },
+                      { title: 'Inscripción aprobada', desc: 'TechCup 2026-II — Ya estás inscrito', time: 'Hace 1 hora', color: '#8B5CF6' },
+                      { title: 'Nuevo mensaje de Tigres FC', desc: 'Nos vemos en la cancha mañana', time: 'Hace 3 horas', color: '#3B82F6' },
+                      { title: 'Recordatorio de pago', desc: 'Tienes un pago pendiente por $20.000', time: 'Ayer', color: '#F59E0B' },
+                      { title: 'Cambio de horario', desc: 'Partido Sistemas FC vs Code United movido a las 9PM', time: 'Ayer', color: '#EF4444' },
+                    ].map((n, i) => (
+                      <button key={i} className="w-full flex items-start gap-3 px-5 py-3.5 hover:bg-white/5 transition-colors text-left border-b border-white/5">
+                        <div className="w-2 h-2 rounded-full mt-1.5 flex-shrink-0" style={{ backgroundColor: n.color }} />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-white">{n.title}</p>
+                          <p className="text-xs text-text-muted mt-0.5">{n.desc}</p>
+                          <p className="text-[10px] text-text-faint mt-1">{n.time}</p>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                  <div className="px-5 py-3 text-center border-t border-white/5">
+                    <p className="text-xs text-text-muted">— No hay más notificaciones —</p>
+                  </div>
+                </>
+              ) : (
+                /* ─── Configuración de notificaciones ─── */
+                <>
+                  <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+                    <div className="flex items-center gap-2">
+                      <button onClick={() => setNotifSettings(false)} className="text-gray-light hover:text-gold transition-colors p-1">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+                      </button>
+                      <h2 className="text-sm font-bold">Config. notificaciones</h2>
+                    </div>
+                    <button onClick={() => setNotifOpen(false)} className="text-gray-light hover:text-red-400 transition-colors p-1"><X size={18} /></button>
+                  </div>
+                  <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                    <div>
+                      <h3 className="text-xs font-bold uppercase tracking-wider text-text-muted mb-3">Notificarme cuando juegue...</h3>
+                      <div className="space-y-2">
+                        {Object.entries(notifTeams).map(([team, enabled]) => (
+                          <label key={team} className="flex items-center justify-between py-2 px-3 rounded-xl hover:bg-white/5 transition-colors cursor-pointer">
+                            <span className="text-sm font-medium text-white">{team}</span>
+                            <button
+                              onClick={() => setNotifTeams(prev => ({ ...prev, [team]: !prev[team] }))}
+                              className={`relative w-10 h-5 rounded-full transition-colors ${enabled ? 'bg-purple-mid' : 'bg-white/10'}`}
+                            >
+                              <span className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform ${enabled ? 'translate-x-5' : 'translate-x-0'}`} />
+                            </button>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="pt-2 border-t border-white/5">
+                      <h3 className="text-xs font-bold uppercase tracking-wider text-text-muted mb-3">General</h3>
+                      <div className="space-y-2">
+                        {[
+                          { label: 'Resultados de partidos', key: 'resultados' },
+                          { label: 'Cambios de horario', key: 'horarios' },
+                          { label: 'Inscripciones', key: 'inscripciones' },
+                          { label: 'Mensajes del equipo', key: 'mensajes' },
+                        ].map(item => (
+                          <label key={item.key} className="flex items-center justify-between py-2 px-3 rounded-xl hover:bg-white/5 transition-colors cursor-pointer">
+                            <span className="text-sm font-medium text-white">{item.label}</span>
+                            <div className="relative w-10 h-5 rounded-full bg-purple-mid">
+                              <span className="absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white translate-x-5" />
+                            </div>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
             </motion.div>
-          </motion.div>
+          </>
         )}
       </AnimatePresence>
 
@@ -171,13 +225,13 @@ export default function AppTopbar({ title, sidebarOpen, sidebarCollapsed, onMenu
       <AnimatePresence>
         {chatOpen && (
           <>
-            <div className="fixed inset-0 z-30" onClick={() => setChatOpen(false)} />
+            <div className="fixed inset-0 z-[65] bg-black/40 backdrop-blur-sm" onClick={() => setChatOpen(false)} />
             <motion.div
               initial={{ x: '100%', opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: '100%', opacity: 0 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="fixed right-0 top-0 bottom-0 z-40 w-[380px] max-w-[90vw] bg-[#1e0d33] border-l border-white/10 flex flex-col"
+              className="fixed right-0 top-0 bottom-0 z-[70] w-[380px] max-w-[90vw] bg-[#1e0d33] border-l border-white/10 flex flex-col shadow-2xl shadow-black/50"
             >
               {!selectedChat ? (
                 /* Lista de conversaciones */
@@ -192,7 +246,7 @@ export default function AppTopbar({ title, sidebarOpen, sidebarCollapsed, onMenu
                   <div className="px-4 py-2 border-b border-border">
                     <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5">
                       <Search size={14} className="text-text-faint" />
-                      <input placeholder="Buscar conversación..." className="bg-transparent border-none outline-none text-white placeholder:text-text-faint text-sm w-full" />
+                      <input placeholder="Buscar equipo o chat..." className="bg-transparent border-none outline-none text-white placeholder:text-text-faint text-sm w-full" />
                     </div>
                   </div>
                   <div className="flex-1 overflow-y-auto">
@@ -202,10 +256,11 @@ export default function AppTopbar({ title, sidebarOpen, sidebarCollapsed, onMenu
                         <div className="relative flex-shrink-0">
                           <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-gold/30"><img src={conv.avatar} alt="" className="w-full h-full object-cover" /></div>
                           {conv.online && <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-green-500 ring-2 ring-black" />}
+                          {conv.isTeam && <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-gold flex items-center justify-center ring-1 ring-black"><svg width="8" height="8" viewBox="0 0 24 24" fill="#1A1206" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>}
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between">
-                            <p className="text-sm font-semibold">{conv.name}</p>
+                            <p className="text-sm font-semibold">{conv.isTeam ? <><span className="text-gold">🏆</span> {conv.name}</> : conv.name}</p>
                             {conv.unread > 0 && <span className="bg-purple-mid text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center">{conv.unread}</span>}
                           </div>
                           <p className="text-xs text-text-muted truncate">{conv.lastMsg}</p>
@@ -213,11 +268,11 @@ export default function AppTopbar({ title, sidebarOpen, sidebarCollapsed, onMenu
                       </button>
                     ))}
                   </div>
-                  {/* Botón nuevo contacto */}
+                  {/* Botón nuevo equipo */}
                   <div className="border-t border-border p-3">
-                    <button onClick={() => { const email = prompt('Ingresá el correo electrónico del contacto:'); if (email) { alert(`Se enviará invitación a: ${email}`); } }} 
+                    <button onClick={() => { const name = prompt('Nombre del equipo:'); if (name) { alert(`Chat de equipo "${name}" creado`); } }} 
                       className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-gold/10 border border-gold/30 text-gold text-sm font-semibold hover:bg-gold/20 transition-all">
-                      <Plus size={16} /> Nuevo contacto
+                      <Plus size={16} /> Nuevo equipo
                     </button>
                   </div>
                 </>

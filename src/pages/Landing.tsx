@@ -229,17 +229,17 @@ export default function Landing() {
       {/* Torneos — Jugador dinámico + tarjetas con escenas */}
       <section className="py-10 pb-[110px] relative overflow-hidden">
         <div className="absolute top-[10%] left-[20%] w-[700px] h-[700px] rounded-full bg-purple-deep/20 blur-[180px] pointer-events-none" />
-        <div className="absolute bottom-[5%] right-[5%] w-[600px] h-[600px] rounded-full bg-gold/20 blur-[150px] pointer-events-none" />
+        <div className="absolute bottom-[5%] right-[5%] w-[600px] h-[600px] rounded-full bg-purple-mid/20 blur-[150px] pointer-events-none" />
         <div className="absolute top-[50%] left-[50%] w-[400px] h-[400px] rounded-full bg-purple-mid/15 blur-[120px] pointer-events-none" />
 
         <div className="max-w-[1280px] mx-auto px-8 relative">
           {/* Header section */}
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <span className="w-1 h-6 rounded-full bg-gold" />
+              <span className="w-1 h-6 rounded-full bg-purple-mid" />
               <div>
-                <span className="text-[11px] font-bold tracking-[1.4px] uppercase text-gold">Torneos</span>
-                <h2 className="font-[family-name:var(--font-display)] text-xl uppercase tracking-[.5px] text-[#4B2D7A] dark:text-gray-light">Compite y <span className="text-gold">deja tu huella</span></h2>
+                <span className="text-[11px] font-bold tracking-[1.4px] uppercase text-purple-mid">Torneos</span>
+                <h2 className="font-[family-name:var(--font-display)] text-xl uppercase tracking-[.5px] text-[#4B2D7A] dark:text-gray-light">Compite y <span className="text-purple-mid">deja tu huella</span></h2>
               </div>
             </div>
           </div>
@@ -260,7 +260,7 @@ export default function Landing() {
                 <div className="flex items-center gap-3">
                   <span className="text-[11px] text-text-muted dark:text-text-faint">6 torneos encontrados</span>
                   <div className="relative">
-                    <select className="appearance-none bg-white/5 dark:bg-white/5 border border-[#D4C8E8]/40 dark:border-white/10 rounded-lg px-2.5 py-1.5 pr-7 text-[11px] text-[#4B2D7A] dark:text-gray-light cursor-pointer focus:outline-none focus:border-gold/50">
+                    <select className="appearance-none bg-white/5 dark:bg-white/5 border border-[#D4C8E8]/40 dark:border-white/10 rounded-lg px-2.5 py-1.5 pr-7 text-[11px] text-[#4B2D7A] dark:text-gray-light cursor-pointer focus:outline-none focus:border-purple-mid/50">
                       <option>Más recientes</option>
                       <option>Más antiguos</option>
                       <option>Nombre</option>
@@ -278,13 +278,13 @@ export default function Landing() {
               <div className="grid grid-cols-3 max-lg:grid-cols-1 gap-5">
               {/* 2026-I — Finalizado */}
               <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0, duration: 0.4 }} viewport={{ once: true }}>
-                <div className="relative rounded-2xl overflow-hidden group cursor-pointer border border-purple-mid/30 hover:border-[#D4AF37]/60 hover:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-300 h-[240px]">
+                <div className="relative rounded-2xl overflow-hidden group cursor-pointer border border-purple-mid/30 hover:border-purple-mid/60 hover:shadow-[0_0_20px_rgba(139,92,246,0.15)] transition-all duration-300 h-[240px]">
                   <img src="/images/1.png" alt="" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0A0614] via-[#0A0614]/60 to-transparent" />
                   <div className="relative h-full flex flex-col justify-between p-5 z-10">
                     <div>
                       <Badge className="rounded-full text-[10px] font-bold uppercase tracking-[.4px] px-2.5 py-0.5 h-auto bg-white/15 text-white border border-white/20 backdrop-blur-sm w-fit mb-2">Finalizado</Badge>
-                      <span className="block text-[10px] tracking-[1.2px] text-gold font-bold uppercase mb-1">Torneo oficial</span>
+                      <span className="block text-[10px] tracking-[1.2px] text-purple-mid font-bold uppercase mb-1">Torneo oficial</span>
                       <h3 className="font-[family-name:var(--font-display)] text-xl uppercase text-white leading-tight">TechCup 2026-I</h3>
                       <p className="text-[12px] text-white/60 mt-1">Ingeniería de Sistemas</p>
                     </div>
@@ -299,7 +299,7 @@ export default function Landing() {
                           <span className="text-[11px] text-white/60"><strong className="text-white/90">384</strong> Jugadores</span>
                           <span className="text-[11px] text-white/60"><strong className="text-white/90">4</strong> Canchas</span>
                         </div>
-                        <span className="text-[11px] font-bold text-gold bg-gold/10 border border-gold/30 px-3 py-1 rounded-full group-hover:bg-gold/20 transition-colors">Ver detalles</span>
+                        <span className="text-[11px] font-bold text-purple-mid bg-purple-mid/10 border border-purple-mid/30 px-3 py-1 rounded-full group-hover:bg-purple-mid/20 transition-colors">Ver detalles</span>
                       </div>
                     </div>
                   </div>
@@ -308,13 +308,13 @@ export default function Landing() {
 
               {/* 2026-II — Próximo */}
               <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.4 }} viewport={{ once: true }}>
-                <div className="relative rounded-2xl overflow-hidden group cursor-pointer border border-purple-mid/30 hover:border-[#D4AF37]/60 hover:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-300 h-[240px]">
+                <div className="relative rounded-2xl overflow-hidden group cursor-pointer border border-purple-mid/30 hover:border-purple-mid/60 hover:shadow-[0_0_20px_rgba(139,92,246,0.15)] transition-all duration-300 h-[240px]">
                   <img src="/images/2.png" alt="" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0A0614] via-[#0A0614]/60 to-transparent" />
                   <div className="relative h-full flex flex-col justify-between p-5 z-10">
                     <div>
                       <Badge className="rounded-full text-[10px] font-bold uppercase tracking-[.4px] px-2.5 py-0.5 h-auto bg-purple-mid text-white w-fit mb-2">Próximo</Badge>
-                      <span className="block text-[10px] tracking-[1.2px] text-gold font-bold uppercase mb-1">Torneo oficial</span>
+                      <span className="block text-[10px] tracking-[1.2px] text-purple-mid font-bold uppercase mb-1">Torneo oficial</span>
                       <h3 className="font-[family-name:var(--font-display)] text-xl uppercase text-white leading-tight">TechCup 2026-II</h3>
                       <p className="text-[12px] text-white/60 mt-1">Ingeniería de Sistemas</p>
                     </div>
@@ -329,7 +329,7 @@ export default function Landing() {
                           <span className="text-[11px] text-white/60"><strong className="text-white/90">384</strong> Jugadores</span>
                           <span className="text-[11px] text-white/60"><strong className="text-white/90">4</strong> Canchas</span>
                         </div>
-                        <span className="text-[11px] font-bold text-gold bg-gold/10 border border-gold/30 px-3 py-1 rounded-full group-hover:bg-gold/20 transition-colors">Ver detalles</span>
+                        <span className="text-[11px] font-bold text-purple-mid bg-purple-mid/10 border border-purple-mid/30 px-3 py-1 rounded-full group-hover:bg-purple-mid/20 transition-colors">Ver detalles</span>
                       </div>
                     </div>
                   </div>
@@ -338,13 +338,13 @@ export default function Landing() {
 
               {/* Relámpago */}
               <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.4 }} viewport={{ once: true }}>
-                <div className="relative rounded-2xl overflow-hidden group cursor-pointer border border-purple-mid/30 hover:border-[#D4AF37]/60 hover:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-300 h-[240px]">
+                <div className="relative rounded-2xl overflow-hidden group cursor-pointer border border-purple-mid/30 hover:border-purple-mid/60 hover:shadow-[0_0_20px_rgba(139,92,246,0.15)] transition-all duration-300 h-[240px]">
                   <img src="/images/3.png" alt="" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0A0614] via-[#0A0614]/60 to-transparent" />
                   <div className="relative h-full flex flex-col justify-between p-5 z-10">
                     <div>
-                      <Badge className="rounded-full text-[10px] font-bold uppercase tracking-[.4px] px-2.5 py-0.5 h-auto bg-gold/20 text-gold border border-gold/40 backdrop-blur-sm w-fit mb-2">Relámpago</Badge>
-                      <span className="block text-[10px] tracking-[1.2px] text-gold font-bold uppercase mb-1">Torneo relámpago</span>
+                      <Badge className="rounded-full text-[10px] font-bold uppercase tracking-[.4px] px-2.5 py-0.5 h-auto bg-purple-mid/20 text-purple-mid border border-purple-mid/40 backdrop-blur-sm w-fit mb-2">Relámpago</Badge>
+                      <span className="block text-[10px] tracking-[1.2px] text-purple-mid font-bold uppercase mb-1">Torneo relámpago</span>
                       <h3 className="font-[family-name:var(--font-display)] text-xl uppercase text-white leading-tight">TechCup Relámpago 2026</h3>
                       <p className="text-[12px] text-white/60 mt-1">Ingeniería de Sistemas</p>
                     </div>
@@ -359,7 +359,7 @@ export default function Landing() {
                           <span className="text-[11px] text-white/60"><strong className="text-white/90">192</strong> Jugadores</span>
                           <span className="text-[11px] text-white/60"><strong className="text-white/90">2</strong> Canchas</span>
                         </div>
-                        <span className="text-[11px] font-bold text-gold bg-gold/10 border border-gold/30 px-3 py-1 rounded-full group-hover:bg-gold/20 transition-colors">Ver detalles</span>
+                        <span className="text-[11px] font-bold text-purple-mid bg-purple-mid/10 border border-purple-mid/30 px-3 py-1 rounded-full group-hover:bg-purple-mid/20 transition-colors">Ver detalles</span>
                       </div>
                     </div>
                   </div>

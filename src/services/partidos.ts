@@ -8,6 +8,31 @@ export interface Partido {
 }
 
 export const partidos: Partido[] = [
+  // ── Semana del 11 al 17 de Mayo ──
+  // Lunes 11
+  { dia:11, mes:"MAY", eq1:"Sistemas FC",     eq2:"Los Bits",     hora:"6:00 PM",  lugar:"Cancha Principal Sede Norte" },
+  { dia:11, mes:"MAY", eq1:"Tigres FC",       eq2:"Code United",  hora:"8:00 PM",  lugar:"Cancha Principal Sede Norte" },
+  // Martes 12
+  { dia:12, mes:"MAY", eq1:"Dragones FC",     eq2:"IA Warriors",  hora:"7:00 PM",  lugar:"Cancha Principal Sede Norte 2" },
+  { dia:12, mes:"MAY", eq1:"Code United",     eq2:"Los Bits",     hora:"9:00 PM",  lugar:"Cancha Principal Sede Norte" },
+  // Miércoles 13
+  { dia:13, mes:"MAY", eq1:"Tigres FC",       eq2:"Dragones FC",  hora:"6:30 PM",  lugar:"Cancha Principal Sede Norte" },
+  { dia:13, mes:"MAY", eq1:"IA Warriors",     eq2:"Sistemas FC",  hora:"8:30 PM",  lugar:"Auditorio Principal Sede Norte" },
+  // Jueves 14
+  { dia:14, mes:"MAY", eq1:"Code United",     eq2:"IA Warriors",  hora:"7:00 PM",  lugar:"Cancha Principal Sede Norte" },
+  { dia:14, mes:"MAY", eq1:"Tigres FC",       eq2:"Los Bits",     hora:"9:00 PM",  lugar:"Cancha Principal Sede Norte 2" },
+  // Viernes 15
+  { dia:15, mes:"MAY", eq1:"Sistemas FC",     eq2:"Dragones FC",  hora:"6:00 PM",  lugar:"Auditorio Principal Sede Norte" },
+  { dia:15, mes:"MAY", eq1:"Tigres FC",       eq2:"IA Warriors",  hora:"8:00 PM",  lugar:"Cancha Principal Sede Norte" },
+  // Sábado 16
+  { dia:16, mes:"MAY", eq1:"Code United",     eq2:"Dragones FC",  hora:"10:00 AM", lugar:"Cancha Principal Sede Norte" },
+  { dia:16, mes:"MAY", eq1:"Los Bits",        eq2:"IA Warriors",  hora:"12:00 PM", lugar:"Cancha Principal Sede Norte 2" },
+  { dia:16, mes:"MAY", eq1:"Tigres FC",       eq2:"Sistemas FC",  hora:"4:00 PM",  lugar:"Cancha Principal Sede Norte" },
+  // Domingo 17
+  { dia:17, mes:"MAY", eq1:"IA Warriors",     eq2:"Code United",  hora:"11:00 AM", lugar:"Cancha Principal Sede Norte" },
+  { dia:17, mes:"MAY", eq1:"Dragones FC",     eq2:"Los Bits",     hora:"5:00 PM",  lugar:"Auditorio Principal Sede Norte" },
+  { dia:17, mes:"MAY", eq1:"Tigres FC",       eq2:"Code United",  hora:"8:00 PM",  lugar:"Cancha Principal Sede Norte" },
+  // ── Semana del 24 al 25 (original) ──
   { dia:24, mes:"MAY", eq1:"Tigres FC",       eq2:"IA Warriors",  hora:"8:00 PM",  lugar:"Cancha Principal Sede Norte" },
   { dia:24, mes:"MAY", eq1:"Code United",      eq2:"Sistemas FC",  hora:"9:30 PM",  lugar:"Cancha Principal Sede Norte" },
   { dia:25, mes:"MAY", eq1:"Dragones FC",      eq2:"Los Bits",     hora:"5:00 PM",  lugar:"Auditorio Principal Sede Norte" },

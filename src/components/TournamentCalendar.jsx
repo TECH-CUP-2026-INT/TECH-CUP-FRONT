@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   ChevronLeft,
   ChevronRight,
@@ -14,13 +14,16 @@ import {
   Flame,
 } from "lucide-react";
 
-/**
- * TournamentCalendar
- * Réplica de un calendario semanal de torneo (estilo esports),
- * mismos colores, tipografía y estructura que el diseño original.
- */
+// ---------- Constantes de equipos ----------
 
-// ---------- Datos de ejemplo (mismos partidos del diseño) ----------
+const TEAM_MAP = {
+  'Tigres FC': { short: 'TIG', group: 'B', icon: Cat, bg: '#E7B23A', fg: '#3A2A05' },
+  'IA Warriors': { short: 'IA WAR', group: 'A', icon: Swords, bg: '#E7E7EA', fg: '#3A3A42' },
+  'Code United': { short: 'CODE', group: 'A', icon: Code2, bg: '#2B2B33', fg: '#C9C9D6' },
+  'Sistemas FC': { short: 'SYS FC', group: 'B', icon: Shield, bg: '#7A1F2B', fg: '#F3D9DC' },
+  'Dragones FC': { short: 'DRAG', group: 'C', icon: Flame, bg: '#1A1A1F', fg: '#C9C9D6' },
+  'Los Bits': { short: 'BITS', group: 'C', icon: Zap, bg: '#E7E7EA', fg: '#3A3A42' },
+}
 
 const TEAM_ICONS = {
   "SYS FC": { icon: Shield, bg: "#7A1F2B", fg: "#F3D9DC" },
@@ -38,102 +41,41 @@ const GROUP_STYLES = {
   "Grupo C": { bg: "#7C3AED", fg: "#F3EEFF" },
 };
 
-const DAYS = [
-  { key: "LUN", date: "12 MAY", full: "Lunes 12 de Mayo" },
-  { key: "MAR", date: "13 MAY", full: "Martes 13 de Mayo" },
-  { key: "MIE", date: "1 MAY", full: "Miércoles", highlight: true },
-  { key: "JUE", date: "15 MAY", full: "Jueves 15 de Mayo" },
-  { key: "VIE", date: "16 MAY", full: "Viernes 16 de Mayo" },
-  { key: "SAB", date: "17 MAY", full: "Sábado 17 de Mayo" },
-  { key: "DOM", date: "18 MAY", full: "Domingo 18 de Mayo" },
-];
-
 const START_HOUR = 8;
 const END_HOUR = 21;
-const HOUR_HEIGHT = 60; // px por hora
+const HOUR_HEIGHT = 60;
 
-const MATCHES = [
-  {
-    id: 1,
-    day: 1, // MAR
-    start: 10 * 60 + 30,
-    duration: 60,
-    group: "Grupo B",
-    home: "SYS FC",
-    away: "IA WAR",
-    court: "Cancha 2",
-  },
-  {
-    id: 2,
-    day: 2, // MIE
-    start: 12 * 60,
-    duration: 90,
-    group: "Grupo A",
-    home: "IA WAR",
-    away: "CODE",
-    court: "Cancha 1",
-  },
-  {
-    id: 3,
-    day: 2, // MIE
-    start: 19 * 60 + 30,
-    duration: 60,
-    group: "Grupo A",
-    home: "CODE",
-    away: "DRAG",
-    court: "Cancha 1",
-  },
-  {
-    id: 4,
-    day: 3, // JUE
-    start: 15 * 60 + 30,
-    duration: 60,
-    group: "Grupo C",
-    home: "DRAG",
-    away: "BITS",
-    court: "Cancha 3",
-  },
-  {
-    id: 5,
-    day: 4, // VIE
-    start: 16 * 60,
-    duration: 60,
-    group: "Grupo B",
-    home: "TIG",
-    away: "SYS FC",
-    court: "Cancha 1",
-  },
-  {
-    id: 6,
-    day: 5, // SAB
-    start: 9 * 60,
-    duration: 75,
-    group: "Grupo A",
-    home: "TIGG",
-    away: "CODE",
-    court: "Cancha 1",
-  },
-  {
-    id: 7,
-    day: 0, // LUN
-    start: 18 * 60,
-    duration: 60,
-    group: "Grupo C",
-    home: "BITS",
-    away: "IA WAR",
-    court: "Cancha 2",
-  },
-  {
-    id: 8,
-    day: 6, // DOM
-    start: 20 * 60,
-    duration: 60,
-    group: "Grupo B",
-    home: "SYS FC",
-    away: "BITS",
-    court: "Cancha 3",
-  },
-];
+// ---------- Helpers ----------
+
+function minutosADesdeMedianoche(horaStr) {
+  // "8:00 PM" -> 20*60, "5:00 PM" -> 17*60, "9:30 PM" -> 21*60+30
+  const [h, mPart] = horaStr.split(':')
+  const min = parseInt(mPart.replace(/\D/g, ''))
+  const esPM = horaStr.includes('PM')
+  let hh = parseInt(h)
+  if (esPM && hh !== 12) hh += 12
+  if (!esPM && hh === 12) hh = 0
+  return hh * 60 + min
+}
+
+function convertirPartidos(partidos) {
+  return partidos.map((p, idx) => {
+    const info1 = TEAM_MAP[p.eq1] || { short: p.eq1.slice(0, 6).toUpperCase(), group: 'A', icon: Shield, bg: '#2B2B33', fg: '#C9C9D6' }
+    const info2 = TEAM_MAP[p.eq2] || { short: p.eq2.slice(0, 6).toUpperCase(), group: 'A', icon: Shield, bg: '#2B2B33', fg: '#C9C9D6' }
+    return {
+      id: idx + 1,
+      day: new Date(2026, 4, p.dia).getDay(), // 0=Dom
+      start: minutosADesdeMedianoche(p.hora),
+      duration: 60,
+      group: `Grupo ${info1.group}`,
+      home: info1.short,
+      away: info2.short,
+      court: p.lugar === 'Cancha Principal Sede Norte' ? 'Cancha 1'
+        : p.lugar === 'Cancha Principal Sede Norte 2' ? 'Cancha 2'
+        : 'Cancha 3',
+    }
+  })
+}
 
 // Línea de "ahora" (estática, como en el diseño ~14:00)
 const NOW_MINUTES = 14 * 60;
@@ -174,55 +116,6 @@ function GroupPill({ group }) {
   );
 }
 
-function MatchCard({ match }) {
-  const top = ((match.start - START_HOUR * 60) / 60) * HOUR_HEIGHT;
-  const height = (match.duration / 60) * HOUR_HEIGHT;
-  const timeLabel = minutesToLabel(match.start);
-
-  return (
-    <div
-      className="absolute left-1 right-1 rounded-xl p-2.5 flex flex-col gap-1.5 cursor-pointer transition-transform hover:-translate-y-[1px]"
-      style={{
-        top,
-        height: Math.max(height, 70),
-        backgroundColor: "#1B1524",
-        border: "1px solid #322A44",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.35)",
-      }}
-    >
-      <div className="flex items-center justify-between gap-1">
-        <span className="text-[11px] font-medium" style={{ color: "#9C93B5" }}>
-          {timeLabel}
-        </span>
-        <GroupPill group={match.group} />
-      </div>
-
-      <div className="flex items-center gap-1.5">
-        <TeamBadge team={match.home} />
-        <span
-          className="text-[10px] font-semibold"
-          style={{ color: "#6E6685" }}
-        >
-          vs
-        </span>
-        <TeamBadge team={match.away} />
-      </div>
-
-      <div className="text-[12px] font-semibold text-white leading-tight truncate">
-        {match.home} <span style={{ color: "#8B84A0" }}>vs</span> {match.away}
-      </div>
-
-      <div
-        className="flex items-center gap-1 text-[10.5px] mt-auto"
-        style={{ color: "#8B84A0" }}
-      >
-        <MapPin size={11} />
-        <span>{match.court}</span>
-      </div>
-    </div>
-  );
-}
-
 function minutesToLabel(mins) {
   const h = Math.floor(mins / 60);
   const m = mins % 60;
@@ -231,13 +124,60 @@ function minutesToLabel(mins) {
 
 // ---------- Componente principal ----------
 
-export default function TournamentCalendar() {
+export default function TournamentCalendar({ partidos = [], mes = 4, año = 2026, onMesChange }) {
   const [view, setView] = useState("Semana");
+  const [selectedMatch, setSelectedMatch] = useState(null);
+
+  const today = new Date()
+  const primerDia = new Date(año, mes, 1)
+  const primerDiaSemana = (primerDia.getDay() || 7) - 1 // 0=Lu
+  const diasEnMes = new Date(año, mes + 1, 0).getDate()
+
+  // Encontrar la semana actual: día 14 del mes -> qué semana cae
+  const semanaActualIdx = Math.floor((14 + primerDiaSemana - 1) / 7)
+
+  function generarSemana(semanaIdx) {
+    const inicio = semanaIdx * 7 - primerDiaSemana + 1
+    return [0,1,2,3,4,5,6].map(offset => {
+      const d = inicio + offset
+      return d >= 1 && d <= diasEnMes ? d : null
+    })
+  }
+
+  const semana = generarSemana(semanaActualIdx).filter(d => d !== null)
+  const diasSemana = semana.length > 0 ? semana : [1,2,3,4,5,6,7]
+
+  const NOMBRES_DIAS = ['DOM','LUN','MAR','MIÉ','JUE','VIE','SÁB']
+  const NOMBRES_MES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
+
+  const DAYS = diasSemana.map((d, i) => {
+    const fecha = new Date(año, mes, d)
+    const dayOfWeek = fecha.getDay()
+    const key = NOMBRES_DIAS[dayOfWeek]
+    return {
+      key,
+      date: `${d} ${NOMBRES_MES[mes].slice(0,3).toUpperCase()}`,
+      full: `${key} ${d} de ${NOMBRES_MES[mes]}`,
+      highlight: d === today.getDate() && mes === today.getMonth() && año === today.getFullYear(),
+      dayNum: d,
+    }
+  })
+
+  const MATCHES = useMemo(() => convertirPartidos(partidos), [partidos])
 
   const hours = [];
   for (let h = START_HOUR; h <= END_HOUR; h++) hours.push(h);
 
   const nowTop = ((NOW_MINUTES - START_HOUR * 60) / 60) * HOUR_HEIGHT;
+
+  const navegarSemana = (dir) => {
+    const nuevaFecha = new Date(año, mes, diasSemana[0] + dir * 7)
+    onMesChange?.(nuevaFecha.getMonth(), nuevaFecha.getFullYear())
+  }
+
+  const irAHoy = () => {
+    onMesChange?.(today.getMonth(), today.getFullYear())
+  }
 
   return (
     <div
@@ -279,15 +219,17 @@ export default function TournamentCalendar() {
           <button
             className="p-1.5 rounded-lg transition-colors"
             style={{ backgroundColor: "#171020", color: "#9C93B5" }}
+            onClick={() => navegarSemana(-1)}
           >
             <ChevronLeft size={16} />
           </button>
           <span className="text-[15px] font-semibold text-white whitespace-nowrap">
-            12 – 18 de Mayo, 2024
+            {diasSemana[0]} – {diasSemana[diasSemana.length - 1]} de {NOMBRES_MES[mes]}, {año}
           </span>
           <button
             className="p-1.5 rounded-lg transition-colors"
             style={{ backgroundColor: "#171020", color: "#9C93B5" }}
+            onClick={() => navegarSemana(1)}
           >
             <ChevronRight size={16} />
           </button>
@@ -301,6 +243,7 @@ export default function TournamentCalendar() {
             color: "#E9E6F0",
             border: "1px solid #2A2236",
           }}
+          onClick={irAHoy}
         >
           Hoy
         </button>
@@ -349,90 +292,190 @@ export default function TournamentCalendar() {
       </div>
 
       {/* Cuerpo del calendario */}
-      <div className="flex-1 overflow-auto">
-        <div
-          className="grid relative"
-          style={{ gridTemplateColumns: "64px repeat(7, 1fr)" }}
-        >
-          {/* Columna de "All day" + horas */}
-          <div>
-            <div
-              className="flex items-start justify-end pr-2 text-[10.5px]"
-              style={{
-                height: 36,
-                color: "#6E6685",
-                borderBottom: "1px solid #201933",
-              }}
-            >
-              All day
-            </div>
-            {hours.map((h) => (
-              <div
-                key={h}
-                className="flex items-start justify-end pr-2 text-[10.5px] -translate-y-2"
-                style={{ height: HOUR_HEIGHT, color: "#6E6685" }}
-              >
-                {String(h).padStart(2, "0")}:00
-              </div>
-            ))}
-          </div>
+      {view === "Día" ? (
+        /* ───── Vista DÍA ───── */
+        <DayView
+          DAYS={DAYS}
+          hours={hours}
+          MATCHES={MATCHES}
+          nowTop={nowTop}
+          HOUR_HEIGHT={HOUR_HEIGHT}
+          selectedMatch={selectedMatch}
+          onSelectMatch={setSelectedMatch}
+        />
+      ) : view === "Lista" ? (
+        /* ───── Vista LISTA ───── */
+        <ListView
+          MATCHES={MATCHES}
+          DAYS={DAYS}
+          selectedMatch={selectedMatch}
+          onSelectMatch={setSelectedMatch}
+        />
+      ) : (
+        /* ───── Vista SEMANA ───── */
+        <WeekView
+          DAYS={DAYS}
+          hours={hours}
+          MATCHES={MATCHES}
+          nowTop={nowTop}
+          HOUR_HEIGHT={HOUR_HEIGHT}
+          selectedMatch={selectedMatch}
+          onSelectMatch={setSelectedMatch}
+        />
+      )}
+    </div>
+  );
+}
 
-          {/* Columnas de días */}
-          {DAYS.map((day, dayIndex) => (
-            <div
-              key={day.key}
-              className="relative"
-              style={{
-                borderLeft: "1px solid #201933",
-                backgroundColor: day.highlight
-                  ? "rgba(124,58,237,0.06)"
-                  : "transparent",
-              }}
-            >
-              {/* All day row */}
-              <div style={{ height: 36, borderBottom: "1px solid #201933" }} />
+/* ───── SUBCOMPONENTES DE VISTA ───── */
 
-              {/* Líneas de hora */}
-              {hours.map((h) => (
-                <div
-                  key={h}
-                  style={{
-                    height: HOUR_HEIGHT,
-                    borderBottom: "1px solid #17111f",
-                  }}
-                />
-              ))}
-
-              {/* Línea de "ahora" solo en la columna resaltada */}
-              {day.highlight && (
-                <div
-                  className="absolute left-0 right-0 flex items-center z-20"
-                  style={{ top: nowTop + 36 }}
-                >
-                  <div
-                    className="rounded-full -ml-[5px]"
-                    style={{
-                      width: 9,
-                      height: 9,
-                      backgroundColor: "#F59E0B",
-                    }}
-                  />
-                  <div
-                    className="flex-1"
-                    style={{ height: 1.5, backgroundColor: "#F59E0B" }}
-                  />
-                </div>
-              )}
-
-              {/* Partidos */}
-              <div className="absolute inset-0" style={{ top: 36 }}>
-                {MATCHES.filter((m) => m.day === dayIndex).map((match) => (
-                  <MatchCard key={match.id} match={match} />
-                ))}
-              </div>
+function WeekView({ DAYS, hours, MATCHES, nowTop, HOUR_HEIGHT, selectedMatch, onSelectMatch }) {
+  return (
+    <div className="flex-1 overflow-auto">
+      <div className="grid relative" style={{ gridTemplateColumns: "64px repeat(7, 1fr)" }}>
+        <div>
+          <div className="flex items-start justify-end pr-2 text-[10.5px]" style={{ height: 36, color: "#6E6685", borderBottom: "1px solid #201933" }}>All day</div>
+          {hours.map((h) => (
+            <div key={h} className="flex items-start justify-end pr-2 text-[10.5px] -translate-y-2" style={{ height: HOUR_HEIGHT, color: "#6E6685" }}>
+              {String(h).padStart(2, "0")}:00
             </div>
           ))}
         </div>
+        {DAYS.map((day, dayIndex) => (
+          <div key={day.key} className="relative" style={{ borderLeft: "1px solid #201933", backgroundColor: day.highlight ? "rgba(124,58,237,0.06)" : "transparent" }}>
+            <div style={{ height: 36, borderBottom: "1px solid #201933" }} />
+            {hours.map((h) => (
+              <div key={h} style={{ height: HOUR_HEIGHT, borderBottom: "1px solid #17111f" }} />
+            ))}
+            {day.highlight && (
+              <div className="absolute left-0 right-0 flex items-center z-20" style={{ top: nowTop + 36 }}>
+                <div className="rounded-full -ml-[5px]" style={{ width: 9, height: 9, backgroundColor: "#F59E0B" }} />
+                <div className="flex-1" style={{ height: 1.5, backgroundColor: "#F59E0B" }} />
+              </div>
+            )}
+            <div className="absolute inset-0" style={{ top: 36 }}>
+              {MATCHES.filter((m) => m.day === dayIndex).map((match) => (
+                <MatchCard key={match.id} match={match} selected={selectedMatch?.id === match.id} onClick={() => onSelectMatch?.(match)} />
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function DayView({ DAYS, hours, MATCHES, nowTop, HOUR_HEIGHT, selectedMatch, onSelectMatch }) {
+  const today = DAYS.find(d => d.highlight) || DAYS[0]
+  const todayIdx = DAYS.indexOf(today)
+  return (
+    <div className="flex-1 overflow-auto">
+      <div className="grid relative" style={{ gridTemplateColumns: "64px 1fr" }}>
+        <div>
+          <div className="flex items-start justify-end pr-2 text-[10.5px]" style={{ height: 36, color: "#6E6685", borderBottom: "1px solid #201933" }}>All day</div>
+          {hours.map((h) => (
+            <div key={h} className="flex items-start justify-end pr-2 text-[10.5px] -translate-y-2" style={{ height: HOUR_HEIGHT, color: "#6E6685" }}>
+              {String(h).padStart(2, "0")}:00
+            </div>
+          ))}
+        </div>
+        <div className="relative" style={{ borderLeft: "1px solid #201933" }}>
+          <div style={{ height: 36, borderBottom: "1px solid #201933" }} />
+          {hours.map((h) => (
+            <div key={h} style={{ height: HOUR_HEIGHT, borderBottom: "1px solid #17111f" }} />
+          ))}
+          <div className="absolute left-0 right-0 flex items-center z-20" style={{ top: nowTop + 36 }}>
+            <div className="rounded-full -ml-[5px]" style={{ width: 9, height: 9, backgroundColor: "#F59E0B" }} />
+            <div className="flex-1" style={{ height: 1.5, backgroundColor: "#F59E0B" }} />
+          </div>
+          <div className="absolute inset-0" style={{ top: 36 }}>
+            {MATCHES.filter((m) => m.day === todayIdx).map((match) => (
+              <MatchCard key={match.id} match={match} selected={selectedMatch?.id === match.id} onClick={() => onSelectMatch?.(match)} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ListView({ MATCHES, DAYS, selectedMatch, onSelectMatch }) {
+  const allMatches = MATCHES.map(m => {
+    const day = DAYS[m.day]
+    return { ...m, dayLabel: day?.date || '', dayName: day?.key || '' }
+  }).sort((a, b) => a.day - b.day || a.start - b.start)
+
+  return (
+    <div className="flex-1 overflow-auto p-4">
+      <div className="flex flex-col gap-2">
+        {allMatches.length === 0 && (
+          <div className="text-center py-10 text-[13px]" style={{ color: '#6E6685' }}>
+            No hay partidos esta semana
+          </div>
+        )}
+        {allMatches.map((match) => (
+          <button key={match.id} onClick={() => onSelectMatch?.(match)}
+            className="w-full text-left rounded-xl p-3 flex items-center gap-3 transition-all"
+            style={{
+              backgroundColor: selectedMatch?.id === match.id ? '#1B1524' : '#171020',
+              border: `1px solid ${selectedMatch?.id === match.id ? '#7C3AED' : '#2A2236'}`,
+            }}
+          >
+            <div className="flex flex-col items-center min-w-[50px]">
+              <span className="text-[10px] font-bold tracking-wide" style={{ color: '#E7A93A' }}>{match.dayLabel}</span>
+              <span className="text-[13px] font-semibold text-white">{match.dayName}</span>
+            </div>
+            <div className="flex items-center gap-2 flex-1 min-w-0">
+              <TeamBadge team={match.home} />
+              <span className="text-[11px]" style={{ color: '#6E6685' }}>vs</span>
+              <TeamBadge team={match.away} />
+              <span className="text-[12px] font-semibold text-white ml-2">{match.home} vs {match.away}</span>
+            </div>
+            <div className="flex items-center gap-2 text-[11px]" style={{ color: '#8B84A0' }}>
+              <span>{String(Math.floor(match.start / 60)).padStart(2, '0')}:{String(match.start % 60).padStart(2, '0')}</span>
+              <MapPin size={11} /><span>{match.court}</span>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ───── Actualizar MatchCard para aceptar onClick ───── */
+function MatchCard({ match, selected, onClick }) {
+  const top = ((match.start - START_HOUR * 60) / 60) * HOUR_HEIGHT;
+  const height = (match.duration / 60) * HOUR_HEIGHT;
+  const timeLabel = minutesToLabel(match.start);
+
+  return (
+    <div onClick={onClick}
+      className="absolute left-1 right-1 rounded-xl p-2.5 flex flex-col gap-1.5 cursor-pointer transition-transform hover:-translate-y-[1px]"
+      style={{
+        top,
+        height: Math.max(height, 70),
+        backgroundColor: "#1B1524",
+        border: selected ? "1px solid #7C3AED" : "1px solid #322A44",
+        boxShadow: selected ? "0 0 0 1px #7C3AED, 0 2px 8px rgba(0,0,0,0.35)" : "0 2px 8px rgba(0,0,0,0.35)",
+      }}
+    >
+      <div className="flex items-center justify-between gap-1">
+        <span className="text-[11px] font-medium" style={{ color: "#9C93B5" }}>
+          {timeLabel}
+        </span>
+        <GroupPill group={match.group} />
+      </div>
+      <div className="flex items-center gap-1.5">
+        <TeamBadge team={match.home} />
+        <span className="text-[10px] font-semibold" style={{ color: "#6E6685" }}>vs</span>
+        <TeamBadge team={match.away} />
+      </div>
+      <div className="text-[12px] font-semibold text-white leading-tight truncate">
+        {match.home} <span style={{ color: "#8B84A0" }}>vs</span> {match.away}
+      </div>
+      <div className="flex items-center gap-1 text-[10.5px] mt-auto" style={{ color: "#8B84A0" }}>
+        <MapPin size={11} />
+        <span>{match.court}</span>
       </div>
     </div>
   );

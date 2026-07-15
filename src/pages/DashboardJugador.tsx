@@ -11,6 +11,7 @@ import { InteractiveHoverButton } from '@/components/common/interactive-hover-bu
 import { Badge } from '@/components/common/badge'
 import { useAuth } from '@/hooks/auth/useAuth'
 import ManchasFloating from '@/components/common/ManchasFloating'
+import FallingBalls from '@/components/FallingBalls'
 import { partidos, posiciones } from '@/services/partidos'
 import { torneos } from '@/services/torneos'
 import {
@@ -68,6 +69,17 @@ export default function DashboardJugador() {
   const [editSaved, setEditSaved] = useState(false)
   const [torneoModal, setTorneoModal] = useState<Torneo | null>(null)
   const [modalTab, setModalTab] = useState('info')
+  const [browseTeamsOpen, setBrowseTeamsOpen] = useState(false)
+  const [teamSearch, setTeamSearch] = useState('')
+
+  const equiposDisponibles = [
+    { nom: 'Tigres FC', img: '/images/logo1.png', jug: '8/12', vac: 4, cap: 'Carlos M.', desc: 'Equipo competitivo buscando delantero y defensas.' },
+    { nom: 'Code United', img: '/images/logo2.png', jug: '10/12', vac: 2, cap: 'Ana G.', desc: 'Buscamos mediocampista y portero para la temporada.' },
+    { nom: 'Sistemas FC', img: '/images/logo3.png', jug: '7/12', vac: 5, cap: 'Pedro L.', desc: 'Equipo nuevo, abiertos a todas las posiciones.' },
+    { nom: 'IA Warriors', img: '/images/logo4.png', jug: '9/12', vac: 3, cap: 'Laura R.', desc: 'Refuerzos para ataque y defensa.' },
+    { nom: 'Dragones FC', img: '/images/logo1.png', jug: '11/12', vac: 1, cap: 'Jorge H.', desc: 'Buscamos un extremo rápido.' },
+    { nom: 'Los Bits', img: '/images/logo2.png', jug: '6/12', vac: 6, cap: 'Diana F.', desc: 'Equipo en formación, todas las posiciones disponibles.' },
+  ]
 
   /* ─── captain state ─── */
   const [capitanTab, setCapitanTab] = useState<CapitanTab>('dashboard')
@@ -114,14 +126,13 @@ export default function DashboardJugador() {
 
   return (
     <div className="min-h-screen bg-black">
+      <FallingBalls count={40} duration={20000} startDelay={2000} triggerOnScroll={true} />
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} collapsed={sidebarCollapsed} onCollapse={handleCollapse} />
 
       <div className="min-w-0 transition-all duration-300" style={{ marginLeft: sidebarWidth }}>
         <AppTopbar title={isCaptain ? `Panel Capitán — ${MI_EQUIPO.nombre}` : 'Panel Jugador'} sidebarOpen={sidebarOpen} sidebarCollapsed={sidebarCollapsed} onMenuClick={() => setSidebarOpen(true)} />
 
-        <main className="p-8 pb-[60px] max-md:p-5 relative">
-          <div className="fixed top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-purple-mid/15 blur-[150px] pointer-events-none" />
-          <div className="fixed bottom-[-5%] left-[-5%] w-[450px] h-[450px] rounded-full bg-gold/15 blur-[120px] pointer-events-none" />
+        <main className="p-8 pb-[60px] max-md:p-5 relative" style={{ backgroundImage: 'linear-gradient(rgba(30,10,60,0.65), rgba(30,10,60,0.65)), url(/images/fondo3.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
 
           {/* ═══════════ PERFIL ═══════════ */}
           <section className="rounded-2xl mb-[26px] relative overflow-hidden border border-purple-mid/30" style={{ minHeight: '280px' }}>
@@ -171,31 +182,14 @@ export default function DashboardJugador() {
                   <p className="text-4xl mb-2 opacity-60">🏠</p>
                   <p className="text-sm text-text-muted mb-4">No pertenecés a ningún equipo aún</p>
                   <div className="flex gap-2 justify-center">
-                    <Button onClick={() => navigate('/torneos')} className="rounded-full bg-gold/15 backdrop-blur-md border border-gold/40 text-gold hover:bg-gold/25 hover:text-white shadow-lg shadow-gold/10 text-xs font-bold px-4">Buscar equipo</Button>
+                    <Button onClick={() => setBrowseTeamsOpen(true)} className="rounded-full bg-gold/15 backdrop-blur-md border border-gold/40 text-gold hover:bg-gold/25 hover:text-white shadow-lg shadow-gold/10 text-xs font-bold px-4">Buscar equipo</Button>
                     <Button onClick={handleCrearEquipo} variant="outline" className="rounded-full bg-white/5 backdrop-blur-md border border-purple-mid/40 text-gold hover:bg-gold/15 hover:border-gold/60 hover:text-white text-xs px-4">Crear equipo</Button>
                   </div>
                 </div>
               )}
             </SpotlightCard>
 
-            {/* Estadísticas */}
-            <SpotlightCard accent="purple" className="p-5 bg-black/30 backdrop-blur-sm border border-purple-mid/30 rounded-2xl shadow-lg shadow-purple-mid/10">
-              <h3 className="text-[14.5px] font-semibold tracking-[.3px] mb-3 flex items-center gap-2 text-white"><span>📊</span> Mis estadísticas</h3>
-              <div className="space-y-2.5">
-                {[
-                  { label: 'Partidos jugados', value: '8', color: 'text-purple-300' },
-                  { label: 'Goles marcados', value: '12', color: 'text-gold' },
-                  { label: 'Asistencias', value: '4', color: 'text-purple-300' },
-                  { label: 'Tarjetas amarillas', value: '2', color: 'text-yellow-400' },
-                  { label: 'Minutos jugados', value: "620'", color: 'text-gray-400' },
-                ].map((s, i) => (
-                  <div key={i} className="flex justify-between text-sm bg-black/20 backdrop-blur-sm rounded-lg px-3 py-2 border border-white/5">
-                    <span className="text-text-muted">{s.label}</span>
-                    <span className={`font-bold ${s.color}`}>{s.value}</span>
-                  </div>
-                ))}
-              </div>
-            </SpotlightCard>
+
 
             {/* Invitaciones */}
             <SpotlightCard accent="purple" className="p-5 bg-black/40 backdrop-blur-sm border border-purple-mid/30 rounded-2xl shadow-lg shadow-purple-mid/10">
@@ -655,6 +649,73 @@ export default function DashboardJugador() {
           </div>
         </div>
       )}
+
+      {/* ─── Modal: Buscar equipo ─── */}
+      <AnimatePresence>
+        {browseTeamsOpen && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[80] flex items-center justify-center p-4" onClick={() => setBrowseTeamsOpen(false)}>
+            <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+            <motion.div initial={{ opacity: 0, y: 20, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 20, scale: 0.95 }} transition={{ duration: 0.25 }}
+              className="relative w-full max-w-2xl bg-[#1A0D2E] border border-white/10 rounded-3xl overflow-hidden shadow-2xl" onClick={e => e.stopPropagation()}>
+              
+              <div className="px-8 pt-10 pb-6 text-center border-b border-white/5">
+                <button onClick={() => setBrowseTeamsOpen(false)} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center hover:bg-gold transition-colors"><X size={16} /></button>
+                <span className="inline-flex items-center gap-2 text-[11.5px] font-bold tracking-[1.6px] uppercase text-gold bg-gold/10 border border-gold/30 px-3.5 py-1.5 rounded-full mb-4">
+                  👥 Equipos disponibles
+                </span>
+                <h2 className="font-[family-name:var(--font-display-alt)] font-bold text-[clamp(28px,3.5vw,42px)] leading-[.92] tracking-[.5px] uppercase italic mb-3">
+                  <span className="text-white">Explorá los</span> <span className="text-gold">equipos</span>
+                </h2>
+                <p className="text-base leading-relaxed text-[#7A6B99] max-w-[560px] mx-auto">
+                  Descubre los equipos inscritos, mirá sus vacantes y enviá solicitud para unirte.
+                </p>
+              </div>
+
+              {/* Buscador */}
+              <div className="px-6 pt-4 pb-2">
+                <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 focus-within:border-gold/40 transition-all">
+                  <Search size={14} className="text-text-faint shrink-0" />
+                  <input value={teamSearch} onChange={e => setTeamSearch(e.target.value)} placeholder="Buscar equipo por nombre..." className="bg-transparent border-none outline-none text-white placeholder:text-text-faint text-sm w-full" />
+                </div>
+              </div>
+              <div className="max-h-[45vh] overflow-y-auto p-6 pt-2 space-y-3">
+                {equiposDisponibles.filter(eq => eq.nom.toLowerCase().includes(teamSearch.toLowerCase())).map((eq, i) => (
+                  <div key={i} className="flex items-center gap-4 p-4 rounded-2xl bg-black/30 backdrop-blur-sm border border-purple-mid/20 hover:border-purple-mid/50 transition-all group">
+                    <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 ring-2 ring-gold/30 bg-black/40">
+                      <img src={eq.img} alt="" className="w-full h-full object-contain" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <h4 className="text-sm font-bold text-white">{eq.nom}</h4>
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${eq.vac > 0 ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-red-500/20 text-red-400 border border-red-500/30'}`}>
+                          {eq.vac > 0 ? `${eq.vac} vacante${eq.vac > 1 ? 's' : ''}` : 'Completo'}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-text-muted mt-0.5">{eq.desc}</p>
+                      <div className="flex items-center gap-3 mt-1.5 text-[10px] text-text-faint">
+                        <span>👥 {eq.jug}</span>
+                        <span>👤 Capitán: {eq.cap}</span>
+                      </div>
+                    </div>
+                    <button disabled={eq.vac === 0}
+                      onClick={() => { if (eq.vac > 0) { alert(`Solicitud enviada a ${eq.nom} ✅`); setBrowseTeamsOpen(false) } }}
+                      className={`shrink-0 px-4 py-2 rounded-full text-xs font-bold transition-all ${eq.vac > 0 ? 'bg-gold/15 border border-gold/40 text-gold hover:bg-gold/25 hover:text-white' : 'bg-white/5 border border-white/10 text-text-faint cursor-not-allowed'}`}>
+                      {eq.vac > 0 ? 'Solicitar' : 'Lleno'}
+                    </button>
+                  </div>
+                ))}
+                {equiposDisponibles.filter(eq => eq.nom.toLowerCase().includes(teamSearch.toLowerCase())).length === 0 && (
+                  <p className="text-center py-8 text-text-muted text-sm">No hay equipos que coincidan con "<strong className="text-white">{teamSearch}</strong>"</p>
+                )}
+              </div>
+
+              <div className="px-6 py-4 text-center border-t border-white/5">
+                <p className="text-xs text-text-muted">¿No encontrás lo que buscás? <button onClick={() => { setBrowseTeamsOpen(false); handleCrearEquipo() }} className="text-gold font-semibold hover:underline">Creá tu propio equipo</button></p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

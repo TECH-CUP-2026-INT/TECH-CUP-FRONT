@@ -82,22 +82,12 @@ export default function TechCupRoleSelector({ onContinue } = {}) {
           border-radius:16px;
           overflow:hidden;
           margin-bottom:22px;
-          background:linear-gradient(160deg,#1c1330,#100a1e);
+          background:#100a1e;
           border:1px solid rgba(255,255,255,0.12);
           display:flex;
           align-items:center;
         }
-        .tc-hero-glow{
-          position:absolute;
-          right:8%;
-          bottom:-30%;
-          width:60%;
-          height:75%;
-          border-radius:50%;
-          filter:blur(60px);
-          opacity:.4;
-          transition:opacity .5s ease, background .5s ease;
-        }
+        .tc-hero-glow{ display:none; }
         .tc-hero-text{
           position:relative;
           z-index:2;
@@ -328,14 +318,27 @@ export default function TechCupRoleSelector({ onContinue } = {}) {
               {activeRole ? activeRole.sub : DEFAULT_STATE.sub}
             </p>
           </div>
+          {active === "arbitro" && (
+            <video
+              className="absolute inset-0 w-full h-full object-cover"
+              src="/videos/video-arbitro.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              style={{ filter: 'brightness(0.5)' }}
+            />
+          )}
           <div className="tc-hero-imgs">
             {ROLES.map((r) => (
-              <img
-                key={r.key}
-                className={`tc-hero-img${active === r.key ? " active" : ""}`}
-                src={r.hero}
-                alt={r.name}
-              />
+              r.key !== "arbitro" && (
+                <img
+                  key={r.key}
+                  className={`tc-hero-img${active === r.key ? " active" : ""}`}
+                  src={r.hero}
+                  alt={r.name}
+                />
+              )
             ))}
           </div>
         </div>
