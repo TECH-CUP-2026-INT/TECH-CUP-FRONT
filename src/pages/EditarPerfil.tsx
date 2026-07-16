@@ -36,7 +36,7 @@ export default function EditarPerfil() {
   const [name, setName] = useState(saved?.name || user?.name || 'Juan Camilo Rivera')
   const [program, setProgram] = useState(saved?.program || 'Ing. Sistemas')
   const [semester, setSemester] = useState(saved?.semester || '6')
-  const [avatar] = useState(saved?.avatar || user?.avatar || 'https://i.pravatar.cc/150?img=13')
+  const [avatar] = useState(saved?.avatar || user?.avatar || '')
   const [savedMsg, setSavedMsg] = useState(false)
 
   const handleSave = () => {

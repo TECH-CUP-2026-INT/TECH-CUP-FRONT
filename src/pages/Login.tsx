@@ -41,7 +41,7 @@ export default function Login() {
   const handleGoogleSuccess = (response: CredentialResponse) => {
     const payload = decodeJwtPayload(response.credential || '')
     const email = payload?.email || `${selectedRole}@google.com`
-    login(email, selectedRole as import('@/hooks/auth/useAuth').UserRole, payload?.picture)
+    login(email, selectedRole as import('@/hooks/auth/useAuth').UserRole, payload?.picture, payload?.name)
     navigate(selectedRole === 'arbitro' ? '/arbitro/dashboard' : `/dashboard/${selectedRole}`)
   }
 
