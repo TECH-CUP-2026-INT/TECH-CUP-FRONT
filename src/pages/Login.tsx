@@ -1,19 +1,45 @@
 import { useState, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { GoogleLogin, type CredentialResponse } from '@react-oauth/google'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/common/button'
 import { Input } from '@/components/common/input'
 import { Label } from '@/components/common/label'
 import { Checkbox } from '@/components/common/checkbox'
-import { Eye, EyeOff, Mail, Lock, ArrowLeft } from 'lucide-react'
+import { Eye, EyeOff, Mail, Lock, ArrowLeft, Users, ShieldCheck, UserCog, ChevronRight } from 'lucide-react'
 import { useAuth } from '@/hooks/auth/useAuth'
-import TechCupRoleSelector from '@/components/TechCupRoleSelector'
 
-const roles = [
-  { id: 'jugador', name: 'Jugador', desc: 'Equipo, partidos y estadísticas.', color: '#7f77dd', img: '/images/jugador.png' },
-  { id: 'arbitro', name: 'Árbitro', desc: 'Marcador, tiempo y sanciones en vivo.', color: '#e24b4a', img: '/images/arbitro.png' },
-  { id: 'organizador', name: 'Organizador', desc: 'Equipos, calendario y configuración.', color: '#3fc8ff', img: '/images/organizador.png' },
+const roleCards = [
+  {
+    id: 'jugador',
+    name: 'Jugador / Familiar',
+    shortName: 'Jugador',
+    desc: 'Seguí los partidos, consultá estadísticas y mantenete al día con el rendimiento de tu equipo.',
+    color: '#7f77dd',
+    colorLight: 'rgba(127,119,221,0.15)',
+    icon: Users,
+    img: '/images/jugador.png',
+  },
+  {
+    id: 'administrador',
+    name: 'Administrador / Organizador',
+    shortName: 'Organizador',
+    desc: 'Gestioná equipos, armá el calendario, configurá torneos y administrá los usuarios del sistema.',
+    color: '#3fc8ff',
+    colorLight: 'rgba(63,200,255,0.15)',
+    icon: UserCog,
+    img: '/images/admin.png',
+  },
+  {
+    id: 'arbitro',
+    name: 'Árbitro',
+    shortName: 'Árbitro',
+    desc: 'Controlá el marcador en vivo, gestioná el tiempo y registrá sanciones durante los partidos.',
+    color: '#e24b4a',
+    colorLight: 'rgba(226,75,74,0.15)',
+    icon: ShieldCheck,
+    img: '/images/arbitro.png',
+  },
 ]
 
 const videos = ['/hero-video.mp4', '/videos/video-arbitro.mp4']
@@ -93,8 +119,56 @@ export default function Login() {
         <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-purple-mid/10 blur-[50px]" />
         <div className="relative w-full max-w-[460px]">
           {step === 'role' ? (
-            /* Step 1: Role Selector */
-            <TechCupRoleSelector onContinue={handleRoleContinue} />
+            /* Step 1: Role Selector — estilo cards tipo marval */
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
+              <div className="mb-6">
+                <h1 className="font-[family-name:var(--font-display)] text-3xl uppercase tracking-[.5px] text-white mb-2">
+                  Elegí tu <span className="text-gold">rol</span>
+                </h1>
+                <p className="text-sm text-text-muted">Seleccioná cómo querés ingresar al sistema.</p>
+              </div>
+
+              <div className="flex flex-col gap-4">
+                {roleCards.map((role, i) => {
+                  const Icon = role.icon
+                  return (
+                    <motion.button
+                      key={role.id}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.1 }}
+                      onClick={() => handleRoleContinue(role.shortName.toLowerCase())}
+                      className="group relative flex items-stretch gap-0 rounded-2xl overflow-hidden border border-white/10 bg-purple-deep/20 backdrop-blur-sm hover:border-gold/40 transition-all duration-300 text-left w-full cursor-pointer"
+                    >
+                      {/* Imagen lateral */}
+                      <div className="relative w-[140px] min-h-[150px] flex-shrink-0 overflow-hidden bg-purple-deep/40 flex items-center justify-center max-sm:hidden">
+                        <img src={role.img} alt="" className="w-full h-full object-contain p-3 transition-transform duration-500 group-hover:scale-110" />
+                        <div className="absolute inset-0" style={{ background: `linear-gradient(90deg, transparent 40%, ${role.colorLight} 100%)` }} />
+                      </div>
+                      {/* Contenido */}
+                      <div className="flex-1 p-5 flex flex-col justify-center relative">
+                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: `linear-gradient(135deg, ${role.colorLight}, transparent)` }} />
+                        <div className="relative z-10 flex items-start justify-between gap-4">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-1.5">
+                              <Icon size={18} style={{ color: role.color }} />
+                              <span className="text-xs font-bold tracking-[1.6px] uppercase" style={{ color: role.color }}>Rol</span>
+                            </div>
+                            <h3 className="font-[family-name:var(--font-display)] text-xl uppercase tracking-[.3px] text-white mb-1">{role.name}</h3>
+                            <p className="text-sm text-text-muted leading-relaxed">{role.desc}</p>
+                          </div>
+                          <div className="flex-shrink-0 mt-1">
+                            <div className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 group-hover:bg-gold/20" style={{ border: `1px solid ${role.color}` }}>
+                              <ChevronRight size={18} style={{ color: role.color }} />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.button>
+                  )
+                })}
+              </div>
+            </motion.div>
           ) : (
             /* Step 2: Login form */
             <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} className="space-y-5 p-6 rounded-2xl border border-gold/10 bg-purple-deep/20 backdrop-blur-sm">

@@ -187,12 +187,14 @@ export default function Landing() {
                   <>
                 <img src="/images/mosaico1.png" alt="" className="absolute inset-0 w-full h-full object-cover" />
                 <div className="absolute inset-0" style={{ backgroundImage: 'url(/images/copa%20y%20manchas.png)', backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center bottom' }} />
-                {/* Mosaico 2x2 con las 4 fotos */}
-                <div className="absolute inset-0 grid grid-cols-2 grid-rows-2">
-                  <img src="/images/landing-mosaico-1.jpeg" alt="" className="w-full h-full object-cover" />
-                  <img src="/images/landing-mosaico-2.jpeg" alt="" className="w-full h-full object-cover" />
-                  <img src="/images/landing-mosaico-3.jpeg" alt="" className="w-full h-full object-cover" />
-                  <img src="/images/landing-mosaico-4.jpeg" alt="" className="w-full h-full object-cover" />
+                {/* Mosaico 2x2 con las 4 fotos — más grande */}
+                <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 gap-1 p-1">
+                  {['landing-mosaico-1', 'landing-mosaico-2', 'landing-mosaico-3', 'landing-mosaico-4'].map((img, idx) => (
+                    <div key={idx} className="relative overflow-hidden rounded-lg group cursor-pointer">
+                      <img src={`/images/${img}.jpeg`} alt="" className="w-full h-full object-cover transition-all duration-300 group-hover:scale-105" />
+                      <div className="absolute inset-0 transition-all duration-300 opacity-0 group-hover:opacity-100" style={{ background: 'linear-gradient(135deg, #E7A017 0%, rgba(231,160,23,0.3) 100%)' }} />
+                    </div>
+                  ))}
                 </div>
                   </>
                 )}
