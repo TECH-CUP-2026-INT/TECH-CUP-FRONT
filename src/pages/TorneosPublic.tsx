@@ -212,7 +212,7 @@ function TorneosContent() {
           {/* Modal flotante con tabs */}
           {modalTournament && (() => {
             const t = modalTournament
-            const imgSrc = `/images/fondo-${((t.id - 1) % 6) + 1}.png`
+            const imgSrc = `/images/fondo-${((Number(t.id) - 1) % 6) + 1}.png`
             const isClosed = t.estado === 'closed'
             const isUpcoming = t.estado === 'upcoming'
             const isLive = t.estado === 'live'
@@ -426,7 +426,7 @@ function TorneoCard({ torneo: t, onClick }: { torneo: Torneo; onClick: () => voi
   const badgeStyle = t.estado === 'live' ? 'bg-purple-mid text-white'
     : t.estado === 'upcoming' ? 'bg-gold/20 text-gold border border-gold/40'
     : 'bg-white/15 text-white border border-white/20 backdrop-blur-sm'
-  const imgSrc = `/images/fondo-${((t.id - 1) % 6) + 1}.png`
+  const imgSrc = `/images/fondo-${((Number(t.id) - 1) % 6) + 1}.png`
 
   return (
     <button onClick={onClick} className="block group w-full text-left">
