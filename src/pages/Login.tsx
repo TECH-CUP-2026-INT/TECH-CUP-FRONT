@@ -14,7 +14,7 @@ const roleCards = [
     id: 'jugador',
     name: 'Jugador / Familiar',
     shortName: 'Jugador',
-    desc: 'Seguí los partidos, consultá estadísticas y mantenete al día con el rendimiento de tu equipo.',
+    desc: 'Sigue los partidos, consulta estadísticas y mantente al día con el rendimiento de tu equipo.',
     color: '#7f77dd',
     colorLight: 'rgba(127,119,221,0.15)',
     icon: Users,
@@ -24,7 +24,7 @@ const roleCards = [
     id: 'administrador',
     name: 'Administrador / Organizador',
     shortName: 'Organizador',
-    desc: 'Gestioná equipos, armá el calendario, configurá torneos y administrá los usuarios del sistema.',
+    desc: 'Gestiona equipos, arma el calendario, configura torneos y administra los usuarios del sistema.',
     color: '#3fc8ff',
     colorLight: 'rgba(63,200,255,0.15)',
     icon: UserCog,
@@ -34,7 +34,7 @@ const roleCards = [
     id: 'arbitro',
     name: 'Árbitro',
     shortName: 'Árbitro',
-    desc: 'Controlá el marcador en vivo, gestioná el tiempo y registrá sanciones durante los partidos.',
+    desc: 'Controla el marcador en vivo, gestiona el tiempo y registra sanciones durante los partidos.',
     color: '#e24b4a',
     colorLight: 'rgba(226,75,74,0.15)',
     icon: ShieldCheck,
@@ -123,9 +123,9 @@ export default function Login() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
               <div className="mb-6">
                 <h1 className="font-[family-name:var(--font-display)] text-3xl uppercase tracking-[.5px] text-white mb-2">
-                  Elegí tu <span className="text-gold">rol</span>
+                  Selecciona tu <span className="text-gold">rol</span>
                 </h1>
-                <p className="text-sm text-text-muted">Seleccioná cómo querés ingresar al sistema.</p>
+                <p className="text-sm text-text-muted">Selecciona cómo quieres ingresar al sistema.</p>
               </div>
 
               <div className="flex flex-col gap-4">
@@ -185,7 +185,7 @@ export default function Login() {
               <h1 className="font-[family-name:var(--font-display)] text-3xl uppercase tracking-[.5px] text-white mb-1">
                 Bienvenido de <span className="text-gold">vuelta</span>
               </h1>
-              <p className="text-sm text-text-muted mb-4">Iniciá sesión para acceder a tu cuenta.</p>
+              <p className="text-sm text-text-muted mb-4">Inicia sesión para acceder a tu cuenta.</p>
 
               <form onSubmit={e => { e.preventDefault(); login(email, selectedRole as import('@/hooks/auth/useAuth').UserRole); navigate(selectedRole === 'arbitro' ? '/arbitro/dashboard' : `/dashboard/${selectedRole}`) }} className="space-y-4">
                 <div className="space-y-2">
@@ -232,7 +232,7 @@ export default function Login() {
                   Continuar con Google
                 </Button>
               )}
-              <p className="text-center text-sm text-gold/60">¿No tenés cuenta? <Link to="/registro" className="text-gold font-semibold hover:text-gold-dark transition-colors">Registrate</Link></p>
+              <p className="text-center text-sm text-gold/60">¿No tienes cuenta? <Link to="/registro" className="text-gold font-semibold hover:text-gold-dark transition-colors">Regístrate</Link></p>
             </motion.div>
           )}
         </div>
@@ -274,7 +274,7 @@ export default function Login() {
               La pasión nos <span className="text-gold">conecta</span>
             </h2>
             <p className="text-sm text-text-muted mt-4 leading-relaxed">
-              Iniciá sesión y viví la emoción del torneo universitario más importante de Ingeniería de Sistemas.
+              Inicia sesión y vive la emoción del torneo universitario más importante de Ingeniería de Sistemas.
             </p>
           </div>
         </div>
