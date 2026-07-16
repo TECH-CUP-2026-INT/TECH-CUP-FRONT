@@ -6,6 +6,7 @@ import { Badge } from '@/components/common/badge'
 import { Button } from '@/components/common/button'
 import { Input } from '@/components/common/input'
 import { useAuth } from '@/hooks/auth/useAuth'
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/common/avatar'
 import { Swords, Shield, Calendar, Trophy, Camera, X, Lock, CheckCircle } from 'lucide-react'
 
 type Tab = 'informacion' | 'estadisticas' | 'historial'
@@ -198,8 +199,11 @@ export default function Perfil() {
               <div className="flex items-center gap-4 mb-6">
                 <div className="relative">
                   <div className="w-16 h-16 rounded-full overflow-hidden ring-2 ring-gold/40">
-                    <img src={user?.avatar || 'https://i.pravatar.cc/150?img=13'} alt="" className="w-full h-full object-cover" />
-                  </div>
+                      <Avatar className="w-full h-full">
+                        <AvatarImage src={user?.avatar || ''} alt="" className="w-full h-full object-cover" />
+                        <AvatarFallback className="text-sm font-bold">{(user?.name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()}</AvatarFallback>
+                      </Avatar>
+                    </div>
                   <button className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-purple-mid border-2 border-black flex items-center justify-center"><Camera size={10} className="text-white" /></button>
                 </div>
                 <div className="text-sm">

@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { GoogleOAuthProvider } from '@react-oauth/google'
 import { AuthProvider } from '@/hooks/auth/useAuth'
 import { ThemeProvider } from '@/configs/theme'
 import { StarfieldBackground } from '@/components/common/starfield-bg'
@@ -30,9 +31,12 @@ import InscribirEquipo from '@/pages/InscribirEquipo'
 import Llaves from '@/pages/Llaves'
 import Campus from '@/pages/Campus'
 
+const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || ''
+
 export default function App() {
   return (
     <BrowserRouter>
+      <GoogleOAuthProvider clientId={googleClientId}>
       <ThemeProvider>
       <AuthProvider>
       <StarfieldBackground className="min-h-screen">
@@ -73,6 +77,7 @@ export default function App() {
       </StarfieldBackground>
       </AuthProvider>
       </ThemeProvider>
+      </GoogleOAuthProvider>
     </BrowserRouter>
   )
 }

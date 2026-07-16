@@ -2,6 +2,7 @@ import { useRef, useState, useEffect, useMemo } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { cn } from '@/utils/cn'
 import { useAuth, type UserRole } from '@/hooks/auth/useAuth'
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/common/avatar'
 import {
   Home, Trophy, Calendar, Sword, BarChart3, ShieldCheck, MapPin, HelpCircle, ChevronDown, X, PanelLeftClose, PanelLeft, User, Swords, ClipboardCheck, Users
 } from 'lucide-react'
@@ -187,9 +188,12 @@ export default function Sidebar({ open, onClose, collapsed: collapsedProp, onCol
         {/* Profile */}
         <Link to="/perfil" className={cn('mt-3 pt-3 border-t border-border flex items-center gap-2.5 cursor-pointer group', sideCollapsed ? 'justify-center px-2' : 'px-3')} onClick={handleNavigate}>
           <div className="relative">
-            <img src={user?.avatar || 'https://i.pravatar.cc/72?img=13'} alt="Avatar" className={cn('rounded-full object-cover border-2 border-transparent group-hover:border-gold transition-colors', sideCollapsed ? 'w-9 h-9' : 'w-[38px] h-[38px]')} />
-            <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-green-500 border-2 border-black" />
-          </div>
+              <Avatar className={cn('rounded-full border-2 border-transparent group-hover:border-gold transition-colors', sideCollapsed ? 'w-9 h-9' : 'w-[38px] h-[38px]')}>
+                <AvatarImage src={user?.avatar || ''} alt="Avatar" className="rounded-full object-cover" />
+                <AvatarFallback className="text-[11px] font-bold">{(user?.name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()}</AvatarFallback>
+              </Avatar>
+              <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-green-500 border-2 border-black" />
+            </div>
           {!sideCollapsed && (
             <>
               <div className="flex-1 leading-tight min-w-0">

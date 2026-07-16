@@ -12,11 +12,24 @@ interface User {
 
 interface AuthContextType {
   user: User | null
-  login: (email: string, role: UserRole) => void
+  login: (email: string, role: UserRole, avatar?: string) => void
   logout: () => void
   isAuthenticated: boolean
   becomeCaptain: () => void
   removeCaptain: () => void
+}
+
+function getInitialsAvatar(name: string): string {
+  const initials = name
+    .split(' ')
+    .map(w => w[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join('')
+    .toUpperCase() || '?'
+  const colors = ['#7f77dd', '#e24b4a', '#3fc8ff', '#e8bd5f', '#4CAF50', '#FF9800']
+  const color = colors[name.length % colors.length]
+  return `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="${color}"/><text x="50" y="50" dominant-baseline="central" text-anchor="middle" fill="white" font-size="40" font-weight="700" font-family="Arial,sans-serif">${initials}</text></svg>`)}`
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -38,12 +51,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
-  const login = (email: string, role: UserRole = 'jugador') => {
+  const login = (email: string, role: UserRole = 'jugador', avatar?: string) => {
     const name = email.split('@')[0].replace(/[._]/g, ' ')
     const newUser: User = {
       name: name.charAt(0).toUpperCase() + name.slice(1),
       email,
-      avatar: `https://i.pravatar.cc/72?img=${Math.floor(Math.random() * 70) + 1}`,
+      avatar: avatar || getInitialsAvatar(name),
       role,
       isCaptain: false,
     }

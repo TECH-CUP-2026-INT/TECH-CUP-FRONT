@@ -4,6 +4,7 @@ import { Menu, Send, Paperclip, X, Search, Plus } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ThemeToggle } from '@/components/common/theme-toggle'
 import { useAuth } from '@/hooks/auth/useAuth'
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/common/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,6 +34,9 @@ const messages: Record<number, { text: string; me: boolean }[]> = {
 export default function AppTopbar({ title, sidebarOpen, sidebarCollapsed, onMenuClick }: AppTopbarProps) {
   const navigate = useNavigate()
   const { user } = useAuth()
+  const userName = user?.name || 'Juan Camilo Rivera'
+  const userRole = user?.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : 'Estudiante'
+  const initials = userName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
   const [chatOpen, setChatOpen] = useState(false)
   const [notifOpen, setNotifOpen] = useState(false)
   const [notifSettings, setNotifSettings] = useState(false)
@@ -96,17 +100,23 @@ export default function AppTopbar({ title, sidebarOpen, sidebarCollapsed, onMenu
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="w-9 h-9 rounded-full overflow-hidden ring-2 ring-gold/40 ring-offset-2 ring-offset-black hover:ring-gold transition-all cursor-pointer">
-                <img className="w-full h-full object-cover" src="https://i.pravatar.cc/72?img=13" alt="" />
-              </button>
+                  <Avatar className="w-full h-full">
+                    <AvatarImage src={user?.avatar || ''} alt="" className="w-full h-full object-cover" />
+                    <AvatarFallback className="text-xs font-bold">{initials}</AvatarFallback>
+                  </Avatar>
+                </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-64 border-border bg-surface text-gray-light rounded-2xl p-1.5 mt-2">
               <div className="flex items-center gap-3 px-3 pt-3 pb-3">
-                <img className="w-10 h-10 rounded-full object-cover ring-2 ring-gold/60" src="https://i.pravatar.cc/72?img=13" alt="" />
-                <div className="leading-tight">
-                  <p className="text-sm font-bold">Juan Camilo Rivera</p>
-                  <p className="text-xs text-text-muted">Estudiante · Ing. Sistemas</p>
+                  <Avatar className="w-10 h-10 ring-2 ring-gold/60 rounded-full">
+                    <AvatarImage src={user?.avatar || ''} alt="" className="w-full h-full object-cover rounded-full" />
+                    <AvatarFallback className="text-sm font-bold rounded-full">{initials}</AvatarFallback>
+                  </Avatar>
+                  <div className="leading-tight">
+                    <p className="text-sm font-bold">{userName}</p>
+                    <p className="text-xs text-text-muted">{userRole} · Ing. Sistemas</p>
+                  </div>
                 </div>
-              </div>
               <DropdownMenuSeparator className="bg-border" />
               <DropdownMenuItem className="rounded-xl py-2.5 cursor-pointer text-sm font-semibold focus:bg-purple-mid/20 focus:text-purple-mid" onClick={() => navigate('/perfil')}>👤 Mi perfil</DropdownMenuItem>
               <DropdownMenuItem className="rounded-xl py-2.5 cursor-pointer text-sm font-semibold focus:bg-purple-mid/20 focus:text-purple-mid" onClick={() => navigate('/configuracion')}>⚙️ Configuración</DropdownMenuItem>
@@ -238,7 +248,10 @@ export default function AppTopbar({ title, sidebarOpen, sidebarCollapsed, onMenu
                 <>
                   <div className="flex items-center justify-between px-4 py-3 border-b border-border">
                     <h2 className="text-sm font-bold flex items-center gap-2">
-                      <img src="https://i.pravatar.cc/72?img=13" alt="" className="w-6 h-6 rounded-full ring-2 ring-gold/40" />
+                      <Avatar className="w-6 h-6 ring-2 ring-gold/40 rounded-full">
+                          <AvatarImage src={user?.avatar || ''} alt="" className="w-full h-full object-cover rounded-full" />
+                          <AvatarFallback className="text-[9px] font-bold rounded-full">{initials}</AvatarFallback>
+                        </Avatar>
                       Mensajes
                     </h2>
                     <button onClick={() => setChatOpen(false)} className="text-gray-light hover:text-red-400 transition-colors p-1"><X size={18} /></button>

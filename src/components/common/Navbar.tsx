@@ -5,6 +5,7 @@ import { Button } from '@/components/common/button'
 import { cn } from '@/utils/cn'
 import { useAuth } from '@/hooks/auth/useAuth'
 import { ThemeToggle } from '@/components/common/theme-toggle'
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/common/avatar'
 
 const links = [
   { href: '/', label: 'Inicio' },
@@ -78,8 +79,11 @@ export default function Navbar() {
                 className="flex items-center gap-2.5 bg-surface border border-border rounded-full pr-4 pl-1.5 py-1 hover:border-gold/40 transition-colors"
               >
                 <div className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-gold/30">
-                  <img src={user.avatar} alt="" className="w-full h-full object-cover" />
-                </div>
+                    <Avatar className="w-full h-full rounded-full">
+                      <AvatarImage src={user.avatar} alt="" className="w-full h-full object-cover" />
+                      <AvatarFallback className="text-[10px] font-bold">{user.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()}</AvatarFallback>
+                    </Avatar>
+                  </div>
                 <span className="text-sm font-semibold text-gray-light">{user.name}</span>
               </Link>
               <button
