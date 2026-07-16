@@ -1,3 +1,15 @@
+/**
+ * TODO: Reemplazar con llamadas API cuando el Matches Service (am-matches-service)
+ * esté deployado.
+ *
+ * Endpoints esperados bajo el APIM:
+ *   GET /matches          → listado de partidos
+ *   GET /matches/{id}     → detalle de un partido
+ *   GET /tournaments/{id}/matches  → partidos de un torneo
+ *
+ * Mientras tanto, datos mock.
+ */
+
 export interface Partido {
   dia: number
   mes: string
@@ -38,6 +50,11 @@ export const partidos: Partido[] = [
   { dia:25, mes:"MAY", eq1:"Dragones FC",      eq2:"Los Bits",     hora:"5:00 PM",  lugar:"Auditorio Principal Sede Norte" },
 ]
 
+/**
+ * Posiciones (tabla de posiciones).
+ * TODO: Migrar a llamada API cuando esté disponible:
+ *   GET /api/v1/statistics/tournaments/{tournamentId}/standings
+ */
 export interface Posicion {
   pos: number
   equipo: string

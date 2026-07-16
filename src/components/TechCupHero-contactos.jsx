@@ -1,28 +1,6 @@
-import React, { useState, useEffect } from "react";
 import { Mail, MapPin, Phone, Clock } from "lucide-react";
 
 export default function TechCupHero() {
-  const [time, setTime] = useState(new Date());
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const now = new Date();
-      if (now.getSeconds() !== time.getSeconds()) {
-        setTime(now);
-      }
-    }, 100);
-    return () => clearInterval(interval);
-  }, [time]);
-
-  const pad = (n) => n < 10 ? `0${n}` : n;
-
-  const getTime = () => {
-    const h = time.getHours() % 12 || 12;
-    const m = time.getMinutes();
-    const s = time.getSeconds();
-    return `${pad(h)}:${pad(m)}:${pad(s)}`;
-  };
-
   return (
     <div style={{ background: "#0E0619", minHeight: "600px", padding: "48px 40px" }}>
       <div
@@ -73,31 +51,35 @@ export default function TechCupHero() {
           </p>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "14px", alignItems: "flex-start" }}>
-            {/* Reloj en vivo */}
             <div
               style={{
-                background: "linear-gradient(to bottom right, rgba(2, 99, 225, 1), rgba(235, 24, 54, 1))",
+                background: "linear-gradient(to bottom right, rgb(2, 99, 225), rgb(235, 24, 54))",
                 borderRadius: "22px",
                 padding: "4px",
+                boxShadow: "0 0 80px 24px rgba(168, 85, 247, 0.6)",
               }}
             >
               <div
                 style={{
-                  background: "#1E1E1E",
+                  background: "#251143",
                   borderRadius: "20px",
+                  overflow: "hidden",
                   display: "flex",
                   alignItems: "center",
-                  padding: "0 20px",
-                  gap: "0",
+                  justifyContent: "center",
+                  padding: "8px 32px",
                 }}
               >
-                {getTime().split("").map((char, i) =>
-                  char === ":" ? (
-                    <span key={i} style={{ color: "white", fontSize: "4em", lineHeight: "150px", width: "40px", textAlign: "center" }}>:</span>
-                  ) : (
-                    <span key={i} style={{ color: "white", fontSize: "6em", fontWeight: 700, lineHeight: "150px", width: "60px", textAlign: "center" }}>{char}</span>
-                  )
-                )}
+                <img
+                  src="/images/mercado-pago.png"
+                  alt="Mercado Pago"
+                  style={{
+                    width: "160px",
+                    height: "auto",
+                    display: "block",
+                    rotate: "-90deg",
+                  }}
+                />
               </div>
             </div>
           </div>

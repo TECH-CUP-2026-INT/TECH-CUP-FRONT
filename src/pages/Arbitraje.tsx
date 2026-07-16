@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import DashboardLayout from '@/components/common/DashboardLayout'
 import { Button } from '@/components/common/button'
+import SoccerField3D from '@/components/employees/SoccerField3D'
 
 type Evento = { min: string; icon: string; desc: string; equipo: string }
 type Accion = 'golA' | 'golB' | 'amarilla' | 'roja' | 'sust' | null
@@ -128,62 +129,27 @@ export default function Arbitraje() {
             className="fixed inset-0 pointer-events-none z-50 flex items-center justify-center text-8xl">{flash === '⚽' ? '⚽' : flash === '🟨' ? '🟨' : flash === '🟥' ? '🟥' : '🔄'}</motion.div>
         )}</AnimatePresence>
 
-        {/* Alineación visual: ambos equipos con sus jugadores */}
-        <div className="flex-1 p-4 max-w-4xl mx-auto w-full overflow-y-auto">
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            {/* Tigres FC */}
-            <div>
-              <div className="flex items-center gap-2 mb-3 px-2">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center text-sm font-black text-white">T</div>
-                <div>
-                  <p className="text-sm font-bold text-green-400">Tigres FC</p>
-                  <p className="text-[10px] text-text-muted">0 goles</p>
-                </div>
-              </div>
-              <div className="space-y-2">
-                {jugadores.A.map((j, i) => (
-                  <button key={j.nombre} onClick={() => { selectTeam('A'); setSelectedPlayer(j.nombre); setStep('action') }}
-                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-green-950/20 border border-green-500/20 hover:border-green-400/50 hover:bg-green-900/30 active:scale-[0.97] transition-all group">
-                    <div className="w-9 h-9 rounded-full overflow-hidden ring-2 ring-green-500/30 flex-shrink-0">
-                      <img src={`https://i.pravatar.cc/72?img=${i + 30}`} alt="" className="w-full h-full object-cover" />
-                    </div>
-                    <div className="text-left flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-white group-hover:text-green-300 transition-colors truncate">{j.nombre}</p>
-                      <p className="text-[10px] text-text-muted">#{j.dorsal} · {j.pos}</p>
-                    </div>
-                    <span className="text-green-500/30 group-hover:text-green-400/60 transition-colors text-xs">⚽</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Sistemas FC */}
-            <div>
-              <div className="flex items-center gap-2 mb-3 px-2">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center text-sm font-black text-white">S</div>
-                <div>
-                  <p className="text-sm font-bold text-purple-400">Sistemas FC</p>
-                  <p className="text-[10px] text-text-muted">0 goles</p>
-                </div>
-              </div>
-              <div className="space-y-2">
-                {jugadores.B.map((j, i) => (
-                  <button key={j.nombre} onClick={() => { selectTeam('B'); setSelectedPlayer(j.nombre); setStep('action') }}
-                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-purple-950/20 border border-purple-500/20 hover:border-purple-400/50 hover:bg-purple-900/30 active:scale-[0.97] transition-all group">
-                    <div className="w-9 h-9 rounded-full overflow-hidden ring-2 ring-purple-500/30 flex-shrink-0">
-                      <img src={`https://i.pravatar.cc/72?img=${i + 40}`} alt="" className="w-full h-full object-cover" />
-                    </div>
-                    <div className="text-left flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-white group-hover:text-purple-300 transition-colors truncate">{j.nombre}</p>
-                      <p className="text-[10px] text-text-muted">#{j.dorsal} · {j.pos}</p>
-                    </div>
-                    <span className="text-purple-500/30 group-hover:text-purple-400/60 transition-colors text-xs">⚽</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-2 mb-3">
+        {/* Cancha 3D con jugadores */}
+        <div className="flex-1 p-4 max-w-5xl mx-auto w-full overflow-y-auto">
+          <SoccerField3D
+            homePlayers={jugadores.A.map((j, i) => ({
+              name: j.nombre,
+              number: j.dorsal,
+              posicion: j.pos,
+              img: `https://i.pravatar.cc/150?img=${i + 30}`,
+              x: 0, z: 0,
+            }))}
+            awayPlayers={jugadores.B.map((j, i) => ({
+              name: j.nombre,
+              number: j.dorsal,
+              posicion: j.pos,
+              img: `https://i.pravatar.cc/150?img=${i + 40}`,
+              x: 0, z: 0,
+            }))}
+            homeColor="#22C55E"
+            awayColor="#A855F7"
+          />
+          <div className="grid grid-cols-2 gap-2 mb-3 mt-4">
             <button onClick={() => setCorriendo(!corriendo)}
               className={`h-12 rounded-xl font-bold text-sm active:scale-95 transition-all flex items-center justify-center gap-2 ${corriendo ? 'bg-gold/20 border-2 border-gold/40 text-gold' : 'bg-green-600/20 border-2 border-green-500/40 text-green-400'}`}>
               {corriendo ? <><span className="text-xl">⏸️</span> PAUSAR</> : <><span className="text-xl">▶️</span> REANUDAR</>}

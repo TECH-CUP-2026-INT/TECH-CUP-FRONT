@@ -15,7 +15,7 @@ const roles = [
   { id: 'organizador', name: 'Organizador', desc: 'Equipos, calendario y configuración.', color: '#3fc8ff', img: '/images/organizador.png' },
 ]
 
-const videos = ['/hero-video.mp4', '/hero-video.mp4']
+const videos = ['/hero-video.mp4', '/videos/video-arbitro.mp4']
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false)
@@ -31,6 +31,12 @@ export default function Login() {
   const handleRoleContinue = (role: string) => {
     setSelectedRole(role)
     setStep('login')
+    if (role === 'arbitro') {
+      setVideoIndex(1)
+    } else {
+      setVideoIndex(0)
+    }
+    setIsPlaying(true)
   }
 
   const togglePlay = () => {
@@ -135,8 +141,7 @@ export default function Login() {
           maskImage: "linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 20%, rgba(0,0,0,1) 50%)",
           WebkitMaskImage: "linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 20%, rgba(0,0,0,1) 50%)",
         }}>
-        {/* Overlay gradiente */}
-        <div className="absolute inset-0 bg-gradient-to-l from-purple-black/95 via-purple-black/70 to-transparent" />
+        {/* El gradiente fue eliminado por solicitud del usuario */}
         
         {/* Controles de video */}
         <div className="absolute top-6 right-6 z-30 flex items-center gap-3">

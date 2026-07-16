@@ -133,91 +133,86 @@ export default function SoccerField3D({
 
   return (
     <GlassWrapper>
-    <div className="flex gap-4" style={{ touchAction: "none" }}>
-      <div className="flex-1 min-w-0">
-        {/* Switcher + Formaciones */}
-        <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
-          <div className="flex items-center gap-0">
-            <button onClick={() => { if (!home) switchSide() }} disabled={home || rotating}
-              className={`px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider transition-all rounded-l-lg border ${home ? "bg-white/20 text-white border-white/30 cursor-default" : "bg-transparent text-white/50 border-white/20 hover:text-white hover:border-white/40"}`}>
-              LOCAL
-            </button>
-            <button onClick={() => { if (home) switchSide() }} disabled={!home || rotating}
-              className={`px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider transition-all rounded-r-lg border-l-0 ${!home ? "bg-white/20 text-white border-white/30 cursor-default" : "bg-transparent text-white/50 border-white/20 hover:text-white hover:border-white/40"}`}>
-              VISITA
-            </button>
-          </div>
-          <div className="flex items-center gap-1">
-            {Object.keys(FORMACIONES).map((name) => (
-              <button key={name} onClick={() => applyFormacion(name)}
-                className={`px-2.5 py-1 text-[10px] font-bold rounded transition-all ${
-                  formacion === name
-                    ? "bg-purple-mid text-white"
-                    : "bg-white/5 text-text-muted border border-white/10 hover:bg-white/10"
-                }`}>
-                {name}
+      <div className="flex gap-4" style={{ touchAction: "none" }}>
+        <div className="flex-1 min-w-0">
+          {/* Switcher + Formaciones */}
+          <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+            <div className="flex items-center gap-0">
+              <button onClick={switchSide}
+                className={`px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider transition-all rounded-lg border ${home ? "bg-white/20 text-white border-white/30" : "bg-transparent text-white/50 border-white/20 hover:text-white hover:border-white/40"}`}>
+                {home ? "LOCAL" : "VISITA"}
               </button>
-            ))}
+            </div>
+            <div className="flex items-center gap-1">
+              {Object.keys(FORMACIONES).map((name) => (
+                <button key={name} onClick={() => applyFormacion(name)}
+                  className={`px-2.5 py-1 text-[10px] font-bold rounded transition-all ${
+                    formacion === name
+                      ? "bg-purple-mid text-white"
+                      : "bg-white/5 text-text-muted border border-white/10 hover:bg-white/10"
+                  }`}>
+                  {name}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Stage 3D */}
-        <div className="relative w-full overflow-hidden select-none rounded-2xl border border-white/10 shadow-2xl shadow-black/50 bg-black/40"
-          style={{ perspective: "1100px", perspectiveOrigin: "50% -200px", height: "560px" }}>
-          <div ref={worldRef} className="absolute left-1/2"
-            style={{ width: "600px", height: "700px", marginLeft: "-300px", top: "20px", transformStyle: "preserve-3d", transition: "transform 1.2s ease-in-out", transform: home ? "translateZ(-200px)" : "translateZ(-200px) rotateY(180deg)" }}>
+        {/* Stage cancha — vista superior */}
+        <div className="relative w-full overflow-hidden select-none rounded-2xl border border-white/10 shadow-2xl shadow-black/50"
+          style={{ height: "560px" }}>
+          <div ref={worldRef} className="absolute inset-0"
+            style={{ background: 'linear-gradient(135deg, #1a6b30 0%, #238b3e 30%, #2d9e4a 60%, #1f7a36 100%)' }}>
             
-            {/* Campo */}
-            <div className="absolute inset-0" style={{ transform: "rotateX(90deg) translateZ(0)", transformOrigin: "50% 50%", backfaceVisibility: "hidden" }}>
-              <div className="absolute" style={{ width: "80%", left: "10%", height: "100%", background: "rgba(0,0,0,0.3)", transform: "rotateX(90deg) translateZ(-10px)", boxShadow: "0 0 40px 30px #000" }} />
-              <div className="absolute inset-0" style={{ backgroundImage: 'url(/canchas.jpeg)', backgroundSize: 'cover', backgroundPosition: 'center center', opacity: 0.85 }} />
-              <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.15), transparent), repeating-linear-gradient(65deg, transparent 0px, transparent 25px, rgba(0,0,0,0.08) 25px, rgba(0,0,0,0.08) 50px)" }} />
+            {/* Líneas de la cancha */}
+            <div className="absolute inset-0" style={{ 
+              backgroundImage: `
+                repeating-linear-gradient(90deg, transparent 0px, transparent 49px, rgba(255,255,255,0.06) 49px, rgba(255,255,255,0.06) 50px),
+                repeating-linear-gradient(0deg, transparent 0px, transparent 49px, rgba(255,255,255,0.06) 49px, rgba(255,255,255,0.06) 50px)
+              `
+            }}>
               <svg viewBox="0 0 600 700" className="absolute inset-0 w-full h-full" style={{ zIndex: 4 }}>
-                <filter id="g3d"><feDropShadow dx="0" dy="0" stdDeviation="1" floodColor="white" floodOpacity="0.15" /></filter>
-                <rect x="24" y="28" width="552" height="644" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="3" filter="url(#g3d)" />
-                <line x1="24" y1="350" x2="576" y2="350" stroke="rgba(255,255,255,0.5)" strokeWidth="3" />
-                <circle cx="300" cy="350" r="120" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="3" />
-                <rect x="168" y="530" width="264" height="115" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="3" rx="4" />
-                <rect x="222" y="550" width="156" height="60" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="2" rx="2" />
-                <rect x="168" y="55" width="264" height="115" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="3" rx="4" />
-                <rect x="222" y="90" width="156" height="60" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="2" rx="2" />
-                <circle cx="300" cy="145" r="2" fill="rgba(255,255,255,0.5)" />
-                <circle cx="300" cy="555" r="2" fill="rgba(255,255,255,0.5)" />
+                <rect x="24" y="28" width="552" height="644" fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="3" />
+                <line x1="24" y1="350" x2="576" y2="350" stroke="rgba(255,255,255,0.45)" strokeWidth="3" />
+                <circle cx="300" cy="350" r="120" fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="3" />
+                <rect x="168" y="530" width="264" height="115" fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="3" rx="4" />
+                <rect x="222" y="550" width="156" height="60" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="2" rx="2" />
+                <rect x="168" y="55" width="264" height="115" fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="3" rx="4" />
+                <rect x="222" y="90" width="156" height="60" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="2" rx="2" />
                 <circle cx="300" cy="350" r="2" fill="rgba(255,255,255,0.5)" />
               </svg>
             </div>
 
-            {/* Players */}
-            {players.map((p, i) => (
+            {/* Players — posicionados en el campo 2D */}
+            {players.map((p, i) => {
+              // Mapear coordenadas a píxeles (campo 600x700)
+              const px = 300 + p.x
+              const py = 350 - p.z
+              return (
               <div key={i}
                 className="absolute cursor-grab active:cursor-grabbing"
                 onPointerDown={(e) => handlePointerDown(e, i)}
                 style={{
-                  width: "56px", height: "56px", zIndex: 10,
-                  left: "50%", bottom: "50%", marginLeft: "-28px",
-                  transform: `translateX(${p.x}px) translateZ(${p.z}px)`,
-                  transformStyle: "preserve-3d",
+                  width: "52px", height: "52px", zIndex: 10,
+                  left: `${px}px`, top: `${py}px`,
+                  marginLeft: "-26px", marginTop: "-26px",
                   transition: ghostPos ? "none" : "all 0.3s ease",
                   opacity: dragRef.current?.idx === i ? 0.4 : 1,
                 }}
                 onClick={() => !ghostPos && setSelected(p)}
               >
-                <div className="absolute inset-0 rounded-full blur-md opacity-50" style={{ backgroundColor: activeColor }} />
+                <div className="absolute inset-0 rounded-full blur-md opacity-40" style={{ backgroundColor: activeColor }} />
                 <div className="relative w-full h-full rounded-full overflow-hidden border-2"
-                  style={{ borderColor: `${activeColor}dd`, boxShadow: "0 2px 12px rgba(0,0,0,.6)" }}>
+                  style={{ borderColor: `${activeColor}dd`, boxShadow: "0 2px 10px rgba(0,0,0,.6)" }}>
                   <img src={p.img.replace("72", "150")} alt={p.name} className="w-full h-full object-cover"
                     onError={(e) => { const t = e.currentTarget; if (t.src !== p.img) t.src = p.img }} />
                 </div>
-                <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap pointer-events-none">
-                  <span className="text-[10px] font-bold text-white drop-shadow-[0_1px_3px_rgba(0,0,0,.8)] bg-black/60 backdrop-blur-sm px-2 py-0.5 rounded-full border border-white/10">
+                <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap pointer-events-none">
+                  <span className="text-[9px] font-bold text-white drop-shadow-[0_1px_3px_rgba(0,0,0,.8)] bg-black/60 backdrop-blur-sm px-2 py-0.5 rounded-full border border-white/10">
                     {p.name.split(" ")[0]}
                   </span>
                 </div>
               </div>
-            ))}
-
-            {/* Borde 3D */}
-            <div className="absolute" style={{ top: "50%", left: 0, width: "100%", height: "8px", transform: "rotateX(180deg) translateZ(-350px)", transformOrigin: "50% 50%", background: "#141d2b", zIndex: 9 }} />
+            )})}
           </div>
         </div>
       </div>

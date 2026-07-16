@@ -21,7 +21,6 @@ const featureSlides = [
 const heroFondos = [
   '/images/landing-arquero2.png',
   '/images/landing-futbol2.png',
-  '/images/landing-futbol3.png',
 ]
 
 export default function Landing() {
@@ -171,45 +170,45 @@ export default function Landing() {
       {/* Features — Carrusel con escenas CSS */}
       <section className="pb-[90px] relative z-[3]">
         <div className="absolute left-[-10%] top-[-20%] w-[700px] h-[700px] rounded-full bg-purple-mid/20 blur-[180px] pointer-events-none" />
-        <div className="absolute right-[-5%] bottom-[-10%] w-[600px] h-[600px] rounded-full bg-gold/20 blur-[150px] pointer-events-none" />
         <div className="max-w-[1280px] mx-auto px-8 relative">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }} className="bg-[#E8DFF5]/70 dark:bg-black/30 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-white/5 rounded-2xl p-[30px] overflow-hidden">
-            <div className="flex gap-6 max-lg:flex-col">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }} className="bg-[#E8DFF5]/70 dark:bg-black/30 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-white/5 rounded-2xl p-[40px] overflow-hidden">
+            <div className="flex gap-8 max-lg:flex-col">
               {/* Imagen grande */}
-              <div className="flex-[1.6] relative min-h-[320px] rounded-xl overflow-hidden">
+              <div className="flex-[1.6] relative min-h-[420px] rounded-xl overflow-hidden">
                 <img src="/images/mosaico1.png" alt="" className="absolute inset-0 w-full h-full object-cover" />
-                <div className="absolute inset-0" style={{ boxShadow: 'inset 0 0 80px 30px rgba(10,6,20,0.9)' }} />
+                <div className="absolute inset-0" style={{ backgroundImage: 'url(/images/copa%20y%20manchas.png)', backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center bottom' }} />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#FFD700]/5 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: featureSlides[activeFeature].color }} />
-                    <span className="text-[11px] font-bold tracking-[1.4px] uppercase text-white/70">Funcionalidad</span>
+                    <span className="text-xs font-bold tracking-[1.6px] uppercase text-white/70">Funcionalidad</span>
                   </div>
-                  <h3 className="font-[family-name:var(--font-display)] text-2xl uppercase text-white mb-1">{featureSlides[activeFeature].title}</h3>
-                  <p className="text-sm text-white/70 max-w-[400px]">{featureSlides[activeFeature].desc}</p>
+                  <h3 className="font-[family-name:var(--font-display)] text-3xl uppercase text-white mb-2">{featureSlides[activeFeature].title}</h3>
+                  <p className="text-base text-white/70 max-w-[450px]">{featureSlides[activeFeature].desc}</p>
                 </div>
               </div>
               {/* Thumbnails — estilo cards */}
-              <div className="flex-[0.8] flex flex-col gap-3 justify-center">
-                <div className="flex flex-col gap-3">
+              <div className="flex-[0.8] flex flex-col gap-4 justify-center">
+                <div className="flex flex-col gap-4">
                 {featureSlides.map((f, i) => {
                   const Icon = f.icon
                   return (
-                  <button key={i} onClick={() => setActiveFeature(i)} className={`feature-card relative flex items-center gap-5 p-3.5 rounded-xl bg-[#130B24] border cursor-pointer overflow-hidden group transition-all duration-300 ${i === activeFeature ? 'border-[#FFD700] shadow-[0_0_20px_rgba(255,215,0,0.15)]' : 'border-[#2A1A4A]/80 hover:border-[#D4AF37] hover:shadow-[0_0_15px_rgba(212,175,55,0.12)]'}`}>
+                  <button key={i} onClick={() => setActiveFeature(i)} className={`feature-card relative flex items-center gap-6 p-4 rounded-xl bg-[#130B24] border cursor-pointer overflow-hidden group transition-all duration-300 ${i === activeFeature ? 'border-[#FFD700] shadow-[0_0_20px_rgba(255,215,0,0.15)]' : 'border-[#2A1A4A]/80 hover:border-[#D4AF37] hover:shadow-[0_0_15px_rgba(212,175,55,0.12)]'}`}>
                     {/* Active left indicator */}
                     {i === activeFeature && (
-                      <div className="absolute left-0 top-[20%] h-[60%] w-[3px] bg-[#FFD700] rounded-r-sm shadow-[0_0_10px_#FFD700]" />
+                      <div className="absolute left-0 top-[20%] h-[60%] w-[4px] bg-[#FFD700] rounded-r-sm shadow-[0_0_10px_#FFD700]" />
                     )}
                     {/* Background subtle highlight */}
                     <div className={`absolute inset-0 bg-gradient-to-r from-[#FFD700]/5 to-transparent transition-opacity ${i === activeFeature ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
                     {/* Icon container */}
-                    <div className="relative z-10 w-[72px] h-[72px] flex-shrink-0 rounded-xl flex items-center justify-center border border-white/5" style={{ background: 'linear-gradient(180deg, rgba(30,15,60,1) 0%, rgba(20,10,40,1) 100%)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 10px rgba(0,0,0,0.5)' }}>
-                      <Icon className="w-7 h-7 text-[#FFD700]" style={{ filter: 'drop-shadow(0 0 8px rgba(255,215,0,0.5))' }} />
+                    <div className="relative z-10 w-[84px] h-[84px] flex-shrink-0 rounded-xl flex items-center justify-center border border-white/5" style={{ background: 'linear-gradient(180deg, rgba(30,15,60,1) 0%, rgba(20,10,40,1) 100%)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 10px rgba(0,0,0,0.5)' }}>
+                      <Icon className="w-8 h-8 text-[#FFD700]" style={{ filter: 'drop-shadow(0 0 8px rgba(255,215,0,0.5))' }} />
                       <div className="absolute -bottom-[2px] left-[20%] w-[60%] h-[2px] rounded-full" style={{ background: 'linear-gradient(90deg, transparent, #FFD700, transparent)', opacity: 0.8, filter: 'blur(2px)' }} />
                     </div>
                     {/* Text */}
                     <div className="flex-1 relative z-10 py-1 text-left">
-                      <h4 className="text-lg font-semibold mb-0.5 tracking-wide" style={{ background: 'linear-gradient(to right, #FFE066, #FFB300)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>{f.title}</h4>
-                      <p className="text-[13px] text-[#A592C4] leading-relaxed">{f.desc}</p>
+                      <h4 className="text-xl font-semibold mb-1 tracking-wide" style={{ background: 'linear-gradient(to right, #FFE066, #FFB300)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>{f.title}</h4>
+                      <p className="text-sm text-[#A592C4] leading-relaxed">{f.desc}</p>
                     </div>
                   </button>
                   )
@@ -281,6 +280,7 @@ export default function Landing() {
                 <div className="relative rounded-2xl overflow-hidden group cursor-pointer border border-purple-mid/30 hover:border-purple-mid/60 hover:shadow-[0_0_20px_rgba(139,92,246,0.15)] transition-all duration-300 h-[240px]">
                   <img src="/images/1.png" alt="" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0A0614] via-[#0A0614]/60 to-transparent" />
+                  <div className="absolute inset-0 bg-white/60 backdrop-blur-[3px] dark:bg-transparent dark:backdrop-blur-none" />
                   <div className="relative h-full flex flex-col justify-between p-5 z-10">
                     <div>
                       <Badge className="rounded-full text-[10px] font-bold uppercase tracking-[.4px] px-2.5 py-0.5 h-auto bg-white/15 text-white border border-white/20 backdrop-blur-sm w-fit mb-2">Finalizado</Badge>
@@ -311,6 +311,7 @@ export default function Landing() {
                 <div className="relative rounded-2xl overflow-hidden group cursor-pointer border border-purple-mid/30 hover:border-purple-mid/60 hover:shadow-[0_0_20px_rgba(139,92,246,0.15)] transition-all duration-300 h-[240px]">
                   <img src="/images/2.png" alt="" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0A0614] via-[#0A0614]/60 to-transparent" />
+                  <div className="absolute inset-0 bg-white/60 backdrop-blur-[3px] dark:bg-transparent dark:backdrop-blur-none" />
                   <div className="relative h-full flex flex-col justify-between p-5 z-10">
                     <div>
                       <Badge className="rounded-full text-[10px] font-bold uppercase tracking-[.4px] px-2.5 py-0.5 h-auto bg-purple-mid text-white w-fit mb-2">Próximo</Badge>
@@ -341,6 +342,7 @@ export default function Landing() {
                 <div className="relative rounded-2xl overflow-hidden group cursor-pointer border border-purple-mid/30 hover:border-purple-mid/60 hover:shadow-[0_0_20px_rgba(139,92,246,0.15)] transition-all duration-300 h-[240px]">
                   <img src="/images/3.png" alt="" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0A0614] via-[#0A0614]/60 to-transparent" />
+                  <div className="absolute inset-0 bg-white/60 backdrop-blur-[3px] dark:bg-transparent dark:backdrop-blur-none" />
                   <div className="relative h-full flex flex-col justify-between p-5 z-10">
                     <div>
                       <Badge className="rounded-full text-[10px] font-bold uppercase tracking-[.4px] px-2.5 py-0.5 h-auto bg-purple-mid/20 text-purple-mid border border-purple-mid/40 backdrop-blur-sm w-fit mb-2">Relámpago</Badge>

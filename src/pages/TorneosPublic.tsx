@@ -73,7 +73,7 @@ function TorneosContent() {
                 { src:'/images/fondo-2.png' },
                 { src:'/images/fondo-3.png' },
               ]).map((img, i) => (
-                <img key={i} src={img.src} alt="" className="object-cover" style={{ width: `${140 + (i % 3) * 20}px`, height: `${160 + (i % 3) * 24}px`, transform: `translateY(${(i % 3) * 5 - 5}px)` }} />
+                <img key={i} src={img.src} alt="" className="object-cover" style={{ width: `${320 - (i % 3) * 130}px`, height: `${360 - (i % 3) * 140}px`, transform: `translateY(${25 - (i % 3) * 25}px)` }} />
               ))}
             </div>
           </div>
@@ -109,10 +109,7 @@ function TorneosContent() {
 
       {/* Content */}
       <section className="py-12 pb-[100px] relative overflow-hidden bg-[#E5ECE9] dark:bg-[#190D2B]">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-[10%] left-[-5%] w-[600px] h-[600px] rounded-full bg-purple-mid/15 dark:bg-purple-mid/20 blur-[180px]" />
-          <div className="absolute bottom-[10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-gold/15 dark:bg-gold/20 blur-[150px]" />
-        </div>
+        <div className="absolute inset-0 pointer-events-none" />
 
         <div className="max-w-[1280px] mx-auto px-8 relative">
           {/* Filters */}
