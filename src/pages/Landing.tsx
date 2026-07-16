@@ -397,56 +397,106 @@ export default function Landing() {
       <section className="py-12 relative overflow-hidden">
         <div className="absolute left-[5%] top-[-60%] w-[400px] h-[400px] rounded-full bg-purple-mid/15 blur-[120px] pointer-events-none" />
         <div className="absolute right-[5%] bottom-[-60%] w-[300px] h-[300px] rounded-full bg-gold/10 blur-[100px] pointer-events-none" />
-        <div className="max-w-[1280px] mx-auto px-8 relative">
-          <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-[90%] h-[90%] bg-gradient-to-br from-[#2d1b4e]/40 via-[#1a0f2e]/30 to-[#0d0720]/40 backdrop-blur-[2px] border border-gold/20 rounded-2xl z-0" />
-          <div className="flex items-center justify-between mb-6 relative z-10">
-            <div className="flex items-center gap-3">
+        <div className="max-w-[1280px] mx-auto px-8 space-y-8">
+
+          {/* ── Recuadro: Resultados en vivo ── */}
+          <div className="relative rounded-2xl bg-gradient-to-br from-[#2d1b4e]/40 via-[#1a0f2e]/30 to-[#0d0720]/40 backdrop-blur-[2px] border border-gold/20 overflow-hidden p-6 md:p-8">
+            <div className="absolute -top-[30%] -left-[10%] w-[250px] h-[250px] rounded-full bg-purple-mid/10 blur-[100px] pointer-events-none" />
+            <div className="absolute -bottom-[30%] -right-[10%] w-[200px] h-[200px] rounded-full bg-gold/10 blur-[80px] pointer-events-none" />
+
+            <div className="flex items-center gap-3 mb-5 relative z-10">
               <span className="w-1 h-6 rounded-full bg-gold" />
               <div>
-                <span className="text-[11px] font-bold tracking-[1.4px] uppercase text-gold">Últimos partidos</span>
-                <h2 className="font-[family-name:var(--font-display)] text-xl uppercase tracking-[.5px] text-[#4B2D7A] dark:text-gray-light">Resultados <span className="text-gold">en vivo</span></h2>
+                <span className="text-[11px] font-bold tracking-[1.4px] uppercase text-gold">En vivo</span>
+                <h2 className="font-[family-name:var(--font-display)] text-lg uppercase tracking-[.5px] text-[#4B2D7A] dark:text-gray-light">Resultados <span className="text-gold">en vivo</span></h2>
               </div>
             </div>
-            <span className="hidden md:flex items-center gap-2 text-[11px] font-bold tracking-[1px] uppercase text-gold bg-gold/10 border border-gold/30 px-3 py-1.5 rounded-full">
-              <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" /> Actualizado ahora
-            </span>
+
+            <div className="relative z-10 overflow-hidden mx-auto" style={{ maxWidth: 'calc(240px * 3 + 1rem * 2)' }}>
+              <Marquee speed={35} pauseOnHover={true}>
+                {[
+                  { eq1:'Ing. Mecánica', eq2:'Ing. Eléctrica', score:'1 - 1', estado:"42'", color:'#3B82F6' },
+                  { eq1:'Ing. Estadística', eq2:'Ing. Sistemas', score:'0 - 0', estado:"18'", color:'#06B6D4' },
+                  { eq1:'Ing. Civil', eq2:'Ing. Química', score:'2 - 1', estado:"55'", color:'#22C55E' },
+                  { eq1:'Ing. Industrial', eq2:'Ciberseguridad', score:'0 - 3', estado:"30'", color:'#F59E0B' },
+                  { eq1:'Ing. Mecánica', eq2:'Ing. Eléctrica', score:'1 - 1', estado:"42'", color:'#3B82F6' },
+                  { eq1:'Ing. Estadística', eq2:'Ing. Sistemas', score:'0 - 0', estado:"18'", color:'#06B6D4' },
+                ].map((m, i) => (
+                  <div key={i} className="group relative overflow-hidden rounded-xl w-[240px] flex-shrink-0 bg-[#E8DFF5]/70 dark:bg-black/30 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-white/5 hover:border-gold/40 transition-all duration-300 p-3.5">
+                    <div className="absolute -inset-[50%] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ background: 'radial-gradient(circle at 50% 50%, rgba(245,166,35,0.06), transparent 60%)' }} />
+                    <div className="flex items-center justify-between mb-2.5">
+                      <span className="text-[9px] font-bold uppercase tracking-[.6px] px-2 py-0.5 rounded-full bg-gold/15 text-gold dark:bg-gold/20 animate-pulse">{m.estado}</span>
+                      <span className="text-[9px] text-[#9B8AB5] dark:text-text-faint font-medium">EN VIVO</span>
+                    </div>
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex flex-col items-center gap-1 flex-1 min-w-0">
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold" style={{ backgroundColor: m.color + '20', color: m.color }}>{m.eq1.split(' ').pop()?.substring(0, 3) || m.eq1.substring(0, 3)}</div>
+                        <span className="text-[11px] font-semibold text-[#4B2D7A] dark:text-gray-light text-center leading-tight truncate w-full">{m.eq1}</span>
+                      </div>
+                      <div className="flex flex-col items-center px-1">
+                        <span className="text-lg font-black leading-none text-gold">{m.score}</span>
+                        <span className="text-[8px] text-[#9B8AB5] dark:text-text-faint font-bold uppercase mt-0.5">VS</span>
+                      </div>
+                      <div className="flex flex-col items-center gap-1 flex-1 min-w-0">
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold" style={{ backgroundColor: m.color + '20', color: m.color }}>{m.eq2.split(' ').pop()?.substring(0, 3) || m.eq2.substring(0, 3)}</div>
+                        <span className="text-[11px] font-semibold text-[#4B2D7A] dark:text-gray-light text-center leading-tight truncate w-full">{m.eq2}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </Marquee>
+            </div>
           </div>
-          <div className="relative z-10">
-          <Marquee speed={35} pauseOnHover={true}>
-            {[
-              { eq1:'Ing. Sistemas', eq2:'Ing. Civil', score:'3 - 1', estado:'Final', color:'#22C55E' },
-              { eq1:'Ing. Industrial', eq2:'Ing. Sistemas', score:'0 - 2', estado:'Final', color:'#F59E0B' },
-              { eq1:'Ing. Mecánica', eq2:'Ing. Eléctrica', score:'1 - 1', estado:'42\'', color:'#3B82F6' },
-              { eq1:'Ing. Sistemas', eq2:'Ing. Industrial', score:'-', estado:'Sáb 8PM', color:'#22C55E' },
-              { eq1:'Ing. Civil', eq2:'Ing. Mecánica', score:'-', estado:'Dom 5PM', color:'#EF4444' },
-              { eq1:'Ciberseguridad', eq2:'IA', score:'4 - 2', estado:'Final', color:'#8B5CF6' },
-              { eq1:'Ing. Estadística', eq2:'Ing. Sistemas', score:'0 - 0', estado:'18\'', color:'#06B6D4' },
-              { eq1:'Ing. Química', eq2:'Ing. Industrial', score:'2 - 1', estado:'Final', color:'#EC4899' },
-            ].map((m, i) => (
-              <div key={i} className="group relative overflow-hidden rounded-xl min-w-[240px] bg-[#E8DFF5]/70 dark:bg-black/30 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-white/5 hover:border-gold/40 transition-all duration-300 p-3.5">
-                <div className="absolute -inset-[50%] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ background: 'radial-gradient(circle at 50% 50%, rgba(245,166,35,0.06), transparent 60%)' }} />
-                <div className="flex items-center justify-between mb-2.5">
-                  <span className={`text-[9px] font-bold uppercase tracking-[.6px] px-2 py-0.5 rounded-full ${m.estado === 'Final' ? 'bg-[#E8E0F5] text-[#6B4D9E] dark:bg-white/10 dark:text-text-faint' : m.estado.includes("'") ? 'bg-gold/15 text-gold dark:bg-gold/20 animate-pulse' : 'bg-purple-mid/15 text-purple-mid'}`}>{m.estado}</span>
-                  <span className="text-[9px] text-[#9B8AB5] dark:text-text-faint font-medium">{m.estado === 'Final' ? 'FINAL' : m.estado.includes("'") ? 'EN VIVO' : 'PRÓXIMO'}</span>
-                </div>
-                <div className="flex items-center justify-between gap-3">
-                  <div className="flex flex-col items-center gap-1 flex-1 min-w-0">
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold" style={{ backgroundColor: m.color + '20', color: m.color }}>{m.eq1.split(' ').pop()?.substring(0, 3) || m.eq1.substring(0, 3)}</div>
-                    <span className="text-[11px] font-semibold text-[#4B2D7A] dark:text-gray-light text-center leading-tight truncate w-full">{m.eq1}</span>
-                  </div>
-                  <div className="flex flex-col items-center px-1">
-                    <span className={`text-lg font-black leading-none ${m.estado === 'Final' ? 'text-[#4B2D7A] dark:text-gray-light' : m.estado.includes("'") ? 'text-gold' : 'text-purple-mid'}`}>{m.score}</span>
-                    <span className="text-[8px] text-[#9B8AB5] dark:text-text-faint font-bold uppercase mt-0.5">VS</span>
-                  </div>
-                  <div className="flex flex-col items-center gap-1 flex-1 min-w-0">
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold" style={{ backgroundColor: m.color + '20', color: m.color }}>{m.eq2.split(' ').pop()?.substring(0, 3) || m.eq2.substring(0, 3)}</div>
-                    <span className="text-[11px] font-semibold text-[#4B2D7A] dark:text-gray-light text-center leading-tight truncate w-full">{m.eq2}</span>
-                  </div>
-                </div>
+
+          {/* ── Recuadro: Partidos finalizados ── */}
+          <div className="relative rounded-2xl bg-gradient-to-br from-[#2d1b4e]/40 via-[#1a0f2e]/30 to-[#0d0720]/40 backdrop-blur-[2px] border border-purple-mid/20 overflow-hidden p-6 md:p-8">
+            <div className="absolute -top-[30%] -left-[10%] w-[250px] h-[250px] rounded-full bg-purple-mid/10 blur-[100px] pointer-events-none" />
+            <div className="absolute -bottom-[30%] -right-[10%] w-[200px] h-[200px] rounded-full bg-purple-mid/10 blur-[80px] pointer-events-none" />
+
+            <div className="flex items-center gap-3 mb-5 relative z-10">
+              <span className="w-1 h-6 rounded-full bg-purple-mid" />
+              <div>
+                <span className="text-[11px] font-bold tracking-[1.4px] uppercase text-purple-mid">Finalizados</span>
+                <h2 className="font-[family-name:var(--font-display)] text-lg uppercase tracking-[.5px] text-[#4B2D7A] dark:text-gray-light">Últimos <span className="text-purple-mid">resultados</span></h2>
               </div>
-            ))}
-          </Marquee>
+            </div>
+
+            <div className="relative z-10 overflow-hidden mx-auto" style={{ maxWidth: 'calc(240px * 3 + 1rem * 2)' }}>
+              <Marquee speed={35} pauseOnHover={true}>
+                {[
+                  { eq1:'Ing. Sistemas', eq2:'Ing. Civil', score:'3 - 0', estado:'Final', color:'#8B5CF6' },
+                  { eq1:'Ing. Industrial', eq2:'Ing. Mecánica', score:'2 - 2', estado:'Final', color:'#6D28D9' },
+                  { eq1:'Ing. Eléctrica', eq2:'Ing. Química', score:'0 - 1', estado:'Final', color:'#7C3AED' },
+                  { eq1:'Ing. Sistemas', eq2:'Ing. Civil', score:'3 - 0', estado:'Final', color:'#8B5CF6' },
+                  { eq1:'Ing. Industrial', eq2:'Ing. Mecánica', score:'2 - 2', estado:'Final', color:'#6D28D9' },
+                  { eq1:'Ing. Eléctrica', eq2:'Ing. Química', score:'0 - 1', estado:'Final', color:'#7C3AED' },
+                ].map((m, i) => (
+                  <div key={i} className="group relative overflow-hidden rounded-xl w-[240px] flex-shrink-0 bg-[#E8DFF5]/70 dark:bg-black/30 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-white/5 hover:border-purple-mid/40 transition-all duration-300 p-3.5">
+                    <div className="absolute -inset-[50%] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ background: 'radial-gradient(circle at 50% 50%, rgba(139,92,246,0.06), transparent 60%)' }} />
+                    <div className="flex items-center justify-between mb-2.5">
+                      <span className="text-[9px] font-bold uppercase tracking-[.6px] px-2 py-0.5 rounded-full bg-[#E8E0F5] text-[#6B4D9E] dark:bg-white/10 dark:text-text-faint">{m.estado}</span>
+                      <span className="text-[9px] text-[#9B8AB5] dark:text-text-faint font-medium">FINAL</span>
+                    </div>
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex flex-col items-center gap-1 flex-1 min-w-0">
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold" style={{ backgroundColor: m.color + '20', color: m.color }}>{m.eq1.split(' ').pop()?.substring(0, 3) || m.eq1.substring(0, 3)}</div>
+                        <span className="text-[11px] font-semibold text-[#4B2D7A] dark:text-gray-light text-center leading-tight truncate w-full">{m.eq1}</span>
+                      </div>
+                      <div className="flex flex-col items-center px-1">
+                        <span className="text-lg font-black leading-none text-[#4B2D7A] dark:text-gray-light">{m.score}</span>
+                        <span className="text-[8px] text-[#9B8AB5] dark:text-text-faint font-bold uppercase mt-0.5">VS</span>
+                      </div>
+                      <div className="flex flex-col items-center gap-1 flex-1 min-w-0">
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold" style={{ backgroundColor: m.color + '20', color: m.color }}>{m.eq2.split(' ').pop()?.substring(0, 3) || m.eq2.substring(0, 3)}</div>
+                        <span className="text-[11px] font-semibold text-[#4B2D7A] dark:text-gray-light text-center leading-tight truncate w-full">{m.eq2}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </Marquee>
+            </div>
           </div>
+
         </div>
       </section>
 
