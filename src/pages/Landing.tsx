@@ -175,6 +175,16 @@ export default function Landing() {
             <div className="flex gap-8 max-lg:flex-col">
               {/* Imagen grande */}
               <div className="flex-[1.6] relative min-h-[420px] rounded-xl overflow-hidden">
+                {activeFeature === 0 ? (
+                  <img src="/images/feature-torneos.png" alt="" className="absolute inset-0 w-full h-full object-contain" />
+                ) : activeFeature === 1 ? (
+                  <img src="/images/feature-equipos.png" alt="" className="absolute inset-0 w-full h-full object-contain" />
+                ) : activeFeature === 2 ? (
+                  <img src="/images/feature-calendario.png" alt="" className="absolute inset-0 w-full h-full object-contain" />
+                ) : activeFeature === 3 ? (
+                  <img src="/images/feature-estadisticas.png" alt="" className="absolute inset-0 w-full h-full object-contain" />
+                ) : (
+                  <>
                 <img src="/images/mosaico1.png" alt="" className="absolute inset-0 w-full h-full object-cover" />
                 <div className="absolute inset-0" style={{ backgroundImage: 'url(/images/copa%20y%20manchas.png)', backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center bottom' }} />
                 {/* Mosaico 2x2 con las 4 fotos */}
@@ -184,6 +194,8 @@ export default function Landing() {
                   <img src="/images/landing-mosaico-3.jpeg" alt="" className="w-full h-full object-cover" />
                   <img src="/images/landing-mosaico-4.jpeg" alt="" className="w-full h-full object-cover" />
                 </div>
+                  </>
+                )}
                 <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: featureSlides[activeFeature].color }} />
