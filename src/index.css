@@ -35,7 +35,7 @@
   --color-text-faint: #6E6B80;
 
   --font-display: 'Montserrat', 'Oswald', 'Arial Narrow', sans-serif;
-  --font-display-alt: 'Montserrat', 'Archivo Black', 'Oswald', sans-serif;
+  --font-display-alt: 'Archivo Black', 'Oswald', 'Montserrat', sans-serif;
   --font-body: 'Inter', sans-serif;
 }
 
@@ -59,8 +59,8 @@
     --color-surface-2: #F5F5F5;
     --color-border: rgba(0, 0, 0, 0.08);
     --color-gray-light: #1F1F1F;
-    --color-text-muted: #6B7280;
-    --color-text-faint: #9CA3AF;
+    --color-text-muted: #374151;
+    --color-text-faint: #4B5563;
   }
 
   :root:not(.dark) body {

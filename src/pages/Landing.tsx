@@ -1,14 +1,13 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Trophy, Users, Calendar, BarChart3, Clock } from 'lucide-react'
+import { Trophy, Users, Calendar, BarChart3, Clock, ChevronLeft, ChevronRight } from 'lucide-react'
 import Navbar from '@/components/common/Navbar'
 import Footer from '@/components/common/Footer'
 import { Button } from '@/components/common/button'
 import { Badge } from '@/components/common/badge'
 import { SpotlightCard } from '@/components/common/spotlight-card'
 import { Marquee } from '@/components/common/marquee'
-import { Copa3D } from '@/components/common/copa-3d'
 import { torneos } from '@/services/torneos'
 
 const featureSlides = [
@@ -23,10 +22,57 @@ const heroFondos = [
   '/images/landing-futbol2.png',
 ]
 
+const torneosDestacados = [
+  {
+    img: '/images/1.png',
+    badgeLabel: 'Finalizado',
+    badgeClass: 'bg-white/15 text-white border border-white/20 backdrop-blur-sm',
+    categoria: 'Torneo oficial',
+    titulo: 'TechCup 2026-I',
+    fecha: 'Mar 3 – Jun 14, 2026',
+    equipos: 32,
+    jugadores: 384,
+    canchas: 4,
+  },
+  {
+    img: '/images/2.png',
+    badgeLabel: 'Próximo',
+    badgeClass: 'bg-purple-mid text-white',
+    categoria: 'Torneo oficial',
+    titulo: 'TechCup 2026-II',
+    fecha: 'Ago 20 – Nov 30, 2026',
+    equipos: 32,
+    jugadores: 384,
+    canchas: 4,
+  },
+  {
+    img: '/images/3.png',
+    badgeLabel: 'Relámpago',
+    badgeClass: 'bg-purple-mid/20 text-purple-mid border border-purple-mid/40 backdrop-blur-sm',
+    categoria: 'Torneo relámpago',
+    titulo: 'TechCup Relámpago 2026',
+    fecha: 'Sep 2026',
+    equipos: 16,
+    jugadores: 192,
+    canchas: 2,
+  },
+]
+
 export default function Landing() {
   const navigate = useNavigate()
   const [activeFeature, setActiveFeature] = useState(0)
   const [heroImg, setHeroImg] = useState(0)
+  const [activeTorneo, setActiveTorneo] = useState(0)
+  const [torneoDir, setTorneoDir] = useState(1)
+
+  const prevTorneo = () => {
+    setTorneoDir(-1)
+    setActiveTorneo(i => (i - 1 + torneosDestacados.length) % torneosDestacados.length)
+  }
+  const nextTorneo = () => {
+    setTorneoDir(1)
+    setActiveTorneo(i => (i + 1) % torneosDestacados.length)
+  }
 
   const nextFeature = useCallback(() => {
     setActiveFeature(i => (i + 1) % featureSlides.length)
@@ -36,6 +82,14 @@ export default function Landing() {
     const t = setInterval(nextFeature, 5000)
     return () => clearInterval(t)
   }, [nextFeature])
+
+  useEffect(() => {
+    const t = setInterval(() => {
+      setTorneoDir(1)
+      setActiveTorneo(i => (i + 1) % torneosDestacados.length)
+    }, 3000)
+    return () => clearInterval(t)
+  }, [])
 
   useEffect(() => {
     const t = setInterval(() => {
@@ -130,9 +184,8 @@ export default function Landing() {
 
             {/* Texto — DERECHA */}
             <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.8, ease: 'easeInOut' }}>
-              <div className="overflow-hidden mb-6">
-                <motion.h1 initial={{ y: 100 }} animate={{ y: 0 }} transition={{ delay: 0.5, duration: 0.6, ease: 'easeOut' }} className="font-[family-name:var(--font-display-alt)] font-bold text-[clamp(52px,7vw,92px)] leading-[.92] tracking-[.5px] uppercase italic">
-                  <span className="text-[#3D1A6B] dark:text-[#F7EDE2]">TECH</span>
+              <div className="overflow-hidden pb-2 mb-4">
+                <motion.h1 initial={{ y: 100 }} animate={{ y: 0 }} transition={{ delay: 0.5, duration: 0.6, ease: 'easeOut' }} className="font-[family-name:var(--font-display-alt)] font-bold text-[clamp(52px,7vw,92px)] leading-[1.15] tracking-[.5px] uppercase italic">                  <span className="text-[#3D1A6B] dark:text-[#F7EDE2]">TECH</span>
                   <span style={{ background: 'linear-gradient(135deg, #A5610A 0%, #BD7712 25%, #F5A623 50%, #FBC946 75%, #FBD559 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>CUP</span>
                 </motion.h1>
               </div>
@@ -153,10 +206,10 @@ export default function Landing() {
 
         {/* Texto inferior derecha — encima de todo */}
         <div className="absolute bottom-8 right-8 z-20 max-w-[360px] text-right max-md:hidden">
-          <p className="font-[family-name:var(--font-display)] text-4xl uppercase leading-[1.1] mb-4 text-white drop-shadow-lg">
+          <p className="font-[family-name:var(--font-display)] text-4xl uppercase leading-[1.1] mb-4 text-[#3D1A6B] dark:text-white drop-shadow-lg">
             La pasión nos <span className="text-gold">conecta</span>
           </p>
-          <p className="text-sm text-white/70 leading-relaxed drop-shadow">
+          <p className="text-sm text-[#3D1A6B]/70 dark:text-white/70 leading-relaxed drop-shadow">
             Iniciá sesión y viví la emoción del torneo universitario más importante de Ingeniería de Sistemas.
           </p>
           <div className="flex items-center gap-3 mt-6 justify-end">
@@ -257,7 +310,7 @@ export default function Landing() {
             <div className="flex items-center gap-3">
               <span className="w-1 h-6 rounded-full bg-purple-mid" />
               <div>
-                <span className="text-[11px] font-bold tracking-[1.4px] uppercase text-purple-mid">Torneos</span>
+                <span className="text-lg font-bold tracking-[1.4px] uppercase text-purple-mid">Torneos</span>
                 <h2 className="font-[family-name:var(--font-display)] text-xl uppercase tracking-[.5px] text-[#4B2D7A] dark:text-gray-light">Compite y <span className="text-purple-mid">deja tu huella</span></h2>
               </div>
             </div>
@@ -265,130 +318,73 @@ export default function Landing() {
 
           {/* Sub-header removed — está dentro del right column */}
 
-          <div className="grid grid-cols-[0.8fr_1.6fr] gap-10 items-center max-lg:grid-cols-1">
-            {/* Left — Copa 3D */}
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6 }} viewport={{ once: true }} className="flex items-center justify-center">
-              <Copa3D />
-            </motion.div>
+          <div className="max-w-[1100px] mx-auto">
+            {/* Carrusel — torneo activo en primer plano */}
+              <div className="relative">
+                <div className="relative rounded-2xl overflow-hidden border border-purple-mid/30 h-[340px] max-md:h-[300px]">
+                  <AnimatePresence initial={false} custom={torneoDir} mode="wait">
+                    {(() => {
+                      const t = torneosDestacados[activeTorneo]
+                      return (
+                        <motion.div
+                          key={activeTorneo}
+                          custom={torneoDir}
+                          initial={{ opacity: 0, x: 60 * torneoDir }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -60 * torneoDir }}
+                          transition={{ duration: 0.35, ease: 'easeInOut' }}
+                          className="absolute inset-0"
+                        >
+                          <img src={t.img} alt="" className="absolute inset-0 w-full h-full object-cover" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#0A0614] via-[#0A0614]/60 to-transparent" />
+                          <div className="relative h-full flex flex-col justify-between p-7 z-10">
+                            <div>
+                              <Badge className={`rounded-full text-[10px] font-bold uppercase tracking-[.4px] px-2.5 py-0.5 h-auto w-fit mb-2 ${t.badgeClass}`}>{t.badgeLabel}</Badge>
+                              <span className="block text-[10px] tracking-[1.2px] text-purple-mid font-bold uppercase mb-1">{t.categoria}</span>
+                              <h3 className="font-[family-name:var(--font-display)] text-3xl uppercase text-white leading-tight">{t.titulo}</h3>
+                              <p className="text-[13px] text-white/60 mt-1">Ingeniería de Sistemas</p>
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2 text-[11px] text-white/50 mb-3">
+                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                {t.fecha}
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                  <span className="text-[11px] text-white/60"><strong className="text-white/90">{t.equipos}</strong> Equipos</span>
+                                  <span className="text-[11px] text-white/60"><strong className="text-white/90">{t.jugadores}</strong> Jugadores</span>
+                                  <span className="text-[11px] text-white/60"><strong className="text-white/90">{t.canchas}</strong> Canchas</span>
+                                </div>
+                                <span className="text-[11px] font-bold text-purple-mid bg-purple-mid/10 border border-purple-mid/30 px-3 py-1 rounded-full hover:bg-purple-mid/20 transition-colors cursor-pointer">Ver detalles</span>
+                              </div>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )
+                    })()}
+                  </AnimatePresence>
+                </div>
 
-            {/* Right — Tournament cards */}
-            <div>
-              {/* Header toolbar */}
-              <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#D4C8E8]/40 dark:border-white/5">
-                <h3 className="font-[family-name:var(--font-display)] text-lg uppercase text-[#4B2D7A] dark:text-white">Todos los torneos</h3>
-                <div className="flex items-center gap-3">
-                  <span className="text-[11px] text-text-muted dark:text-text-faint">6 torneos encontrados</span>
-                  <div className="relative">
-                    <select className="appearance-none bg-white/5 dark:bg-white/5 border border-[#D4C8E8]/40 dark:border-white/10 rounded-lg px-2.5 py-1.5 pr-7 text-[11px] text-[#4B2D7A] dark:text-gray-light cursor-pointer focus:outline-none focus:border-purple-mid/50">
-                      <option>Más recientes</option>
-                      <option>Más antiguos</option>
-                      <option>Nombre</option>
-                    </select>
-                    <svg className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-text-muted pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/></svg>
-                  </div>
-                  <div className="flex border border-[#D4C8E8]/40 dark:border-white/10 rounded-lg overflow-hidden">
-                    <button className="p-1.5 bg-purple-mid text-white"><svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z"/></svg></button>
-                    <button className="p-1.5 bg-white/5 dark:bg-white/5 text-text-muted hover:text-white transition-colors"><svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg></button>
-                  </div>
+                {/* Flechas */}
+                <button onClick={prevTorneo} aria-label="Torneo anterior" className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/40 hover:bg-purple-mid text-white flex items-center justify-center backdrop-blur-sm transition-colors">
+                  <ChevronLeft size={20} />
+                </button>
+                <button onClick={nextTorneo} aria-label="Siguiente torneo" className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/40 hover:bg-purple-mid text-white flex items-center justify-center backdrop-blur-sm transition-colors">
+                  <ChevronRight size={20} />
+                </button>
+
+                {/* Indicadores */}
+                <div className="flex justify-center gap-2 mt-4">
+                  {torneosDestacados.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => { setTorneoDir(i > activeTorneo ? 1 : -1); setActiveTorneo(i) }}
+                      aria-label={`Ir al torneo ${i + 1}`}
+                      className={`h-1.5 rounded-full transition-all duration-300 ${i === activeTorneo ? 'w-8 bg-purple-mid' : 'w-1.5 bg-purple-mid/20 hover:bg-purple-mid/40'}`}
+                    />
+                  ))}
                 </div>
               </div>
-
-              {/* Cards grid */}
-              <div className="grid grid-cols-3 max-lg:grid-cols-1 gap-5">
-              {/* 2026-I — Finalizado */}
-              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0, duration: 0.4 }} viewport={{ once: true }}>
-                <div className="relative rounded-2xl overflow-hidden group cursor-pointer border border-purple-mid/30 hover:border-purple-mid/60 hover:shadow-[0_0_20px_rgba(139,92,246,0.15)] transition-all duration-300 h-[240px]">
-                  <img src="/images/1.png" alt="" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0A0614] via-[#0A0614]/60 to-transparent" />
-                  <div className="absolute inset-0 bg-white/60 backdrop-blur-[3px] dark:bg-transparent dark:backdrop-blur-none" />
-                  <div className="relative h-full flex flex-col justify-between p-5 z-10">
-                    <div>
-                      <Badge className="rounded-full text-[10px] font-bold uppercase tracking-[.4px] px-2.5 py-0.5 h-auto bg-white/15 text-white border border-white/20 backdrop-blur-sm w-fit mb-2">Finalizado</Badge>
-                      <span className="block text-[10px] tracking-[1.2px] text-purple-mid font-bold uppercase mb-1">Torneo oficial</span>
-                      <h3 className="font-[family-name:var(--font-display)] text-xl uppercase text-white leading-tight">TechCup 2026-I</h3>
-                      <p className="text-[12px] text-white/60 mt-1">Ingeniería de Sistemas</p>
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2 text-[11px] text-white/50 mb-3">
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                        Mar 3 – Jun 14, 2026
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <span className="text-[11px] text-white/60"><strong className="text-white/90">32</strong> Equipos</span>
-                          <span className="text-[11px] text-white/60"><strong className="text-white/90">384</strong> Jugadores</span>
-                          <span className="text-[11px] text-white/60"><strong className="text-white/90">4</strong> Canchas</span>
-                        </div>
-                        <span className="text-[11px] font-bold text-purple-mid bg-purple-mid/10 border border-purple-mid/30 px-3 py-1 rounded-full group-hover:bg-purple-mid/20 transition-colors">Ver detalles</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* 2026-II — Próximo */}
-              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.4 }} viewport={{ once: true }}>
-                <div className="relative rounded-2xl overflow-hidden group cursor-pointer border border-purple-mid/30 hover:border-purple-mid/60 hover:shadow-[0_0_20px_rgba(139,92,246,0.15)] transition-all duration-300 h-[240px]">
-                  <img src="/images/2.png" alt="" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0A0614] via-[#0A0614]/60 to-transparent" />
-                  <div className="absolute inset-0 bg-white/60 backdrop-blur-[3px] dark:bg-transparent dark:backdrop-blur-none" />
-                  <div className="relative h-full flex flex-col justify-between p-5 z-10">
-                    <div>
-                      <Badge className="rounded-full text-[10px] font-bold uppercase tracking-[.4px] px-2.5 py-0.5 h-auto bg-purple-mid text-white w-fit mb-2">Próximo</Badge>
-                      <span className="block text-[10px] tracking-[1.2px] text-purple-mid font-bold uppercase mb-1">Torneo oficial</span>
-                      <h3 className="font-[family-name:var(--font-display)] text-xl uppercase text-white leading-tight">TechCup 2026-II</h3>
-                      <p className="text-[12px] text-white/60 mt-1">Ingeniería de Sistemas</p>
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2 text-[11px] text-white/50 mb-3">
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                        Ago 20 – Nov 30, 2026
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <span className="text-[11px] text-white/60"><strong className="text-white/90">32</strong> Equipos</span>
-                          <span className="text-[11px] text-white/60"><strong className="text-white/90">384</strong> Jugadores</span>
-                          <span className="text-[11px] text-white/60"><strong className="text-white/90">4</strong> Canchas</span>
-                        </div>
-                        <span className="text-[11px] font-bold text-purple-mid bg-purple-mid/10 border border-purple-mid/30 px-3 py-1 rounded-full group-hover:bg-purple-mid/20 transition-colors">Ver detalles</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Relámpago */}
-              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.4 }} viewport={{ once: true }}>
-                <div className="relative rounded-2xl overflow-hidden group cursor-pointer border border-purple-mid/30 hover:border-purple-mid/60 hover:shadow-[0_0_20px_rgba(139,92,246,0.15)] transition-all duration-300 h-[240px]">
-                  <img src="/images/3.png" alt="" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0A0614] via-[#0A0614]/60 to-transparent" />
-                  <div className="absolute inset-0 bg-white/60 backdrop-blur-[3px] dark:bg-transparent dark:backdrop-blur-none" />
-                  <div className="relative h-full flex flex-col justify-between p-5 z-10">
-                    <div>
-                      <Badge className="rounded-full text-[10px] font-bold uppercase tracking-[.4px] px-2.5 py-0.5 h-auto bg-purple-mid/20 text-purple-mid border border-purple-mid/40 backdrop-blur-sm w-fit mb-2">Relámpago</Badge>
-                      <span className="block text-[10px] tracking-[1.2px] text-purple-mid font-bold uppercase mb-1">Torneo relámpago</span>
-                      <h3 className="font-[family-name:var(--font-display)] text-xl uppercase text-white leading-tight">TechCup Relámpago 2026</h3>
-                      <p className="text-[12px] text-white/60 mt-1">Ingeniería de Sistemas</p>
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2 text-[11px] text-white/50 mb-3">
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                        Sep 2026
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <span className="text-[11px] text-white/60"><strong className="text-white/90">16</strong> Equipos</span>
-                          <span className="text-[11px] text-white/60"><strong className="text-white/90">192</strong> Jugadores</span>
-                          <span className="text-[11px] text-white/60"><strong className="text-white/90">2</strong> Canchas</span>
-                        </div>
-                        <span className="text-[11px] font-bold text-purple-mid bg-purple-mid/10 border border-purple-mid/30 px-3 py-1 rounded-full group-hover:bg-purple-mid/20 transition-colors">Ver detalles</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-          </div>
           </div>
         </div>
       </section>
