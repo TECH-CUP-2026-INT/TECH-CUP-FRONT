@@ -4,6 +4,8 @@ import DashboardLayout from '@/components/common/DashboardLayout'
 import { SpotlightCard } from '@/components/common/spotlight-card'
 import { Button } from '@/components/common/button'
 import { TrendingUp, Trophy } from 'lucide-react'
+import { useAuth } from '@/hooks/auth/useAuth'
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/common/avatar'
 
 const stats = [
   { label: 'Goles', value: '8', change: '+2', icon: '⚽' },
@@ -21,16 +23,21 @@ const partidosStats = [
 ]
 
 export default function Estadisticas() {
+  const { user } = useAuth()
+  const initials = (user?.name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
   return (
     <DashboardLayout title="Estadísticas">
       <main className="max-w-[900px] mx-auto px-8 py-8 pb-[60px]">
           {/* Header */}
           <div className="flex items-center gap-4 mb-8 max-md:flex-col max-md:text-center">
             <div className="w-16 h-16 rounded-full overflow-hidden ring-2 ring-gold/40 ring-offset-2 ring-offset-black">
-              <img src="https://i.pravatar.cc/150?img=13" alt="" className="w-full h-full object-cover" />
-            </div>
+                <Avatar className="w-full h-full">
+                  <AvatarImage src={user?.avatar || ''} alt="" className="w-full h-full object-cover" />
+                  <AvatarFallback className="text-sm font-bold">{initials}</AvatarFallback>
+                </Avatar>
+              </div>
             <div>
-              <h1 className="font-[family-name:var(--font-display)] text-2xl uppercase">Estadísticas de <span className="text-gold">Juan Camilo</span></h1>
+              <h1 className="font-[family-name:var(--font-display)] text-2xl uppercase">Estadísticas de <span className="text-gold">{user?.name?.split(' ')[0] || 'Juan Camilo'}</span></h1>
               <p className="text-sm text-text-muted">Delantero · #10 · Sistemas FC</p>
             </div>
           </div>

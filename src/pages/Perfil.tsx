@@ -63,8 +63,11 @@ export default function Perfil() {
               {/* Foto grande */}
               <div className="relative group">
                 <div className="w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden ring-4 ring-gold/40 ring-offset-4 ring-offset-black">
-                  <img src="https://i.pravatar.cc/150?img=13" alt="" className="w-full h-full object-cover" />
-                </div>
+                    <Avatar className="w-full h-full">
+                      <AvatarImage src={user?.avatar || ''} alt="" className="w-full h-full object-cover" />
+                      <AvatarFallback className="text-2xl font-bold">{(user?.name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()}</AvatarFallback>
+                    </Avatar>
+                  </div>
                 <button className="absolute bottom-1 right-1 w-8 h-8 rounded-full bg-purple-mid border-2 border-black flex items-center justify-center hover:bg-purple-deep2 transition-colors">
                   <Camera size={14} className="text-white" />
                 </button>
@@ -72,11 +75,11 @@ export default function Perfil() {
 
               <div className="flex-1">
                 <h1 className="font-[family-name:var(--font-display)] text-3xl uppercase tracking-[.5px]">
-                  Juan Camilo <span className="text-gold">Rivera</span>
+                  {(user?.name || 'Usuario').split(' ').slice(0, -1).join(' ')} <span className="text-gold">{(user?.name || 'Usuario').split(' ').pop()}</span>
                 </h1>
                 <div className="flex items-center gap-3 mt-2 flex-wrap max-md:justify-center">
                   <Badge className="rounded-full bg-purple-mid/20 text-purple-mid border border-purple-mid/30 text-[11px] uppercase font-bold">
-                    Jugador
+                    {user?.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : 'Jugador'}
                   </Badge>
                   <span className="text-sm text-text-muted">Sistemas FC</span>
                   <span className="w-1 h-1 rounded-full bg-text-faint" />

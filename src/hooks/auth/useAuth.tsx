@@ -12,7 +12,7 @@ interface User {
 
 interface AuthContextType {
   user: User | null
-  login: (email: string, role: UserRole, avatar?: string) => void
+  login: (email: string, role: UserRole, avatar?: string, name?: string) => void
   logout: () => void
   isAuthenticated: boolean
   becomeCaptain: () => void
@@ -51,12 +51,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
-  const login = (email: string, role: UserRole = 'jugador', avatar?: string) => {
-    const name = email.split('@')[0].replace(/[._]/g, ' ')
+  const login = (email: string, role: UserRole = 'jugador', avatar?: string, name?: string) => {
+    const displayName = name || (email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, c => c.toUpperCase()))
     const newUser: User = {
-      name: name.charAt(0).toUpperCase() + name.slice(1),
+      name: displayName,
       email,
-      avatar: avatar || getInitialsAvatar(name),
+      avatar: avatar || getInitialsAvatar(displayName),
       role,
       isCaptain: false,
     }
