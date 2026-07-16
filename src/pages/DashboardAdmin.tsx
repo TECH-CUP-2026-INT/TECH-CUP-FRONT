@@ -21,7 +21,7 @@ import {
 
 const SIDEBAR_KEY = 'techcup_sidebar_collapsed'
 type RolView = 'admin' | 'arbitro' | 'capitan'
-type AdminTab = 'dashboard' | 'inscripciones' | 'arbitros' | 'torneos' | 'logistica'
+type AdminTab = 'dashboard' | 'inscripciones' | 'arbitros' | 'torneos' | 'logistica' | 'reportes'
 
 interface Jugador { id: number; nombre: string; posicion: string; dorsal: number; estaJugando: boolean }
 interface TeamDetail {
@@ -498,12 +498,12 @@ export default function DashboardAdmin() {
           {rolActivo === 'admin' && (
             <>
               <div className="flex items-center gap-1 mb-6 bg-white/5 border border-white/10 rounded-xl p-1 overflow-x-auto">
-                {(['dashboard','inscripciones','arbitros','torneos','logistica'] as AdminTab[]).map(id => (
+                {(['dashboard','inscripciones','arbitros','torneos','logistica','reportes'] as AdminTab[]).map(id => (
                   <button key={id} onClick={() => setAdminTab(id)}
                     className={`flex items-center gap-2 px-4 py-2 rounded-lg text-[12.5px] font-semibold transition-all whitespace-nowrap ${
                       adminTab === id ? 'bg-purple-mid text-white shadow-lg shadow-purple-mid/25' : 'text-gray-600 dark:text-white/60 hover:text-gray-900 dark:text-white hover:bg-white/5'
                     }`}>
-                    {id === 'dashboard' ? <Trophy size={16} /> : id === 'inscripciones' ? <ClipboardList size={16} /> : id === 'arbitros' ? <UserPlus size={16} /> : id === 'torneos' ? <CalendarDays size={16} /> : <Package size={16} />}
+                    {id === 'dashboard' ? <Trophy size={16} /> : id === 'inscripciones' ? <ClipboardList size={16} /> : id === 'arbitros' ? <UserPlus size={16} /> : id === 'torneos' ? <CalendarDays size={16} /> : id === 'logistica' ? <Package size={16} /> : <Activity size={16} />}
                     {id.charAt(0).toUpperCase() + id.slice(1)}
                   </button>
                 ))}
@@ -686,6 +686,108 @@ export default function DashboardAdmin() {
                       </button>
                     </div>
                   ))}
+                </div>
+              )}
+
+              {adminTab === 'reportes' && (
+                <div className="space-y-5">
+                  <h3 className="font-[family-name:var(--font-display)] uppercase text-lg tracking-[.5px] mb-2">Reportes y <span className="text-gold">estadísticas</span></h3>
+                  <p className="text-sm text-text-muted mb-4">Vista general de métricas, rendimiento y actividad del torneo.</p>
+
+                  <div className="grid grid-cols-4 max-lg:grid-cols-2 gap-[18px]">
+                    {[
+                      { icon: '🏆', num: partidosDetalle.filter(m => m.estado === 'finalizado').length.toString(), label: 'Partidos finalizados', accent: 'gold' },
+                      { icon: '⚽', num: partidosDetalle.reduce((sum, m) => sum + (m.score1 || 0) + (m.score2 || 0), 0).toString(), label: 'Goles totales', accent: 'purple' },
+                      { icon: '🟨', num: partidosDetalle.reduce((sum, m) => sum + m.eventos.filter(e => e.tipo === 'amarilla').length, 0).toString(), label: 'Tarjetas amarillas', accent: 'gold' },
+                      { icon: '🟥', num: partidosDetalle.reduce((sum, m) => sum + m.eventos.filter(e => e.tipo === 'roja').length, 0).toString(), label: 'Tarjetas rojas', accent: 'purple' },
+                      { icon: '👥', num: equiposDetalle.length.toString(), label: 'Equipos registrados', accent: 'gold' },
+                      { icon: '🧑‍🤝‍🧑', num: equiposDetalle.reduce((sum, e) => sum + e.jugadores.length, 0).toString(), label: 'Jugadores totales', accent: 'purple' },
+                      { icon: '📊', num: playersStats.filter(p => p.goles > 0).length.toString(), label: 'Goleadores distintos', accent: 'gold' },
+                      { icon: '✅', num: listaInscripciones.filter(i => i.estado === 'approved').length.toString(), label: 'Inscripciones aprobadas', accent: 'purple' },
+                    ].map((s, i) => (
+                      <SpotlightCard key={i} accent={s.accent as 'gold'|'purple'} className="p-5 flex gap-3.5 items-center bg-surface border-border rounded-2xl">
+                        <span className={`w-[46px] h-[46px] rounded-xl flex items-center justify-center flex-shrink-0 ${s.accent === 'purple' ? 'bg-purple-mid/20 text-[#b39ef2]' : 'bg-gold/15 text-gold'}`}>{s.icon}</span>
+                        <div><div className="font-[family-name:var(--font-display)] text-[26px] leading-none">{s.num}</div><div className="text-xs text-text-muted mt-1">{s.label}</div></div>
+                      </SpotlightCard>
+                    ))}
+                  </div>
+
+                  <SpotlightCard accent="gold" className="p-[22px_24px] bg-surface border-border rounded-2xl">
+                    <h3 className="text-[14.5px] font-semibold tracking-[.3px] flex items-center gap-2 mb-4">
+                      <Goal size={16} className="text-gold" /> Tabla de goleadores completa
+                    </h3>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-[13px]">
+                        <thead>
+                          <tr className="border-b border-white/10 text-text-muted text-[11px] uppercase tracking-[.5px]">
+                            <th className="text-left py-2 pr-2">#</th>
+                            <th className="text-left py-2 pr-2">Jugador</th>
+                            <th className="text-left py-2 pr-2">Equipo</th>
+                            <th className="text-center py-2 pr-2">Goles</th>
+                            <th className="text-center py-2 pr-2">Asistencias</th>
+                            <th className="text-center py-2 pr-2">Amarillas</th>
+                            <th className="text-center py-2 pr-2">Rojas</th>
+                            <th className="text-center py-2">PJ</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {[...playersStats].sort((a, b) => b.goles - a.goles).map((p, i) => (
+                            <tr key={p.id} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
+                              <td className="py-2.5 pr-2 font-bold text-gold">{i + 1}º</td>
+                              <td className="py-2.5 pr-2 font-semibold">{p.nombre}</td>
+                              <td className="py-2.5 pr-2 text-text-muted">{p.emoji} {p.equipo}</td>
+                              <td className="py-2.5 pr-2 text-center font-bold text-gold">{p.goles}</td>
+                              <td className="py-2.5 pr-2 text-center text-blue-400">{p.asistencias}</td>
+                              <td className="py-2.5 pr-2 text-center text-yellow-400">{p.amarillas}</td>
+                              <td className="py-2.5 pr-2 text-center text-red-400">{p.rojas}</td>
+                              <td className="py-2.5 text-center">{p.partidosJugados}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </SpotlightCard>
+
+                  <div className="grid grid-cols-2 max-lg:grid-cols-1 gap-4">
+                    <SpotlightCard accent="purple" className="p-[22px_24px] bg-surface border-border rounded-2xl">
+                      <h3 className="text-[14.5px] font-semibold tracking-[.3px] flex items-center gap-2 mb-4">
+                        <CalendarDays size={16} className="text-gold" /> Partidos por estado
+                      </h3>
+                      {[
+                        { label: 'Finalizados', count: partidosDetalle.filter(m => m.estado === 'finalizado').length, color: 'bg-green-500' },
+                        { label: 'En vivo', count: partidosDetalle.filter(m => m.estado === 'en_vivo').length, color: 'bg-red-500' },
+                        { label: 'Programados', count: partidosDetalle.filter(m => m.estado === 'programado').length, color: 'bg-blue-500' },
+                      ].map((s, i) => {
+                        const total = partidosDetalle.length || 1
+                        const pct = Math.round((s.count / total) * 100)
+                        return (
+                          <div key={i} className="flex items-center gap-3 py-2">
+                            <span className={`w-2.5 h-2.5 rounded-full ${s.color}`} />
+                            <span className="flex-1 text-[13px]">{s.label}</span>
+                            <span className="text-sm font-bold">{s.count}</span>
+                            <div className="w-20 h-2 rounded-full bg-white/10 overflow-hidden">
+                              <div className={`h-full rounded-full ${s.color}`} style={{ width: `${pct}%` }} />
+                            </div>
+                            <span className="text-[11px] text-text-muted w-8 text-right">{pct}%</span>
+                          </div>
+                        )
+                      })}
+                    </SpotlightCard>
+
+                    <SpotlightCard accent="gold" className="p-[22px_24px] bg-surface border-border rounded-2xl">
+                      <h3 className="text-[14.5px] font-semibold tracking-[.3px] flex items-center gap-2 mb-4">
+                        <Users size={16} className="text-gold" /> Equipos con más jugadores
+                      </h3>
+                      {[...equiposDetalle].sort((a, b) => b.jugadores.length - a.jugadores.length).map((eq, i) => (
+                        <div key={eq.id} className="flex items-center gap-3 py-2 border-b border-white/5 last:border-b-0">
+                          <span className="w-5 text-center text-sm font-bold text-text-muted">{i + 1}º</span>
+                          <span className="text-lg">{eq.emoji}</span>
+                          <span className="flex-1 text-[13px] font-semibold">{eq.nombre}</span>
+                          <span className="text-sm font-bold text-gold">{eq.jugadores.length} jug.</span>
+                        </div>
+                      ))}
+                    </SpotlightCard>
+                  </div>
                 </div>
               )}
             </>

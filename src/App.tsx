@@ -3,6 +3,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google'
 import { AuthProvider } from '@/hooks/auth/useAuth'
 import { ThemeProvider } from '@/configs/theme'
 import { StarfieldBackground } from '@/components/common/starfield-bg'
+import { ErrorBoundary } from '@/components/common/error-boundary'
 
 import Landing from '@/pages/Landing'
 import Dashboard from '@/pages/Dashboard'
@@ -27,9 +28,12 @@ import DetalleTorneo from '@/pages/DetalleTorneo'
 import Arbitraje from '@/pages/Arbitraje'
 import RefereeDashboard from '@/pages/RefereeDashboard'
 import CrearEquipo from '@/pages/CrearEquipo'
+import CrearTorneo from '@/pages/CrearTorneo'
 import InscribirEquipo from '@/pages/InscribirEquipo'
 import Llaves from '@/pages/Llaves'
 import Campus from '@/pages/Campus'
+import Notificaciones from '@/pages/Notificaciones'
+import Rankings from '@/pages/Rankings'
 
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || ''
 
@@ -42,6 +46,7 @@ export default function App() {
       <StarfieldBackground className="min-h-screen">
       <div className="fixed inset-0 pointer-events-none z-0 dark:hidden" style={{ backgroundImage: 'url(/images/fondo-landing2-claro.png)', backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.45 }} />
       <div className="fixed inset-0 pointer-events-none z-0 hidden dark:block" style={{ backgroundImage: 'url(/images/fondo-landing2.png)', backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.3 }} />
+      <ErrorBoundary>
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/torneos" element={<TorneosPublic />} />
@@ -73,7 +78,11 @@ export default function App() {
         <Route path="/dashboard/admin" element={<DashboardAdmin />} />
         <Route path="/dashboard/organizador" element={<DashboardAdmin />} />
         <Route path="/campus" element={<Campus />} />
+        <Route path="/crear-torneo" element={<CrearTorneo />} />
+        <Route path="/notificaciones" element={<Notificaciones />} />
+        <Route path="/rankings" element={<Rankings />} />
       </Routes>
+      </ErrorBoundary>
       </StarfieldBackground>
       </AuthProvider>
       </ThemeProvider>
