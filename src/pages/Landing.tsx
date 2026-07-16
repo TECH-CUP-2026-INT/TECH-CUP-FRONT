@@ -177,7 +177,13 @@ export default function Landing() {
               <div className="flex-[1.6] relative min-h-[420px] rounded-xl overflow-hidden">
                 <img src="/images/mosaico1.png" alt="" className="absolute inset-0 w-full h-full object-cover" />
                 <div className="absolute inset-0" style={{ backgroundImage: 'url(/images/copa%20y%20manchas.png)', backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center bottom' }} />
-                <div className="absolute inset-0 bg-gradient-to-r from-[#FFD700]/5 to-transparent" />
+                {/* Mosaico 2x2 con las 4 fotos */}
+                <div className="absolute inset-0 grid grid-cols-2 grid-rows-2">
+                  <img src="/images/landing-mosaico-1.jpeg" alt="" className="w-full h-full object-cover" />
+                  <img src="/images/landing-mosaico-2.jpeg" alt="" className="w-full h-full object-cover" />
+                  <img src="/images/landing-mosaico-3.jpeg" alt="" className="w-full h-full object-cover" />
+                  <img src="/images/landing-mosaico-4.jpeg" alt="" className="w-full h-full object-cover" />
+                </div>
                 <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: featureSlides[activeFeature].color }} />
