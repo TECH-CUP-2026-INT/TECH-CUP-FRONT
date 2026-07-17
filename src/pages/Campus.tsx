@@ -179,11 +179,11 @@ export default function Campus() {
           <div className="relative z-10 w-full">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-10 rounded-xl bg-gold/15 border border-gold/20 flex items-center justify-center">
-                <Fence className="text-gold" size={20} />
+                <Fence className="text-gold-ink" size={20} />
               </div>
               <div>
                 <h1 className="font-[family-name:var(--font-display)] text-2xl uppercase tracking-[.5px] text-white">
-                  Campus <span className="text-gold">Deportivo</span>
+                  Campus <span className="text-gold-ink">Deportivo</span>
                 </h1>
                 <p className="text-sm text-white/60">{new Date().toLocaleDateString('es-CO', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</p>
               </div>
@@ -191,8 +191,8 @@ export default function Campus() {
 
             <div className="max-w-2xl">
               <p className="text-sm text-white/80 leading-relaxed">
-                Conocé todas las instalaciones del campus. El torneo se juega en la <strong className="text-gold">Cancha Principal</strong>,
-                que se divide en <strong className="text-gold">4 canchas simultáneas</strong> para que hasta 8 equipos compitan al mismo tiempo.
+                Conocé todas las instalaciones del campus. El torneo se juega en la <strong className="text-gold-ink">Cancha Principal</strong>,
+                que se divide en <strong className="text-gold-ink">4 canchas simultáneas</strong> para que hasta 8 equipos compitan al mismo tiempo.
               </p>
             </div>
           </div>
@@ -202,7 +202,7 @@ export default function Campus() {
         <div className="flex items-center gap-1 bg-surface/50 border border-border/60 rounded-2xl p-1 mb-6">
           {(['instalaciones', 'partidos'] as CampusTab[]).map(t => (
             <button key={t} onClick={() => setTab(t)}
-              className={`flex-1 py-2.5 px-4 rounded-xl text-sm font-semibold capitalize transition-all ${
+              className={`flex-1 py-2.5 px-4 rounded-xl text-sm font-semibold transition-all ${
                 tab === t ? 'bg-purple-mid text-white shadow-lg shadow-purple-mid/25' : 'text-text-muted hover:text-white'
               }`}>
               {t === 'instalaciones' ? '🏟️ Instalaciones' : '⚽ Partidos en vivo'}
@@ -295,9 +295,9 @@ export default function Campus() {
             <section>
               <div className="flex items-center justify-between mb-4">
                 <h2 className="font-[family-name:var(--font-display)] text-lg uppercase tracking-[.5px] text-white">
-                  🔴 Partidos <span className="text-gold">en vivo</span>
+                  🔴 Partidos <span className="text-gold-ink">en vivo</span>
                 </h2>
-                <span className="text-[10px] text-gold font-bold uppercase tracking-[.5px] bg-gold/10 border border-gold/30 px-3 py-1 rounded-full">
+                <span className="text-[10px] text-gold-ink font-bold uppercase tracking-[.5px] bg-gold/10 border border-gold/30 px-3 py-1 rounded-full">
                   Simultáneo · 8:00 PM
                 </span>
               </div>
@@ -308,7 +308,7 @@ export default function Campus() {
                   <button key={i} onClick={() => setMatchModal({ eq1: d.eq1, eq2: d.eq2, hora: d.hora, resultado: d.resultado })}
                     className="bg-surface border border-border/60 rounded-xl p-4 text-left hover:border-gold/30 transition-all group">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs text-gold font-bold uppercase">{d.nombre}</span>
+                      <span className="text-xs text-gold-ink font-bold uppercase">{d.nombre}</span>
                       {d.resultado ? (
                         <span className="text-[10px] text-green-400 font-bold">✅ Finalizado</span>
                       ) : (
@@ -317,7 +317,7 @@ export default function Campus() {
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-semibold">{d.eq1}</span>
-                      <span className="text-lg font-bold font-[family-name:var(--font-display)] text-gold">{d.resultado || 'vs'}</span>
+                      <span className="text-lg font-bold font-[family-name:var(--font-display)] text-gold-ink">{d.resultado || 'vs'}</span>
                       <span className="text-sm font-semibold">{d.eq2}</span>
                     </div>
                     <div className="flex items-center gap-2 text-[10px] text-text-muted mt-2">
@@ -367,22 +367,22 @@ export default function Campus() {
 
                   <div className="grid grid-cols-2 gap-3">
                     <div className="p-3 rounded-xl bg-white/5 border border-white/10">
-                      <MapPin size={14} className="text-gold mb-1" />
+                      <MapPin size={14} className="text-gold-ink mb-1" />
                       <div className="text-sm font-semibold text-white">Ubicación</div>
                       <div className="text-[11px] text-text-muted">{sedeModal.ubicacion}</div>
                     </div>
                     <div className="p-3 rounded-xl bg-white/5 border border-white/10">
-                      <Users size={14} className="text-gold mb-1" />
+                      <Users size={14} className="text-gold-ink mb-1" />
                       <div className="text-sm font-semibold text-white">Capacidad</div>
                       <div className="text-[11px] text-text-muted">{sedeModal.capacidad} personas</div>
                     </div>
                     <div className="p-3 rounded-xl bg-white/5 border border-white/10">
-                      <Clock size={14} className="text-gold mb-1" />
+                      <Clock size={14} className="text-gold-ink mb-1" />
                       <div className="text-sm font-semibold text-white">Horarios</div>
                       <div className="text-[11px] text-text-muted">{sedeModal.horarios}</div>
                     </div>
                     <div className="p-3 rounded-xl bg-white/5 border border-white/10">
-                      <span className="text-gold text-sm mb-1 block">🏷️</span>
+                      <span className="text-gold-ink text-sm mb-1 block">🏷️</span>
                       <div className="text-sm font-semibold text-white">Tipo</div>
                       <div className="text-[11px] text-text-muted capitalize">{sedeModal.tipo}</div>
                     </div>
@@ -404,7 +404,7 @@ export default function Campus() {
                     <div className="grid grid-cols-2 gap-2">
                       {sedeModal.amenities.map(a => (
                         <div key={a} className="flex items-center gap-2 text-[12px] text-white/70">
-                          {AMENITY_ICONS[a] || <span className="text-gold">✓</span>}
+                          {AMENITY_ICONS[a] || <span className="text-gold-ink">✓</span>}
                           {a}
                         </div>
                       ))}
@@ -437,7 +437,7 @@ export default function Campus() {
                         <p className="text-sm font-semibold mt-1 text-white">{matchModal.eq1}</p>
                       </div>
                       <div className="text-center px-6">
-                        <div className="text-3xl font-bold font-[family-name:var(--font-display)] text-gold">{matchModal.resultado || 'vs'}</div>
+                        <div className="text-3xl font-bold font-[family-name:var(--font-display)] text-gold-ink">{matchModal.resultado || 'vs'}</div>
                         <Badge className="mt-1 rounded-full bg-red-500/20 text-red-400 border-red-500/30 text-[9px] px-2 py-0.5 h-auto">🔴 En vivo</Badge>
                       </div>
                       <div className="text-center flex-1">
@@ -455,7 +455,7 @@ export default function Campus() {
 
                 <div className="p-5">
                   <h3 className="text-[13px] font-semibold text-white/70 uppercase tracking-[.5px] mb-4 flex items-center gap-2">
-                    <Activity size={14} className="text-gold" /> Cronología del partido
+                    <Activity size={14} className="text-gold-ink" /> Cronología del partido
                   </h3>
                   <div className="space-y-1 relative before:absolute before:left-[18px] before:top-0 before:bottom-0 before:w-[2px] before:bg-white/10">
                     {matchEvents.map((ev, i) => (
@@ -480,12 +480,12 @@ export default function Campus() {
 
                 <div className="grid grid-cols-2 gap-3 px-5 pb-5">
                   <div className="p-3 rounded-xl bg-white/5 border border-white/10">
-                    <Goal size={14} className="text-gold mb-1" />
+                    <Goal size={14} className="text-gold-ink mb-1" />
                     <div className="text-lg font-bold text-white">{matchEvents.filter(e => e.tipo === 'gol').length}</div>
                     <div className="text-[10px] text-white/50">Goles totales</div>
                   </div>
                   <div className="p-3 rounded-xl bg-white/5 border border-white/10">
-                    <ShieldCheck size={14} className="text-gold mb-1" />
+                    <ShieldCheck size={14} className="text-gold-ink mb-1" />
                     <div className="text-lg font-bold text-white">{matchEvents.filter(e => e.tipo === 'amarilla' || e.tipo === 'roja').length}</div>
                     <div className="text-[10px] text-white/50">Tarjetas</div>
                   </div>

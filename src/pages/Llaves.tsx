@@ -24,7 +24,7 @@ const Llave = ({ partido, round }: { partido: Partido; round: number }) => (
     <div className={`flex items-center gap-2 px-3 py-2 rounded-xl border transition-all ${partido.ganador === partido.eq1.nom ? 'border-gold/50 bg-gold/10' : 'border-white/10 bg-white/5'}`}>
       <span>{partido.eq1.emoji}</span>
       <span className="text-sm font-semibold flex-1">{partido.eq1.nom}</span>
-      <span className="text-xs font-bold font-mono text-gold">{partido.res.split(' - ')[0]}</span>
+      <span className="text-xs font-bold font-mono text-gold-ink">{partido.res.split(' - ')[0]}</span>
     </div>
     <div className="h-3 flex items-center justify-center">
       <span className="text-[8px] text-text-faint font-bold uppercase tracking-wider">VS</span>
@@ -32,7 +32,7 @@ const Llave = ({ partido, round }: { partido: Partido; round: number }) => (
     <div className={`flex items-center gap-2 px-3 py-2 rounded-xl border transition-all ${partido.ganador === partido.eq2.nom ? 'border-gold/50 bg-gold/10' : 'border-white/10 bg-white/5'}`}>
       <span>{partido.eq2.emoji}</span>
       <span className="text-sm font-semibold flex-1">{partido.eq2.nom}</span>
-      <span className="text-xs font-bold font-mono text-gold">{partido.res.split(' - ')[1]}</span>
+      <span className="text-xs font-bold font-mono text-gold-ink">{partido.res.split(' - ')[1]}</span>
     </div>
   </div>
 )
@@ -60,7 +60,7 @@ export default function Llaves() {
           <div className="flex items-center justify-between mb-6 max-md:flex-col gap-3">
             <div>
               <h1 className="font-[family-name:var(--font-display)] text-2xl uppercase tracking-[.5px]">
-                Llaves <span className="text-gold">eliminatorias</span>
+                Llaves <span className="text-gold-ink">eliminatorias</span>
               </h1>
               <p className="text-sm text-text-muted">TechCup 2024-I · Fase final</p>
             </div>
@@ -70,7 +70,7 @@ export default function Llaves() {
                   <Shuffle size={16} /> Generar llaves
                 </Button>
               ) : (
-                <Button variant="outline" className="rounded-full border-gold/50 text-gold hover:bg-gold/10 text-sm h-auto py-2.5 px-5 flex items-center gap-2">
+                <Button variant="outline" className="rounded-full border-gold/50 text-gold-ink hover:bg-gold/10 text-sm h-auto py-2.5 px-5 flex items-center gap-2">
                   <Edit3 size={16} /> Editar emparejamientos
                 </Button>
               )}
@@ -122,23 +122,23 @@ export default function Llaves() {
                     <div className="flex flex-col gap-1">
                       <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-gold/30 bg-gold/10">
                         <span>🐯</span><span className="text-sm font-semibold flex-1">Tigres FC</span>
-                        <span className="text-xs font-bold font-mono text-gold">1</span>
+                        <span className="text-xs font-bold font-mono text-gold-ink">1</span>
                       </div>
                       <span className="text-[8px] text-text-faint text-center">VS</span>
                       <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-white/10 bg-white/5">
                         <span>🔵</span><span className="text-sm font-semibold flex-1">Code United</span>
-                        <span className="text-xs font-bold font-mono text-gold">0</span>
+                        <span className="text-xs font-bold font-mono text-gold-ink">0</span>
                       </div>
                     </div>
                     <div className="flex flex-col gap-1">
                       <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-gold/30 bg-gold/10">
                         <span>🐉</span><span className="text-sm font-semibold flex-1">Dragones FC</span>
-                        <span className="text-xs font-bold font-mono text-gold">2</span>
+                        <span className="text-xs font-bold font-mono text-gold-ink">2</span>
                       </div>
                       <span className="text-[8px] text-text-faint text-center">VS</span>
                       <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-gold/30 bg-gold/10">
                         <span>🛡️</span><span className="text-sm font-semibold flex-1">Titanes</span>
-                        <span className="text-xs font-bold font-mono text-gold">1</span>
+                        <span className="text-xs font-bold font-mono text-gold-ink">1</span>
                       </div>
                     </div>
                   </div>
@@ -149,12 +149,12 @@ export default function Llaves() {
                   <div className="flex flex-col gap-1">
                     <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-gold/40 bg-gold/15">
                       <span>🐯</span><span className="text-sm font-semibold flex-1">Tigres FC</span>
-                      <span className="text-xs font-bold font-mono text-gold">3</span>
+                      <span className="text-xs font-bold font-mono text-gold-ink">3</span>
                     </div>
                     <span className="text-[8px] text-text-faint text-center">VS</span>
                     <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-white/10 bg-white/5">
                       <span>🐉</span><span className="text-sm font-semibold flex-1">Dragones FC</span>
-                      <span className="text-xs font-bold font-mono text-gold">1</span>
+                      <span className="text-xs font-bold font-mono text-gold-ink">1</span>
                     </div>
                   </div>
                 </div>
@@ -164,7 +164,7 @@ export default function Llaves() {
                   <div className="w-full min-w-[120px] flex flex-col items-center gap-2 p-4 rounded-2xl bg-gradient-to-b from-gold/20 to-gold/5 border border-gold/40">
                     <span className="text-3xl">🏆</span>
                     <span className="text-2xl">🐯</span>
-                    <p className="font-[family-name:var(--font-display)] text-lg uppercase text-gold">Tigres FC</p>
+                    <p className="font-[family-name:var(--font-display)] text-lg uppercase text-gold-ink">Tigres FC</p>
                     <p className="text-[10px] text-text-muted uppercase tracking-[1px]">Campeón 2024-I</p>
                   </div>
                 </div>

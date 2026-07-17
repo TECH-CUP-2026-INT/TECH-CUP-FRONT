@@ -34,7 +34,7 @@ const tipoConfig: Record<string, { icon: typeof Bell; color: string; bg: string 
   mensaje: { icon: MessageSquare, color: 'text-blue-400', bg: 'bg-blue-500/10' },
   invitacion: { icon: UserPlus, color: 'text-purple-400', bg: 'bg-purple-500/10' },
   inscripcion: { icon: CreditCard, color: 'text-green-400', bg: 'bg-green-500/10' },
-  partido: { icon: Calendar, color: 'text-gold', bg: 'bg-gold/10' },
+  partido: { icon: Calendar, color: 'text-gold-ink', bg: 'bg-gold/10' },
 }
 
 const tabs = [
@@ -71,7 +71,7 @@ export default function Notificaciones() {
         <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
           <div className="flex items-center gap-3">
             <div className="w-11 h-11 rounded-xl bg-gold/15 border border-gold/20 flex items-center justify-center">
-              <Bell size={22} className="text-gold" />
+              <Bell size={22} className="text-gold-ink" />
             </div>
             <div>
               <h1 className="font-[family-name:var(--font-display)] text-2xl uppercase">
@@ -83,7 +83,7 @@ export default function Notificaciones() {
             </div>
           </div>
           {noLeidas > 0 && (
-            <Button size="sm" onClick={marcarTodasLeidas} className="rounded-full bg-gold/10 border border-gold/30 text-gold hover:bg-gold/20 text-xs h-auto py-2 px-4 gap-1.5">
+            <Button size="sm" onClick={marcarTodasLeidas} className="rounded-full bg-gold/10 border border-gold/30 text-gold-ink hover:bg-gold/20 text-xs h-auto py-2 px-4 gap-1.5">
               <CheckCheck size={14} /> Marcar todas leídas
             </Button>
           )}
@@ -92,7 +92,7 @@ export default function Notificaciones() {
         <div className="flex items-center gap-1 bg-surface/50 border border-border/60 rounded-2xl p-1 mb-6 overflow-x-auto">
           {tabs.map(t => (
             <button key={t.id} onClick={() => setTab(t.id)}
-              className={`py-2 px-3.5 rounded-xl text-sm font-semibold capitalize whitespace-nowrap transition-all ${tab === t.id ? 'bg-purple-mid text-white shadow-lg shadow-purple-mid/25' : 'text-text-muted hover:text-white'}`}>
+              className={`py-2 px-3.5 rounded-xl text-sm font-semibold whitespace-nowrap transition-all ${tab === t.id ? 'bg-purple-mid text-white shadow-lg shadow-purple-mid/25' : 'text-text-muted hover:text-white'}`}>
               {t.label}
               {t.id !== 'todas' && (
                 <span className="ml-1.5 text-[10px] opacity-60">

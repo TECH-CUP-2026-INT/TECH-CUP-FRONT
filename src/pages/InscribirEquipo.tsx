@@ -46,7 +46,7 @@ export default function InscribirEquipo() {
             <AnimatePresence mode="wait">
               {paso === 1 && !finalizado && (
                 <motion.div key="p1" initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-20}}>
-                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Seleccionar <span className="text-gold">torneo</span></h2>
+                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Seleccionar <span className="text-gold-ink">torneo</span></h2>
                   <p className="text-sm text-text-muted mb-6">Elegí el torneo en el que querés inscribir a tu equipo.</p>
                   <div className="space-y-3 mb-6">
                     {torneos.map(t => (
@@ -72,7 +72,7 @@ export default function InscribirEquipo() {
 
               {paso === 2 && (
                 <motion.div key="p2" initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-20}}>
-                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Confirmar <span className="text-gold">datos</span></h2>
+                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Confirmar <span className="text-gold-ink">datos</span></h2>
                   <p className="text-sm text-text-muted mb-6">Revisá la información antes de continuar.</p>
                   <div className="bg-black/50 border border-border rounded-xl p-5 space-y-3 mb-6">
                     {[
@@ -97,7 +97,7 @@ export default function InscribirEquipo() {
 
               {paso === 3 && (
                 <motion.div key="p3" initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-20}}>
-                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Comprobante de <span className="text-gold">pago</span></h2>
+                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Comprobante de <span className="text-gold-ink">pago</span></h2>
                   <p className="text-sm text-text-muted mb-6">Subí el comprobante de pago de la inscripción para que el organizador lo revise.</p>
                   <div className="border-2 border-dashed border-border rounded-xl p-10 text-center hover:border-gold/50 transition-all cursor-pointer mb-6"
                     onClick={() => document.getElementById('file-input')?.click()}>
@@ -107,9 +107,9 @@ export default function InscribirEquipo() {
                     <input id="file-input" type="file" accept=".pdf,.png,.jpg" className="hidden" onChange={e => setFile(e.target.files?.[0] || null)} />
                   </div>
                   <div className="bg-gold/5 border border-gold/20 rounded-xl p-4 flex items-start gap-3 mb-6">
-                    <DollarSign size={18} className="text-gold flex-shrink-0 mt-0.5" />
+                    <DollarSign size={18} className="text-gold-ink flex-shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-sm font-semibold">Valor de inscripción: <span className="text-gold">${torneo?.costo.toLocaleString()}</span></p>
+                      <p className="text-sm font-semibold">Valor de inscripción: <span className="text-gold-ink">${torneo?.costo.toLocaleString()}</span></p>
                       <p className="text-xs text-text-muted">El pago se realiza por transferencia o consignación. No se procesa en la plataforma.</p>
                     </div>
                   </div>
@@ -127,7 +127,7 @@ export default function InscribirEquipo() {
                   {!finalizado ? (
                     <div>
                       <motion.div animate={{ rotate: 360 }} transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }} className="w-16 h-16 rounded-full border-4 border-gold/30 border-t-gold mx-auto mb-6" />
-                      <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-2">Enviando <span className="text-gold">inscripción</span></h2>
+                      <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-2">Enviando <span className="text-gold-ink">inscripción</span></h2>
                       <p className="text-sm text-text-muted">Estamos procesando tu solicitud...</p>
                     </div>
                   ) : (
@@ -136,7 +136,7 @@ export default function InscribirEquipo() {
                         <Check size={32} className="text-green-400" />
                       </div>
                       <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-2">Inscripción <span className="text-green-400">enviada</span></h2>
-                      <p className="text-sm text-text-muted mb-2">Tu solicitud está <span className="text-gold font-semibold uppercase tracking-wide">En revisión</span></p>
+                      <p className="text-sm text-text-muted mb-2">Tu solicitud está <span className="text-gold-ink font-semibold uppercase tracking-wide">En revisión</span></p>
                       <p className="text-xs text-text-muted mb-6">El organizador revisará el comprobante y aprobará la inscripción. Te notificaremos el resultado.</p>
                       <div className="bg-surface border border-border rounded-xl p-4 text-left space-y-2 mb-6">
                         {[

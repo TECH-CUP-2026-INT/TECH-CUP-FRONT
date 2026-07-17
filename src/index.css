@@ -30,6 +30,7 @@
   --color-gold: #F5A623;
   --color-gold-2: #F59E0B;
   --color-gold-dark: #D97706;
+  --color-gold-ink: #F5A623;
   --color-gray-light: #E5E7EB;
   --color-text-muted: #9B98A8;
   --color-text-faint: #6E6B80;
@@ -61,11 +62,31 @@
     --color-gray-light: #1F1F1F;
     --color-text-muted: #374151;
     --color-text-faint: #4B5563;
+    /* Vivid gold fails WCAG contrast as text on light backgrounds (~1.7:1);
+       gold-ink keeps the brand hue but darkens it for legible text/icons.
+       Solid gold backgrounds (bg-gold) stay vivid since they pair with dark text. */
+    --color-gold-ink: #92400E;
   }
 
   :root:not(.dark) body {
     background: #E5ECE9;
     color: #1F1F1F;
+  }
+
+  /* Scopes that stay permanently dark ("branded chrome") regardless of site theme —
+     re-pin the flippable tokens to their dark values so text inside doesn't
+     inherit the light-mode overrides and vanish against the dark background. */
+  .chrome-dark {
+    --color-black: #0A0614;
+    --color-purple-black: #120826;
+    --color-surface: #1A0D30;
+    --color-surface-2: #231440;
+    --color-gray-light: #E5E7EB;
+    --color-text-muted: #9B98A8;
+    --color-text-faint: #6E6B80;
+    --color-gold-ink: #F5A623;
+    --color-border: rgba(255, 255, 255, 0.08);
+    color: var(--color-gray-light);
   }
 
   :root:not(.dark) ::-webkit-scrollbar-track {
@@ -83,6 +104,10 @@
   :focus-visible {
     outline: 2px solid var(--color-gold);
     outline-offset: 2px;
+  }
+
+  button {
+    text-transform: uppercase;
   }
 
   ::-webkit-scrollbar { width: 10px; height: 10px; }

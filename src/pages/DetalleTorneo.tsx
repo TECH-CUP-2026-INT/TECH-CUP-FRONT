@@ -28,8 +28,8 @@ export default function DetalleTorneo() {
           <SpotlightCard accent="gold" className="bg-gradient-to-br from-purple-deep to-purple-black border border-border rounded-2xl p-8 mb-6">
             <div className="flex items-center justify-between max-md:flex-col max-md:text-center gap-4">
               <div>
-                <Badge className="rounded-full bg-gold/15 text-gold border border-gold/40 text-[11px] mb-3">En curso</Badge>
-                <h1 className="font-[family-name:var(--font-display)] text-3xl md:text-4xl uppercase">TechCup <span className="text-gold">2024-I</span></h1>
+                <Badge className="rounded-full bg-gold/15 text-gold-ink border border-gold/40 text-[11px] mb-3">En curso</Badge>
+                <h1 className="font-[family-name:var(--font-display)] text-3xl md:text-4xl uppercase">TechCup <span className="text-gold-ink">2024-I</span></h1>
                 <p className="text-text-muted text-sm mt-1">Ingeniería de Sistemas</p>
                 <div className="flex items-center gap-4 mt-3 text-xs text-text-muted flex-wrap max-md:justify-center">
                   <span className="flex items-center gap-1"><CalendarDays size={12} /> Mar 5 – Jun 15, 2024</span>
@@ -46,7 +46,7 @@ export default function DetalleTorneo() {
           <div className="flex items-center gap-1 bg-surface/50 border border-border/60 rounded-2xl p-1 mb-6 overflow-x-auto">
             {(['info', 'equipos', 'calendario', 'tabla', 'llaves'] as Tab[]).map(t => (
               <button key={t} onClick={() => setTab(t)}
-                className={`py-2.5 px-4 rounded-xl text-sm font-semibold capitalize whitespace-nowrap transition-all ${
+                className={`py-2.5 px-4 rounded-xl text-sm font-semibold whitespace-nowrap transition-all ${
                   tab === t ? 'bg-purple-mid text-white shadow-lg shadow-purple-mid/25' : 'text-text-muted hover:text-white'
                 }`}>{t === 'info' ? 'Información' : t === 'equipos' ? 'Equipos' : t === 'calendario' ? 'Calendario' : t === 'tabla' ? 'Tabla' : 'Llaves'}</button>
             ))}
@@ -77,7 +77,7 @@ export default function DetalleTorneo() {
                 {['Tigres FC', 'Sistemas FC', 'IA Warriors', 'Code United', 'Dragones FC', 'Los Bits', 'Titanes', 'Fénix'].map((eq, i) => (
                   <Link key={i} to="/mi-equipo" className="block">
                     <SpotlightCard accent="purple" className="bg-surface border border-border rounded-2xl p-4 text-center">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-deep to-purple-black border border-gold/30 flex items-center justify-center text-lg font-bold text-gold mx-auto mb-2">{eq.split(' ')[0][0]}</div>
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-deep to-purple-black border border-gold/30 flex items-center justify-center text-lg font-bold text-gold-ink mx-auto mb-2">{eq.split(' ')[0][0]}</div>
                       <p className="text-xs font-semibold">{eq}</p>
                     </SpotlightCard>
                   </Link>
@@ -103,7 +103,7 @@ export default function DetalleTorneo() {
                         <td className="py-3 px-3 text-center text-yellow-400">{r.e}</td>
                         <td className="py-3 px-3 text-center text-red-400">{r.p}</td>
                         <td className="py-3 px-3 text-center">+{r.dg}</td>
-                        <td className="py-3 px-4 text-right font-bold text-gold">{r.pts}</td>
+                        <td className="py-3 px-4 text-right font-bold text-gold-ink">{r.pts}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -130,19 +130,19 @@ export default function DetalleTorneo() {
               <div className="bg-surface/50 border border-border/60 rounded-2xl p-6 overflow-x-auto">
                 <div className="flex items-center justify-center gap-8 min-w-[500px]">
                   <div className="space-y-4">
-                    <div className="p-3 rounded-xl bg-white/5 border border-white/10"><span className="text-sm font-semibold">🐯 Tigres FC <span className="text-gold">2</span></span></div>
-                    <div className="p-3 rounded-xl bg-white/5 border border-white/10"><span className="text-sm font-semibold">⚙️ Sistemas FC <span className="text-gold">1</span></span></div>
+                    <div className="p-3 rounded-xl bg-white/5 border border-white/10"><span className="text-sm font-semibold">🐯 Tigres FC <span className="text-gold-ink">2</span></span></div>
+                    <div className="p-3 rounded-xl bg-white/5 border border-white/10"><span className="text-sm font-semibold">⚙️ Sistemas FC <span className="text-gold-ink">1</span></span></div>
                     <div className="text-center text-[10px] text-text-faint uppercase tracking-wider mt-1">Cuartos</div>
                   </div>
-                  <div className="text-gold text-2xl">⟶</div>
+                  <div className="text-gold-ink text-2xl">⟶</div>
                   <div className="space-y-4">
-                    <div className="p-3 rounded-xl border border-gold/30 bg-gold/10"><span className="text-sm font-semibold">🐯 Tigres FC <span className="text-gold">1</span></span></div>
-                    <div className="p-3 rounded-xl bg-white/5 border border-white/10"><span className="text-sm font-semibold">🔵 Code United <span className="text-gold">0</span></span></div>
+                    <div className="p-3 rounded-xl border border-gold/30 bg-gold/10"><span className="text-sm font-semibold">🐯 Tigres FC <span className="text-gold-ink">1</span></span></div>
+                    <div className="p-3 rounded-xl bg-white/5 border border-white/10"><span className="text-sm font-semibold">🔵 Code United <span className="text-gold-ink">0</span></span></div>
                     <div className="text-center text-[10px] text-text-faint uppercase tracking-wider mt-1">Semifinal</div>
                   </div>
-                  <div className="text-gold text-2xl">⟶</div>
+                  <div className="text-gold-ink text-2xl">⟶</div>
                   <div className="space-y-4">
-                    <div className="p-4 rounded-xl bg-gradient-to-b from-gold/20 to-gold/5 border border-gold/40"><span className="text-sm font-semibold">🏆🐯 Tigres FC <span className="text-gold">3</span></span></div>
+                    <div className="p-4 rounded-xl bg-gradient-to-b from-gold/20 to-gold/5 border border-gold/40"><span className="text-sm font-semibold">🏆🐯 Tigres FC <span className="text-gold-ink">3</span></span></div>
                     <div className="text-center text-[10px] text-text-faint uppercase tracking-wider mt-1">Final</div>
                   </div>
                 </div>

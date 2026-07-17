@@ -44,7 +44,7 @@ export default function Navbar() {
           </div>
           <div className="flex flex-col leading-none">
             <span className="font-[family-name:var(--font-display)] font-bold text-lg tracking-[.5px]">
-              TECH<span className="text-gold">CUP</span>
+              TECH<span className="text-gold-ink">CUP</span>
             </span>
             <span className="text-[8.5px] tracking-[1.6px] text-text-muted font-semibold">
               INGENIERÍA DE SISTEMAS
@@ -96,7 +96,7 @@ export default function Navbar() {
             </div>
           ) : (
             <Link to="/login">
-              <Button className="rounded-full bg-transparent text-gold border border-gold/50 hover:bg-gold/10 font-bold text-sm px-6 py-2.5 h-auto transition-all duration-300">
+              <Button className="rounded-full bg-transparent text-gold-ink border border-gold/50 hover:bg-gold/10 font-bold text-sm px-6 py-2.5 h-auto transition-all duration-300">
                 Iniciar sesión
               </Button>
             </Link>

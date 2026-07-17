@@ -37,7 +37,7 @@ export default function Estadisticas() {
                 </Avatar>
               </div>
             <div>
-              <h1 className="font-[family-name:var(--font-display)] text-2xl uppercase">Estadísticas de <span className="text-gold">{user?.name?.split(' ')[0] || 'Juan Camilo'}</span></h1>
+              <h1 className="font-[family-name:var(--font-display)] text-2xl uppercase">Estadísticas de <span className="text-gold-ink">{user?.name?.split(' ')[0] || 'Juan Camilo'}</span></h1>
               <p className="text-sm text-text-muted">Delantero · #10 · Sistemas FC</p>
             </div>
           </div>
@@ -59,7 +59,7 @@ export default function Estadisticas() {
           {/* Gráfico de evolución */}
           <SpotlightCard accent="gold" className="bg-surface border border-border rounded-2xl p-6 mb-6">
             <h3 className="font-[family-name:var(--font-display)] text-lg uppercase mb-4 flex items-center gap-2">
-              <TrendingUp size={18} className="text-gold" /> Evolución de <span className="text-gold">goles</span>
+              <TrendingUp size={18} className="text-gold-ink" /> Evolución de <span className="text-gold-ink">goles</span>
             </h3>
             <div className="flex items-end gap-3 h-32">
               {[
@@ -68,7 +68,7 @@ export default function Estadisticas() {
                 { torneo: '2024-II', goles: 8 },
               ].map((g, i) => (
                 <div key={i} className="flex-1 flex flex-col items-center gap-2">
-                  <span className="text-xs font-bold text-gold">{g.goles}</span>
+                  <span className="text-xs font-bold text-gold-ink">{g.goles}</span>
                   <div className="w-full rounded-t-lg bg-gradient-to-t from-gold/30 to-gold/60" style={{ height: `${(g.goles / 8) * 100}%` }} />
                   <span className="text-[10px] text-text-faint text-center">{g.torneo}</span>
                 </div>
@@ -80,7 +80,7 @@ export default function Estadisticas() {
           <SpotlightCard accent="purple" className="bg-surface border border-border rounded-2xl overflow-hidden">
             <div className="p-5 pb-3">
               <h3 className="font-[family-name:var(--font-display)] text-lg uppercase flex items-center gap-2">
-                <Trophy size={18} className="text-gold" /> Historial de <span className="text-gold">partidos</span>
+                <Trophy size={18} className="text-gold-ink" /> Historial de <span className="text-gold-ink">partidos</span>
               </h3>
             </div>
             <div className="overflow-x-auto">
@@ -102,7 +102,7 @@ export default function Estadisticas() {
                       <td className="py-3 px-5 text-xs text-text-muted">{p.fecha}</td>
                       <td className="py-3 px-5 font-semibold">{p.rival}</td>
                       <td className="py-3 px-5 text-center font-bold">{p.resultado}</td>
-                      <td className="py-3 px-3 text-center text-gold font-bold">{p.goles}</td>
+                      <td className="py-3 px-3 text-center text-gold-ink font-bold">{p.goles}</td>
                       <td className="py-3 px-3 text-center text-purple-mid">{p.asistencias}</td>
                       <td className="py-3 px-3 text-center">{p.tarjetas > 0 ? '🟨' : '-'}</td>
                       <td className="py-3 px-3 text-center text-text-muted">{p.min}'</td>

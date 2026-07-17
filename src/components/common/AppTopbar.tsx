@@ -60,12 +60,12 @@ export default function AppTopbar({ title, sidebarOpen, sidebarCollapsed, onMenu
   return (
     <>
       <div className="h-[64px]" /> {/* spacer para fixed header */}
-      <header className="fixed top-0 z-50 flex items-center justify-between px-8 py-[18px] bg-[#2F1350] dark:bg-[#100D1E] border-b border-white/10 max-md:px-4 transition-all duration-300 right-0"
+      <header className="chrome-dark fixed top-0 z-50 flex items-center justify-between px-8 py-[18px] bg-[#2F1350] dark:bg-[#100D1E] border-b border-white/10 max-md:px-4 transition-all duration-300 right-0"
         style={{ left: sidebarOpen ? (sidebarCollapsed ? '72px' : '260px') : '0px' }}>
         <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple-mid/60 to-transparent" />
         
         <div className="flex items-center gap-3">
-          <button className="text-white p-1.5 hover:text-gold transition-colors" onClick={onMenuClick} aria-label="Menú">
+          <button className="text-white p-1.5 hover:text-gold-ink transition-colors" onClick={onMenuClick} aria-label="Menú">
             <Menu size={22} />
           </button>
           <h1 className="text-[17px] font-bold">{title}</h1>
@@ -137,18 +137,18 @@ export default function AppTopbar({ title, sidebarOpen, sidebarCollapsed, onMenu
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: '100%', opacity: 0 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="fixed right-0 top-0 bottom-0 z-[70] w-[380px] max-w-[90vw] bg-[#1e0d33] border-l border-white/10 flex flex-col"
+              className="chrome-dark fixed right-0 top-0 bottom-0 z-[70] w-[380px] max-w-[90vw] bg-[#1e0d33] border-l border-white/10 flex flex-col"
             >
               {!notifSettings ? (
                 /* ─── Lista de notificaciones ─── */
                 <>
                   <div className="flex items-center justify-between px-4 py-3 border-b border-border">
                     <h2 className="text-sm font-bold flex items-center gap-2">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gold"><path d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 003.4 0"/></svg>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gold-ink"><path d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 003.4 0"/></svg>
                       Notificaciones
                     </h2>
                     <div className="flex items-center gap-1">
-                      <button onClick={() => setNotifSettings(true)} className="text-gray-light hover:text-gold transition-colors p-1.5 rounded-lg hover:bg-white/5" title="Configurar notificaciones">
+                      <button onClick={() => setNotifSettings(true)} className="text-gray-light hover:text-gold-ink transition-colors p-1.5 rounded-lg hover:bg-white/5" title="Configurar notificaciones">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
                       </button>
                       <button onClick={() => setNotifOpen(false)} className="text-gray-light hover:text-red-400 transition-colors p-1"><X size={18} /></button>
@@ -181,7 +181,7 @@ export default function AppTopbar({ title, sidebarOpen, sidebarCollapsed, onMenu
                 <>
                   <div className="flex items-center justify-between px-4 py-3 border-b border-border">
                     <div className="flex items-center gap-2">
-                      <button onClick={() => setNotifSettings(false)} className="text-gray-light hover:text-gold transition-colors p-1">
+                      <button onClick={() => setNotifSettings(false)} className="text-gray-light hover:text-gold-ink transition-colors p-1">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
                       </button>
                       <h2 className="text-sm font-bold">Config. notificaciones</h2>
@@ -235,13 +235,13 @@ export default function AppTopbar({ title, sidebarOpen, sidebarCollapsed, onMenu
       <AnimatePresence>
         {chatOpen && (
           <>
-            <div className="fixed inset-0 z-[65] bg-black/40 backdrop-blur-sm" onClick={() => setChatOpen(false)} />
+            <div className="fixed inset-0 z-[65] bg-[#0A0614]/40 backdrop-blur-sm" onClick={() => setChatOpen(false)} />
             <motion.div
               initial={{ x: '100%', opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: '100%', opacity: 0 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="fixed right-0 top-0 bottom-0 z-[70] w-[380px] max-w-[90vw] bg-[#1e0d33] border-l border-white/10 flex flex-col shadow-2xl shadow-black/50"
+              className="chrome-dark fixed right-0 top-0 bottom-0 z-[70] w-[380px] max-w-[90vw] bg-[#1e0d33] border-l border-white/10 flex flex-col shadow-2xl shadow-black/50"
             >
               {!selectedChat ? (
                 /* Lista de conversaciones */
@@ -273,7 +273,7 @@ export default function AppTopbar({ title, sidebarOpen, sidebarCollapsed, onMenu
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between">
-                            <p className="text-sm font-semibold">{conv.isTeam ? <><span className="text-gold">🏆</span> {conv.name}</> : conv.name}</p>
+                            <p className="text-sm font-semibold">{conv.isTeam ? <><span className="text-gold-ink">🏆</span> {conv.name}</> : conv.name}</p>
                             {conv.unread > 0 && <span className="bg-purple-mid text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center">{conv.unread}</span>}
                           </div>
                           <p className="text-xs text-text-muted truncate">{conv.lastMsg}</p>
@@ -284,7 +284,7 @@ export default function AppTopbar({ title, sidebarOpen, sidebarCollapsed, onMenu
                   {/* Botón nuevo equipo */}
                   <div className="border-t border-border p-3">
                     <button onClick={() => { const name = prompt('Nombre del equipo:'); if (name) { alert(`Chat de equipo "${name}" creado`); } }} 
-                      className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-gold/10 border border-gold/30 text-gold text-sm font-semibold hover:bg-gold/20 transition-all">
+                      className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-gold/10 border border-gold/30 text-gold-ink text-sm font-semibold hover:bg-gold/20 transition-all">
                       <Plus size={16} /> Nuevo equipo
                     </button>
                   </div>
@@ -294,7 +294,7 @@ export default function AppTopbar({ title, sidebarOpen, sidebarCollapsed, onMenu
                 <>
                   <div className="flex items-center justify-between px-4 py-3 border-b border-border">
                     <div className="flex items-center gap-3">
-                      <button onClick={() => setSelectedChat(null)} className="text-gray-light hover:text-gold transition-colors p-1"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></button>
+                      <button onClick={() => setSelectedChat(null)} className="text-gray-light hover:text-gold-ink transition-colors p-1"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></button>
                       {activeConv && (
                         <div className="flex items-center gap-2">
                           <div className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-gold/40"><img src={activeConv.avatar} alt="" className="w-full h-full object-cover" /></div>
@@ -318,7 +318,7 @@ export default function AppTopbar({ title, sidebarOpen, sidebarCollapsed, onMenu
                   </div>
                   <div className="border-t border-border p-3">
                     <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-2xl px-3 py-1.5 focus-within:border-gold/40 transition-all">
-                      <button className="text-text-faint hover:text-gold p-1"><Paperclip size={16} /></button>
+                      <button className="text-text-faint hover:text-gold-ink p-1"><Paperclip size={16} /></button>
                       <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSend()} placeholder="Escribí un mensaje..." className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-text-faint text-sm py-1.5" />
                       <button onClick={handleSend} className="w-8 h-8 rounded-lg bg-gold text-[#1A1206] flex items-center justify-center hover:bg-gold-dark transition-colors"><Send size={14} /></button>
                     </div>

@@ -132,7 +132,7 @@ export default function Register() {
             <img src="/assets/logo.png" alt="" className="w-full h-full object-cover" />
           </div>
           <span className="font-[family-name:var(--font-display)] font-bold text-lg tracking-[.5px]">
-            TECH<span className="text-gold">CUP</span>
+            TECH<span className="text-gold-ink">CUP</span>
           </span>
         </Link>
 
@@ -152,7 +152,7 @@ export default function Register() {
                 <Check size={36} className="text-[#1A1206]" />
               </motion.div>
               <h2 className="font-[family-name:var(--font-display)] text-3xl uppercase tracking-[.5px] mb-2">
-                ¡Registro <span className="text-gold">exitoso!</span>
+                ¡Registro <span className="text-gold-ink">exitoso!</span>
               </h2>
               <p className="text-text-muted">Bienvenido a TechCup. Revisá tu correo para verificar tu cuenta.</p>
             </div>
@@ -166,7 +166,7 @@ export default function Register() {
           <div className="mb-8">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs text-text-muted font-semibold">Paso {step} de 5</span>
-              <span className="text-xs text-gold font-semibold">{steps[step - 1].label}</span>
+              <span className="text-xs text-gold-ink font-semibold">{steps[step - 1].label}</span>
             </div>
             <div className="flex gap-1.5">
               {steps.map((s) => (
@@ -344,7 +344,7 @@ export default function Register() {
                 </div>
                 <p className="text-xs text-text-muted mb-6">
                   ¿No recibiste el código?{' '}
-                  <button className="text-gold font-semibold hover:underline">Reenviar</button>
+                  <button className="text-gold-ink font-semibold hover:underline">Reenviar</button>
                 </p>
                 <div className="flex gap-3">
                   <Button variant="outline" onClick={() => setStep(3)} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1">
@@ -372,7 +372,7 @@ export default function Register() {
                           onClick={() => update('posicion', p.id)}
                           className={`py-3 px-4 rounded-xl border-2 text-sm font-semibold transition-all ${
                             form.posicion === p.id
-                              ? 'border-gold bg-gold/10 text-gold'
+                              ? 'border-gold bg-gold/10 text-gold-ink'
                               : 'border-border bg-black/50 hover:border-purple-mid/50 hover:bg-purple-mid/10'
                           }`}
                         >
@@ -391,7 +391,7 @@ export default function Register() {
                       {form.fotoPreview ? (
                         <div className="flex flex-col items-center gap-2">
                           <img src={form.fotoPreview} alt="Preview" className="w-24 h-24 rounded-full object-cover ring-2 ring-gold/40" />
-                          <p className="text-xs text-gold font-semibold">{form.foto?.name}</p>
+                          <p className="text-xs text-gold-ink font-semibold">{form.foto?.name}</p>
                         </div>
                       ) : (
                         <>
@@ -420,7 +420,7 @@ export default function Register() {
 
         {/* Link volver */}
         <div className="text-center mt-6">
-          <Link to="/login" className="text-sm text-text-muted hover:text-gold transition-colors inline-flex items-center gap-1.5">
+          <Link to="/login" className="text-sm text-text-muted hover:text-gold-ink transition-colors inline-flex items-center gap-1.5">
             <ArrowLeft size={14} /> ¿Ya tenés cuenta? Iniciá sesión
           </Link>
         </div>
