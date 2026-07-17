@@ -1,19 +1,45 @@
 import { useState, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { GoogleLogin, type CredentialResponse } from '@react-oauth/google'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/common/button'
 import { Input } from '@/components/common/input'
 import { Label } from '@/components/common/label'
 import { Checkbox } from '@/components/common/checkbox'
-import { Eye, EyeOff, Mail, Lock, ArrowLeft } from 'lucide-react'
+import { Eye, EyeOff, Mail, Lock, ArrowLeft, Users, ShieldCheck, UserCog, ChevronRight } from 'lucide-react'
 import { useAuth } from '@/hooks/auth/useAuth'
-import TechCupRoleSelector from '@/components/TechCupRoleSelector'
 
-const roles = [
-  { id: 'jugador', name: 'Jugador', desc: 'Equipo, partidos y estadísticas.', color: '#7f77dd', img: '/images/jugador.png' },
-  { id: 'arbitro', name: 'Árbitro', desc: 'Marcador, tiempo y sanciones en vivo.', color: '#e24b4a', img: '/images/arbitro.png' },
-  { id: 'organizador', name: 'Organizador', desc: 'Equipos, calendario y configuración.', color: '#3fc8ff', img: '/images/organizador.png' },
+const roleCards = [
+  {
+    id: 'jugador',
+    name: 'Jugador / Familiar',
+    shortName: 'Jugador',
+    desc: 'Sigue los partidos, consulta estadísticas y mantente al día con el rendimiento de tu equipo.',
+    color: '#7f77dd',
+    colorLight: 'rgba(127,119,221,0.15)',
+    icon: Users,
+    img: '/images/jugador.png',
+  },
+  {
+    id: 'administrador',
+    name: 'Administrador / Organizador',
+    shortName: 'Organizador',
+    desc: 'Gestiona equipos, arma el calendario, configura torneos y administra los usuarios del sistema.',
+    color: '#3fc8ff',
+    colorLight: 'rgba(63,200,255,0.15)',
+    icon: UserCog,
+    img: '/images/admin.png',
+  },
+  {
+    id: 'arbitro',
+    name: 'Árbitro',
+    shortName: 'Árbitro',
+    desc: 'Controla el marcador en vivo, gestiona el tiempo y registra sanciones durante los partidos.',
+    color: '#e24b4a',
+    colorLight: 'rgba(226,75,74,0.15)',
+    icon: ShieldCheck,
+    img: '/images/arbitro.png',
+  },
 ]
 
 const videos = ['/hero-video.mp4', '/videos/video-arbitro.mp4']
@@ -71,30 +97,86 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-black flex relative overflow-hidden">
-      {/* Full-screen background video */}
-      <video key={videoIndex} ref={videoRef} autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover"
-        style={{ objectPosition: "70% center" }}>
-        <source src={videos[videoIndex]} type="video/mp4" />
-      </video>
-      {/* Grid dots — full screen */}
-      <div className="absolute inset-0 opacity-20"
-        style={{
-          backgroundImage: 'radial-gradient(rgba(255,255,255,.1) 1px, transparent 1px)',
-          backgroundSize: '30px 30px',
-        }}
-      />
 
-      {/* Left — cristal */}
+      {/* Left — panel negro-dorado */}
       <div className="relative z-10 w-full lg:w-[38%] flex items-center justify-center p-8 lg:p-16 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#2d1b4e]/80 via-[#1a0f2e]/70 to-[#0d0720]/80 backdrop-blur-[2px] border-r border-gold/20" />
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-[#1a1a1a] to-black border-r border-gold/20" />
+        {/* Grid dots */}
+        <div className="absolute inset-0 opacity-[0.12]"
+          style={{
+            backgroundImage: 'radial-gradient(rgba(212,175,55,.15) 1px, transparent 1px)',
+            backgroundSize: '30px 30px',
+          }}
+        />
         {/* Brillo dorado sutil */}
         <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
         <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-gold/5 blur-[60px]" />
-        <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-purple-mid/10 blur-[50px]" />
+        <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-gold/10 blur-[50px]" />
         <div className="relative w-full max-w-[460px]">
+          {/* Back to home button */}
+          <Link to="/" className="inline-flex items-center gap-2 px-4 py-2 rounded-[10px] bg-black/60 border border-gold/30 text-gold hover:bg-gold/20 hover:text-white transition-all duration-300 text-sm font-semibold backdrop-blur-sm mb-10">
+            <ArrowLeft size={16} /> Volver al inicio
+          </Link>
+
           {step === 'role' ? (
-            /* Step 1: Role Selector */
-            <TechCupRoleSelector onContinue={handleRoleContinue} />
+            /* Step 1: Role Selector — recuadro negro-dorado */
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+              className="p-8 rounded-[12px] border border-gold/30 shadow-[0_0_40px_rgba(212,175,55,0.08)] relative overflow-hidden"
+              style={{
+                backgroundImage: 'url("/images/bg-roles.png")',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}>
+              {/* Overlay oscuro para legibilidad */}
+              <div className="absolute inset-0 bg-black/70" />
+              <div className="mb-6">
+                <h1 className="font-[family-name:var(--font-display)] text-3xl uppercase tracking-[.5px] text-white mb-2">
+                  Selecciona tu <span className="text-gold">rol</span>
+                </h1>
+                <p className="text-sm text-gray-400">Selecciona cómo quieres ingresar al sistema.</p>
+              </div>
+
+              <div className="flex flex-col gap-4">
+                {roleCards.map((role, i) => {
+                  const Icon = role.icon
+                  return (
+                    <motion.button
+                      key={role.id}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.1 }}
+                      onClick={() => handleRoleContinue(role.shortName.toLowerCase())}
+                      className="group relative flex items-stretch gap-0 rounded-[10px] overflow-hidden border border-gold/20 bg-black/60 hover:border-gold/50 transition-all duration-300 text-left w-full cursor-pointer"
+                    >
+                      {/* Imagen lateral */}
+                      <div className="relative w-[120px] min-h-[140px] flex-shrink-0 overflow-hidden bg-black/80 flex items-center justify-center max-sm:hidden">
+                        <img src={role.img} alt="" className="w-full h-full object-contain p-3 transition-transform duration-500 group-hover:scale-110" />
+                        <div className="absolute inset-0" style={{ background: `linear-gradient(90deg, transparent 40%, rgba(0,0,0,0.8) 100%)` }} />
+                      </div>
+                      {/* Contenido */}
+                      <div className="flex-1 p-4 flex flex-col justify-center relative">
+                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: 'linear-gradient(135deg, rgba(212,175,55,0.08), transparent)' }} />
+                        <div className="relative z-10 flex items-start justify-between gap-4">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-1.5">
+                              <Icon size={16} className="text-gold" />
+                              <span className="text-[10px] font-bold tracking-[1.6px] uppercase text-gold">Rol</span>
+                            </div>
+                            <h3 className="font-[family-name:var(--font-display)] text-lg uppercase tracking-[.3px] text-white mb-1">{role.name}</h3>
+                            <p className="text-xs text-gray-400 leading-relaxed">{role.desc}</p>
+                          </div>
+                          <div className="flex-shrink-0 mt-1">
+                            <div className="w-9 h-9 rounded-[8px] flex items-center justify-center transition-all duration-300 group-hover:bg-gold/20 border border-gold/30">
+                              <ChevronRight size={16} className="text-gold" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.button>
+                  )
+                })}
+              </div>
+            </motion.div>
           ) : (
             /* Step 2: Login form */
             <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} className="space-y-5 p-6 rounded-2xl border border-gold/10 bg-purple-deep/20 backdrop-blur-sm">
@@ -111,7 +193,7 @@ export default function Login() {
               <h1 className="font-[family-name:var(--font-display)] text-3xl uppercase tracking-[.5px] text-white mb-1">
                 Bienvenido de <span className="text-gold">vuelta</span>
               </h1>
-              <p className="text-sm text-text-muted mb-4">Iniciá sesión para acceder a tu cuenta.</p>
+              <p className="text-sm text-text-muted mb-4">Inicia sesión para acceder a tu cuenta.</p>
 
               <form onSubmit={e => { e.preventDefault(); login(email, selectedRole as import('@/hooks/auth/useAuth').UserRole); navigate(selectedRole === 'arbitro' ? '/arbitro/dashboard' : `/dashboard/${selectedRole}`) }} className="space-y-4">
                 <div className="space-y-2">
@@ -158,19 +240,25 @@ export default function Login() {
                   Continuar con Google
                 </Button>
               )}
-              <p className="text-center text-sm text-gold/60">¿No tenés cuenta? <Link to="/registro" className="text-gold font-semibold hover:text-gold-dark transition-colors">Registrate</Link></p>
+              <p className="text-center text-sm text-gold/60">¿No tienes cuenta? <Link to="/registro" className="text-gold font-semibold hover:text-gold-dark transition-colors">Regístrate</Link></p>
             </motion.div>
           )}
         </div>
       </div>
 
-      {/* Right — overlay + texto */}
-      <div className="hidden lg:flex relative z-10 w-[62%] overflow-hidden"
-        style={{
-          maskImage: "linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 20%, rgba(0,0,0,1) 50%)",
-          WebkitMaskImage: "linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 20%, rgba(0,0,0,1) 50%)",
-        }}>
-        {/* El gradiente fue eliminado por solicitud del usuario */}
+      {/* Right — video + texto */}
+      <div className="hidden lg:flex relative z-10 w-[62%] overflow-hidden bg-black">
+        {/* Video de fondo — contenido completo sin recortes */}
+        <video key={videoIndex} ref={videoRef} autoPlay loop muted playsInline
+          className="absolute inset-0 w-full h-full object-cover">
+          <source src={videos[videoIndex]} type="video/mp4" />
+        </video>
+        {/* Overlay gradiente para que el texto sea legible y transición con el panel izquierdo */}
+        <div className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 20%, transparent 40%)',
+          }}
+        />
         
         {/* Controles de video */}
         <div className="absolute top-6 right-6 z-30 flex items-center gap-3">
@@ -200,7 +288,7 @@ export default function Login() {
               La pasión nos <span className="text-gold">conecta</span>
             </h2>
             <p className="text-sm text-text-muted mt-4 leading-relaxed">
-              Iniciá sesión y viví la emoción del torneo universitario más importante de Ingeniería de Sistemas.
+              Inicia sesión y vive la emoción del torneo universitario más importante de Ingeniería de Sistemas.
             </p>
           </div>
         </div>

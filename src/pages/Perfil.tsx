@@ -32,6 +32,12 @@ export default function Perfil() {
   const [editName, setEditName] = useState(user?.name || '')
   const [editProgram, setEditProgram] = useState('Ing. Sistemas')
   const [editSemester, setEditSemester] = useState('6')
+  const [editDocType, setEditDocType] = useState('Cédula')
+  const [editDocNum, setEditDocNum] = useState('1234567890')
+  const [editPhone, setEditPhone] = useState('300 123 4567')
+  const [editAddress, setEditAddress] = useState('Cra 7 # 12-34, Bogotá')
+  const [editGender, setEditGender] = useState('masculino')
+  const [editBirth, setEditBirth] = useState('2003-03-15')
   const [editSaved, setEditSaved] = useState(false)
 
   const handleSaveProfile = () => {
@@ -39,7 +45,11 @@ export default function Perfil() {
       const updated = { ...user, name: editName }
       localStorage.setItem('techcup_user', JSON.stringify(updated))
     }
-    localStorage.setItem('techcup_profile', JSON.stringify({ name: editName, program: editProgram, semester: editSemester }))
+    localStorage.setItem('techcup_profile', JSON.stringify({
+      name: editName, program: editProgram, semester: editSemester,
+      docType: editDocType, docNum: editDocNum, phone: editPhone,
+      address: editAddress, gender: editGender, birth: editBirth,
+    }))
     setEditSaved(true)
     setTimeout(() => { setEditSaved(false); setEditingProfile(false) }, 1500)
   }
@@ -110,7 +120,11 @@ export default function Perfil() {
                 { label: 'Posición', value: 'Delantero', icon: <Swords size={18} /> },
                 { label: 'Dorsal', value: '#10', icon: <Shield size={18} /> },
                 { label: 'Fecha nac.', value: '15 Mar 2003', icon: <Calendar size={18} /> },
-                { label: 'Programa', value: 'Ing. Sistemas', icon: <Trophy size={18} /> },
+                { label: 'Programa', value: editProgram, icon: <Trophy size={18} /> },
+                { label: 'Documento', value: `${editDocType} ${editDocNum}`, icon: <Shield size={18} /> },
+                { label: 'Teléfono', value: editPhone, icon: <Swords size={18} /> },
+                { label: 'Dirección', value: editAddress, icon: <Calendar size={18} /> },
+                { label: 'Género', value: editGender === 'masculino' ? 'Masculino' : editGender === 'femenino' ? 'Femenino' : 'Otro', icon: <Trophy size={18} /> },
               ].map((info, i) => (
                 <SpotlightCard key={i} accent={i % 2 === 0 ? 'gold' : 'purple'} className="bg-surface border border-border rounded-2xl p-5 flex items-center gap-4">
                   <span className="w-11 h-11 rounded-xl flex items-center justify-center bg-purple-mid/20 text-gold">{info.icon}</span>
@@ -215,7 +229,7 @@ export default function Perfil() {
                 </div>
               </div>
 
-              <div className="space-y-4 mb-6">
+              <div className="space-y-4 mb-6 max-h-[420px] overflow-y-auto pr-1">
                 <div>
                   <label className="block text-xs text-gold/60 font-semibold uppercase tracking-[.4px] mb-1.5">Nombre completo</label>
                   <Input value={editName} onChange={e => setEditName(e.target.value)} className="bg-black/40 border-gold/20 text-white rounded-xl h-11 focus-visible:border-gold" />
@@ -227,9 +241,44 @@ export default function Perfil() {
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
+                    <label className="block text-xs text-gold/60 font-semibold uppercase tracking-[.4px] mb-1.5">Tipo documento</label>
+                    <select value={editDocType} onChange={e => setEditDocType(e.target.value)} className="w-full bg-black/40 border border-gold/20 text-white rounded-xl h-11 px-3 text-sm outline-none focus:border-gold">
+                      <option>Cédula</option><option>Tarjeta identidad</option><option>Pasaporte</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gold/60 font-semibold uppercase tracking-[.4px] mb-1.5">Nro. documento</label>
+                    <Input value={editDocNum} onChange={e => setEditDocNum(e.target.value)} className="bg-black/40 border-gold/20 text-white rounded-xl h-11 focus-visible:border-gold" />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs text-gold/60 font-semibold uppercase tracking-[.4px] mb-1.5">Fecha de nacimiento</label>
+                    <Input value={editBirth} onChange={e => setEditBirth(e.target.value)} type="date" className="bg-black/40 border-gold/20 text-white rounded-xl h-11 focus-visible:border-gold [color-scheme:dark]" />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gold/60 font-semibold uppercase tracking-[.4px] mb-1.5">Género</label>
+                    <select value={editGender} onChange={e => setEditGender(e.target.value)} className="w-full bg-black/40 border border-gold/20 text-white rounded-xl h-11 px-3 text-sm outline-none focus:border-gold">
+                      <option value="masculino">Masculino</option>
+                      <option value="femenino">Femenino</option>
+                      <option value="otro">Otro</option>
+                      <option value="no_especifica">Prefiero no decirlo</option>
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs text-gold/60 font-semibold uppercase tracking-[.4px] mb-1.5">Teléfono</label>
+                  <Input value={editPhone} onChange={e => setEditPhone(e.target.value)} className="bg-black/40 border-gold/20 text-white rounded-xl h-11 focus-visible:border-gold" />
+                </div>
+                <div>
+                  <label className="block text-xs text-gold/60 font-semibold uppercase tracking-[.4px] mb-1.5">Dirección</label>
+                  <Input value={editAddress} onChange={e => setEditAddress(e.target.value)} className="bg-black/40 border-gold/20 text-white rounded-xl h-11 focus-visible:border-gold" />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
                     <label className="block text-xs text-gold/60 font-semibold uppercase tracking-[.4px] mb-1.5">Programa</label>
                     <select value={editProgram} onChange={e => setEditProgram(e.target.value)} className="w-full bg-black/40 border border-gold/20 text-white rounded-xl h-11 px-3 text-sm outline-none focus:border-gold">
-                      <option>Ing. Sistemas</option><option>Ing. Industrial</option><option>Ing. Civil</option><option>Matemáticas</option>
+                      <option>Ing. Sistemas</option><option>Ing. Industrial</option><option>Ing. Civil</option><option>Ing. Mecánica</option><option>Ing. Electrónica</option><option>Matemáticas</option><option>Administración</option>
                     </select>
                   </div>
                   <div>

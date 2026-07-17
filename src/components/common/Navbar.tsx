@@ -105,7 +105,7 @@ export default function Navbar() {
 
         {/* Mobile toggle */}
         <button
-          className="md:hidden bg-none border-none text-white p-1.5"
+          className="md:hidden bg-none border-none text-gray-light p-1.5"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Menú"
         >
@@ -126,8 +126,8 @@ export default function Navbar() {
                   to={link.href}
                   onClick={() => setMobileOpen(false)}
                   className={cn(
-                    'text-sm font-semibold tracking-[.4px] text-gray-light transition-colors hover:text-white',
-                    pathname === link.href && 'text-white'
+                    'text-sm font-semibold tracking-[.4px] text-gray-light transition-colors hover:text-purple-mid',
+                    pathname === link.href && 'text-purple-mid'
                   )}
                 >
                   {link.label}

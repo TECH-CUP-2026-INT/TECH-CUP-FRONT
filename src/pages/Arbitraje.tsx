@@ -2,7 +2,9 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import DashboardLayout from '@/components/common/DashboardLayout'
 import { Button } from '@/components/common/button'
+import { Input } from '@/components/common/input'
 import SoccerField3D from '@/components/employees/SoccerField3D'
+import { Upload, FileText, Eye, X } from 'lucide-react'
 
 type Evento = { min: string; icon: string; desc: string; equipo: string }
 type Accion = 'golA' | 'golB' | 'amarilla' | 'roja' | 'sust' | null
@@ -37,6 +39,12 @@ export default function Arbitraje() {
   const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null)
   const [step, setStep] = useState<'player' | 'action'>('player')
   const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined)
+
+  const [showPlanillaModal, setShowPlanillaModal] = useState(false)
+  const [planillaFile, setPlanillaFile] = useState<File | null>(null)
+  const [planillaSubida, setPlanillaSubida] = useState(false)
+  const [observacion, setObservacion] = useState('')
+  const [observaciones, setObservaciones] = useState<{ texto: string; min: string }[]>([])
 
   useEffect(() => {
     if (corriendo) {
@@ -82,8 +90,22 @@ export default function Arbitraje() {
     return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`
   }
 
+  const agregarObservacion = () => {
+    if (!observacion.trim()) return
+    const min = Math.floor(segundos / 60) + "'"
+    setObservaciones(prev => [{ texto: observacion, min }, ...prev])
+    setObservacion('')
+  }
+
+  const subirPlanilla = () => {
+    if (!planillaFile) return
+    setPlanillaSubida(true)
+    setShowPlanillaModal(false)
+    setPlanillaFile(null)
+  }
+
   const reset = () => {
-    setCorriendo(false); setSegundos(0); setGolA(0); setGolB(0); setEventos([]); setFinalizado(false)
+    setCorriendo(false); setSegundos(0); setGolA(0); setGolB(0); setEventos([]); setFinalizado(false); setObservaciones([]); setPlanillaSubida(false)
   }
 
   return (
@@ -160,6 +182,42 @@ export default function Arbitraje() {
             </button>
           </div>
 
+          <div className="grid grid-cols-2 gap-2 mb-3">
+            <button onClick={() => setShowPlanillaModal(true)}
+              className={`h-11 rounded-xl font-bold text-xs active:scale-95 transition-all flex items-center justify-center gap-2 ${planillaSubida ? 'bg-green-600/20 border-2 border-green-500/40 text-green-400' : 'bg-purple-mid/20 border-2 border-purple-mid/40 text-purple-mid'}`}>
+              {planillaSubida ? <><Eye size={16} /> PLANILLA SUBIDA</> : <><Upload size={16} /> SUBIR PLANILLA</>}
+            </button>
+            <button onClick={() => setShowModal(true)}
+              className="h-11 rounded-xl bg-gold/20 border-2 border-gold/40 text-gold font-bold text-xs active:scale-95 transition-all flex items-center justify-center gap-2">
+              <span className="text-lg">⚡</span> REGISTRAR
+            </button>
+          </div>
+
+          {/* Observaciones */}
+          <div className="bg-surface/50 border border-border/60 rounded-xl p-3 mb-3">
+            <h3 className="font-[family-name:var(--font-display)] text-xs uppercase tracking-[.3px] mb-2 flex items-center gap-1.5">
+              <FileText size={13} className="text-gold" /> OBSERVACIONES
+            </h3>
+            <div className="flex gap-2 mb-2">
+              <Input value={observacion} onChange={e => setObservacion(e.target.value)}
+                placeholder="Escribí una observación..." className="bg-black border-border text-white rounded-xl h-10 text-sm flex-1" />
+              <Button onClick={agregarObservacion} disabled={!observacion.trim()}
+                className="rounded-xl bg-gold text-[#1A1206] hover:bg-gold-dark h-10 px-3 disabled:opacity-40 text-xs">
+                Agregar
+              </Button>
+            </div>
+            {observaciones.length > 0 && (
+              <div className="space-y-1 max-h-[100px] overflow-y-auto">
+                {observaciones.map((o, i) => (
+                  <div key={i} className="flex items-start gap-2 text-xs py-1.5 px-2 rounded-lg bg-white/5 border border-white/5">
+                    <span className="font-mono text-gold font-bold min-w-[24px] flex-shrink-0">{o.min}</span>
+                    <span className="text-gray-light">{o.texto}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
           {/* Eventos */}
           <div className="bg-surface/50 border border-border/60 rounded-xl p-3">
             <h3 className="font-[family-name:var(--font-display)] text-xs uppercase tracking-[.3px] mb-2 flex items-center gap-1.5">
@@ -184,6 +242,50 @@ export default function Arbitraje() {
           )}
         </div>
       </div>
+
+      {/* Modal subir planilla */}
+      <AnimatePresence>
+        {showPlanillaModal && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+            onClick={() => setShowPlanillaModal(false)}>
+            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }}
+              className="bg-surface border border-border rounded-2xl p-6 w-full max-w-sm" onClick={e => e.stopPropagation()}>
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="font-[family-name:var(--font-display)] text-xl uppercase flex items-center gap-2">
+                  <Upload size={20} className="text-gold" /> Planilla del <span className="text-gold">árbitro</span>
+                </h2>
+                <button onClick={() => setShowPlanillaModal(false)} className="text-text-muted hover:text-white transition-colors"><X size={20} /></button>
+              </div>
+              <p className="text-sm text-text-muted mb-4">Subí la planilla oficial del partido (PDF o imagen, máx. 5 MB).</p>
+              <label className="flex flex-col items-center justify-center h-32 rounded-xl border-2 border-dashed border-border bg-black/50 cursor-pointer hover:border-gold/50 transition-colors mb-4">
+                {planillaFile ? (
+                  <div className="text-center">
+                    <FileText size={24} className="text-gold mx-auto mb-1" />
+                    <p className="text-sm font-bold text-white">{planillaFile.name}</p>
+                    <p className="text-[10px] text-text-muted">{(planillaFile.size / 1024 / 1024).toFixed(1)} MB</p>
+                  </div>
+                ) : (
+                  <div className="text-center">
+                    <Upload size={28} className="text-text-faint mx-auto mb-2" />
+                    <p className="text-sm text-text-muted">Hacé clic para seleccionar</p>
+                    <p className="text-[10px] text-text-faint mt-1">PDF, PNG, JPG</p>
+                  </div>
+                )}
+                <input type="file" accept=".pdf,.png,.jpg,.jpeg" className="hidden" onChange={e => setPlanillaFile(e.target.files?.[0] || null)} />
+              </label>
+              <div className="flex gap-3">
+                <Button variant="outline" onClick={() => setShowPlanillaModal(false)} className="rounded-full border-border text-gray-light hover:bg-white/5 h-11 flex-1">
+                  Cancelar
+                </Button>
+                <Button onClick={subirPlanilla} disabled={!planillaFile} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-11 flex-1 disabled:opacity-40 gap-1.5">
+                  <Upload size={15} /> Subir
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Modal flotante: elegir jugador → elegir acción */}
       <AnimatePresence>

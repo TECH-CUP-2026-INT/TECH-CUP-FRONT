@@ -7,7 +7,7 @@ import { SpotlightCard } from '@/components/common/spotlight-card'
 import { Badge } from '@/components/common/badge'
 import { Button } from '@/components/common/button'
 import { Input } from '@/components/common/input'
-import { Swords, Calendar, BarChart3, Plus, X, Edit3, Users, Clock, Goal, ShieldAlert } from 'lucide-react'
+import { Swords, Calendar, BarChart3, Plus, X, Edit3, Users, Clock, Goal, ShieldAlert, UserPlus, Send, Check, Crown, ArrowLeftRight, CheckCircle, XCircle } from 'lucide-react'
 
 type Tab = 'plantilla' | 'calendario' | 'estadisticas'
 
@@ -23,6 +23,20 @@ interface Jugador {
   rojas: number
   faltas: number
   partidos: number
+}
+
+interface Solicitud {
+  id: number
+  jugador: string
+  posicion: string
+  img: string
+  estado: 'pendiente' | 'aceptada' | 'rechazada'
+}
+
+interface InvitacionEnviada {
+  id: number
+  email: string
+  estado: 'pendiente' | 'aceptada' | 'rechazada'
 }
 
 const defaultStats = { goles: 0, asistencias: 0, amarillas: 0, rojas: 0, faltas: 0, partidos: 0 }
@@ -49,6 +63,17 @@ export default function MiEquipo() {
   const [selectedPlayer, setSelectedPlayer] = useState<Jugador | null>(null)
   const [nuevoJugador, setNuevoJugador] = useState({ nombre: '', dorsal: '', posicion: 'Volante' })
 
+  const [showInviteModal, setShowInviteModal] = useState(false)
+  const [inviteEmail, setInviteEmail] = useState('')
+  const [invitaciones, setInvitaciones] = useState<InvitacionEnviada[]>([])
+  const [solicitudes, setSolicitudes] = useState<Solicitud[]>([
+    { id: 1, jugador: 'David Ocampo', posicion: 'Defensa', img: 'https://i.pravatar.cc/72?img=7', estado: 'pendiente' },
+    { id: 2, jugador: 'María Torres', posicion: 'Volante', img: 'https://i.pravatar.cc/72?img=5', estado: 'pendiente' },
+  ])
+
+  const [showCaptainModal, setShowCaptainModal] = useState(false)
+  const [captainTarget, setCaptainTarget] = useState<number | null>(null)
+
   const agregar = () => {
     if (!nuevoJugador.nombre || !nuevoJugador.dorsal) return
     setJugadores([...jugadores, { id: Date.now(), ...nuevoJugador, dorsal: parseInt(nuevoJugador.dorsal), img: `https://i.pravatar.cc/72?img=${Math.floor(Math.random()*70)+1}`, ...defaultStats }])
@@ -57,6 +82,24 @@ export default function MiEquipo() {
   }
 
   const eliminar = (id: number) => setJugadores(jugadores.filter(j => j.id !== id))
+
+  const enviarInvitacion = () => {
+    if (!inviteEmail.trim()) return
+    setInvitaciones([...invitaciones, { id: Date.now(), email: inviteEmail, estado: 'pendiente' }])
+    setInviteEmail('')
+  }
+
+  const responderSolicitud = (id: number, aceptar: boolean) => {
+    setSolicitudes(solicitudes.map(s => s.id === id ? { ...s, estado: aceptar ? 'aceptada' as const : 'rechazada' as const } : s))
+  }
+
+  const transferirCapitanía = () => {
+    if (captainTarget === null) return
+    const jugador = jugadores.find(j => j.id === captainTarget)
+    if (jugador) alert(`✅ Capitanía transferida a ${jugador.nombre}`)
+    setShowCaptainModal(false)
+    setCaptainTarget(null)
+  }
 
   return (
     <DashboardLayout title="Mi equipo">
@@ -80,6 +123,20 @@ export default function MiEquipo() {
                 <span className="text-center"><b className="block text-gold text-lg">25</b>PTS</span>
               </div>
             </div>
+            <div className="flex gap-2 mt-4 flex-wrap">
+              <Button size="sm" onClick={() => setShowInviteModal(true)} className="rounded-full bg-purple-mid/20 border border-purple-mid/30 text-purple-mid hover:bg-purple-mid/30 text-xs h-auto py-2 px-4 gap-1.5">
+                <UserPlus size={14} /> Invitar jugador
+              </Button>
+              <Button size="sm" onClick={() => setShowCaptainModal(true)} className="rounded-full bg-gold/10 border border-gold/30 text-gold hover:bg-gold/20 text-xs h-auto py-2 px-4 gap-1.5">
+                <Crown size={14} /> Transferir capitanía
+              </Button>
+            </div>
+            {solicitudes.filter(s => s.estado === 'pendiente').length > 0 && (
+              <div className="mt-3 p-3 rounded-xl bg-yellow-500/10 border border-yellow-500/30 text-xs text-yellow-300 flex items-center gap-2">
+                <UserPlus size={14} />
+                {solicitudes.filter(s => s.estado === 'pendiente').length} solicitud(es) de ingreso pendiente(s)
+              </div>
+            )}
           </SpotlightCard>
 
           {/* Tabs */}
@@ -164,6 +221,128 @@ export default function MiEquipo() {
             </div>
           )}
         </main>
+
+      {/* Modal invitaciones */}
+      <AnimatePresence>
+        {showInviteModal && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+            onClick={() => setShowInviteModal(false)}>
+            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }}
+              className="bg-surface border border-border rounded-2xl p-6 w-full max-w-md max-h-[80vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="font-[family-name:var(--font-display)] text-xl uppercase flex items-center gap-2">
+                  <UserPlus size={20} className="text-gold" /> Gestionar <span className="text-gold">invitaciones</span>
+                </h2>
+                <button onClick={() => setShowInviteModal(false)} className="text-text-muted hover:text-white transition-colors"><X size={20} /></button>
+              </div>
+
+              {/* Solicitudes entrantes */}
+              {solicitudes.length > 0 && (
+                <div className="mb-6">
+                  <h3 className="text-xs text-text-faint uppercase tracking-[.4px] font-semibold mb-3">Solicitudes de jugadores</h3>
+                  <div className="space-y-2">
+                    {solicitudes.map(s => (
+                      <div key={s.id} className="flex items-center gap-3 p-3 rounded-xl bg-black/50 border border-border">
+                        <img src={s.img} alt="" className="w-10 h-10 rounded-full" />
+                        <div className="flex-1">
+                          <p className="text-sm font-bold">{s.jugador}</p>
+                          <p className="text-xs text-text-muted">{s.posicion}</p>
+                        </div>
+                        {s.estado === 'pendiente' ? (
+                          <div className="flex gap-1.5">
+                            <button onClick={() => responderSolicitud(s.id, true)} className="w-8 h-8 rounded-full bg-green-500/15 border border-green-500/30 flex items-center justify-center hover:bg-green-500/30 transition-colors">
+                              <Check size={14} className="text-green-400" />
+                            </button>
+                            <button onClick={() => responderSolicitud(s.id, false)} className="w-8 h-8 rounded-full bg-red-500/15 border border-red-500/30 flex items-center justify-center hover:bg-red-500/30 transition-colors">
+                              <X size={14} className="text-red-400" />
+                            </button>
+                          </div>
+                        ) : (
+                          <Badge className={`rounded-full text-[10px] ${s.estado === 'aceptada' ? 'bg-green-500/15 text-green-400 border-green-500/30' : 'bg-red-500/15 text-red-400 border-red-500/30'}`}>
+                            {s.estado === 'aceptada' ? 'Aceptada' : 'Rechazada'}
+                          </Badge>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Enviar invitación */}
+              <div className="mb-6">
+                <h3 className="text-xs text-text-faint uppercase tracking-[.4px] font-semibold mb-3">Invitar jugador</h3>
+                <div className="flex gap-2">
+                  <Input value={inviteEmail} onChange={e => setInviteEmail(e.target.value)}
+                    placeholder="Correo del jugador" className="bg-black border-border text-white rounded-xl h-11 flex-1" />
+                  <Button onClick={enviarInvitacion} disabled={!inviteEmail.trim()}
+                    className="rounded-xl bg-gold text-[#1A1206] hover:bg-gold-dark h-11 px-4 disabled:opacity-40 gap-1.5">
+                    <Send size={15} /> Invitar
+                  </Button>
+                </div>
+              </div>
+
+              {/* Invitaciones enviadas */}
+              {invitaciones.length > 0 && (
+                <div>
+                  <h3 className="text-xs text-text-faint uppercase tracking-[.4px] font-semibold mb-3">Invitaciones enviadas</h3>
+                  <div className="space-y-2">
+                    {invitaciones.map(inv => (
+                      <div key={inv.id} className="flex items-center justify-between p-3 rounded-xl bg-black/50 border border-border">
+                        <span className="text-sm">{inv.email}</span>
+                        <Badge className={`rounded-full text-[10px] ${inv.estado === 'pendiente' ? 'bg-yellow-500/15 text-yellow-400 border-yellow-500/30' : inv.estado === 'aceptada' ? 'bg-green-500/15 text-green-400 border-green-500/30' : 'bg-red-500/15 text-red-400 border-red-500/30'}`}>
+                          {inv.estado === 'pendiente' ? 'Pendiente' : inv.estado === 'aceptada' ? 'Aceptada' : 'Rechazada'}
+                        </Badge>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Modal transferir capitanía */}
+      <AnimatePresence>
+        {showCaptainModal && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+            onClick={() => setShowCaptainModal(false)}>
+            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }}
+              className="bg-surface border border-border rounded-2xl p-6 w-full max-w-sm" onClick={e => e.stopPropagation()}>
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="font-[family-name:var(--font-display)] text-xl uppercase flex items-center gap-2">
+                  <Crown size={20} className="text-gold" /> Transferir <span className="text-gold">capitanía</span>
+                </h2>
+                <button onClick={() => setShowCaptainModal(false)} className="text-text-muted hover:text-white transition-colors"><X size={20} /></button>
+              </div>
+              <p className="text-sm text-text-muted mb-4">Seleccioná el jugador que recibirá la capitanía:</p>
+              <div className="space-y-2 mb-6">
+                {jugadores.map(j => (
+                  <button key={j.id} onClick={() => setCaptainTarget(j.id)}
+                    className={`w-full flex items-center gap-3 p-3 rounded-xl border-2 transition-all ${captainTarget === j.id ? 'border-gold bg-gold/10' : 'border-border bg-black/50 hover:border-purple-mid/50'}`}>
+                    <img src={j.img} alt="" className="w-10 h-10 rounded-full" />
+                    <div className="flex-1 text-left">
+                      <p className="text-sm font-bold">{j.nombre}</p>
+                      <p className="text-xs text-text-muted">#{j.dorsal} · {j.posicion}</p>
+                    </div>
+                    {captainTarget === j.id && <CheckCircle size={20} className="text-gold" />}
+                  </button>
+                ))}
+              </div>
+              <div className="flex gap-3">
+                <Button variant="outline" onClick={() => setShowCaptainModal(false)} className="rounded-full border-border text-gray-light hover:bg-white/5 h-11 flex-1">
+                  Cancelar
+                </Button>
+                <Button onClick={transferirCapitanía} disabled={captainTarget === null} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-11 flex-1 disabled:opacity-40 gap-1.5">
+                  <ArrowLeftRight size={15} /> Transferir
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Modal detalle jugador */}
       <AnimatePresence>

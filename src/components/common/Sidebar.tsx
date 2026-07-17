@@ -4,7 +4,7 @@ import { cn } from '@/utils/cn'
 import { useAuth, type UserRole } from '@/hooks/auth/useAuth'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/common/avatar'
 import {
-  Home, Trophy, Calendar, Sword, BarChart3, ShieldCheck, MapPin, HelpCircle, ChevronDown, X, PanelLeftClose, PanelLeft, User, Swords, ClipboardCheck, Users
+  Home, Trophy, Calendar, Sword, BarChart3, ShieldCheck, MapPin, HelpCircle, ChevronDown, X, PanelLeftClose, PanelLeft, User, Swords, ClipboardCheck, Users, Bell, PlusCircle, Medal
 } from 'lucide-react'
 
 type NavItem = { id:string; icon:typeof Home; label:string; href:string; roles?: UserRole[] }
@@ -16,7 +16,10 @@ const allItems: NavItem[] = [
   { id:'partidos',    icon: Sword,         label:'Mis partidos',        href:'/mis-partidos',       roles:['jugador'] },
   { id:'mi-equipo',   icon: Users,         label:'Mi equipo',           href:'/mi-equipo',          roles:['jugador'] },
   { id:'perfil',      icon: User,          label:'Perfil',               href:'/perfil' },
+  { id:'notificaciones', icon: Bell,       label:'Notificaciones',       href:'/notificaciones' },
+  { id:'rankings',    icon: Medal,         label:'Rankings',             href:'/rankings' },
   { id:'estadisticas',icon: BarChart3,     label:'Estadísticas',         href:'/estadisticas' },
+  { id:'crear-torneo',icon: PlusCircle,    label:'Crear Torneo',         href:'/crear-torneo',       roles:['organizador'] },
   { id:'arbitraje',   icon: ClipboardCheck,label:'Arbitraje',            href:'/arbitraje',          roles:['arbitro'] },
   { id:'arbitro-db',  icon: Home,          label:'Panel Árbitro',       href:'/arbitro/dashboard',  roles:['arbitro'] },
   { id:'admin-panel', icon: ShieldCheck,   label:'Panel Organizador',   href:'/dashboard/admin',    roles:['organizador'] },
@@ -63,6 +66,9 @@ export default function Sidebar({ open, onClose, collapsed: collapsedProp, onCol
     : pathname.startsWith('/estadisticas') ? 'estadisticas'
     : pathname.startsWith('/mi-equipo') ? 'mi-equipo'
     : pathname.startsWith('/perfil') ? 'perfil'
+    : pathname.startsWith('/notificaciones') ? 'notificaciones'
+    : pathname.startsWith('/rankings') ? 'rankings'
+    : pathname.startsWith('/crear-torneo') ? 'crear-torneo'
     : pathname.startsWith('/arbitraje') ? 'arbitraje'
     : pathname.startsWith('/arbitro') ? 'arbitro-db'
     : pathname.startsWith('/calendario') ? 'calendario'

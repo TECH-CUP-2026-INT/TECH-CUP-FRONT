@@ -703,18 +703,11 @@ export default function DashboardJugador() {
                     </div>
                     <button disabled={eq.vac === 0}
                       onClick={() => { if (eq.vac > 0) { alert(`Solicitud enviada a ${eq.nom} ✅`); setBrowseTeamsOpen(false) } }}
-                      className={`shrink-0 px-4 py-2 rounded-full text-xs font-bold transition-all ${eq.vac > 0 ? 'bg-gold/15 border border-gold/40 text-gold hover:bg-gold/25 hover:text-white' : 'bg-white/5 border border-white/10 text-text-faint cursor-not-allowed'}`}>
-                      {eq.vac > 0 ? 'Solicitar' : 'Lleno'}
+                      className={`shrink-0 px-4 py-2 rounded-full text-xs font-bold transition-all ${eq.vac > 0 ? 'bg-gold/20 text-gold hover:bg-gold/30 cursor-pointer' : 'bg-white/5 text-white/30 cursor-not-allowed'}`}>
+                      Unirme
                     </button>
                   </div>
                 ))}
-                {equiposDisponibles.filter(eq => eq.nom.toLowerCase().includes(teamSearch.toLowerCase())).length === 0 && (
-                  <p className="text-center py-8 text-text-muted text-sm">No hay equipos que coincidan con "<strong className="text-white">{teamSearch}</strong>"</p>
-                )}
-              </div>
-
-              <div className="px-6 py-4 text-center border-t border-white/5">
-                <p className="text-xs text-text-muted">¿No encontrás lo que buscás? <button onClick={() => { setBrowseTeamsOpen(false); handleCrearEquipo() }} className="text-gold font-semibold hover:underline">Creá tu propio equipo</button></p>
               </div>
             </motion.div>
           </motion.div>

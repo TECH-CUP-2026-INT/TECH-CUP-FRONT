@@ -21,18 +21,6 @@ export function Copa3D() {
         }}
       />
 
-      {/* Texto en lugar de la copa */}
-      <div className="relative w-full aspect-[3/4] flex flex-col items-center justify-center text-center px-6">
-        <span className="text-sm font-bold tracking-[2px] uppercase text-purple-mid mb-5">Torneos</span>
-        <h3 className="font-[family-name:var(--font-display)] text-5xl uppercase text-white leading-[1.1] mb-5">
-          Compite y<br />
-          <span className="text-purple-mid">deja tu huella</span>
-        </h3>
-        <p className="text-lg text-white/60 max-w-[300px] leading-relaxed">
-                    Inscribe tu equipo, sigue los resultados en vivo y vive la emoción del torneo.
-        </p>
-      </div>
-
       {/* Shadow on ground */}
       <div
         className="absolute bottom-[3%] left-1/2 w-[50%] h-[5%] rounded-full pointer-events-none"
