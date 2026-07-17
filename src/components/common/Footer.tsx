@@ -8,24 +8,27 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2.5">
-              <div className="w-[34px] h-[34px] rounded-lg overflow-hidden bg-purple-black flex-shrink-0">
+              <div className="w-[34px] h-[34px] rounded-lg overflow-hidden bg-black flex-shrink-0">
                 <img src="/assets/logo.png" alt="TechCup" className="w-full h-full object-cover" />
               </div>
               <div className="flex flex-col leading-none">
                 <span className="font-[family-name:var(--font-display)] font-bold text-lg tracking-[.5px] text-white">
                   TECH<span className="text-white/80">CUP</span>
                 </span>
-                <span className="text-[8.5px] tracking-[1.6px] text-white/60 font-semibold">INGENIERÍA DE SISTEMAS</span>
+                <span className="text-[8.5px] tracking-[1.6px] text-white/80 font-semibold">INGENIERÍA DE SISTEMAS</span>
               </div>
             </div>
-            <p className="text-[13.5px] text-white/70 leading-relaxed mt-3.5 max-w-[260px]">
+            <p className="text-[13.5px] text-white/85 leading-relaxed mt-3.5 max-w-[260px]">
               Generado por y para estudiantes.
             </p>
+            <div className="mt-4 w-[170px]">
+              <img src="/assets/logo-eci.png" alt="Escuela Colombiana de Ingeniería Julio Garavito" className="w-full h-auto object-contain" />
+            </div>
           </div>
 
           {/* Enlaces */}
           <div>
-            <h4 className="text-xs tracking-[1.2px] uppercase text-white/80 font-semibold mb-4">Enlaces</h4>
+            <h4 className="text-xs tracking-[1.2px] uppercase text-white/90 font-semibold mb-4">Enlaces</h4>
             <ul className="space-y-2.5">
               {[
                 { href:'/', label:'Inicio' },
@@ -33,7 +36,7 @@ export default function Footer() {
                 { href:'/calendario', label:'Calendario' },
               ].map(l => (
                 <li key={l.href}>
-                  <Link to={l.href} className="text-[13.5px] text-white/70 hover:text-white transition-colors">{l.label}</Link>
+                  <Link to={l.href} className="text-[13.5px] text-white/85 hover:text-white transition-colors">{l.label}</Link>
                 </li>
               ))}
             </ul>
@@ -41,17 +44,17 @@ export default function Footer() {
 
           {/* Más información */}
           <div>
-            <h4 className="text-xs tracking-[1.2px] uppercase text-white/80 font-semibold mb-4">Más información</h4>
+            <h4 className="text-xs tracking-[1.2px] uppercase text-white/90 font-semibold mb-4">Más información</h4>
             <ul className="space-y-2.5">
               {['Reglamento', 'Preguntas frecuentes', 'Contacto'].map(l => (
-                <li key={l}><a href="#" className="text-[13.5px] text-white/70 hover:text-white transition-colors">{l}</a></li>
+                <li key={l}><a href="#" className="text-[13.5px] text-white/85 hover:text-white transition-colors">{l}</a></li>
               ))}
             </ul>
           </div>
 
           {/* Social */}
           <div>
-            <h4 className="text-xs tracking-[1.2px] uppercase text-white/80 font-semibold mb-4">Síguenos</h4>
+            <h4 className="text-xs tracking-[1.2px] uppercase text-white/90 font-semibold mb-4">Síguenos</h4>
             <div className="flex gap-2.5 items-center">
               {/* Instagram con tooltip */}
               <div className="group relative cursor-pointer text-[17px] rounded-[10px]">
@@ -94,7 +97,7 @@ export default function Footer() {
           </div>
         </div>
 
-          <div className="border-t border-white/10 pt-[22px] text-[12.5px] text-white/50 text-center">
+          <div className="border-t border-white/10 pt-[22px] text-[12.5px] text-white/70 text-center">
           © {new Date().getFullYear()} TechCup — Decanatura de Ingeniería de Sistemas. Todos los derechos reservados.
         </div>
       </div>

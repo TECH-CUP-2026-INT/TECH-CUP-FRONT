@@ -183,10 +183,10 @@ export default function Landing() {
             </motion.div>
 
             {/* Texto — DERECHA */}
-            <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.8, ease: 'easeInOut' }}>
-              <div className="overflow-hidden pb-4 mb-4">
-                <motion.h1 initial={{ y: 100 }} animate={{ y: 0 }} transition={{ delay: 0.5, duration: 0.6, ease: 'easeOut' }} className="font-[family-name:var(--font-display-alt)] font-bold text-[clamp(52px,7vw,92px)] leading-[1.3] tracking-[.5px] uppercase italic">                  <span className="text-[#3D1A6B] dark:text-[#F7EDE2]">TECH</span>
-                  <span style={{ background: 'linear-gradient(135deg, #A5610A 0%, #BD7712 25%, #F5A623 50%, #FBC946 75%, #FBD559 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>CUP</span>
+            <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.8, ease: 'easeInOut' }} className="@container">
+              <div className="overflow-x-visible overflow-y-hidden pb-4 mb-4">
+                <motion.h1 initial={{ y: 100 }} animate={{ y: 0 }} transition={{ delay: 0.5, duration: 0.6, ease: 'easeOut' }} className="font-[family-name:var(--font-display-alt)] font-bold text-[clamp(52px,20cqw,110px)] leading-[1.3] tracking-[.5px] uppercase italic w-full">                  <span className="text-[#3D1A6B] dark:text-[#F7EDE2]">TECH</span>
+                  <span style={{ background: 'linear-gradient(135deg, #A5610A 0%, #BD7712 25%, #F5A623 50%, #FBC946 75%, #FBD559 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', paddingRight: '0.25em', backgroundOrigin: 'padding-box' }}>CUP</span>
                 </motion.h1>
               </div>
               <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7, duration: 0.5 }} className="font-[family-name:var(--font-display)] text-[clamp(16px,2vw,21px)] font-semibold tracking-[.4px] uppercase text-[#5B4A7A] dark:text-gray-light leading-tight mb-5">
@@ -205,14 +205,11 @@ export default function Landing() {
         </div>
 
         {/* Texto inferior derecha — encima de todo */}
-        <div className="absolute bottom-8 right-8 z-20 max-w-[360px] text-right max-md:hidden">
-          <p className="font-[family-name:var(--font-display)] text-4xl uppercase leading-[1.1] mb-4 text-[#3D1A6B] dark:text-white drop-shadow-lg">
+        <div className="absolute bottom-8 right-8 z-20 max-w-[360px] text-right max-md:hidden rounded-2xl border border-white/40 dark:border-white/10 bg-white/50 dark:bg-black/40 backdrop-blur-md px-6 py-5 shadow-lg">
+          <p className="font-[family-name:var(--font-display)] text-4xl uppercase leading-[1.1] text-[#3D1A6B] dark:text-white drop-shadow-lg">
             La pasión nos <span className="text-gold-ink">conecta</span>
           </p>
-          <p className="text-sm text-[#3D1A6B]/70 dark:text-white/70 leading-relaxed drop-shadow">
-            Iniciá sesión y viví la emoción del torneo universitario más importante de Ingeniería de Sistemas.
-          </p>
-          <div className="flex items-center gap-3 mt-6 justify-end">
+          <div className="flex items-center gap-3 mt-5 justify-end">
             <div className="w-8 h-[2px] rounded-full bg-gold/20" />
             <div className="w-8 h-[2px] rounded-full bg-purple-mid/40" />
             <div className="w-8 h-[2px] rounded-full bg-gold/60" />
@@ -239,13 +236,13 @@ export default function Landing() {
                     ) : (
                       <img src="/images/feature-estadisticas.png" alt="" className="absolute inset-0 w-full h-full object-contain" />
                     )}
-                    <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
+                    <div className="absolute bottom-0 left-0 right-0 p-6 pt-16 z-10 bg-gradient-to-t from-white/90 via-white/55 to-transparent dark:from-black/80 dark:via-black/40 dark:to-transparent backdrop-blur-[2px]">
                       <div className="flex items-center gap-2 mb-2">
                         <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: featureSlides[activeFeature].color }} />
-                        <span className="text-xs font-bold tracking-[1.6px] uppercase text-white/70">Funcionalidad</span>
+                        <span className="text-xs font-bold tracking-[1.6px] uppercase text-[#3D1A6B]/70 dark:text-white/70">Funcionalidad</span>
                       </div>
-                      <h3 className="font-[family-name:var(--font-display)] text-3xl uppercase text-white mb-2">{featureSlides[activeFeature].title}</h3>
-                      <p className="text-base text-white/70 max-w-[450px]">{featureSlides[activeFeature].desc}</p>
+                      <h3 className="font-[family-name:var(--font-display)] text-3xl uppercase text-[#3D1A6B] dark:text-white mb-2">{featureSlides[activeFeature].title}</h3>
+                      <p className="text-base text-[#3D1A6B]/70 dark:text-white/70 max-w-[450px]">{featureSlides[activeFeature].desc}</p>
                     </div>
                   </motion.div>
                 </AnimatePresence>
@@ -389,6 +386,35 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Manchas — nuestra mascota */}
+      <section className="py-12 relative overflow-hidden">
+        <div className="absolute right-[10%] top-[-40%] w-[500px] h-[500px] rounded-full bg-gold/15 blur-[150px] pointer-events-none" />
+
+        <div className="max-w-[1280px] mx-auto px-8 relative">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <span className="w-1 h-6 rounded-full bg-gold" />
+              <div>
+                <span className="text-lg font-bold tracking-[1.4px] uppercase text-gold-ink">Manchas</span>
+                <h2 className="font-[family-name:var(--font-display)] text-xl uppercase tracking-[.5px] text-[#4B2D7A] dark:text-gray-light">Nuestra <span className="text-gold-ink">mascota</span></h2>
+              </div>
+            </div>
+          </div>
+
+          <div className="max-w-[1100px] mx-auto rounded-2xl bg-gradient-to-br from-gold/25 via-[#FBEBC9] to-gold/15 dark:from-[#2d1b4e]/40 dark:via-[#1a0f2e]/30 dark:to-[#0d0720]/40 backdrop-blur-[2px] border border-gold/30 p-6 md:p-8">
+            <div className="relative rounded-2xl overflow-hidden border border-gold/30">
+              <img src="/images/manchas-mascota.png" alt="Manchas, la mascota de TechCup, junto a la selección de fútbol de Ingeniería de Sistemas" className="w-full h-[340px] max-md:h-[300px] object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0A0614] via-[#0A0614]/40 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-7 z-10">
+                <span className="block text-[10px] tracking-[1.2px] text-gold font-bold uppercase mb-1">Mascota oficial</span>
+                <h3 className="font-[family-name:var(--font-display)] text-3xl uppercase text-white leading-tight">Manchas</h3>
+                <p className="text-[13px] text-white/70 mt-1 max-w-[520px]">La mascota oficial de TECH CUP y de la ECI, un símbolo de innovación, trabajo en equipo y pasión por el fútbol.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Últimos Partidos */}
       <section className="py-12 relative overflow-hidden">
         <div className="absolute left-[5%] top-[-60%] w-[400px] h-[400px] rounded-full bg-purple-mid/15 blur-[120px] pointer-events-none" />
@@ -418,23 +444,25 @@ export default function Landing() {
                   { eq1:'Ing. Mecánica', eq2:'Ing. Eléctrica', score:'1 - 1', estado:"42'", color:'#3B82F6' },
                   { eq1:'Ing. Estadística', eq2:'Ing. Sistemas', score:'0 - 0', estado:"18'", color:'#06B6D4' },
                 ].map((m, i) => (
-                  <div key={i} className="group relative overflow-hidden rounded-xl w-[240px] flex-shrink-0 bg-[#E8DFF5]/70 dark:bg-black/30 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-white/5 hover:border-gold/40 transition-all duration-300 p-3.5">
+                  <div key={i} className="group relative overflow-hidden rounded-2xl w-[280px] flex-shrink-0 bg-[#E8DFF5]/70 dark:bg-black/30 backdrop-blur-sm border-2 border-green-500 shadow-sm hover:shadow-[0_10px_28px_rgba(34,197,94,0.25)] hover:-translate-y-1 transition-all duration-300 p-4">
                     <div className="absolute -inset-[50%] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ background: 'radial-gradient(circle at 50% 50%, rgba(245,166,35,0.06), transparent 60%)' }} />
-                    <div className="flex items-center justify-between mb-2.5">
-                      <span className="text-[9px] font-bold uppercase tracking-[.6px] px-2 py-0.5 rounded-full bg-gold/15 text-gold-ink dark:bg-gold/20 animate-pulse">{m.estado}</span>
-                      <span className="text-[9px] text-[#9B8AB5] dark:text-text-faint font-medium">EN VIVO</span>
+                    <div className="flex items-center justify-center mb-2.5">
+                      <span className="flex items-center gap-1.5 text-[13px] font-black tracking-[.3px] px-3 py-1 rounded-full bg-green-500 text-white shadow-[0_0_12px_rgba(34,197,94,0.55)]">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                        {m.estado}
+                      </span>
                     </div>
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex flex-col items-center gap-1 flex-1 min-w-0">
-                        <div className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold" style={{ backgroundColor: m.color + '20', color: m.color }}>{m.eq1.split(' ').pop()?.substring(0, 3) || m.eq1.substring(0, 3)}</div>
+                        <div className="w-14 h-14 rounded-full flex items-center justify-center text-base font-bold" style={{ backgroundColor: m.color + '20', color: m.color }}>{m.eq1.split(' ').pop()?.substring(0, 3) || m.eq1.substring(0, 3)}</div>
                         <span className="text-[11px] font-semibold text-[#4B2D7A] dark:text-gray-light text-center leading-tight truncate w-full">{m.eq1}</span>
                       </div>
                       <div className="flex flex-col items-center px-1">
-                        <span className="text-lg font-black leading-none text-gold-ink">{m.score}</span>
-                        <span className="text-[8px] text-[#9B8AB5] dark:text-text-faint font-bold uppercase mt-0.5">VS</span>
+                        <span className="text-3xl font-black leading-none text-gold-ink">{m.score}</span>
+                        <span className="text-xs text-[#9B8AB5] dark:text-text-faint font-bold uppercase mt-1">VS</span>
                       </div>
                       <div className="flex flex-col items-center gap-1 flex-1 min-w-0">
-                        <div className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold" style={{ backgroundColor: m.color + '20', color: m.color }}>{m.eq2.split(' ').pop()?.substring(0, 3) || m.eq2.substring(0, 3)}</div>
+                        <div className="w-14 h-14 rounded-full flex items-center justify-center text-base font-bold" style={{ backgroundColor: m.color + '20', color: m.color }}>{m.eq2.split(' ').pop()?.substring(0, 3) || m.eq2.substring(0, 3)}</div>
                         <span className="text-[11px] font-semibold text-[#4B2D7A] dark:text-gray-light text-center leading-tight truncate w-full">{m.eq2}</span>
                       </div>
                     </div>
@@ -467,23 +495,25 @@ export default function Landing() {
                   { eq1:'Ing. Industrial', eq2:'Ing. Mecánica', score:'2 - 2', estado:'Final', color:'#6D28D9' },
                   { eq1:'Ing. Eléctrica', eq2:'Ing. Química', score:'0 - 1', estado:'Final', color:'#7C3AED' },
                 ].map((m, i) => (
-                  <div key={i} className="group relative overflow-hidden rounded-xl w-[240px] flex-shrink-0 bg-[#E8DFF5]/70 dark:bg-black/30 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-white/5 hover:border-purple-mid/40 transition-all duration-300 p-3.5">
+                  <div key={i} className="group relative overflow-hidden rounded-xl w-[280px] flex-shrink-0 bg-[#E8DFF5]/70 dark:bg-black/30 backdrop-blur-sm border-2 border-red-500 shadow-sm hover:shadow-[0_10px_28px_rgba(239,68,68,0.25)] hover:-translate-y-1 transition-all duration-300 p-4">
                     <div className="absolute -inset-[50%] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ background: 'radial-gradient(circle at 50% 50%, rgba(139,92,246,0.06), transparent 60%)' }} />
-                    <div className="flex items-center justify-between mb-2.5">
-                      <span className="text-[9px] font-bold uppercase tracking-[.6px] px-2 py-0.5 rounded-full bg-[#E8E0F5] text-[#6B4D9E] dark:bg-white/10 dark:text-text-faint">{m.estado}</span>
-                      <span className="text-[9px] text-[#9B8AB5] dark:text-text-faint font-medium">FINAL</span>
+                    <div className="flex items-center justify-center mb-2.5">
+                      <span className="flex items-center gap-1.5 text-[13px] font-black tracking-[.3px] px-3 py-1 rounded-full bg-red-500 text-white shadow-[0_0_12px_rgba(239,68,68,0.5)]">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white" />
+                        {m.estado}
+                      </span>
                     </div>
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex flex-col items-center gap-1 flex-1 min-w-0">
-                        <div className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold" style={{ backgroundColor: m.color + '20', color: m.color }}>{m.eq1.split(' ').pop()?.substring(0, 3) || m.eq1.substring(0, 3)}</div>
+                        <div className="w-14 h-14 rounded-full flex items-center justify-center text-base font-bold" style={{ backgroundColor: m.color + '20', color: m.color }}>{m.eq1.split(' ').pop()?.substring(0, 3) || m.eq1.substring(0, 3)}</div>
                         <span className="text-[11px] font-semibold text-[#4B2D7A] dark:text-gray-light text-center leading-tight truncate w-full">{m.eq1}</span>
                       </div>
                       <div className="flex flex-col items-center px-1">
-                        <span className="text-lg font-black leading-none text-[#4B2D7A] dark:text-gray-light">{m.score}</span>
-                        <span className="text-[8px] text-[#9B8AB5] dark:text-text-faint font-bold uppercase mt-0.5">VS</span>
+                        <span className="text-3xl font-black leading-none text-[#4B2D7A] dark:text-gray-light">{m.score}</span>
+                        <span className="text-xs text-[#9B8AB5] dark:text-text-faint font-bold uppercase mt-1">VS</span>
                       </div>
                       <div className="flex flex-col items-center gap-1 flex-1 min-w-0">
-                        <div className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold" style={{ backgroundColor: m.color + '20', color: m.color }}>{m.eq2.split(' ').pop()?.substring(0, 3) || m.eq2.substring(0, 3)}</div>
+                        <div className="w-14 h-14 rounded-full flex items-center justify-center text-base font-bold" style={{ backgroundColor: m.color + '20', color: m.color }}>{m.eq2.split(' ').pop()?.substring(0, 3) || m.eq2.substring(0, 3)}</div>
                         <span className="text-[11px] font-semibold text-[#4B2D7A] dark:text-gray-light text-center leading-tight truncate w-full">{m.eq2}</span>
                       </div>
                     </div>
