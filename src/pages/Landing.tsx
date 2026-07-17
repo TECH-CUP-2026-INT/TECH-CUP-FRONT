@@ -444,11 +444,11 @@ export default function Landing() {
                   { eq1:'Ing. Mecánica', eq2:'Ing. Eléctrica', score:'1 - 1', estado:"42'", color:'#3B82F6' },
                   { eq1:'Ing. Estadística', eq2:'Ing. Sistemas', score:'0 - 0', estado:"18'", color:'#06B6D4' },
                 ].map((m, i) => (
-                  <div key={i} className="group relative overflow-hidden rounded-2xl w-[280px] flex-shrink-0 bg-[#E8DFF5]/70 dark:bg-black/30 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-white/5 hover:border-gold/50 shadow-sm hover:shadow-[0_10px_28px_rgba(245,166,35,0.2)] hover:-translate-y-1 transition-all duration-300 p-4">
+                  <div key={i} className="group relative overflow-hidden rounded-2xl w-[280px] flex-shrink-0 bg-[#E8DFF5]/70 dark:bg-black/30 backdrop-blur-sm border-2 border-green-500 shadow-sm hover:shadow-[0_10px_28px_rgba(34,197,94,0.25)] hover:-translate-y-1 transition-all duration-300 p-4">
                     <div className="absolute -inset-[50%] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ background: 'radial-gradient(circle at 50% 50%, rgba(245,166,35,0.06), transparent 60%)' }} />
                     <div className="flex items-center justify-center mb-2.5">
-                      <span className="flex items-center gap-1.5 text-[13px] font-black tracking-[.3px] px-3 py-1 rounded-full bg-gold text-[#1D0440] shadow-[0_0_12px_rgba(245,166,35,0.55)]">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#1D0440] animate-pulse" />
+                      <span className="flex items-center gap-1.5 text-[13px] font-black tracking-[.3px] px-3 py-1 rounded-full bg-green-500 text-white shadow-[0_0_12px_rgba(34,197,94,0.55)]">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                         {m.estado}
                       </span>
                     </div>
@@ -495,7 +495,7 @@ export default function Landing() {
                   { eq1:'Ing. Industrial', eq2:'Ing. Mecánica', score:'2 - 2', estado:'Final', color:'#6D28D9' },
                   { eq1:'Ing. Eléctrica', eq2:'Ing. Química', score:'0 - 1', estado:'Final', color:'#7C3AED' },
                 ].map((m, i) => (
-                  <div key={i} className="group relative overflow-hidden rounded-xl w-[280px] flex-shrink-0 bg-[#E8DFF5]/70 dark:bg-black/30 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-white/5 hover:border-purple-mid/50 shadow-sm hover:shadow-[0_10px_28px_rgba(139,92,246,0.2)] hover:-translate-y-1 transition-all duration-300 p-4">
+                  <div key={i} className="group relative overflow-hidden rounded-xl w-[280px] flex-shrink-0 bg-[#E8DFF5]/70 dark:bg-black/30 backdrop-blur-sm border-2 border-red-500 shadow-sm hover:shadow-[0_10px_28px_rgba(239,68,68,0.25)] hover:-translate-y-1 transition-all duration-300 p-4">
                     <div className="absolute -inset-[50%] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ background: 'radial-gradient(circle at 50% 50%, rgba(139,92,246,0.06), transparent 60%)' }} />
                     <div className="flex items-center justify-center mb-2.5">
                       <span className="flex items-center gap-1.5 text-[13px] font-black tracking-[.3px] px-3 py-1 rounded-full bg-red-500 text-white shadow-[0_0_12px_rgba(239,68,68,0.5)]">
