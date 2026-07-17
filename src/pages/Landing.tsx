@@ -386,6 +386,35 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Manchas — nuestra mascota */}
+      <section className="py-12 relative overflow-hidden">
+        <div className="absolute right-[10%] top-[-40%] w-[500px] h-[500px] rounded-full bg-gold/15 blur-[150px] pointer-events-none" />
+
+        <div className="max-w-[1280px] mx-auto px-8 relative">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <span className="w-1 h-6 rounded-full bg-gold" />
+              <div>
+                <span className="text-lg font-bold tracking-[1.4px] uppercase text-gold">Manchas</span>
+                <h2 className="font-[family-name:var(--font-display)] text-xl uppercase tracking-[.5px] text-[#4B2D7A] dark:text-gray-light">Nuestra <span className="text-gold">mascota</span></h2>
+              </div>
+            </div>
+          </div>
+
+          <div className="max-w-[1100px] mx-auto rounded-2xl bg-gradient-to-br from-gold/25 via-[#FBEBC9] to-gold/15 dark:from-[#2d1b4e]/40 dark:via-[#1a0f2e]/30 dark:to-[#0d0720]/40 backdrop-blur-[2px] border border-gold/30 p-6 md:p-8">
+            <div className="relative rounded-2xl overflow-hidden border border-gold/30">
+              <img src="/images/manchas-mascota.png" alt="Manchas, la mascota de TechCup, junto a la selección de fútbol de Ingeniería de Sistemas" className="w-full h-[340px] max-md:h-[300px] object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0A0614] via-[#0A0614]/40 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-7 z-10">
+                <span className="block text-[10px] tracking-[1.2px] text-gold font-bold uppercase mb-1">Mascota oficial</span>
+                <h3 className="font-[family-name:var(--font-display)] text-3xl uppercase text-white leading-tight">Manchas</h3>
+                <p className="text-[13px] text-white/70 mt-1 max-w-[520px]">La mascota oficial de TECH CUP y de la ECI, un símbolo de innovación, trabajo en equipo y pasión por el fútbol.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Últimos Partidos */}
       <section className="py-12 relative overflow-hidden">
         <div className="absolute left-[5%] top-[-60%] w-[400px] h-[400px] rounded-full bg-purple-mid/15 blur-[120px] pointer-events-none" />
