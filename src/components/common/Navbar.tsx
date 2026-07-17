@@ -36,17 +36,17 @@ export default function Navbar() {
         scrolled && 'bg-[#F0EDF7]/80 dark:bg-black/82 backdrop-blur-md border-[rgba(0,0,0,0.06)] dark:border-[rgba(255,255,255,0.08)] py-3'
       )}
     >
-      <div className="max-w-[1280px] mx-auto px-8 flex items-center justify-between gap-6">
+      <div className="max-w-[1280px] mx-auto px-0 flex items-center justify-between gap-6">
         {/* Brand */}
         <Link to="/" className="flex items-center gap-2.5">
           <div className="w-[34px] h-[34px] rounded-lg overflow-hidden bg-purple-black flex-shrink-0">
             <img src="/assets/logo.png" alt="TechCup" className="w-full h-full object-cover" />
           </div>
           <div className="flex flex-col leading-none">
-            <span className="font-[family-name:var(--font-display)] font-bold text-lg tracking-[.5px]">
-              TECH<span className="text-gold">CUP</span>
+            <span className="font-[family-name:var(--font-display)] font-black italic text-2xl tracking-[.5px]">
+              T<span className="text-gold">C</span>
             </span>
-            <span className="text-[8.5px] tracking-[1.6px] text-text-muted font-semibold">
+            <span className="text-[9px] tracking-[1.5px] text-text-muted/80 font-semibold mt-[3px] whitespace-nowrap">
               INGENIERÍA DE SISTEMAS
             </span>
           </div>
@@ -59,8 +59,8 @@ export default function Navbar() {
               <Link
                 to={link.href}
                 className={cn(
-                  'text-[13.5px] font-semibold tracking-[.4px] text-gray-light pb-1.5 border-b-2 border-transparent transition-colors hover:text-purple-mid',
-                  pathname === link.href && 'text-purple-mid border-gold'
+                  'text-[13.5px] font-semibold tracking-[.4px] text-gray-light pb-1.5 border-b-2 border-transparent transition-colors hover:text-gold',
+                  pathname === link.href && 'text-gold border-gold'
                 )}
               >
                 {link.label}
@@ -126,8 +126,8 @@ export default function Navbar() {
                   to={link.href}
                   onClick={() => setMobileOpen(false)}
                   className={cn(
-                    'text-sm font-semibold tracking-[.4px] text-gray-light transition-colors hover:text-purple-mid',
-                    pathname === link.href && 'text-purple-mid'
+                    'text-sm font-semibold tracking-[.4px] text-gray-light transition-colors hover:text-gold',
+                    pathname === link.href && 'text-gold'
                   )}
                 >
                   {link.label}
