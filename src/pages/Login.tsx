@@ -71,6 +71,45 @@ export default function Login() {
     setStep('login')
   }
 
+  const renderRoleCard = (role: typeof roleCards[number], i: number) => {
+    const Icon = role.icon
+    return (
+      <motion.button
+        key={role.id}
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: i * 0.1 }}
+        onClick={() => handleRoleContinue(role.shortName.toLowerCase())}
+        className="group relative flex items-stretch gap-0 rounded-[10px] overflow-hidden border border-gold/20 bg-black/60 hover:border-gold/50 transition-all duration-300 text-left w-full cursor-pointer"
+      >
+        {/* Imagen lateral */}
+        <div className="relative w-[120px] min-h-[140px] flex-shrink-0 overflow-hidden bg-black/80 flex items-center justify-center max-sm:hidden">
+          <img src={role.img} alt="" className="w-full h-full object-contain p-3 transition-transform duration-500 group-hover:scale-110" />
+          <div className="absolute inset-0" style={{ background: `linear-gradient(90deg, transparent 40%, rgba(0,0,0,0.8) 100%)` }} />
+        </div>
+        {/* Contenido */}
+        <div className="flex-1 p-4 flex flex-col justify-center relative">
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: 'linear-gradient(135deg, rgba(212,175,55,0.08), transparent)' }} />
+          <div className="relative z-10 flex items-start justify-between gap-4">
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1.5">
+                <Icon size={16} className="text-gold-ink" />
+                <span className="text-[10px] font-bold tracking-[1.6px] uppercase text-gold-ink">Rol</span>
+              </div>
+              <h3 className="font-[family-name:var(--font-display)] text-lg uppercase tracking-[.3px] text-white mb-1">{role.name}</h3>
+              <p className="text-xs text-gray-400 leading-relaxed">{role.desc}</p>
+            </div>
+            <div className="flex-shrink-0 mt-1">
+              <div className="w-9 h-9 rounded-[8px] flex items-center justify-center transition-all duration-300 group-hover:bg-gold/20 border border-gold/30">
+                <ChevronRight size={16} className="text-gold-ink" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.button>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-black flex relative overflow-hidden">
 
@@ -85,7 +124,7 @@ export default function Login() {
         <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
         <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-gold/5 blur-[60px]" />
         <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-gold/10 blur-[50px]" />
-        <div className="relative w-full max-w-[460px]">
+        <div className={`relative w-full transition-all duration-300 ${step === 'role' ? 'max-w-[820px]' : 'max-w-[460px]'}`}>
           {/* Back to home button */}
           <Link to="/" className="inline-flex items-center gap-2 px-4 py-2 rounded-[10px] bg-black/60 border border-gold/30 text-gold-ink hover:bg-gold/20 hover:text-white transition-all duration-300 text-sm font-semibold backdrop-blur-sm mb-10">
             <ArrowLeft size={16} /> Volver al inicio
@@ -109,45 +148,16 @@ export default function Login() {
                 <p className="text-sm text-gray-400">Selecciona cómo quieres ingresar al sistema.</p>
               </div>
 
-              <div className="flex flex-col gap-4">
-                {roleCards.map((role, i) => {
-                  const Icon = role.icon
-                  return (
-                    <motion.button
-                      key={role.id}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.1 }}
-                      onClick={() => handleRoleContinue(role.shortName.toLowerCase())}
-                      className="group relative flex items-stretch gap-0 rounded-[10px] overflow-hidden border border-gold/20 bg-black/60 hover:border-gold/50 transition-all duration-300 text-left w-full cursor-pointer"
-                    >
-                      {/* Imagen lateral */}
-                      <div className="relative w-[120px] min-h-[140px] flex-shrink-0 overflow-hidden bg-black/80 flex items-center justify-center max-sm:hidden">
-                        <img src={role.img} alt="" className="w-full h-full object-contain p-3 transition-transform duration-500 group-hover:scale-110" />
-                        <div className="absolute inset-0" style={{ background: `linear-gradient(90deg, transparent 40%, rgba(0,0,0,0.8) 100%)` }} />
-                      </div>
-                      {/* Contenido */}
-                      <div className="flex-1 p-4 flex flex-col justify-center relative">
-                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: 'linear-gradient(135deg, rgba(212,175,55,0.08), transparent)' }} />
-                        <div className="relative z-10 flex items-start justify-between gap-4">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1.5">
-                              <Icon size={16} className="text-gold-ink" />
-                              <span className="text-[10px] font-bold tracking-[1.6px] uppercase text-gold-ink">Rol</span>
-                            </div>
-                            <h3 className="font-[family-name:var(--font-display)] text-lg uppercase tracking-[.3px] text-white mb-1">{role.name}</h3>
-                            <p className="text-xs text-gray-400 leading-relaxed">{role.desc}</p>
-                          </div>
-                          <div className="flex-shrink-0 mt-1">
-                            <div className="w-9 h-9 rounded-[8px] flex items-center justify-center transition-all duration-300 group-hover:bg-gold/20 border border-gold/30">
-                              <ChevronRight size={16} className="text-gold-ink" />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </motion.button>
-                  )
-                })}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
+                {/* Izquierda — Jugador/Familiar y Administrador/Organizador, uno arriba y otro abajo */}
+                <div className="flex flex-col gap-4">
+                  {renderRoleCard(roleCards[0], 0)}
+                  {renderRoleCard(roleCards[1], 1)}
+                </div>
+                {/* Derecha — Árbitro, alineado hacia arriba */}
+                <div>
+                  {renderRoleCard(roleCards[2], 2)}
+                </div>
               </div>
             </motion.div>
           ) : (
