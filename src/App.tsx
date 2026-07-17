@@ -44,8 +44,6 @@ export default function App() {
       <ThemeProvider>
       <AuthProvider>
       <StarfieldBackground className="min-h-screen">
-      <div className="fixed inset-0 pointer-events-none z-0 dark:hidden" style={{ backgroundImage: 'url(/images/fondo-landing2-claro.png)', backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.45 }} />
-      <div className="fixed inset-0 pointer-events-none z-0 hidden dark:block" style={{ backgroundImage: 'url(/images/fondo-landing2.png)', backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.3 }} />
       <ErrorBoundary>
       <Routes>
         <Route path="/" element={<Landing />} />
