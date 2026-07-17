@@ -101,13 +101,9 @@ export default function Login() {
       {/* Left — panel negro-dorado */}
       <div className="relative z-10 w-full lg:w-[38%] flex items-center justify-center p-8 lg:p-16 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-black via-[#1a1a1a] to-black border-r border-gold/20" />
-        {/* Grid dots */}
-        <div className="absolute inset-0 opacity-[0.12]"
-          style={{
-            backgroundImage: 'radial-gradient(rgba(212,175,55,.15) 1px, transparent 1px)',
-            backgroundSize: '30px 30px',
-          }}
-        />
+        {/* Aurora dorado + violeta — mismo tratamiento que el hero de Landing */}
+        <div className="absolute inset-0 pointer-events-none opacity-60" style={{ background: 'radial-gradient(ellipse at 30% 40%, rgba(139,92,246,0.15) 0%, transparent 60%)' }} />
+        <div className="absolute inset-0 pointer-events-none opacity-40" style={{ background: 'radial-gradient(ellipse at 70% 60%, rgba(245,166,35,0.08) 0%, transparent 50%)' }} />
         {/* Brillo dorado sutil */}
         <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
         <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-gold/5 blur-[60px]" />
