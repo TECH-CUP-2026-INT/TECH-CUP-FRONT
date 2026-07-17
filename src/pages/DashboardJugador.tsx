@@ -5,7 +5,6 @@ import Sidebar from '@/components/common/Sidebar'
 import AppTopbar from '@/components/common/AppTopbar'
 import Footer from '@/components/common/Footer'
 import { Button } from '@/components/common/button'
-import { Input } from '@/components/common/input'
 import { SpotlightCard } from '@/components/common/spotlight-card'
 import { InteractiveHoverButton } from '@/components/common/interactive-hover-button'
 import { Badge } from '@/components/common/badge'
@@ -16,7 +15,7 @@ import FallingBalls from '@/components/FallingBalls'
 import { partidos, posiciones } from '@/services/partidos'
 import { torneos } from '@/services/torneos'
 import {
-  Camera, Lock, CheckCircle, X, CalendarDays, Trophy, Clock, MapPin, Download, Medal, Users, Package, QrCode, Check, RefreshCw, Swords, Shirt, Apple, Smartphone, Truck, ChevronRight, UserCheck, ClipboardList, Search, Plus, ArrowLeft, UserPlus, Send, Trash2, Edit3
+  X, CalendarDays, Trophy, Clock, MapPin, Download, Medal, Users, Package, QrCode, Check, RefreshCw, Swords, Shirt, Apple, Smartphone, Truck, ChevronRight, UserCheck, ClipboardList, Search, Plus, ArrowLeft, UserPlus, Send, Trash2, Edit3
 } from 'lucide-react'
 import type { Torneo } from '@/services/torneos'
 
@@ -63,11 +62,6 @@ export default function DashboardJugador() {
   const navigate = useNavigate()
   const { user, becomeCaptain } = useAuth()
 
-  const [editingProfile, setEditingProfile] = useState(false)
-  const [editName, setEditName] = useState(user?.name || '')
-  const [editProgram, setEditProgram] = useState('Ing. Sistemas')
-  const [editSemester, setEditSemester] = useState('6')
-  const [editSaved, setEditSaved] = useState(false)
   const [torneoModal, setTorneoModal] = useState<Torneo | null>(null)
   const [modalTab, setModalTab] = useState('info')
   const [browseTeamsOpen, setBrowseTeamsOpen] = useState(false)
@@ -90,16 +84,6 @@ export default function DashboardJugador() {
   const [dotacion, setDotacion] = useState(dotacionItems)
 
   const isCaptain = user?.isCaptain ?? false
-
-  const handleSaveProfile = () => {
-    if (user) {
-      const updated = { ...user, name: editName }
-      localStorage.setItem('techcup_user', JSON.stringify(updated))
-    }
-    localStorage.setItem('techcup_profile', JSON.stringify({ name: editName, program: editProgram, semester: editSemester }))
-    setEditSaved(true)
-    setTimeout(() => { setEditSaved(false); setEditingProfile(false) }, 1500)
-  }
 
   const handleCollapse = (val: boolean) => {
     setSidebarCollapsed(val)
@@ -139,22 +123,18 @@ export default function DashboardJugador() {
           <section className="rounded-2xl mb-[26px] relative overflow-hidden border border-purple-mid/30" style={{ minHeight: '280px' }}>
             <img src="/dash-board.jpg" alt="" className="absolute inset-0 w-full h-full" style={{ objectFit: 'cover', objectPosition: 'center center' }} />
             <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
-            <div className="relative z-10 flex items-center gap-6 flex-wrap px-10">
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold to-purple-mid flex items-center justify-center text-3xl font-bold text-white ring-2 ring-gold/40">
-                <span>7</span>
+            <div className="relative z-10 flex flex-col items-center justify-center gap-3 h-full min-h-[280px] px-10 w-fit">
+              <div className="w-28 h-28 rounded-full overflow-hidden ring-4 ring-gold/50 shadow-xl shadow-black/40 flex-shrink-0">
+                <Avatar className="w-full h-full">
+                  <AvatarImage src={user?.avatar || ''} alt="" className="w-full h-full object-cover" />
+                  <AvatarFallback className="w-full h-full flex items-center justify-center text-3xl font-bold text-white bg-gradient-to-br from-gold to-purple-mid">7</AvatarFallback>
+                </Avatar>
               </div>
-              <div className="flex-1">
-                <h2 className="text-xl font-bold text-white">{user?.name || 'Juan Camilo Rivera'}</h2>
-                <p className="text-sm text-gold/70">Delantero · Camiseta #7{isCaptain ? ` · ${MI_EQUIPO.emoji} Capitán de ${MI_EQUIPO.nombre}` : ''}</p>
-                <div className="flex gap-4 mt-2 text-xs text-text-muted">
-                  <span>⚽ 12 goles</span>
-                  <span>📋 8 partidos</span>
-                  <span>🟨 2 tarjetas</span>
-                </div>
+              <div className="text-center">
+                <h2 className="text-2xl font-bold text-white leading-tight">{user?.name || 'Juan Camilo Rivera'}</h2>
+                <p className="text-sm text-gold font-semibold uppercase tracking-[.4px] mt-1.5">Delantero</p>
+                <p className="text-[13px] text-white/50 mt-1">Camiseta #7{isCaptain ? ` · ${MI_EQUIPO.emoji} Capitán de ${MI_EQUIPO.nombre}` : ''}</p>
               </div>
-              <Button onClick={() => { setEditingProfile(true); setEditName(user?.name || '') }} className="rounded-full bg-gold/10 border border-purple-mid/40 text-gold hover:bg-gold/20 text-sm">
-                Editar perfil
-              </Button>
             </div>
           </section>
 
@@ -570,74 +550,6 @@ export default function DashboardJugador() {
         <Footer />
       </div>
       <ManchasFloating />
-
-      {/* Modal editar perfil */}
-      <AnimatePresence>
-        {editingProfile && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
-            onClick={() => setEditingProfile(false)}
-          >
-            <motion.div initial={{ opacity: 0, scale: 0.92, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.92, y: 20 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="bg-black/60 backdrop-blur-lg border border-purple-mid/40 rounded-3xl w-full max-w-lg shadow-2xl shadow-gold/10 p-6"
-              onClick={e => e.stopPropagation()}
-            >
-              <div className="flex items-center justify-between mb-5">
-                <h2 className="font-[family-name:var(--font-display)] text-xl uppercase tracking-[.5px] text-white">Editar <span className="text-gold">perfil</span></h2>
-                <button onClick={() => setEditingProfile(false)} className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-red-500/20 hover:border-red-500/30 transition-colors"><X size={16} className="text-gray-light" /></button>
-              </div>
-              <div className="flex items-center gap-4 mb-6">
-                <div className="relative">
-                  <div className="w-16 h-16 rounded-full overflow-hidden ring-2 ring-gold/40">
-                      <Avatar className="w-full h-full">
-                        <AvatarImage src={user?.avatar || ''} alt="" className="w-full h-full object-cover" />
-                        <AvatarFallback className="text-sm font-bold">{(user?.name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()}</AvatarFallback>
-                      </Avatar>
-                    </div>
-                  <button className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-purple-mid border-2 border-black flex items-center justify-center"><Camera size={10} className="text-white" /></button>
-                </div>
-                <div className="text-sm">
-                  <p className="font-semibold text-white">{user?.name || 'Usuario'}</p>
-                  <p className="text-xs text-gold/60 capitalize">{user?.role || 'jugador'}{user?.isCaptain ? ' · Capitán' : ''}</p>
-                </div>
-              </div>
-              <div className="space-y-4 mb-6">
-                <div>
-                  <label className="block text-xs text-gold/60 font-semibold uppercase tracking-[.4px] mb-1.5">Nombre completo</label>
-                  <Input value={editName} onChange={e => setEditName(e.target.value)} className="bg-black/40 border-purple-mid/30 text-white rounded-xl h-11 focus-visible:border-gold" />
-                </div>
-                <div className="relative">
-                  <label className="block text-xs text-gold/60 font-semibold uppercase tracking-[.4px] mb-1.5">Correo</label>
-                  <Input defaultValue={user?.email || 'correo@escuelaing.edu.co'} className="bg-black/40 border-purple-mid/30 text-white/60 rounded-xl h-11 pr-10" disabled />
-                  <Lock size={14} className="absolute right-3 top-[38px] text-text-faint" />
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs text-gold/60 font-semibold uppercase tracking-[.4px] mb-1.5">Programa</label>
-                    <select value={editProgram} onChange={e => setEditProgram(e.target.value)} className="w-full bg-black/40 border border-purple-mid/30 text-white rounded-xl h-11 px-3 text-sm outline-none focus:border-gold">
-                      <option>Ing. Sistemas</option><option>Ing. Industrial</option><option>Ing. Civil</option><option>Matemáticas</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gold/60 font-semibold uppercase tracking-[.4px] mb-1.5">Semestre</label>
-                    <select value={editSemester} onChange={e => setEditSemester(e.target.value)} className="w-full bg-black/40 border border-purple-mid/30 text-white rounded-xl h-11 px-3 text-sm outline-none focus:border-gold">
-                      {[1,2,3,4,5,6,7,8,9,10].map(s => <option key={s} value={s}>{s}°</option>)}
-                    </select>
-                  </div>
-                </div>
-              </div>
-              {editSaved && (
-                <div className="flex items-center gap-2 text-sm text-green-400 bg-green-500/10 border border-green-500/20 rounded-xl px-4 py-3 mb-4"><CheckCircle size={16} /> Cambios guardados</div>
-              )}
-              <div className="flex gap-3 justify-end">
-                <Button variant="outline" onClick={() => setEditingProfile(false)} className="rounded-full bg-white/5 backdrop-blur-md border border-purple-mid/40 text-gold hover:bg-gold/15 hover:border-gold/60 hover:text-white h-11 px-6 text-sm">Cancelar</Button>
-                <Button onClick={handleSaveProfile} className="rounded-full bg-gold/15 backdrop-blur-md border border-gold/40 text-gold hover:bg-gold/25 hover:text-white shadow-lg shadow-gold/10 font-bold h-11 px-6 text-sm">Guardar cambios</Button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Modal detalle torneo (simplificado) */}
       {torneoModal && (
