@@ -149,7 +149,7 @@ export default function Landing() {
           <div className="grid grid-cols-[1fr_1fr] gap-14 items-center w-full max-lg:grid-cols-1 max-lg:text-center relative z-[2]">
             {/* Imagen — IZQUIERDA */}
             <motion.div initial={{ opacity: 0, x: -60 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5, duration: 0.8, ease: 'easeOut' }} className="relative flex items-center justify-center max-lg:hidden">
-              <div className="relative w-full max-w-[520px] aspect-[4/3]">
+              <div className="relative w-full max-w-[700px] aspect-[4/3]">
                 <AnimatePresence mode="wait">
                   <motion.img
                     key={heroImg}
@@ -184,8 +184,8 @@ export default function Landing() {
 
             {/* Texto — DERECHA */}
             <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.8, ease: 'easeInOut' }}>
-              <div className="overflow-hidden pb-2 mb-4">
-                <motion.h1 initial={{ y: 100 }} animate={{ y: 0 }} transition={{ delay: 0.5, duration: 0.6, ease: 'easeOut' }} className="font-[family-name:var(--font-display-alt)] font-bold text-[clamp(52px,7vw,92px)] leading-[1.15] tracking-[.5px] uppercase italic">                  <span className="text-[#3D1A6B] dark:text-[#F7EDE2]">TECH</span>
+              <div className="overflow-hidden pb-4 mb-4">
+                <motion.h1 initial={{ y: 100 }} animate={{ y: 0 }} transition={{ delay: 0.5, duration: 0.6, ease: 'easeOut' }} className="font-[family-name:var(--font-display-alt)] font-bold text-[clamp(52px,7vw,92px)] leading-[1.3] tracking-[.5px] uppercase italic">                  <span className="text-[#3D1A6B] dark:text-[#F7EDE2]">TECH</span>
                   <span style={{ background: 'linear-gradient(135deg, #A5610A 0%, #BD7712 25%, #F5A623 50%, #FBC946 75%, #FBD559 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>CUP</span>
                 </motion.h1>
               </div>
@@ -227,65 +227,65 @@ export default function Landing() {
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }} className="bg-[#E8DFF5]/70 dark:bg-black/30 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-white/5 rounded-2xl p-[40px] overflow-hidden">
             <div className="flex gap-8 max-lg:flex-col">
               {/* Imagen grande */}
-              <div className="flex-[1.6] relative min-h-[420px] rounded-xl overflow-hidden">
-                {activeFeature === 0 ? (
-                  <img src="/images/feature-torneos.png" alt="" className="absolute inset-0 w-full h-full object-contain" />
-                ) : activeFeature === 1 ? (
-                  <img src="/images/feature-equipos.png" alt="" className="absolute inset-0 w-full h-full object-contain" />
-                ) : activeFeature === 2 ? (
-                  <img src="/images/feature-calendario.png" alt="" className="absolute inset-0 w-full h-full object-contain" />
-                ) : activeFeature === 3 ? (
-                  <img src="/images/feature-estadisticas.png" alt="" className="absolute inset-0 w-full h-full object-contain" />
-                ) : (
-                  <>
-                <img src="/images/mosaico1.png" alt="" className="absolute inset-0 w-full h-full object-cover" />
-                <div className="absolute inset-0" style={{ backgroundImage: 'url(/images/copa%20y%20manchas.png)', backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center bottom' }} />
-                {/* Mosaico 2x2 con las 4 fotos — más grande */}
-                <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 gap-1 p-1">
-                  {['landing-mosaico-1', 'landing-mosaico-2', 'landing-mosaico-3', 'landing-mosaico-4'].map((img, idx) => (
-                    <div key={idx} className="relative overflow-hidden rounded-lg group cursor-pointer">
-                      <img src={`/images/${img}.jpeg`} alt="" className="w-full h-full object-cover transition-all duration-300 group-hover:scale-105" />
-                      <div className="absolute inset-0 transition-all duration-300 opacity-0 group-hover:opacity-100" style={{ background: 'linear-gradient(135deg, #E7A017 0%, rgba(231,160,23,0.3) 100%)' }} />
-                    </div>
-                  ))}
-                </div>
-                  </>
-                )}
-                <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: featureSlides[activeFeature].color }} />
-                    <span className="text-xs font-bold tracking-[1.6px] uppercase text-white/70">Funcionalidad</span>
-                  </div>
-                  <h3 className="font-[family-name:var(--font-display)] text-3xl uppercase text-white mb-2">{featureSlides[activeFeature].title}</h3>
-                  <p className="text-base text-white/70 max-w-[450px]">{featureSlides[activeFeature].desc}</p>
-                </div>
-              </div>
-              {/* Thumbnails — estilo cards */}
-              <div className="flex-[0.8] flex flex-col gap-4 justify-center">
-                <div className="flex flex-col gap-4">
-                {featureSlides.map((f, i) => {
-                  const Icon = f.icon
-                  return (
-                  <button key={i} onClick={() => setActiveFeature(i)} className={`feature-card relative flex items-center gap-6 p-4 rounded-xl bg-[#130B24] border cursor-pointer overflow-hidden group transition-all duration-300 ${i === activeFeature ? 'border-[#FFD700] shadow-[0_0_20px_rgba(255,215,0,0.15)]' : 'border-[#2A1A4A]/80 hover:border-[#D4AF37] hover:shadow-[0_0_15px_rgba(212,175,55,0.12)]'}`}>
-                    {/* Active left indicator */}
-                    {i === activeFeature && (
-                      <div className="absolute left-0 top-[20%] h-[60%] w-[4px] bg-[#FFD700] rounded-r-sm shadow-[0_0_10px_#FFD700]" />
+              <div className="flex-[1.6] relative min-h-[420px] rounded-xl overflow-hidden order-1 lg:order-2">
+                <AnimatePresence mode="wait">
+                  <motion.div key={activeFeature} initial={{ opacity: 0, scale: 1.03 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} transition={{ duration: 0.35, ease: 'easeInOut' }} className="absolute inset-0">
+                    {activeFeature === 0 ? (
+                      <img src="/images/feature-torneos.png" alt="" className="absolute inset-0 w-full h-full object-contain" />
+                    ) : activeFeature === 1 ? (
+                      <img src="/images/feature-equipos.png" alt="" className="absolute inset-0 w-full h-full object-contain" />
+                    ) : activeFeature === 2 ? (
+                      <img src="/images/feature-calendario.png" alt="" className="absolute inset-0 w-full h-full object-contain" />
+                    ) : (
+                      <img src="/images/feature-estadisticas.png" alt="" className="absolute inset-0 w-full h-full object-contain" />
                     )}
-                    {/* Background subtle highlight */}
-                    <div className={`absolute inset-0 bg-gradient-to-r from-[#FFD700]/5 to-transparent transition-opacity ${i === activeFeature ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
-                    {/* Icon container */}
-                    <div className="relative z-10 w-[84px] h-[84px] flex-shrink-0 rounded-xl flex items-center justify-center border border-white/5" style={{ background: 'linear-gradient(180deg, rgba(30,15,60,1) 0%, rgba(20,10,40,1) 100%)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 10px rgba(0,0,0,0.5)' }}>
-                      <Icon className="w-8 h-8 text-[#FFD700]" style={{ filter: 'drop-shadow(0 0 8px rgba(255,215,0,0.5))' }} />
-                      <div className="absolute -bottom-[2px] left-[20%] w-[60%] h-[2px] rounded-full" style={{ background: 'linear-gradient(90deg, transparent, #FFD700, transparent)', opacity: 0.8, filter: 'blur(2px)' }} />
+                    <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: featureSlides[activeFeature].color }} />
+                        <span className="text-xs font-bold tracking-[1.6px] uppercase text-white/70">Funcionalidad</span>
+                      </div>
+                      <h3 className="font-[family-name:var(--font-display)] text-3xl uppercase text-white mb-2">{featureSlides[activeFeature].title}</h3>
+                      <p className="text-base text-white/70 max-w-[450px]">{featureSlides[activeFeature].desc}</p>
                     </div>
-                    {/* Text */}
-                    <div className="flex-1 relative z-10 py-1 text-left">
-                      <h4 className="text-xl font-semibold mb-1 tracking-wide" style={{ background: 'linear-gradient(to right, #FFE066, #FFB300)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>{f.title}</h4>
-                      <p className="text-sm text-[#A592C4] leading-relaxed">{f.desc}</p>
-                    </div>
-                  </button>
-                  )
-                })}
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+              {/* Thumbnails — solo los torneos que no están en primer plano */}
+              <div className="flex-[0.8] flex flex-col gap-4 justify-center order-2 lg:order-1">
+                <div className="flex flex-col gap-4">
+                <AnimatePresence mode="popLayout">
+                {featureSlides
+                  .map((f, i) => ({ ...f, i }))
+                  .filter(item => item.i !== activeFeature)
+                  .map(item => {
+                    const Icon = item.icon
+                    return (
+                    <motion.button
+                      key={item.i}
+                      layout
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      transition={{ duration: 0.3, ease: 'easeInOut' }}
+                      onClick={() => setActiveFeature(item.i)}
+                      className="feature-card relative flex items-center gap-6 p-4 rounded-xl bg-[#F3EEFF] dark:bg-[#130B24] border cursor-pointer overflow-hidden group transition-colors duration-300 border-[#D4C8E8]/60 dark:border-[#2A1A4A]/80 hover:border-[#D4AF37] hover:shadow-[0_0_15px_rgba(212,175,55,0.12)]"
+                    >
+                      {/* Background subtle highlight */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#FFD700]/5 to-transparent transition-opacity opacity-0 group-hover:opacity-100" />
+                      {/* Icon container */}
+                      <div className="relative z-10 w-[84px] h-[84px] flex-shrink-0 rounded-xl flex items-center justify-center border border-white/5" style={{ background: 'linear-gradient(180deg, rgba(30,15,60,1) 0%, rgba(20,10,40,1) 100%)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 10px rgba(0,0,0,0.5)' }}>
+                        <Icon className="w-8 h-8 text-[#FFD700]" style={{ filter: 'drop-shadow(0 0 8px rgba(255,215,0,0.5))' }} />
+                        <div className="absolute -bottom-[2px] left-[20%] w-[60%] h-[2px] rounded-full" style={{ background: 'linear-gradient(90deg, transparent, #FFD700, transparent)', opacity: 0.8, filter: 'blur(2px)' }} />
+                      </div>
+                      {/* Text */}
+                      <div className="flex-1 relative z-10 py-1 text-left">
+                        <h4 className="text-xl font-semibold mb-1 tracking-wide bg-gradient-to-r from-[#8B5A00] to-[#A5610A] dark:from-[#FFE066] dark:to-[#FFB300] bg-clip-text text-transparent">{item.title}</h4>
+                        <p className="text-sm text-[#6B5A94] dark:text-[#A592C4] leading-relaxed">{item.desc}</p>
+                      </div>
+                    </motion.button>
+                    )
+                  })}
+                </AnimatePresence>
               </div>
             </div>
             </div>
@@ -318,7 +318,7 @@ export default function Landing() {
 
           {/* Sub-header removed — está dentro del right column */}
 
-          <div className="max-w-[1100px] mx-auto">
+          <div className="max-w-[1100px] mx-auto rounded-2xl bg-gradient-to-br from-purple-mid/25 via-[#E4D6FA] to-purple-mid/15 dark:from-[#2d1b4e]/40 dark:via-[#1a0f2e]/30 dark:to-[#0d0720]/40 backdrop-blur-[2px] border border-purple-mid/30 p-6 md:p-8">
             {/* Carrusel — torneo activo en primer plano */}
               <div className="relative">
                 <div className="relative rounded-2xl overflow-hidden border border-purple-mid/30 h-[340px] max-md:h-[300px]">
@@ -366,10 +366,10 @@ export default function Landing() {
                 </div>
 
                 {/* Flechas */}
-                <button onClick={prevTorneo} aria-label="Torneo anterior" className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/40 hover:bg-purple-mid text-white flex items-center justify-center backdrop-blur-sm transition-colors">
+                <button onClick={prevTorneo} aria-label="Torneo anterior" className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/70 hover:bg-purple-mid text-[#4B2D7A] hover:text-white dark:bg-black/40 dark:text-white flex items-center justify-center backdrop-blur-sm transition-colors">
                   <ChevronLeft size={20} />
                 </button>
-                <button onClick={nextTorneo} aria-label="Siguiente torneo" className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/40 hover:bg-purple-mid text-white flex items-center justify-center backdrop-blur-sm transition-colors">
+                <button onClick={nextTorneo} aria-label="Siguiente torneo" className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/70 hover:bg-purple-mid text-[#4B2D7A] hover:text-white dark:bg-black/40 dark:text-white flex items-center justify-center backdrop-blur-sm transition-colors">
                   <ChevronRight size={20} />
                 </button>
 
@@ -396,7 +396,7 @@ export default function Landing() {
         <div className="max-w-[1280px] mx-auto px-8 space-y-8">
 
           {/* ── Recuadro: Resultados en vivo ── */}
-          <div className="relative rounded-2xl bg-gradient-to-br from-[#2d1b4e]/40 via-[#1a0f2e]/30 to-[#0d0720]/40 backdrop-blur-[2px] border border-gold/20 overflow-hidden p-6 md:p-8">
+          <div className="relative rounded-2xl bg-gradient-to-br from-gold/25 via-[#FBEBC9] to-gold/15 dark:from-[#2d1b4e]/40 dark:via-[#1a0f2e]/30 dark:to-[#0d0720]/40 backdrop-blur-[2px] border border-gold/30 overflow-hidden p-6 md:p-8">
             <div className="absolute -top-[30%] -left-[10%] w-[250px] h-[250px] rounded-full bg-purple-mid/10 blur-[100px] pointer-events-none" />
             <div className="absolute -bottom-[30%] -right-[10%] w-[200px] h-[200px] rounded-full bg-gold/10 blur-[80px] pointer-events-none" />
 
@@ -408,8 +408,8 @@ export default function Landing() {
               </div>
             </div>
 
-            <div className="relative z-10 overflow-hidden mx-auto" style={{ maxWidth: 'calc(240px * 3 + 1rem * 2)' }}>
-              <Marquee speed={35} pauseOnHover={true}>
+            <div className="relative z-10 overflow-hidden">
+              <Marquee speed={22} pauseOnHover={true}>
                 {[
                   { eq1:'Ing. Mecánica', eq2:'Ing. Eléctrica', score:'1 - 1', estado:"42'", color:'#3B82F6' },
                   { eq1:'Ing. Estadística', eq2:'Ing. Sistemas', score:'0 - 0', estado:"18'", color:'#06B6D4' },
@@ -445,7 +445,7 @@ export default function Landing() {
           </div>
 
           {/* ── Recuadro: Partidos finalizados ── */}
-          <div className="relative rounded-2xl bg-gradient-to-br from-[#2d1b4e]/40 via-[#1a0f2e]/30 to-[#0d0720]/40 backdrop-blur-[2px] border border-purple-mid/20 overflow-hidden p-6 md:p-8">
+          <div className="relative rounded-2xl bg-gradient-to-br from-purple-mid/25 via-[#E4D6FA] to-purple-mid/15 dark:from-[#2d1b4e]/40 dark:via-[#1a0f2e]/30 dark:to-[#0d0720]/40 backdrop-blur-[2px] border border-purple-mid/30 overflow-hidden p-6 md:p-8">
             <div className="absolute -top-[30%] -left-[10%] w-[250px] h-[250px] rounded-full bg-purple-mid/10 blur-[100px] pointer-events-none" />
             <div className="absolute -bottom-[30%] -right-[10%] w-[200px] h-[200px] rounded-full bg-purple-mid/10 blur-[80px] pointer-events-none" />
 
@@ -457,8 +457,8 @@ export default function Landing() {
               </div>
             </div>
 
-            <div className="relative z-10 overflow-hidden mx-auto" style={{ maxWidth: 'calc(240px * 3 + 1rem * 2)' }}>
-              <Marquee speed={35} pauseOnHover={true}>
+            <div className="relative z-10 overflow-hidden">
+              <Marquee speed={22} pauseOnHover={true}>
                 {[
                   { eq1:'Ing. Sistemas', eq2:'Ing. Civil', score:'3 - 0', estado:'Final', color:'#8B5CF6' },
                   { eq1:'Ing. Industrial', eq2:'Ing. Mecánica', score:'2 - 2', estado:'Final', color:'#6D28D9' },
