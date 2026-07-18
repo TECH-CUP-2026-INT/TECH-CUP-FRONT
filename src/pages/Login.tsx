@@ -135,7 +135,7 @@ export default function Login() {
       {/* Izquierda — imagen de roles, solo en el paso de selección de rol */}
       {step === 'role' && (
         <div className="block relative w-1/2 min-w-[320px] overflow-hidden bg-black">
-          <img src="/images/bg-roles.png" alt="" className="absolute inset-0 w-full h-full object-cover" />
+          <img src="/images/bg-roles.png" alt="" className="absolute inset-0 w-full h-full object-contain object-center" />
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/10 to-black/50" />
         </div>
       )}
