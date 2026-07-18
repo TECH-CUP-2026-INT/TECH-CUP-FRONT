@@ -8,7 +8,12 @@
  *    desde datos mock hasta que el servicio los incluya
  */
 
-import { getPartidosApi } from '@/api/partidos'
+import {
+  getPartidosApi,
+  updatePartidoApi,
+  deletePartidoApi,
+  type UpdateMatchRequest,
+} from '@/api/partidos'
 import type { Partido, Posicion, CreateMatchRequest, CreateMatchResponse } from '@/api/tipos'
 
 // ─── Mock data (fallback + enrichment) ───────────────────────
@@ -129,5 +134,60 @@ export async function crearPartido(data: CreateMatchRequest): Promise<CreateMatc
     scheduledDate: data.scheduledDate,
     status: 'SCHEDULED',
     message: 'Partido creado exitosamente (mock)',
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CRUD NUEVO: Update (resultado/estado) + Delete
+// ═══════════════════════════════════════════════════════════════
+
+/**
+ * Actualiza el resultado, estado o datos de un partido.
+ */
+export async function actualizarPartido(
+  matchId: string,
+  data: UpdateMatchRequest
+): Promise<boolean> {
+  try {
+    await updatePartidoApi(matchId, data)
+    // Reflejar el cambio en el array local
+    const idx = _partidos.findIndex(p => p.id === matchId)
+    if (idx >= 0) {
+      if (data.homeScore !== undefined) _partidos[idx].homeScore = data.homeScore
+      if (data.awayScore !== undefined) _partidos[idx].awayScore = data.awayScore
+      if (data.status) _partidos[idx].status = data.status
+    }
+    return true
+  } catch (error) {
+    console.warn('[partidos] API update falló, actualizando solo local:', error)
+    // Fallback local
+    const idx = _partidos.findIndex(p => p.id === matchId)
+    if (idx >= 0) {
+      if (data.homeScore !== undefined) _partidos[idx].homeScore = data.homeScore
+      if (data.awayScore !== undefined) _partidos[idx].awayScore = data.awayScore
+      if (data.status) _partidos[idx].status = data.status
+      return true
+    }
+    return false
+  }
+}
+
+/**
+ * Elimina/cancela un partido.
+ */
+export async function eliminarPartido(matchId: string): Promise<boolean> {
+  try {
+    await deletePartidoApi(matchId)
+    const idx = _partidos.findIndex(p => p.id === matchId)
+    if (idx >= 0) _partidos.splice(idx, 1)
+    return true
+  } catch (error) {
+    console.warn('[partidos] API delete falló, eliminando solo local:', error)
+    const idx = _partidos.findIndex(p => p.id === matchId)
+    if (idx >= 0) {
+      _partidos.splice(idx, 1)
+      return true
+    }
+    return false
   }
 }

@@ -16,9 +16,13 @@ import {
   getRegisteredTeamsApi,
   enrollTeamApi,
   getTeamInfoApi,
+  updateTeamApi,
+  deleteTeamApi,
+  removeMemberApi,
   type ApiTeam,
   type ApiRegisteredTeam,
   type ApiInvitation,
+  type UpdateTeamRequest,
 } from '@/api/equipos'
 import type {
   EquipoDisplay,
@@ -264,5 +268,72 @@ function mapInvitacion(api: ApiInvitation): InvitacionDisplay {
         ? 'aceptada'
         : 'rechazada',
     createdAt: api.createdAt,
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CRUD NUEVO: Update + Delete
+// ═══════════════════════════════════════════════════════════════
+
+/**
+ * Actualiza los datos de un equipo.
+ */
+export async function actualizarEquipo(
+  teamId: string,
+  data: UpdateTeamRequest
+): Promise<EquipoDisplay | null> {
+  try {
+    const result = await updateTeamApi(teamId, data)
+    // Reflejar en array local
+    const idx = _equipos.findIndex(e => e.id === teamId)
+    if (idx >= 0) {
+      if (data.name) _equipos[idx].nombre = data.name
+      if (data.colors) _equipos[idx].colores = data.colors
+    }
+    if (_miEquipo?.id === teamId) {
+      if (data.name) _miEquipo.nombre = data.name
+      if (data.colors) _miEquipo.colores = data.colors
+    }
+    return {
+      id: result.id,
+      nombre: result.name,
+      colores: result.colors,
+      miembros: result.memberCount,
+    }
+  } catch (error) {
+    console.warn('[equipos] API update falló:', error)
+    return null
+  }
+}
+
+/**
+ * Elimina un equipo.
+ */
+export async function eliminarEquipo(teamId: string): Promise<boolean> {
+  try {
+    await deleteTeamApi(teamId)
+    const idx = _equipos.findIndex(e => e.id === teamId)
+    if (idx >= 0) _equipos.splice(idx, 1)
+    if (_miEquipo?.id === teamId) _miEquipo = null
+    return true
+  } catch (error) {
+    console.warn('[equipos] API delete falló:', error)
+    return false
+  }
+}
+
+/**
+ * Expulsa un miembro del equipo.
+ */
+export async function expulsarMiembro(
+  teamId: string,
+  memberId: string
+): Promise<boolean> {
+  try {
+    await removeMemberApi(teamId, memberId)
+    return true
+  } catch (error) {
+    console.warn('[equipos] API remove member falló:', error)
+    return false
   }
 }

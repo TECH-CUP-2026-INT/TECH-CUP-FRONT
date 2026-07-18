@@ -7,7 +7,7 @@
  *   POST /api/partidos           → crear un nuevo partido
  */
 
-import { apiGet, apiPost } from './client'
+import { apiGet, apiPost, apiPut, apiDelete } from './client'
 import type { MatchSummaryAPI, MatchDetailAPI, CreateMatchRequest, CreateMatchResponse } from './tipos'
 
 // Siempre via APIM — el client.ts ya apunta a https://techapi.azure-api.net
@@ -45,4 +45,45 @@ export async function crearPartidoApi(
     scheduledDate: data.scheduledDate,
     venue: data.venue,
   })
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CRUD NUEVO: Update (resultado/estado) + Delete
+// ═══════════════════════════════════════════════════════════════
+
+export interface UpdateMatchRequest {
+  homeScore?: number
+  awayScore?: number
+  status?: 'SCHEDULED' | 'IN_PROGRESS' | 'PAUSED' | 'FINISHED'
+  currentMinute?: number
+  currentPeriod?: string
+  refereeId?: string
+  venue?: string
+  scheduledDate?: string
+}
+
+export interface UpdateMatchResponse {
+  id: string
+  message: string
+}
+
+/**
+ * Actualiza un partido (resultado, estado, minuto, etc.).
+ * PUT /api/v1/matches/{matchId}
+ */
+export async function updatePartidoApi(
+  matchId: string,
+  data: UpdateMatchRequest
+): Promise<UpdateMatchResponse> {
+  return apiPut<UpdateMatchResponse>(`${MATCHES_PATH}/${matchId}`, data)
+}
+
+/**
+ * Elimina/cancela un partido.
+ * DELETE /api/v1/matches/{matchId}
+ */
+export async function deletePartidoApi(
+  matchId: string
+): Promise<{ message: string }> {
+  return apiDelete<{ message: string }>(`${MATCHES_PATH}/${matchId}`)
 }

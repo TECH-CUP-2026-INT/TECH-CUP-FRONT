@@ -117,4 +117,17 @@ export async function apiPut<T>(path: string, body: unknown): Promise<T> {
   return res.data
 }
 
+export async function apiPatch<T>(path: string, body: unknown): Promise<T> {
+  const res = await api.patch<T>(path, body)
+  return res.data
+}
+
+/**
+ * DELETE request.
+ */
+export async function apiDelete<T>(path: string): Promise<T> {
+  const res = await api.delete<T>(path)
+  return res.data
+}
+
 export default api

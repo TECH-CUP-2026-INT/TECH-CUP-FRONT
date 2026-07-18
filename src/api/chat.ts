@@ -1,4 +1,4 @@
-import { apiGet, apiPost, CHAT_SERVICE_PREFIX } from './client'
+import { apiGet, apiPost, apiPut, apiDelete, CHAT_SERVICE_PREFIX } from './client'
 
 export type ChatType = 'DIRECT' | 'GROUP' | 'SUPPORT'
 export type ChatStatus = 'OPEN' | 'CLOSED'
@@ -80,4 +80,24 @@ export function addTeamChatParticipant(
     userId,
     role,
   })
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CRUD NUEVO: Cerrar chat + Eliminar mensaje
+// ═══════════════════════════════════════════════════════════════
+
+/**
+ * Cierra un chat (lo marca como CLOSED).
+ * PUT /api/v1/communications/chats/{chatId}/close
+ */
+export function closeChatApi(chatId: string): Promise<Chat> {
+  return apiPut<Chat>(`${CHAT_SERVICE_PREFIX}/chats/${chatId}/close`, {})
+}
+
+/**
+ * Elimina un mensaje del chat.
+ * DELETE /api/v1/communications/messages/{messageId}
+ */
+export function deleteMessageApi(messageId: string): Promise<{ message: string }> {
+  return apiDelete<{ message: string }>(`${CHAT_SERVICE_PREFIX}/messages/${messageId}`)
 }

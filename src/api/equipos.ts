@@ -20,7 +20,7 @@
  *   GET    /teams/by-player/{playerId}/active-tournament → torneo activo
  */
 
-import api, { apiGet, apiPost } from './client'
+import api, { apiGet, apiPost, apiPut, apiDelete } from './client'
 import type { UUID } from './tipos'
 
 // ─── Base path via APIM ──────────────────────────────────────
@@ -296,4 +296,46 @@ export async function getTeamRosterApi(
   return apiGet<ApiTeamRoster>(
     `/api/v1/Teams/teams/by-player/${playerId}/roster`
   )
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CRUD NUEVO: Update + Delete
+// ═══════════════════════════════════════════════════════════════
+
+export interface UpdateTeamRequest {
+  name?: string
+  colors?: string
+  captainName?: string
+}
+
+/**
+ * Actualiza los datos de un equipo (nombre, colores, capitán).
+ * PUT /api/v1/teams/{teamId}
+ */
+export async function updateTeamApi(
+  teamId: UUID,
+  data: UpdateTeamRequest
+): Promise<ApiTeam> {
+  return apiPut<ApiTeam>(`${BASE}/teams/${teamId}`, data)
+}
+
+/**
+ * Elimina un equipo.
+ * DELETE /api/v1/teams/{teamId}
+ */
+export async function deleteTeamApi(
+  teamId: UUID
+): Promise<{ message: string }> {
+  return apiDelete<{ message: string }>(`${BASE}/teams/${teamId}`)
+}
+
+/**
+ * Expulsa un miembro del equipo (solo capitán/organizador).
+ * DELETE /api/v1/teams/{teamId}/members/{memberId}
+ */
+export async function removeMemberApi(
+  teamId: UUID,
+  memberId: UUID
+): Promise<{ message: string }> {
+  return apiDelete<{ message: string }>(`${BASE}/teams/${teamId}/members/${memberId}`)
 }

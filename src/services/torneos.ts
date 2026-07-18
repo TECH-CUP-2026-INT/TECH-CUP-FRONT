@@ -9,7 +9,13 @@
  * TODO: Cuando todas las páginas migren a fetchTorneos(), eliminar el mock por defecto.
  */
 
-import { getTorneosActivos as apiGetTorneosActivos, getTorneoPorId as apiGetTorneoPorId } from '@/api/torneos'
+import {
+  getTorneosActivos as apiGetTorneosActivos,
+  getTorneoPorId as apiGetTorneoPorId,
+  updateTorneoApi,
+  deleteTorneoApi,
+  type UpdateTorneoRequest,
+} from '@/api/torneos'
 
 export type { EstadoTorneo, Categoria, Torneo } from '@/api/tipos'
 import type { Torneo } from '@/api/tipos'
@@ -140,5 +146,75 @@ export async function getTorneoPorId(id: string): Promise<Torneo | undefined> {
     return await apiGetTorneoPorId(id)
   } catch {
     return undefined
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CRUD NUEVO: Update + Delete
+// ═══════════════════════════════════════════════════════════════
+
+/**
+ * Actualiza un torneo. Si el API falla, lo hace en localStorage.
+ */
+export async function actualizarTorneo(
+  id: string,
+  data: UpdateTorneoRequest
+): Promise<Torneo | null> {
+  try {
+    const result = await updateTorneoApi(id, data)
+    // Actualizar en el array local
+    const idx = _torneos.findIndex(t => t.id === id)
+    if (idx >= 0) {
+      _torneos[idx] = { ..._torneos[idx], ...data }
+    }
+    return result
+  } catch (error) {
+    console.warn('[torneos] API update falló, actualizando solo local:', error)
+    // Fallback: actualizar en localStorage
+    const idx = _torneos.findIndex(t => t.id === id)
+    if (idx >= 0) {
+      _torneos[idx] = { ..._torneos[idx], ...data }
+      const creados = loadCreados()
+      const cIdx = creados.findIndex(t => t.id === id)
+      if (cIdx >= 0) {
+        creados[cIdx] = { ...creados[cIdx], ...data }
+        saveCreados(creados)
+      }
+      return _torneos[idx]
+    }
+    return null
+  }
+}
+
+/**
+ * Elimina un torneo. Si el API falla, lo elimina solo localmente.
+ */
+export async function eliminarTorneo(id: string): Promise<boolean> {
+  try {
+    await deleteTorneoApi(id)
+    const idx = _torneos.findIndex(t => t.id === id)
+    if (idx >= 0) _torneos.splice(idx, 1)
+    // También del localStorage
+    const creados = loadCreados()
+    const cIdx = creados.findIndex(t => t.id === id)
+    if (cIdx >= 0) {
+      creados.splice(cIdx, 1)
+      saveCreados(creados)
+    }
+    return true
+  } catch (error) {
+    console.warn('[torneos] API delete falló, eliminando solo local:', error)
+    const idx = _torneos.findIndex(t => t.id === id)
+    if (idx >= 0) {
+      _torneos.splice(idx, 1)
+      const creados = loadCreados()
+      const cIdx = creados.findIndex(t => t.id === id)
+      if (cIdx >= 0) {
+        creados.splice(cIdx, 1)
+        saveCreados(creados)
+      }
+      return true
+    }
+    return false
   }
 }
