@@ -204,7 +204,7 @@ export default function DashboardAdmin() {
 
   const handleCollapse = (val: boolean) => { setSidebarCollapsed(val); localStorage.setItem(SIDEBAR_KEY, JSON.stringify(val)) }
   const sidebarWidth = sidebarOpen ? (sidebarCollapsed ? '72px' : '260px') : '0px'
-  const torneoActivo = torneos.find(t => t.estado === 'live') || torneos.find(t => t.estado === 'upcoming') || torneos[0]
+  const torneoActivo = torneos.find(t => t.estado === 'live') || torneos.find(t => t.estado === 'upcoming') || torneos[0] || { equipos: 0, jugadores: 0, canchas: 4, nombre: 'Cargando...', fecha: '', categoria: 'Fútbol 11', estado: 'upcoming' as const, id: '0', semestre: '', tag: '' }
 
   useEffect(() => { fetchTorneos() }, [])
 

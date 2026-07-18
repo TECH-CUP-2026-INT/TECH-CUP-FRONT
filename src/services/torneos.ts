@@ -48,7 +48,7 @@ const _torneos: Torneo[] = [...MOCK_TORNEOS]
 export let torneos: Torneo[] = _torneos
 
 function updateTorneos(data: Torneo[]): void {
-  // Mutamos el mismo array para mantener la referencia viva
+  if (!data || data.length === 0) return
   _torneos.splice(0, _torneos.length, ...data)
 }
 
