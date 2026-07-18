@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import { AuthProvider } from '@/hooks/auth/useAuth'
 import { ThemeProvider } from '@/configs/theme'
+import { ColorblindProvider } from '@/configs/colorblind'
+import { ColorblindFilters } from '@/components/common/colorblind-filters'
 import { StarfieldBackground } from '@/components/common/starfield-bg'
 import { ErrorBoundary } from '@/components/common/error-boundary'
 
@@ -42,6 +44,8 @@ export default function App() {
     <BrowserRouter>
       <GoogleOAuthProvider clientId={googleClientId}>
       <ThemeProvider>
+      <ColorblindProvider>
+      <ColorblindFilters />
       <AuthProvider>
       <StarfieldBackground className="min-h-screen">
       <ErrorBoundary>
@@ -83,6 +87,7 @@ export default function App() {
       </ErrorBoundary>
       </StarfieldBackground>
       </AuthProvider>
+      </ColorblindProvider>
       </ThemeProvider>
       </GoogleOAuthProvider>
     </BrowserRouter>
