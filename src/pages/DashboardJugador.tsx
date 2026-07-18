@@ -11,7 +11,6 @@ import { Badge } from '@/components/common/badge'
 import { useAuth } from '@/hooks/auth/useAuth'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/common/avatar'
 import ManchasFloating from '@/components/common/ManchasFloating'
-import FallingBalls from '@/components/FallingBalls'
 import { partidos, posiciones } from '@/services/partidos'
 import { torneos } from '@/services/torneos'
 import {
@@ -123,13 +122,12 @@ export default function DashboardJugador() {
 
   return (
     <div className="min-h-screen bg-black">
-      <FallingBalls count={14} duration={20000} startDelay={2000} triggerOnScroll={true} />
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} collapsed={sidebarCollapsed} onCollapse={handleCollapse} />
 
       <div className="min-w-0 transition-all duration-300" style={{ marginLeft: sidebarWidth }}>
         <AppTopbar title={isCaptain ? `Panel Capitán — ${MI_EQUIPO.nombre}` : 'Panel Jugador'} sidebarOpen={sidebarOpen} sidebarCollapsed={sidebarCollapsed} onMenuClick={() => setSidebarOpen(true)} />
 
-        <main className="p-8 pb-[60px] max-md:p-5 relative" style={{ backgroundImage: 'linear-gradient(rgba(30,10,60,0.65), rgba(30,10,60,0.65)), url(/images/fondo3.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+        <main className="p-8 pb-[60px] max-md:p-5 relative bg-cover bg-center bg-[linear-gradient(rgba(232,223,245,0.85),rgba(232,223,245,0.85)),url('/images/fondo-blanco.png')] dark:bg-[linear-gradient(rgba(30,10,60,0.65),rgba(30,10,60,0.65)),url('/images/fondo3.png')]">
 
           {/* ═══════════ PERFIL ═══════════ */}
           <section className="rounded-2xl mb-[26px] relative overflow-hidden border border-purple-mid/30" style={{ minHeight: '280px' }}>
