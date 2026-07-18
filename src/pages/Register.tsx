@@ -1,29 +1,13 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
+import { GoogleLogin, type CredentialResponse } from '@react-oauth/google'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/common/button'
 import { Input } from '@/components/common/input'
 import { Label } from '@/components/common/label'
-import { ArrowLeft, ArrowRight, Check, ChevronLeft, Upload, Camera } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, ChevronLeft, Camera } from 'lucide-react'
 
-type UserType = 'estudiante' | 'graduado' | 'profesor' | 'administrativo' | 'familiar'
 type Position = 'portero' | 'defensa' | 'volante' | 'delantero'
-
-const steps = [
-  { id: 1, label: 'Tipo de usuario' },
-  { id: 2, label: 'Datos personales' },
-  { id: 3, label: 'Credenciales' },
-  { id: 4, label: 'Verificación' },
-  { id: 5, label: 'Perfil deportivo' },
-]
-
-const userTypes: { id: UserType; label: string; icon: string; desc: string }[] = [
-  { id: 'estudiante', label: 'Estudiante', icon: '🎓', desc: 'Actualmente cursando' },
-  { id: 'graduado', label: 'Graduado', icon: '👨‍🎓', desc: 'Egresado de la Escuela' },
-  { id: 'profesor', label: 'Profesor', icon: '👨‍🏫', desc: 'Docente o catedrático' },
-  { id: 'administrativo', label: 'Admin.', icon: '💼', desc: 'Personal administrativo' },
-  { id: 'familiar', label: 'Familiar', icon: '👪', desc: 'Familiar de estudiante' },
-]
 
 const positions: { id: Position; label: string }[] = [
   { id: 'portero', label: 'Portero' },
@@ -35,7 +19,7 @@ const positions: { id: Position; label: string }[] = [
 type Genero = 'masculino' | 'femenino' | 'otro' | 'no_especifica'
 
 interface FormData {
-  userType: UserType | null
+  userType: 'interno' | 'externo' | null
   nombre: string
   email: string
   tipoDoc: string
@@ -77,8 +61,57 @@ const INITIAL_FORM: FormData = {
 export default function Register() {
   const [step, setStep] = useState(1)
   const [form, setForm] = useState<FormData>(INITIAL_FORM)
+  const [fechaExpedicion, setFechaExpedicion] = useState('')
   const [otp, setOtp] = useState(['', '', '', '', '', ''])
+  const [googleVerified, setGoogleVerified] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
+
+  const isExterno = form.userType === 'externo'
+
+  // Validación de documento según tipo y fecha de expedición
+  const docInfo = useMemo(() => {
+    const expYear = fechaExpedicion ? parseInt(fechaExpedicion.split('-')[0]) : 0
+    const expAntes2000 = expYear && expYear < 2000
+
+    switch (form.tipoDoc) {
+      case 'Cédula':
+        if (expAntes2000) {
+          return { placeholder: '3 a 8 dígitos (expedida antes del 2000)', min: 3, max: 8 }
+        }
+        return { placeholder: '10 dígitos (NUIP)', min: 10, max: 10 }
+      case 'Tarjeta de ciudadanía':
+        return { placeholder: 'Número de tarjeta', min: 6, max: 15 }
+      case 'Tarjeta identidad':
+        return { placeholder: '10 dígitos', min: 10, max: 10 }
+      case 'Pasaporte':
+        return { placeholder: 'Número de pasaporte', min: 5, max: 20 }
+      default:
+        return { placeholder: 'Número de documento', min: 4, max: 20 }
+    }
+  }, [form.tipoDoc, fechaExpedicion])
+
+  const docError = useMemo(() => {
+    if (!form.nroDoc) return null
+    const len = form.nroDoc.length
+    if (len < docInfo.min) return `Debe tener al menos ${docInfo.min} dígitos`
+    if (len > docInfo.max) return `Debe tener máximo ${docInfo.max} dígitos`
+    return null
+  }, [form.nroDoc, docInfo])
+
+  const steps = useMemo(() => {
+    const base = [
+      { id: 1, label: 'Tipo de usuario' },
+      { id: 2, label: 'Datos personales' },
+      { id: 3, label: 'Credenciales' },
+      { id: 4, label: 'Verificación' },
+    ]
+    if (!isExterno) {
+      base.push({ id: 5, label: 'Perfil deportivo' })
+    }
+    return base
+  }, [isExterno])
+
+  const totalSteps = steps.length
 
   const update = (field: keyof FormData, value: string | File | null) =>
     setForm(prev => ({ ...prev, [field]: value }))
@@ -104,6 +137,14 @@ export default function Register() {
     }
   }
 
+  const nextStep = () => {
+    if (step === 4 && isExterno) {
+      handleFinish()
+    } else {
+      setStep(s => Math.min(s + 1, totalSteps))
+    }
+  }
+
   const handleFinish = () => {
     console.log('Registro completado:', { ...form, foto: form.foto?.name })
     setShowSuccess(true)
@@ -112,21 +153,15 @@ export default function Register() {
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Background video */}
       <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover">
         <source src="/hero-video.mp4" type="video/mp4" />
       </video>
-      
-      {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-purple-black/90 via-black/80 to-purple-black/90" />
       <div className="absolute inset-0 opacity-20" style={{backgroundImage:'radial-gradient(rgba(255,255,255,.1) 1px, transparent 1px)',backgroundSize:'30px 30px'}} />
-      
-      {/* Background orbs decorativos */}
       <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full bg-purple-mid/20 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-5%] w-[400px] h-[400px] rounded-full bg-gold/15 blur-[100px] pointer-events-none" />
 
       <div className="w-full max-w-[560px] relative z-10">
-        {/* Logo */}
         <Link to="/" className="flex items-center gap-2.5 mb-8 justify-center">
           <div className="w-9 h-9 rounded-lg overflow-hidden bg-purple-black flex-shrink-0">
             <img src="/assets/logo.png" alt="" className="w-full h-full object-cover" />
@@ -136,42 +171,32 @@ export default function Register() {
           </span>
         </Link>
 
-        {/* Success overlay */}
         {showSuccess && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="absolute inset-0 z-50 bg-black/90 backdrop-blur-md rounded-2xl flex items-center justify-center"
-          >
+          <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }}
+            className="absolute inset-0 z-50 bg-black/90 backdrop-blur-md rounded-2xl flex items-center justify-center">
             <div className="text-center">
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                className="w-20 h-20 rounded-full bg-gradient-to-br from-gold to-gold-dark mx-auto mb-6 flex items-center justify-center"
-              >
+              <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                className="w-20 h-20 rounded-full bg-gradient-to-br from-gold to-gold-dark mx-auto mb-6 flex items-center justify-center">
                 <Check size={36} className="text-[#1A1206]" />
               </motion.div>
               <h2 className="font-[family-name:var(--font-display)] text-3xl uppercase tracking-[.5px] mb-2">
                 ¡Registro <span className="text-gold">exitoso!</span>
               </h2>
-              <p className="text-text-muted">Bienvenido a TechCup. Revisá tu correo para verificar tu cuenta.</p>
+              <p className="text-text-muted">Bienvenido a TechCup. Revisa tu correo para verificar tu cuenta.</p>
             </div>
           </motion.div>
         )}
 
-        {/* Card */}
         <div className="bg-surface border border-border/60 rounded-2xl p-8 md:p-10">
-          
           {/* Progress bar */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs text-text-muted font-semibold">Paso {step} de 5</span>
-              <span className="text-xs text-gold font-semibold">{steps[step - 1].label}</span>
+              <span className="text-xs text-text-muted font-semibold">Paso {step} de {totalSteps}</span>
+              <span className="text-xs text-gold font-semibold">{steps[step - 1]?.label}</span>
             </div>
             <div className="flex gap-1.5">
               {steps.map((s) => (
-                <div
-                  key={s.id}
+                <div key={s.id}
                   className={`h-1.5 rounded-full flex-1 transition-all duration-500 ${
                     s.id < step ? 'bg-gold' : s.id === step ? 'bg-purple-mid' : 'bg-border'
                   }`}
@@ -184,30 +209,25 @@ export default function Register() {
             {/* Step 1: Tipo de usuario */}
             {step === 1 && (
               <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase tracking-[.5px] mb-1">¿Quién sos?</h2>
-                <p className="text-sm text-text-muted mb-6">Seleccioná tu tipo de usuario para continuar.</p>
+                <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase tracking-[.5px] mb-1">¿Quién eres?</h2>
+                <p className="text-sm text-text-muted mb-6">Selecciona tu tipo de usuario para continuar.</p>
                 <div className="grid grid-cols-2 gap-3 mb-8">
-                  {userTypes.map((t) => (
-                    <button
-                      key={t.id}
-                      onClick={() => update('userType', t.id)}
-                      className={`p-4 rounded-xl border-2 text-left transition-all ${
-                        form.userType === t.id
-                          ? 'border-gold bg-gold/10'
-                          : 'border-border bg-black/50 hover:border-purple-mid/50'
-                      }`}
-                    >
-                      <span className="text-2xl mb-2 block">{t.icon}</span>
-                      <p className="font-semibold text-sm">{t.label}</p>
-                      <p className="text-xs text-text-muted mt-0.5">{t.desc}</p>
+                  {[
+                    { id: 'interno', label: 'Interno', icon: '🎓', desc: 'Estudiante, graduado o profesor' },
+                    { id: 'externo', label: 'Externo', icon: '👤', desc: 'Familiar o invitado' },
+                  ].map((t) => (
+                    <button key={t.id} onClick={() => update('userType', t.id as 'interno' | 'externo')}
+                      className={`p-6 rounded-xl border-2 text-center transition-all ${
+                        form.userType === t.id ? 'border-gold bg-gold/10 shadow-[0_0_20px_rgba(212,175,55,0.15)]' : 'border-border bg-black/50 hover:border-purple-mid/50'
+                      }`}>
+                      <span className="text-3xl mb-3 block">{t.icon}</span>
+                      <p className="font-bold text-base">{t.label}</p>
+                      <p className="text-xs text-text-muted mt-1">{t.desc}</p>
                     </button>
                   ))}
                 </div>
-                <Button
-                  onClick={() => setStep(2)}
-                  disabled={!form.userType}
-                  className="w-full rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold h-12 disabled:opacity-40"
-                >
+                <Button onClick={() => setStep(2)} disabled={!form.userType}
+                  className="w-full rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold h-12 disabled:opacity-40">
                   Siguiente <ArrowRight size={16} />
                 </Button>
               </motion.div>
@@ -217,7 +237,7 @@ export default function Register() {
             {step === 2 && (
               <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
                 <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase tracking-[.5px] mb-1">Datos personales</h2>
-                <p className="text-sm text-text-muted mb-6">Completá tu información básica.</p>
+                <p className="text-sm text-text-muted mb-6">Completa tu información básica.</p>
                 <div className="space-y-4 max-h-[420px] overflow-y-auto pr-1">
                   <div>
                     <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Nombre completo</Label>
@@ -227,62 +247,55 @@ export default function Register() {
                     <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Correo electrónico</Label>
                     <Input value={form.email} onChange={e => update('email', e.target.value)} type="email" placeholder="correo@escuelaing.edu.co" className="bg-black border-border text-white placeholder:text-text-faint rounded-xl h-11 mt-1.5 focus-visible:border-purple-mid" />
                   </div>
+
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Tipo documento</Label>
                       <select value={form.tipoDoc} onChange={e => update('tipoDoc', e.target.value)} className="w-full bg-black border border-border text-white rounded-xl h-11 mt-1.5 px-3 text-sm outline-none focus:border-purple-mid">
-                        <option>Cédula</option><option>Tarjeta identidad</option><option>Pasaporte</option>
+                        <option>Cédula</option><option>Tarjeta de ciudadanía</option><option>Tarjeta identidad</option><option>Pasaporte</option>
                       </select>
                     </div>
                     <div>
                       <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Número</Label>
-                      <Input value={form.nroDoc} onChange={e => update('nroDoc', e.target.value)} placeholder="1234567890" className="bg-black border-border text-white placeholder:text-text-faint rounded-xl h-11 mt-1.5 focus-visible:border-purple-mid" />
+                      <Input value={form.nroDoc} onChange={e => update('nroDoc', e.target.value.replace(/\D/g, ''))} placeholder={docInfo.placeholder} className="bg-black border-border text-white placeholder:text-text-faint rounded-xl h-11 mt-1.5 focus-visible:border-purple-mid" />
+                      {docError && <p className="text-xs text-red-400 mt-1">{docError}</p>}
+                      <p className="text-[10px] text-text-faint mt-1.5 leading-relaxed">Para poder jugar, deberás presentar tu documento físico en la cancha.</p>
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Fecha de expedición</Label>
+                      <Input value={fechaExpedicion} onChange={e => setFechaExpedicion(e.target.value)} type="date" className="bg-black border-border text-white rounded-xl h-11 mt-1.5 focus-visible:border-purple-mid [color-scheme:dark]" />
+                    </div>
                     <div>
                       <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Fecha de nacimiento</Label>
                       <Input value={form.fechaNac} onChange={e => update('fechaNac', e.target.value)} type="date" className="bg-black border-border text-white rounded-xl h-11 mt-1.5 focus-visible:border-purple-mid [color-scheme:dark]" />
                     </div>
-                    <div>
-                      <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Género</Label>
-                      <select value={form.genero} onChange={e => update('genero', e.target.value)} className="w-full bg-black border border-border text-white rounded-xl h-11 mt-1.5 px-3 text-sm outline-none focus:border-purple-mid">
-                        <option value="">Seleccionar...</option>
-                        <option value="masculino">Masculino</option>
-                        <option value="femenino">Femenino</option>
-                        <option value="otro">Otro</option>
-                        <option value="no_especifica">Prefiero no decirlo</option>
-                      </select>
-                    </div>
                   </div>
-                  <div>
-                    <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Teléfono</Label>
-                    <Input value={form.telefono} onChange={e => update('telefono', e.target.value)} type="tel" placeholder="300 123 4567" className="bg-black border-border text-white placeholder:text-text-faint rounded-xl h-11 mt-1.5 focus-visible:border-purple-mid" />
-                  </div>
-                  <div>
-                    <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Dirección</Label>
-                    <Input value={form.direccion} onChange={e => update('direccion', e.target.value)} placeholder="Cra 7 # 12-34, Bogotá" className="bg-black border-border text-white placeholder:text-text-faint rounded-xl h-11 mt-1.5 focus-visible:border-purple-mid" />
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Programa</Label>
-                      <select value={form.programa} onChange={e => update('programa', e.target.value)} className="w-full bg-black border border-border text-white rounded-xl h-11 mt-1.5 px-3 text-sm outline-none focus:border-purple-mid">
-                        <option>Ing. Sistemas</option><option>Ing. Industrial</option><option>Ing. Civil</option><option>Ing. Mecánica</option><option>Ing. Electrónica</option><option>Matemáticas</option><option>Administración</option>
-                      </select>
-                    </div>
-                    <div>
-                      <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Semestre</Label>
-                      <select value={form.semestre} onChange={e => update('semestre', e.target.value)} className="w-full bg-black border border-border text-white rounded-xl h-11 mt-1.5 px-3 text-sm outline-none focus:border-purple-mid">
-                        {[1,2,3,4,5,6,7,8,9,10].map(s => <option key={s} value={s}>{s}° semestre</option>)}
-                      </select>
-                    </div>
-                  </div>
+                  {!isExterno && (
+                    <>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Programa</Label>
+                          <select value={form.programa} onChange={e => update('programa', e.target.value)} className="w-full bg-black border border-border text-white rounded-xl h-11 mt-1.5 px-3 text-sm outline-none focus:border-purple-mid">
+                            <option>Ing. Sistemas</option><option>Ing. Industrial</option><option>Ing. Civil</option><option>Ing. Mecánica</option><option>Ing. Electrónica</option><option>Matemáticas</option><option>Administración</option>
+                          </select>
+                        </div>
+                        <div>
+                          <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Semestre</Label>
+                          <select value={form.semestre} onChange={e => update('semestre', e.target.value)} className="w-full bg-black border border-border text-white rounded-xl h-11 mt-1.5 px-3 text-sm outline-none focus:border-purple-mid">
+                            {[1,2,3,4,5,6,7,8,9,10].map(s => <option key={s} value={s}>{s}° semestre</option>)}
+                          </select>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
                 <div className="flex gap-3 mt-8">
                   <Button variant="outline" onClick={() => setStep(1)} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1">
                     <ChevronLeft size={16} /> Anterior
                   </Button>
-                  <Button onClick={() => setStep(3)} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold h-12 flex-1">
+                  <Button onClick={() => setStep(3)} disabled={!form.nombre || !form.email || !form.nroDoc || !!docError} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold h-12 flex-1 disabled:opacity-40">
                     Siguiente <ArrowRight size={16} />
                   </Button>
                 </div>
@@ -293,7 +306,7 @@ export default function Register() {
             {step === 3 && (
               <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
                 <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase tracking-[.5px] mb-1">Credenciales</h2>
-                <p className="text-sm text-text-muted mb-6">Creá tu contraseña segura.</p>
+                <p className="text-sm text-text-muted mb-6">Crea tu contraseña segura.</p>
                 <div className="space-y-4">
                   <div>
                     <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Contraseña</Label>
@@ -301,7 +314,7 @@ export default function Register() {
                   </div>
                   <div>
                     <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Confirmar contraseña</Label>
-                    <Input value={form.confirmPassword} onChange={e => update('confirmPassword', e.target.value)} type="password" placeholder="Repetí tu contraseña" className="bg-black border-border text-white placeholder:text-text-faint rounded-xl h-11 mt-1.5 focus-visible:border-purple-mid" />
+                    <Input value={form.confirmPassword} onChange={e => update('confirmPassword', e.target.value)} type="password" placeholder="Repite tu contraseña" className="bg-black border-border text-white placeholder:text-text-faint rounded-xl h-11 mt-1.5 focus-visible:border-purple-mid" />
                   </div>
                   <div className="flex items-center gap-2 text-xs text-text-muted">
                     <span className={`w-2 h-2 rounded-full ${form.password.length >= 8 ? 'bg-green-500' : 'bg-yellow-500'}`} />
@@ -322,62 +335,90 @@ export default function Register() {
               </motion.div>
             )}
 
-            {/* Step 4: OTP */}
+            {/* Step 4: Verificación */}
             {step === 4 && (
               <motion.div key="step4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="text-center">
                 <span className="text-4xl mb-4 block">🔒</span>
-                <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase tracking-[.5px] mb-1">Verificá tu correo</h2>
-                <p className="text-sm text-text-muted mb-6">Ingresá el código de 6 dígitos enviado a juan***@escuelaing.edu.co</p>
-                <div className="flex justify-center gap-2 mb-6">
-                  {otp.map((digit, i) => (
-                    <input
-                      key={i}
-                      id={`otp-${i}`}
-                      type="text"
-                      maxLength={1}
-                      value={digit}
-                      onChange={(e) => handleOtpChange(i, e.target.value)}
-                      className="w-12 h-14 bg-black border border-border text-white text-center text-xl font-bold rounded-xl outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all"
-                      autoFocus={i === 0}
-                    />
-                  ))}
-                </div>
-                <p className="text-xs text-text-muted mb-6">
-                  ¿No recibiste el código?{' '}
-                  <button className="text-gold font-semibold hover:underline">Reenviar</button>
-                </p>
-                <div className="flex gap-3">
-                  <Button variant="outline" onClick={() => setStep(3)} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1">
-                    <ChevronLeft size={16} /> Anterior
-                  </Button>
-                  <Button onClick={() => setStep(5)} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold h-12 flex-1">
-                    Verificar <ArrowRight size={16} />
-                  </Button>
-                </div>
+                <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase tracking-[.5px] mb-1">Verifica tu identidad</h2>
+
+                {isExterno ? (
+                  <>
+                    <p className="text-sm text-text-muted mb-6">Autoriza con Google para confirmar tu identidad.</p>
+                    {googleVerified ? (
+                      <div className="flex items-center justify-center gap-2 mb-6 py-3 px-4 rounded-xl bg-green-500/10 border border-green-500/30">
+                        <Check size={18} className="text-green-400" />
+                        <span className="text-sm text-green-400 font-semibold">Identidad verificada con Google</span>
+                      </div>
+                    ) : (
+                      <div className="mb-6 flex justify-center">
+                        {import.meta.env.VITE_GOOGLE_CLIENT_ID ? (
+                          <GoogleLogin
+                            onSuccess={(_response: CredentialResponse) => setGoogleVerified(true)}
+                            onError={() => console.error('Google registration failed')}
+                            text="signup_with"
+                            shape="pill"
+                            size="large"
+                            theme="outline"
+                          />
+                        ) : (
+                          <button type="button" className="inline-flex items-center justify-center gap-3 rounded-full border border-gold/30 bg-purple-deep/30 text-gold hover:bg-gold/10 hover:text-white h-12 px-6 text-sm font-semibold transition-all">
+                            <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                            Continuar con Google
+                          </button>
+                        )}
+                      </div>
+                    )}
+                    <div className="flex gap-3">
+                      <Button variant="outline" onClick={() => setStep(3)} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1">
+                        <ChevronLeft size={16} /> Anterior
+                      </Button>
+                      <Button onClick={nextStep} disabled={!googleVerified} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold h-12 flex-1 disabled:opacity-40">
+                        Finalizar <ArrowRight size={16} />
+                      </Button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-sm text-text-muted mb-6">Ingresa el código de 6 dígitos enviado a {form.email.replace(/(.{3}).+(?=@)/, '$1***')}</p>
+                    <div className="flex justify-center gap-2 mb-6">
+                      {otp.map((digit, i) => (
+                        <input key={i} id={`otp-${i}`} type="text" maxLength={1} value={digit}
+                          onChange={(e) => handleOtpChange(i, e.target.value)}
+                          className="w-12 h-14 bg-black border border-border text-white text-center text-xl font-bold rounded-xl outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all"
+                          autoFocus={i === 0} />
+                      ))}
+                    </div>
+                    <p className="text-xs text-text-muted mb-6">
+                      ¿No recibiste el código?{' '}
+                      <button className="text-gold font-semibold hover:underline">Reenviar</button>
+                    </p>
+                    <div className="flex gap-3">
+                      <Button variant="outline" onClick={() => setStep(3)} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1">
+                        <ChevronLeft size={16} /> Anterior
+                      </Button>
+                      <Button onClick={nextStep} disabled={otp.join('').length !== 6} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold h-12 flex-1 disabled:opacity-40">
+                        Verificar <ArrowRight size={16} />
+                      </Button>
+                    </div>
+                  </>
+                )}
               </motion.div>
             )}
 
-            {/* Step 5: Perfil deportivo */}
-            {step === 5 && (
+            {/* Step 5: Perfil deportivo (solo Interno) */}
+            {step === 5 && !isExterno && (
               <motion.div key="step5" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
                 <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase tracking-[.5px] mb-1">Perfil deportivo</h2>
-                <p className="text-sm text-text-muted mb-6">Contanos sobre tu experiencia en la cancha.</p>
+                <p className="text-sm text-text-muted mb-6">Cuéntanos sobre tu experiencia en la cancha.</p>
                 <div className="space-y-5">
                   <div>
                     <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Posición de juego</Label>
                     <div className="grid grid-cols-2 gap-2 mt-1.5">
                       {positions.map((p) => (
-                        <button
-                          key={p.id}
-                          onClick={() => update('posicion', p.id)}
+                        <button key={p.id} onClick={() => update('posicion', p.id)}
                           className={`py-3 px-4 rounded-xl border-2 text-sm font-semibold transition-all ${
-                            form.posicion === p.id
-                              ? 'border-gold bg-gold/10 text-gold'
-                              : 'border-border bg-black/50 hover:border-purple-mid/50 hover:bg-purple-mid/10'
-                          }`}
-                        >
-                          {p.label}
-                        </button>
+                            form.posicion === p.id ? 'border-gold bg-gold/10 text-gold' : 'border-border bg-black/50 hover:border-purple-mid/50 hover:bg-purple-mid/10'
+                          }`}>{p.label}</button>
                       ))}
                     </div>
                   </div>
@@ -394,11 +435,9 @@ export default function Register() {
                           <p className="text-xs text-gold font-semibold">{form.foto?.name}</p>
                         </div>
                       ) : (
-                        <>
-                          <Camera size={32} className="mx-auto text-text-faint mb-2" />
+                        <><Camera size={32} className="mx-auto text-text-faint mb-2" />
                           <p className="text-sm text-text-muted">Click para subir tu foto</p>
-                          <p className="text-xs text-text-faint mt-1">PNG, JPG · Max 5MB</p>
-                        </>
+                          <p className="text-xs text-text-faint mt-1">PNG, JPG · Max 5MB</p></>
                       )}
                       <input type="file" accept=".png,.jpg,.jpeg" className="hidden" onChange={handleFoto} />
                     </label>
@@ -415,13 +454,11 @@ export default function Register() {
               </motion.div>
             )}
           </AnimatePresence>
-
         </div>
 
-        {/* Link volver */}
         <div className="text-center mt-6">
           <Link to="/login" className="text-sm text-text-muted hover:text-gold transition-colors inline-flex items-center gap-1.5">
-            <ArrowLeft size={14} /> ¿Ya tenés cuenta? Iniciá sesión
+            <ArrowLeft size={14} /> ¿Ya tienes cuenta? Inicia sesión
           </Link>
         </div>
       </div>
