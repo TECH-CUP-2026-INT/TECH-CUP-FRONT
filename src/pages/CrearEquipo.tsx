@@ -10,6 +10,7 @@ import { Input } from '@/components/common/input'
 import { Label } from '@/components/common/label'
 import { ArrowLeft, ArrowRight, Check, Upload, CalendarDays, MapPin, Trophy } from 'lucide-react'
 import { torneos, fetchTorneos } from '@/services/torneos'
+import { crearEquipo, fetchEquiposTorneo } from '@/services/equipos'
 import { useAuth } from '@/hooks/auth/useAuth'
 import type { Torneo } from '@/services/torneos'
 import { getMiPerfil } from '@/api/usuarios'
@@ -122,6 +123,25 @@ export default function CrearEquipo() {
               ))}
             </div>
 
+            {createdTeamId ? (
+              <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-center py-10">
+                <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-6">
+                  <Check size={40} className="text-green-400" />
+                </div>
+                <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-2">
+                  Equipo <span className="text-gold">creado</span>
+                </h2>
+                <p className="text-text-muted text-sm mb-8">"{nombre}" ya está listo para el torneo "{torneoElegido?.nombre}".</p>
+                <div className="flex gap-3 justify-center">
+                  <Button onClick={() => navigate('/dashboard/jugador')} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-12 px-8">
+                    Ir al panel
+                  </Button>
+                  <Button variant="outline" onClick={() => navigate('/mi-equipo')} className="rounded-full border-gold text-gold hover:bg-gold/10 h-12 px-8">
+                    Ver mi equipo
+                  </Button>
+                </div>
+              </motion.div>
+            ) : (
             <AnimatePresence mode="wait">
               {(() => {
                 if (!isCaptain) return (
@@ -170,15 +190,15 @@ export default function CrearEquipo() {
                   {preview}
                   <div className="flex gap-3 mt-6">
                     <Button variant="outline" onClick={() => setPaso(0)} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1"><ArrowLeft size={16} /> Anterior</Button>
-                    <Button onClick={() => setPaso(3)} disabled={!nombre.trim()} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-12 flex-1 disabled:opacity-40">
+                    <Button onClick={() => setPaso(2)} disabled={!nombre.trim()} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-12 flex-1 disabled:opacity-40">
                       Siguiente <ArrowRight size={16} />
                     </Button>
                   </div>
                 </motion.div>
               )
 
-              if (paso === 3) return (
-                <motion.div key="p3" initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-20}}>
+              if (paso === 2) return (
+                <motion.div key="p2" initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-20}}>
                   <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Colores del <span className="text-gold">equipo</span></h2>
                   <p className="text-sm text-text-muted mb-6">Elegí los colores que representen a tu equipo.</p>
                   <div className="mb-4">
@@ -200,11 +220,11 @@ export default function CrearEquipo() {
                   {preview}
                   <div className="flex gap-3 mt-6">
                     <Button variant="outline" onClick={() => setPaso(2)} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1"><ArrowLeft size={16} /> Anterior</Button>
-                    <Button onClick={() => setPaso(4)} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-12 flex-1">Siguiente <ArrowRight size={16} /></Button>
+                    <Button onClick={() => setPaso(3)} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-12 flex-1">Siguiente <ArrowRight size={16} /></Button>
                   </div>
                 </motion.div>
               )
-              if (paso === 4) return (
+              if (paso === 3) return (
                 <motion.div key="p4" initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-20}}>
                   <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Escudo del <span className="text-gold">equipo</span></h2>
                   <p className="text-sm text-text-muted mb-6">Elegí un diseño o subí tu propio escudo.</p>
@@ -222,9 +242,9 @@ export default function CrearEquipo() {
                   {preview}
                   {createError && <p className="text-sm text-red-400 mt-4">{createError}</p>}
                   <div className="flex gap-3 mt-6">
-                    <Button variant="outline" onClick={() => setPaso(3)} disabled={creating} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1"><ArrowLeft size={16} /> Anterior</Button>
+                    <Button variant="outline" onClick={() => setPaso(2)} disabled={creating} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1"><ArrowLeft size={16} /> Anterior</Button>
                     <Button onClick={handleCrearEquipo} disabled={creating} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-12 flex-1 disabled:opacity-60">
-                      <Check size={16} /> {creating ? 'Creando…' : createdTeamId ? 'Reintentar chat' : 'Crear equipo'}
+                      <Check size={16} /> {creating ? 'Creando…' : createdTeamId ? 'Ir a inscribir' : 'Crear equipo'}
                     </Button>
                   </div>
                 </motion.div>
@@ -232,6 +252,7 @@ export default function CrearEquipo() {
               return null
               })()}
             </AnimatePresence>
+            )}
           </SpotlightCard>
         </main>
         <Footer />

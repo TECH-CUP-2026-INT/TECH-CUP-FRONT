@@ -85,6 +85,32 @@ export async function fetchTorneos(): Promise<Torneo[]> {
 }
 
 /**
+ * Crea un torneo nuevo (local) y lo agrega al listado.
+ */
+export function createTorneo(data: {
+  nombre: string
+  tipo?: string
+  fechaInicio?: string
+  fechaFin?: string
+  canchas?: number
+}): Torneo {
+  const torneo: Torneo = {
+    id: 'local-' + Date.now(),
+    nombre: data.nombre,
+    estado: 'upcoming',
+    semestre: '2026-II',
+    categoria: 'Fútbol 11',
+    equipos: 0,
+    jugadores: 0,
+    canchas: data.canchas ?? 0,
+    fecha: data.fechaInicio || '',
+    tag: data.tipo === 'relampago' ? 'Relámpago' : data.tipo ? `${data.tipo}` : 'Próximo',
+  }
+  _torneos.unshift(torneo)
+  return torneo
+}
+
+/**
  * Obtiene un torneo por ID (busca en cache local primero, luego API).
  */
 export async function getTorneoPorId(id: string): Promise<Torneo | undefined> {

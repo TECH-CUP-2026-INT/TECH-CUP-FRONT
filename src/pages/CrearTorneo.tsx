@@ -10,6 +10,7 @@ import { Input } from '@/components/common/input'
 import { Label } from '@/components/common/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/common/select'
 import { ArrowLeft, ArrowRight, Check, Trophy, CalendarDays, DollarSign, Users, MapPin, Plus, X } from 'lucide-react'
+import { createTorneo } from '@/services/torneos'
 
 type Formato = 'llaves' | 'grupos' | 'liga'
 type TipoTorneo = 'normal' | 'relampago'
@@ -40,21 +41,14 @@ export default function CrearTorneo() {
   const canAddMore = canchas.every(c => c.nombre.trim() && c.ubicacion.trim())
 
   const handleCrear = () => {
-    const torneo = {
-      id: Date.now().toString(),
+    const creado = createTorneo({
       nombre,
       tipo,
-      formato,
-      minEquipos: parseInt(minEquipos),
-      maxEquipos: parseInt(maxEquipos),
-      costo: parseInt(costo),
       fechaInicio,
       fechaFin,
-      fechaCierre,
-      canchas: canchas.filter(c => c.nombre.trim()),
-      estado: 'upcoming',
-    }
-    console.log('[CrearTorneo] Torneo creado:', torneo)
+      canchas: canchas.filter(c => c.nombre.trim()).length,
+    })
+    console.log('[CrearTorneo] Torneo creado:', creado)
     setCreado(true)
   }
 
