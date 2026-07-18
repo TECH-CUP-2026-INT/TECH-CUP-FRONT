@@ -62,12 +62,18 @@ export default function CrearEquipo() {
   const torneosActivos = torneosLocal.filter(t => t.estado === 'upcoming' || t.estado === 'live')
 
   async function crearChatDelEquipo(teamId: string) {
-    const miPerfil = await getMiPerfil()
-    await createChat('GROUP', teamId, [{ userId: miPerfil.id, role: 'MODERATOR' }])
+    try {
+      const miPerfil = await getMiPerfil()
+      await createChat('GROUP', teamId, [{ userId: miPerfil.id, role: 'MODERATOR' }])
+    } catch (err) {
+      console.error('[CrearEquipo] Error al crear chat del equipo:', err)
+      // No bloqueamos el flujo — el equipo ya fue creado
+    }
   }
 
   async function handleCrearEquipo() {
     setCreating(true)
+    setCreateError(null)
     try {
       const miPerfil = await getMiPerfil()
       const logo = await generarLogoPlaceholder(colorP, colorS, diseno)
@@ -76,10 +82,12 @@ export default function CrearEquipo() {
       const teamId = team.id
       setCreatedTeamId(teamId)
       rememberTeamName(teamId, team.name)
+      // El chat es secundario: si falla no debería frenar la creación del equipo
       await crearChatDelEquipo(teamId)
       navigate('/inscribir-equipo', { state: { teamId } })
-    } catch {
-      setCreateError('No pudimos crear el equipo. Intent� de nuevo.')
+    } catch (err) {
+      console.error('[CrearEquipo] Error al crear equipo:', err)
+      setCreateError('No pudimos crear el equipo. Intentá de nuevo.')
     } finally {
       setCreating(false)
     }
@@ -216,7 +224,7 @@ export default function CrearEquipo() {
                   </div>
                   {preview}
                   <div className="flex gap-3 mt-6">
-                    <Button variant="outline" onClick={() => setPaso(2)} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1"><ArrowLeft size={16} /> Anterior</Button>
+                    <Button variant="outline" onClick={() => setPaso(1)} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1"><ArrowLeft size={16} /> Anterior</Button>
                     <Button onClick={() => setPaso(3)} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-12 flex-1">Siguiente <ArrowRight size={16} /></Button>
                   </div>
                 </motion.div>
@@ -239,7 +247,7 @@ export default function CrearEquipo() {
                   {preview}
                   {createError && <p className="text-sm text-red-400 mt-4">{createError}</p>}
                   <div className="flex gap-3 mt-6">
-                    <Button variant="outline" onClick={() => setPaso(3)} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1"><ArrowLeft size={16} /> Anterior</Button>
+                    <Button variant="outline" onClick={() => setPaso(2)} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1"><ArrowLeft size={16} /> Anterior</Button>
                     <Button onClick={handleCrearEquipo} disabled={creating} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-12 flex-1 disabled:opacity-60">
                       <Check size={16} /> {creating ? 'Creando…' : 'Crear equipo'}
                     </Button>
