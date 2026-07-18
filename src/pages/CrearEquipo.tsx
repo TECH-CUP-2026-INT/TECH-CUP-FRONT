@@ -10,7 +10,7 @@ import { Input } from '@/components/common/input'
 import { Label } from '@/components/common/label'
 import { ArrowLeft, ArrowRight, Check, Upload, CalendarDays, MapPin, Trophy } from 'lucide-react'
 import { torneos, fetchTorneos } from '@/services/torneos'
-import { crearEquipo, fetchEquiposTorneo } from '@/services/equipos'
+import { fetchEquiposTorneo } from '@/services/equipos'
 import { useAuth } from '@/hooks/auth/useAuth'
 import type { Torneo } from '@/services/torneos'
 import { getMiPerfil } from '@/api/usuarios'
@@ -50,11 +50,16 @@ export default function CrearEquipo() {
   const [creating, setCreating] = useState(false)
   const [createError, setCreateError] = useState<string | null>(null)
   const [createdTeamId, setCreatedTeamId] = useState<string | null>(null)
+  const [torneosLocal, setTorneosLocal] = useState<Torneo[]>(torneos)
   const navigate = useNavigate()
   const { user } = useAuth()
   const isCaptain = user?.isCaptain ?? false
 
-  useEffect(() => { fetchTorneos() }, [])
+  useEffect(() => {
+    fetchTorneos().then(() => setTorneosLocal([...torneos]))
+  }, [])
+
+  const torneosActivos = torneosLocal.filter(t => t.estado === 'upcoming' || t.estado === 'live')
 
   async function crearChatDelEquipo(teamId: string) {
     const miPerfil = await getMiPerfil()
@@ -65,29 +70,21 @@ export default function CrearEquipo() {
     setCreating(true)
     setCreateError(null)
     try {
-      if (!createdTeamId) {
-        const miPerfil = await getMiPerfil()
-        const logo = await generarLogoPlaceholder(colorP, colorS, diseno)
-        const team = await crearEquipo(miPerfil.nombreCompleto, nombre, `${colorP},${colorS}`, logo)
-        setCreatedTeamId(team.id)
-        rememberTeamName(team.id, team.name)
-        await crearChatDelEquipo(team.id)
-      } else {
-        await crearChatDelEquipo(createdTeamId)
-      }
-      navigate('/inscribir-equipo', { state: { teamId: createdTeamId } })
+      const miPerfil = await getMiPerfil()
+      const logo = await generarLogoPlaceholder(colorP, colorS, diseno)
+      const team = await crearEquipo(miPerfil.nombreCompleto, nombre, `${colorP},${colorS}`, logo)
+      if (!team || !team.id) throw new Error('No se pudo crear el equipo')
+      const teamId = team.id
+      setCreatedTeamId(teamId)
+      rememberTeamName(teamId, team.name)
+      await crearChatDelEquipo(teamId)
+      navigate('/inscribir-equipo', { state: { teamId } })
     } catch {
-      setCreateError(
-        createdTeamId
-          ? 'El equipo ya se creó, pero no pudimos crear su chat. Reintentá solo esa parte.'
-          : 'No pudimos crear el equipo. Intentá de nuevo.',
-      )
+      setCreateError('No pudimos crear el equipo. Intentá de nuevo.')
     } finally {
       setCreating(false)
     }
   }
-
-  const torneosActivos = torneos.filter(t => t.estado === 'upcoming' || t.estado === 'live')
 
   const preview = (
     <div className="flex items-center gap-4 p-4 rounded-xl bg-black/50 border border-border">
