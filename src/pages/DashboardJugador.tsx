@@ -11,10 +11,11 @@ import { Badge } from '@/components/common/badge'
 import { useAuth } from '@/hooks/auth/useAuth'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/common/avatar'
 import ManchasFloating from '@/components/common/ManchasFloating'
+import FallingBalls from '@/components/FallingBalls'
 import { partidos, posiciones } from '@/services/partidos'
 import { torneos } from '@/services/torneos'
 import {
-  X, CalendarDays, Trophy, Clock, MapPin, Download, Medal, Users, Package, QrCode, Check, RefreshCw, Swords, Shirt, Apple, Smartphone, Truck, ChevronRight, UserCheck, ClipboardList, Search, Plus, ArrowLeft, UserPlus, Send, Trash2, Edit3, Mail, Shield, Target, Zap, Hand, Star
+  X, CalendarDays, Trophy, Clock, MapPin, Download, Medal, Users, Package, QrCode, Check, RefreshCw, Swords, Shirt, Apple, Smartphone, Truck, ChevronRight, UserCheck, ClipboardList, Search, Plus, ArrowLeft, UserPlus, Send, Trash2, Edit3
 } from 'lucide-react'
 import type { Torneo } from '@/services/torneos'
 
@@ -22,7 +23,7 @@ const SIDEBAR_KEY = 'techcup_sidebar_collapsed'
 
 /* ─── equipo mock ─── */
 const MI_EQUIPO = {
-  id: 1, nombre: 'Tigres FC', capitan: 'Juan Camilo Rivera',
+  id: 1, nombre: 'Tigres FC', emoji: '🐯', capitan: 'Juan Camilo Rivera',
   colorPrimario: '#EF4444', colorSecundario: '#F97316',
   jugadores: [
     { id:1, nombre:'Carlos Martínez', posicion:'Arquero', dorsal:1, estaJugando:true },
@@ -51,18 +52,6 @@ const dotacionItems = [
 ]
 
 type CapitanTab = 'dashboard' | 'equipo' | 'logistica' | 'qr'
-
-const POSITION_ICONS: Record<string, typeof Shield> = {
-  Arquero: Hand,
-  Defensor: Shield,
-  Mediocampista: Target,
-  Delantero: Zap,
-}
-
-function PositionIcon({ posicion, size = 10, className }: { posicion: string; size?: number; className?: string }) {
-  const Icon = POSITION_ICONS[posicion] ?? Shield
-  return <Icon size={size} className={className} />
-}
 
 export default function DashboardJugador() {
   const [sidebarOpen, setSidebarOpen] = useState(true)
@@ -122,43 +111,39 @@ export default function DashboardJugador() {
 
   return (
     <div className="min-h-screen bg-black">
+      <FallingBalls count={40} duration={20000} startDelay={2000} triggerOnScroll={true} />
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} collapsed={sidebarCollapsed} onCollapse={handleCollapse} />
 
       <div className="min-w-0 transition-all duration-300" style={{ marginLeft: sidebarWidth }}>
         <AppTopbar title={isCaptain ? `Panel Capitán — ${MI_EQUIPO.nombre}` : 'Panel Jugador'} sidebarOpen={sidebarOpen} sidebarCollapsed={sidebarCollapsed} onMenuClick={() => setSidebarOpen(true)} />
 
-        <main className="p-8 pb-[60px] max-md:p-5 relative bg-cover bg-center bg-[linear-gradient(rgba(232,223,245,0.85),rgba(232,223,245,0.85)),url('/images/fondo-blanco.png')] dark:bg-[linear-gradient(rgba(30,10,60,0.65),rgba(30,10,60,0.65)),url('/images/fondo3.png')]">
+        <main className="p-8 pb-[60px] max-md:p-5 relative" style={{ backgroundImage: 'linear-gradient(rgba(30,10,60,0.65), rgba(30,10,60,0.65)), url(/images/fondo3.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
 
           {/* ═══════════ PERFIL ═══════════ */}
           <section className="rounded-2xl mb-[26px] relative overflow-hidden border border-purple-mid/30" style={{ minHeight: '280px' }}>
             <img src="/images/estadio-dashboard.png" alt="" className="absolute inset-0 w-full h-full" style={{ objectFit: 'cover', objectPosition: 'center center' }} />
-            <div className="absolute inset-0 bg-black/30" />
-            <div className="relative z-10 flex flex-row items-center gap-5 h-full min-h-[280px] pl-24 pr-10 max-md:pl-10 w-fit">
-              <div className="w-24 h-24 rounded-full overflow-hidden ring-4 ring-gold shadow-[0_0_30px_rgba(0,0,0,0.8)] flex-shrink-0">
+            <div className="absolute inset-0 bg-gradient-to-r from-[rgba(10,6,20,0.6)] via-[rgba(10,6,20,0.3)] to-transparent" />
+            <div className="relative z-10 flex flex-col items-center justify-center gap-3 h-full min-h-[280px] px-10 w-fit">
+              <div className="w-28 h-28 rounded-full overflow-hidden ring-4 ring-gold/50 shadow-xl shadow-black/40 flex-shrink-0">
                 <Avatar className="w-full h-full">
                   <AvatarImage src={user?.avatar || ''} alt="" className="w-full h-full object-cover" />
                   <AvatarFallback className="w-full h-full flex items-center justify-center text-3xl font-bold text-white bg-gradient-to-br from-gold to-purple-mid">7</AvatarFallback>
                 </Avatar>
               </div>
-              <div className="text-left">
-                <h2 className="text-2xl font-bold text-white leading-tight [text-shadow:0_2px_10px_rgba(0,0,0,0.95)]">{user?.name || 'Juan Camilo Rivera'}</h2>
-                <p className="text-sm text-gold font-bold uppercase tracking-[.4px] mt-1.5 [text-shadow:0_1px_6px_rgba(0,0,0,0.95)]">Delantero</p>
-                <p className="text-[13px] text-white/85 mt-1 flex items-center gap-1.5 [text-shadow:0_1px_6px_rgba(0,0,0,0.95)]">
-                  <span>Camiseta #7</span>
-                  {isCaptain && (
-                    <span className="inline-flex items-center gap-1"><span>·</span><Shield size={12} className="text-gold" /><span>Capitán de {MI_EQUIPO.nombre}</span></span>
-                  )}
-                </p>
+              <div className="text-center">
+                <h2 className="text-2xl font-bold text-white leading-tight">{user?.name || 'Juan Camilo Rivera'}</h2>
+                <p className="text-sm text-gold font-semibold uppercase tracking-[.4px] mt-1.5">Delantero</p>
+                <p className="text-[13px] text-white/50 mt-1">Camiseta #7{isCaptain ? ` · ${MI_EQUIPO.emoji} Capitán de ${MI_EQUIPO.nombre}` : ''}</p>
               </div>
             </div>
           </section>
 
           {/* ═══════════ PLAYER GRID (no capitán o siempre visible) ═══════════ */}
-          <section className="grid grid-cols-2 max-lg:grid-cols-1 gap-5 mb-[26px]">
+          <section className="grid grid-cols-3 max-lg:grid-cols-1 gap-5 mb-[26px]">
             {/* Equipo */}
-            <SpotlightCard accent="purple" className="p-5 bg-[#E8DFF5]/10 dark:bg-white/[0.03] border border-white/40 dark:border-white/10 rounded-2xl shadow-lg shadow-black/10">
+            <SpotlightCard accent="purple" className="p-5 bg-[#E8DFF5]/70 dark:bg-black/40 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-purple-mid/30 rounded-2xl shadow-lg shadow-purple-mid/10">
               <h3 className="text-[14.5px] font-semibold tracking-[.3px] mb-3 flex items-center gap-2 text-[#3D1A6B] dark:text-white">
-                {isCaptain ? <Shield size={16} className="text-gold" /> : <Users size={16} className="text-gold" />} <span className="text-gold">{isCaptain ? MI_EQUIPO.nombre : 'Mi equipo'}</span>
+                <span className="text-gold">{isCaptain ? MI_EQUIPO.emoji : '👥'}</span> <span className="text-gold">{isCaptain ? MI_EQUIPO.nombre : 'Mi equipo'}</span>
               </h3>
               {isCaptain ? (
                 <div className="space-y-2">
@@ -174,8 +159,8 @@ export default function DashboardJugador() {
                   </Button>
                 </div>
               ) : (
-                <div className="text-center py-1">
-                  <img src="/images/icono-equipo.png" alt="" className="w-48 h-48 mx-auto -mt-2 -mb-1 object-contain" />
+                <div className="text-center py-4">
+                  <img src="/images/icono-equipo.png" alt="" className="w-16 h-16 mx-auto mb-2 object-contain" />
                   <p className="text-sm text-text-muted mb-4">No pertenecés a ningún equipo aún</p>
                   <div className="flex gap-2 justify-center">
                     <Button onClick={() => setBrowseTeamsOpen(true)} className="rounded-full bg-gold/15 backdrop-blur-md border border-gold/40 text-gold hover:bg-gold/25 hover:text-white shadow-lg shadow-gold/10 text-xs font-bold px-4">Buscar equipo</Button>
@@ -188,10 +173,10 @@ export default function DashboardJugador() {
 
 
             {/* Invitaciones */}
-            <SpotlightCard accent="purple" className="p-5 bg-[#E8DFF5]/10 dark:bg-white/[0.03] border border-white/40 dark:border-white/10 rounded-2xl shadow-lg shadow-black/10">
-              <h3 className="text-[14.5px] font-semibold tracking-[.3px] mb-3 flex items-center gap-2 text-[#3D1A6B] dark:text-white"><Mail size={16} className="text-gold" /> <span className="text-gold">Invitaciones</span></h3>
-              <div className="text-center py-1">
-                <img src="/images/icono-invitaciones.png" alt="" className="w-48 h-48 mx-auto -mt-2 -mb-1 object-contain" />
+            <SpotlightCard accent="purple" className="p-5 bg-[#E8DFF5]/70 dark:bg-black/40 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-purple-mid/30 rounded-2xl shadow-lg shadow-purple-mid/10">
+              <h3 className="text-[14.5px] font-semibold tracking-[.3px] mb-3 flex items-center gap-2 text-[#3D1A6B] dark:text-white"><span className="text-gold">📨</span> <span className="text-gold">Invitaciones</span></h3>
+              <div className="text-center py-4">
+                <img src="/images/icono-invitaciones.png" alt="" className="w-16 h-16 mx-auto mb-2 object-contain" />
                 <p className="text-sm text-text-muted">No tenés invitaciones pendientes</p>
                 <p className="text-xs text-text-faint mt-1">{isCaptain ? 'Las solicitudes de jugadores aparecen en tu panel de capitán' : 'Las invitaciones de capitanes aparecerán acá'}</p>
               </div>
@@ -202,7 +187,7 @@ export default function DashboardJugador() {
           <section className="grid grid-cols-[1.3fr_1fr] gap-5 mb-[22px] items-start max-lg:grid-cols-1">
             <SpotlightCard accent="purple" className="p-[22px_24px] bg-[#E8DFF5]/70 dark:bg-black/30 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-purple-mid/30 rounded-2xl shadow-lg shadow-purple-mid/10">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-[14.5px] font-semibold tracking-[.3px] text-[#3D1A6B] dark:text-white flex items-center gap-2"><Trophy size={16} className="text-gold" /> Torneos disponibles</h3>
+                <h3 className="text-[14.5px] font-semibold tracking-[.3px] text-[#3D1A6B] dark:text-white">🏆 Torneos disponibles</h3>
                 <Link to="/torneos" className="text-xs text-gold font-bold hover:text-gold-dark transition-colors">Ver todos →</Link>
               </div>
               <div className="space-y-3">
@@ -223,7 +208,7 @@ export default function DashboardJugador() {
 
             <SpotlightCard accent="purple" className="p-[22px_24px] bg-[#E8DFF5]/70 dark:bg-black/40 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-purple-mid/30 rounded-2xl shadow-lg shadow-purple-mid/10">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-[14.5px] font-semibold tracking-[.3px] text-[#3D1A6B] dark:text-white flex items-center gap-2"><CalendarDays size={16} className="text-gold" /> Próximos partidos</h3>
+                <h3 className="text-[14.5px] font-semibold tracking-[.3px] text-[#3D1A6B] dark:text-white">📅 Próximos partidos</h3>
                 <Link to="/mis-partidos" className="text-xs text-gold font-bold hover:text-gold-dark transition-colors">Ver todos →</Link>
               </div>
               {misPartidos.map((m, i) => (
@@ -253,13 +238,13 @@ export default function DashboardJugador() {
                 <div className="absolute inset-0 opacity-20" style={{ background: 'radial-gradient(at 60% 40%, rgb(200, 133, 26) 0%, transparent 60%)' }} />
                 <div className="relative z-10 p-8 max-md:p-5 flex items-center justify-between max-md:flex-col max-md:gap-4">
                   <div>
-                    <h2 className="font-[family-name:var(--font-display)] uppercase text-2xl leading-tight mb-1 flex items-center gap-2">
-                      <Shield size={22} className="text-gold" /> Panel de <span className="text-gold">Capitán</span>
+                    <h2 className="font-[family-name:var(--font-display)] uppercase text-2xl leading-tight mb-1">
+                      {MI_EQUIPO.emoji} Panel de <span className="text-gold">Capitán</span>
                     </h2>
                     <p className="text-sm text-white/60">Gestioná tu equipo, logística y validaciones de {MI_EQUIPO.nombre}.</p>
                   </div>
-                  <Badge className="rounded-full bg-gold/20 text-gold border border-purple-mid/40 h-auto px-3 py-1.5 text-[11px] font-bold inline-flex items-center gap-1">
-                    <Medal size={12} /> {MI_EQUIPO.capitan}
+                  <Badge className="rounded-full bg-gold/20 text-gold border border-purple-mid/40 h-auto px-3 py-1.5 text-[11px] font-bold">
+                    {MI_EQUIPO.emoji} {MI_EQUIPO.capitan}
                   </Badge>
                 </div>
               </section>
@@ -286,13 +271,13 @@ export default function DashboardJugador() {
                 <>
                   <section className="grid grid-cols-4 max-lg:grid-cols-2 gap-[18px] mb-[26px]">
                     {[
-                      { icon:Users, num:MI_EQUIPO.jugadores.length.toString(), label:'Jugadores', accent:'purple' },
-                      { icon:CalendarDays, num:'6', label:'Próximos partidos', accent:'gold' },
-                      { icon:Medal, num:'3º', label:'Posición', accent:'purple' },
-                      { icon:ClipboardList, num:`${dotacion.filter(d => d.estado === 'entregado').length}/${dotacion.length}`, label:'Dotación recibida', accent:'gold' },
+                      { icon:'👥', num:MI_EQUIPO.jugadores.length.toString(), label:'Jugadores', accent:'purple' },
+                      { icon:'📅', num:'6', label:'Próximos partidos', accent:'gold' },
+                      { icon:'🥇', num:'3º', label:'Posición', accent:'purple' },
+                      { icon:'📋', num:`${dotacion.filter(d => d.estado === 'entregado').length}/${dotacion.length}`, label:'Dotación recibida', accent:'gold' },
                     ].map((s, i) => (
                       <SpotlightCard key={i} accent={s.accent as 'gold'|'purple'} className="p-5 flex gap-3.5 items-center bg-surface border-border rounded-2xl">
-                        <span className={`w-[46px] h-[46px] rounded-xl flex items-center justify-center flex-shrink-0 ${s.accent === 'purple' ? 'bg-purple-mid/20 text-[#b39ef2]' : 'bg-gold/15 text-gold'}`}><s.icon size={22} /></span>
+                        <span className={`w-[46px] h-[46px] rounded-xl flex items-center justify-center flex-shrink-0 ${s.accent === 'purple' ? 'bg-purple-mid/20 text-[#b39ef2]' : 'bg-gold/15 text-gold'}`}>{s.icon}</span>
                         <div><div className="font-[family-name:var(--font-display)] text-[26px] leading-none">{s.num}</div><div className="text-xs text-text-muted mt-1">{s.label}</div></div>
                       </SpotlightCard>
                     ))}
@@ -336,11 +321,7 @@ export default function DashboardJugador() {
                             return (
                               <tr key={i} className={`text-[13px] ${isMine ? 'text-gold font-bold bg-gold/5' : ''}`}>
                                 <td className="py-2 text-text-muted w-[26px]">{r.pos}</td>
-                                <td className="py-2 border-t border-border">
-                                  <span className="inline-flex items-center gap-1">
-                                    {i === 0 && <Trophy size={12} className="text-gold" />} {r.equipo} {isMine && <Star size={11} className="text-gold fill-gold" />}
-                                  </span>
-                                </td>
+                                <td className="py-2 border-t border-border">{i === 0 ? '🏆 ' : ''}{r.equipo} {isMine && '👈'}</td>
                                 <td className="py-2 border-t border-border">{r.pj}</td>
                                 <td className="py-2 border-t border-border">{r.dg > 0 ? '+' : ''}{r.dg}</td>
                                 <td className="py-2 border-t border-border text-right font-bold">{r.pts}</td>
@@ -359,9 +340,7 @@ export default function DashboardJugador() {
                 <div className="grid grid-cols-[1.3fr_1fr] gap-5 items-start max-lg:grid-cols-1">
                   <SpotlightCard accent="purple" className="p-[22px_24px] bg-surface border-border rounded-2xl">
                     <div className="flex items-center gap-3 mb-4">
-                      <span className="w-11 h-11 rounded-full bg-gradient-to-br from-gold to-purple-mid flex items-center justify-center flex-shrink-0">
-                        <Shield size={20} className="text-white" />
-                      </span>
+                      <span className="text-3xl">{MI_EQUIPO.emoji}</span>
                       <div>
                         <h3 className="text-[16px] font-bold">{MI_EQUIPO.nombre}</h3>
                         <div className="flex items-center gap-2 text-[11px] text-text-muted">
@@ -372,14 +351,14 @@ export default function DashboardJugador() {
                     </div>
                     <div className="grid grid-cols-4 gap-2 mb-4">
                       {[
-                        { icon:Hand, label:'Arqueros', value:MI_EQUIPO.jugadores.filter(j => j.posicion === 'Arquero').length },
-                        { icon:Shield, label:'Defensas', value:MI_EQUIPO.jugadores.filter(j => j.posicion === 'Defensor').length },
-                        { icon:Target, label:'Medios', value:MI_EQUIPO.jugadores.filter(j => j.posicion === 'Mediocampista').length },
-                        { icon:Zap, label:'Delanteros', value:MI_EQUIPO.jugadores.filter(j => j.posicion === 'Delantero').length },
+                        { label:'🧤 Arqueros', value:MI_EQUIPO.jugadores.filter(j => j.posicion === 'Arquero').length },
+                        { label:'🛡️ Defensas', value:MI_EQUIPO.jugadores.filter(j => j.posicion === 'Defensor').length },
+                        { label:'🎯 Medios', value:MI_EQUIPO.jugadores.filter(j => j.posicion === 'Mediocampista').length },
+                        { label:'⚡ Delanteros', value:MI_EQUIPO.jugadores.filter(j => j.posicion === 'Delantero').length },
                       ].map((s, i) => (
                         <div key={i} className="text-center p-2 rounded-lg bg-[#E8DFF5]/70 dark:bg-black/30">
                           <div className="text-lg font-bold text-[#3D1A6B] dark:text-white">{s.value}</div>
-                          <div className="text-[9px] text-text-muted flex items-center justify-center gap-1"><s.icon size={10} /> {s.label}</div>
+                          <div className="text-[9px] text-text-muted">{s.label}</div>
                         </div>
                       ))}
                     </div>
@@ -392,7 +371,7 @@ export default function DashboardJugador() {
                               <span className="text-[12.5px] font-semibold">{j.nombre}</span>
                               {j.nombre === MI_EQUIPO.capitan && <Medal size={9} className="text-gold" />}
                             </div>
-                            <span className="text-[9.5px] text-text-muted inline-flex items-center gap-1"><PositionIcon posicion={j.posicion} /> {j.posicion}</span>
+                            <span className="text-[9.5px] text-text-muted">{j.posicion === 'Arquero' ? '🧤' : j.posicion === 'Defensor' ? '🛡️' : j.posicion === 'Mediocampista' ? '🎯' : '⚡'} {j.posicion}</span>
                           </div>
                         </div>
                       ))}
@@ -412,7 +391,7 @@ export default function DashboardJugador() {
                       { id:2, jugador:'Valentina Orozco', posicion:'Mediocampista', estado:'pendiente' as const },
                     ].map(s => (
                       <div key={s.id} className="flex items-center gap-3 p-3 rounded-xl bg-[#E8DFF5]/70 dark:bg-black/30 border border-[#D4C8E8]/40 dark:border-white/5 mb-2">
-                        <div className="w-9 h-9 rounded-full bg-gold/10 flex items-center justify-center text-gold"><PositionIcon posicion={s.posicion} size={16} /></div>
+                        <div className="w-9 h-9 rounded-full bg-gold/10 flex items-center justify-center text-sm">{s.posicion === 'Defensor' ? '🛡️' : '🎯'}</div>
                         <div className="flex-1 min-w-0">
                           <span className="text-[12.5px] font-semibold">{s.jugador}</span>
                           <span className="text-[10px] text-text-muted ml-2">{s.posicion}</span>
@@ -451,12 +430,12 @@ export default function DashboardJugador() {
                           <div className="flex-1">
                             <span className="font-semibold text-[13px]">{item.nombre}</span>
                             <div className="flex items-center gap-2 text-[10px] text-text-muted mt-0.5">
-                              <span className="inline-flex items-center gap-1">{item.tipo === 'kit' ? <Shirt size={10} /> : <Apple size={10} />} {item.tipo === 'kit' ? 'Kit' : 'Refrigerio'}</span>
+                              <span>{item.tipo === 'kit' ? '👕 Kit' : '🍎 Refrigerio'}</span>
                               <span>• {item.cantidad} unidades</span>
                             </div>
                           </div>
-                          <Badge className={`rounded-full text-[9px] px-2 py-0.5 h-auto inline-flex items-center gap-1 ${item.estado === 'entregado' ? 'bg-green-500/20 text-green-400 border-green-500/30' : 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'}`}>
-                            {item.estado === 'entregado' ? <Check size={10} /> : <Clock size={10} />} {item.estado === 'entregado' ? 'Entregado' : 'Pendiente'}
+                          <Badge className={`rounded-full text-[9px] px-2 py-0.5 h-auto ${item.estado === 'entregado' ? 'bg-green-500/20 text-green-400 border-green-500/30' : 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'}`}>
+                            {item.estado === 'entregado' ? '✅ Entregado' : '⏳ Pendiente'}
                           </Badge>
                         </div>
                       ))}
@@ -504,7 +483,7 @@ export default function DashboardJugador() {
                               <div className="absolute inset-0 flex items-center justify-center rounded-2xl bg-[rgba(10,6,20,0.6)] backdrop-blur-sm">
                                 <div className="text-center">
                                   <div className="w-16 h-16 rounded-full bg-green-500/30 flex items-center justify-center mx-auto mb-2"><Check size={36} className="text-green-400" /></div>
-                                  <span className="text-green-400 font-bold text-sm inline-flex items-center gap-1"><Check size={14} /> Validado</span>
+                                  <span className="text-green-400 font-bold text-sm">✅ Validado</span>
                                 </div>
                               </div>
                             )}
@@ -544,8 +523,8 @@ export default function DashboardJugador() {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">
                               <span className="text-[12px] font-semibold">{h.fecha}</span>
-                              <Badge className={`rounded-full text-[8px] px-2 py-0.5 h-auto inline-flex items-center gap-1 ${h.estado === 'entregado' ? 'bg-green-500/20 text-green-400 border-green-500/30' : 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'}`}>
-                                {h.estado === 'entregado' ? <Check size={9} /> : <Clock size={9} />} {h.estado === 'entregado' ? 'Entregado' : 'Pendiente'}
+                              <Badge className={`rounded-full text-[8px] px-2 py-0.5 h-auto ${h.estado === 'entregado' ? 'bg-green-500/20 text-green-400 border-green-500/30' : 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'}`}>
+                                {h.estado === 'entregado' ? '✅ Entregado' : '⏳ Pendiente'}
                               </Badge>
                             </div>
                             <span className="text-[10px] text-text-muted">{h.items} — {h.responsable}</span>
@@ -598,7 +577,7 @@ export default function DashboardJugador() {
               <div className="px-8 pt-10 pb-6 text-center border-b border-[#D4C8E8]/40 dark:border-white/5">
                 <button onClick={() => setBrowseTeamsOpen(false)} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center hover:bg-gold transition-colors"><X size={16} /></button>
                 <span className="inline-flex items-center gap-2 text-[11.5px] font-bold tracking-[1.6px] uppercase text-gold bg-gold/10 border border-gold/30 px-3.5 py-1.5 rounded-full mb-4">
-                  <Users size={13} /> Equipos disponibles
+                  👥 Equipos disponibles
                 </span>
                 <h2 className="font-[family-name:var(--font-display-alt)] font-bold text-[clamp(28px,3.5vw,42px)] leading-[.92] tracking-[.5px] uppercase italic mb-3">
                   <span className="text-[#3D1A6B] dark:text-white">Explorá los</span> <span className="text-gold">equipos</span>
@@ -630,8 +609,8 @@ export default function DashboardJugador() {
                       </div>
                       <p className="text-[11px] text-text-muted mt-0.5">{eq.desc}</p>
                       <div className="flex items-center gap-3 mt-1.5 text-[10px] text-text-faint">
-                        <span className="inline-flex items-center gap-1"><Users size={11} /> {eq.jug}</span>
-                        <span className="inline-flex items-center gap-1"><UserCheck size={11} /> Capitán: {eq.cap}</span>
+                        <span>👥 {eq.jug}</span>
+                        <span>👤 Capitán: {eq.cap}</span>
                       </div>
                     </div>
                     <button disabled={eq.vac === 0}
