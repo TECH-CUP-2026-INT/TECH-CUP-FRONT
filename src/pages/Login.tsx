@@ -6,7 +6,7 @@ import { Button } from '@/components/common/button'
 import { Input } from '@/components/common/input'
 import { Label } from '@/components/common/label'
 import { Checkbox } from '@/components/common/checkbox'
-import { Eye, EyeOff, Mail, Lock, ArrowLeft, Users, ShieldCheck, UserCog, ChevronRight, UserRoundCheck } from 'lucide-react'
+import { Eye, EyeOff, Mail, Lock, ArrowLeft, Users, ShieldCheck, UserCog, ChevronRight } from 'lucide-react'
 import { useAuth } from '@/hooks/auth/useAuth'
 import OtpVerify from '@/components/OtpVerify'
 import { login as apiLogin, validateOtp, resendOtp } from '@/services/auth'
@@ -60,7 +60,6 @@ export default function Login() {
   const [authError, setAuthError] = useState<string | null>(null)
   const [isPlaying, setIsPlaying] = useState(true)
   const [videoIndex, setVideoIndex] = useState(0)
-  const [showDemoUsers, setShowDemoUsers] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
   const navigate = useNavigate()
   const { login } = useAuth()
@@ -92,6 +91,26 @@ export default function Login() {
     if (!email || !password) return
     setIsLoading(true)
     setAuthError(null)
+
+    // Si es un usuario demo, login instantáneo sin API
+    const demoUser = DEMO_USERS.find(u => u.email === email)
+    if (demoUser && password === 'TechCup2026!') {
+      const frontRole = demoUser.role === 'arbitro' ? 'arbitro' as const : demoUser.role === 'organizador' ? 'organizador' as const : 'jugador' as const
+      setJwt('demo-jwt-' + Date.now())
+      login(demoUser.email, frontRole, '', demoUser.name)
+      if (demoUser.isCaptain) {
+        const stored = localStorage.getItem('techcup_user')
+        if (stored) {
+          const u = JSON.parse(stored)
+          u.isCaptain = true
+          localStorage.setItem('techcup_user', JSON.stringify(u))
+        }
+      }
+      setIsLoading(false)
+      navigate(demoUser.role === 'arbitro' ? '/arbitro/dashboard' : `/dashboard/${demoUser.role}`)
+      return
+    }
+
     try {
       const res = await apiLogin(email, password)
       setUserId(res.userId)
