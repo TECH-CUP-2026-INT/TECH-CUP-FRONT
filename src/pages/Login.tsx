@@ -130,18 +130,18 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-black flex relative overflow-hidden">
+    <div className="min-h-screen bg-black flex relative overflow-x-auto">
 
       {/* Izquierda — imagen de roles, solo en el paso de selección de rol */}
       {step === 'role' && (
-        <div className="hidden lg:block relative w-1/2 overflow-hidden bg-black">
+        <div className="block relative w-1/2 min-w-[320px] overflow-hidden bg-black">
           <img src="/images/bg-roles.png" alt="" className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/10 to-black/50" />
         </div>
       )}
 
       {/* Panel negro-dorado */}
-      <div className="relative z-10 flex items-center justify-center p-8 lg:p-16 overflow-hidden w-full lg:w-1/2">
+      <div className="relative z-10 flex items-center justify-center p-8 lg:p-16 overflow-hidden w-1/2 min-w-[320px]">
         <div className="absolute inset-0 bg-gradient-to-br from-black via-[#1a1a1a] to-black" />
         {/* Aurora dorado + violeta — mismo tratamiento que el hero de Landing */}
         <div className="absolute inset-0 pointer-events-none opacity-60" style={{ background: 'radial-gradient(ellipse at 30% 40%, rgba(139,92,246,0.15) 0%, transparent 60%)' }} />
@@ -248,7 +248,7 @@ export default function Login() {
 
       {/* Right — video, solo en el paso de iniciar sesión */}
       {step === 'login' && (
-        <div className="hidden lg:flex relative z-10 w-1/2 overflow-hidden bg-black">
+        <div className="flex relative z-10 w-1/2 min-w-[320px] overflow-hidden bg-black">
           <video key={videoIndex} ref={videoRef} autoPlay loop muted playsInline
             className="absolute inset-0 w-full h-full object-cover">
             <source src={videos[videoIndex]} type="video/mp4" />
