@@ -159,7 +159,7 @@ export default function Login() {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: i * 0.1 }}
-        onClick={() => handleRoleContinue(role.shortName.toLowerCase())}
+        onClick={() => handleRoleContinue(role.id)}
         className="group relative flex items-stretch gap-0 rounded-[10px] overflow-hidden border border-gold/20 bg-[#F3EEFF]/70 dark:bg-black/60 hover:border-gold/50 transition-all duration-300 text-left w-full cursor-pointer"
       >
         {/* Imagen lateral */}
