@@ -9,19 +9,10 @@ import {
 } from '@/components/common/select'
 import { torneos, fetchTorneos } from '@/services/torneos'
 import { crearPartido } from '@/services/partidos'
+import { fetchEquiposTorneo } from '@/services/equipos'
 import { canchas } from '@/services/campus'
+import type { EquipoDisplay } from '@/api/tipos'
 import { ArrowLeft, CalendarDays, Clock, MapPin, Swords, Trophy, Check, Loader2 } from 'lucide-react'
-
-const EQUIPOS = [
-  { id: 'eq-1', nombre: 'Tigres FC', emoji: '🐯' },
-  { id: 'eq-2', nombre: 'Sistemas FC', emoji: '⚙️' },
-  { id: 'eq-3', nombre: 'Code United', emoji: '💻' },
-  { id: 'eq-4', nombre: 'IA Warriors', emoji: '🦁' },
-  { id: 'eq-5', nombre: 'Dragones FC', emoji: '🐉' },
-  { id: 'eq-6', nombre: 'Los Bits', emoji: '⚡' },
-  { id: 'eq-7', nombre: 'Titanes', emoji: '🛡️' },
-  { id: 'eq-8', nombre: 'Fénix', emoji: '🔥' },
-]
 
 export default function CrearPartido() {
   const navigate = useNavigate()
@@ -35,13 +26,23 @@ export default function CrearPartido() {
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [resultado, setResultado] = useState<string | null>(null)
+  // Equipos REALES inscritos en el torneo seleccionado (antes eran mock, por eso
+  // el backend rechazaba los IDs y "no creaba partido").
+  const [equipos, setEquipos] = useState<EquipoDisplay[]>([])
 
   useEffect(() => { fetchTorneos() }, [])
 
+  // Al elegir torneo, cargar sus equipos inscritos y resetear la selección.
+  useEffect(() => {
+    if (!tournamentId) { setEquipos([]); return }
+    setHomeTeamId(''); setAwayTeamId('')
+    fetchEquiposTorneo(tournamentId).then(setEquipos).catch(() => setEquipos([]))
+  }, [tournamentId])
+
   const torneosActivos = torneos.filter(t => t.estado === 'live' || t.estado === 'upcoming')
   const canchasDisponibles = canchas.filter(c => c.estado === 'disponible')
-  const homeEq = EQUIPOS.find(e => e.id === homeTeamId)
-  const awayEq = EQUIPOS.find(e => e.id === awayTeamId)
+  const homeEq = equipos.find(e => e.id === homeTeamId)
+  const awayEq = equipos.find(e => e.id === awayTeamId)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -150,9 +151,9 @@ export default function CrearPartido() {
                     <SelectValue placeholder="Local" />
                   </SelectTrigger>
                   <SelectContent className="bg-[#1F1F28] border-border">
-                    {EQUIPOS.map(e => (
+                    {equipos.map(e => (
                       <SelectItem key={e.id} value={e.id} className="text-gray-light">
-                        {e.emoji} {e.nombre}
+                        {e.nombre}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -165,9 +166,9 @@ export default function CrearPartido() {
                     <SelectValue placeholder="Visitante" />
                   </SelectTrigger>
                   <SelectContent className="bg-[#1F1F28] border-border">
-                    {EQUIPOS.map(e => (
+                    {equipos.map(e => (
                       <SelectItem key={e.id} value={e.id} className="text-gray-light">
-                        {e.emoji} {e.nombre}
+                        {e.nombre}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -181,11 +182,9 @@ export default function CrearPartido() {
             {/* Previsualización */}
             {homeTeamId && awayTeamId && homeTeamId !== awayTeamId && (
               <div className="flex items-center justify-center gap-4 py-3 px-4 rounded-xl bg-purple-mid/10 border border-gold/20">
-                <span className="text-2xl">{homeEq?.emoji}</span>
                 <span className="font-bold text-sm">{homeEq?.nombre}</span>
                 <span className="text-gold font-bold text-lg">VS</span>
                 <span className="font-bold text-sm">{awayEq?.nombre}</span>
-                <span className="text-2xl">{awayEq?.emoji}</span>
               </div>
             )}
 
