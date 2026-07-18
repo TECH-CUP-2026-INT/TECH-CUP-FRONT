@@ -34,6 +34,7 @@ import InscribirEquipo from '@/pages/InscribirEquipo'
 import Llaves from '@/pages/Llaves'
 import Campus from '@/pages/Campus'
 import Notificaciones from '@/pages/Notificaciones'
+import Invitaciones from '@/pages/Invitaciones'
 import Rankings from '@/pages/Rankings'
 
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || ''
@@ -83,6 +84,7 @@ export default function App() {
         <Route path="/campus" element={<Campus />} />
         <Route path="/crear-torneo" element={<CrearTorneo />} />
         <Route path="/notificaciones" element={<Notificaciones />} />
+        <Route path="/invitaciones" element={<Invitaciones />} />
         <Route path="/rankings" element={<Rankings />} />
       </Routes>
       </ErrorBoundary>
