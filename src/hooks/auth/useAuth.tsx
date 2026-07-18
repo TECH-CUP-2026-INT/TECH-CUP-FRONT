@@ -5,6 +5,8 @@ import { getInitialsAvatar } from '@/utils/avatar'
 export type UserRole = 'jugador' | 'arbitro' | 'organizador'
 
 interface User {
+  /** id del usuario en el backend (claim `sub` / user.id del JWT). Vacío en demo. */
+  id?: string
   name: string
   email: string
   avatar: string
@@ -14,7 +16,7 @@ interface User {
 
 interface AuthContextType {
   user: User | null
-  login: (email: string, role: UserRole, avatar?: string, name?: string) => void
+  login: (email: string, role: UserRole, avatar?: string, name?: string, id?: string) => void
   logout: () => void
   isAuthenticated: boolean
   isRealAuth: boolean
@@ -58,7 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             const role = res.role === 'REFEREE' ? 'arbitro' as const
               : (res.role === 'ORGANIZER' || res.role === 'ADMIN') ? 'organizador' as const
               : 'jugador' as const
-            login(res.email, role)
+            login(res.email, role, undefined, undefined, res.userId)
           } else {
             clearJwt()
           }
@@ -67,9 +69,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
-  const login = (email: string, role: UserRole = 'jugador', avatar?: string, name?: string) => {
+  const login = (email: string, role: UserRole = 'jugador', avatar?: string, name?: string, id?: string) => {
     const displayName = name || (email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, c => c.toUpperCase()))
     const newUser: User = {
+      id,
       name: displayName,
       email,
       avatar: avatar || getInitialsAvatar(displayName),

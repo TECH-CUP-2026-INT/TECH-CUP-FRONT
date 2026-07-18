@@ -136,7 +136,7 @@ export default function Login() {
       const frontRole = (res.user?.role ? mapApiRoleToFront(res.user.role) : fallbackRole) as import('@/hooks/auth/useAuth').UserRole
       const userEmail = res.user?.email || email || `${selectedRole}@techcup.com`
       const userName = res.user?.fullName || userEmail
-      login(userEmail, frontRole, '', userName)
+      login(userEmail, frontRole, '', userName, res.user?.id)
       navigate(frontRole === 'arbitro' ? '/arbitro/dashboard' : `/dashboard/${frontRole}`)
     } catch (err) {
       // Si la API no responde, intentar login local

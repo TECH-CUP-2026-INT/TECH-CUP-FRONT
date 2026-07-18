@@ -1,20 +1,13 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import DashboardLayout from '@/components/common/DashboardLayout'
 import { SpotlightCard } from '@/components/common/spotlight-card'
 import { Button } from '@/components/common/button'
 import { TrendingUp, Trophy } from 'lucide-react'
 import { useAuth } from '@/hooks/auth/useAuth'
+import { fetchPlayerStats } from '@/services/estadisticas'
+import type { PlayerStatsDisplay } from '@/api/tipos'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/common/avatar'
-
-const stats = [
-  { label: 'Goles', value: '8', change: '+2', icon: '⚽' },
-  { label: 'Asistencias', value: '5', change: '+1', icon: '👟' },
-  { label: 'Partidos', value: '12', change: '+3', icon: '📋' },
-  { label: 'Minutos', value: "480'", change: '+90\'', icon: '⏱️' },
-  { label: 'Tarjetas 🟨', value: '2', change: '+1', icon: '🟨' },
-  { label: 'Faltas', value: '3', change: '0', icon: '⚠️' },
-]
 
 const partidosStats = [
   { rival: 'Tigres FC', resultado: '3-1', goles: 2, asistencias: 1, tarjetas: 0, min: 90, fecha: '20 MAY' },
@@ -25,6 +18,21 @@ const partidosStats = [
 export default function Estadisticas() {
   const { user } = useAuth()
   const initials = (user?.name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
+
+  // Estadísticas reales del jugador (con fallback a mock dentro del service).
+  const [ps, setPs] = useState<PlayerStatsDisplay | null>(null)
+  useEffect(() => {
+    fetchPlayerStats(user?.id || '').then(setPs).catch(() => {})
+  }, [user?.id])
+
+  const stats = [
+    { label: 'Goles', value: String(ps?.goles ?? '—'), icon: '⚽' },
+    { label: 'Asistencias', value: String(ps?.asistencias ?? '—'), icon: '👟' },
+    { label: 'Partidos', value: String(ps?.partidos ?? '—'), icon: '📋' },
+    { label: 'Minutos', value: ps ? `${ps.minutos}'` : '—', icon: '⏱️' },
+    { label: 'Tarjetas 🟨', value: String(ps?.tarjetas ?? '—'), icon: '🟨' },
+    { label: 'Faltas', value: String(ps?.faltas ?? '—'), icon: '⚠️' },
+  ]
   return (
     <DashboardLayout title="Estadísticas">
       <main className="max-w-[900px] mx-auto px-8 py-8 pb-[60px]">
@@ -48,7 +56,6 @@ export default function Estadisticas() {
               <SpotlightCard key={i} accent={i % 2 === 0 ? 'gold' : 'purple'} className="bg-surface border border-border rounded-2xl p-5">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-lg">{s.icon}</span>
-                  <span className="text-[10px] text-green-400 font-semibold bg-green-500/10 px-2 py-0.5 rounded-full">{s.change}</span>
                 </div>
                 <p className="font-[family-name:var(--font-display)] text-3xl font-bold">{s.value}</p>
                 <p className="text-xs text-text-muted mt-1">{s.label}</p>
