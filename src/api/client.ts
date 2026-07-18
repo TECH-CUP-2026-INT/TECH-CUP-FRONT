@@ -82,4 +82,12 @@ export async function apiPost<T>(path: string, body: unknown): Promise<T> {
   return res.data
 }
 
+/**
+ * PATCH request al API de TechCup.
+ */
+export async function apiPatch<T>(path: string, body?: unknown): Promise<T> {
+  const res = await api.patch<T>(path, body)
+  return res.data
+}
+
 export default api

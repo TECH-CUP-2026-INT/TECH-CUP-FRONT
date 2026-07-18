@@ -261,3 +261,44 @@ export interface MatchStatDisplay {
   local: number | string
   visitor: number | string
 }
+
+// ─── Equipos ────────────────────────────────────────────────
+export type UUID = string
+
+export interface EquipoDisplay {
+  id: UUID
+  nombre: string
+  logoUrl?: string
+  colores?: string
+  capitanId?: UUID
+  capitanNombre?: string
+  miembros?: number
+  stats?: {
+    pj: number
+    g?: number
+    e?: number
+    p?: number
+    gf: number
+    gc: number
+    pts: number
+  }
+}
+
+export interface EquipoRosterDisplay {
+  teamId: UUID | null
+  memberIds: UUID[]
+}
+
+export interface InvitacionDisplay {
+  id: UUID
+  teamId: UUID
+  teamName: string
+  estado: 'pendiente' | 'aceptada' | 'rechazada'
+  createdAt: string
+}
+
+export interface InscripcionDisplay {
+  enrollmentId: UUID
+  status: string
+  vence: string
+}
