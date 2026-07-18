@@ -132,8 +132,16 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-black flex relative overflow-hidden">
 
+      {/* Izquierda — imagen de roles, solo en el paso de selección de rol */}
+      {step === 'role' && (
+        <div className="hidden lg:block relative w-1/2 overflow-hidden bg-black">
+          <img src="/images/bg-roles.png" alt="" className="absolute inset-0 w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/10 to-black/50" />
+        </div>
+      )}
+
       {/* Panel negro-dorado */}
-      <div className={`relative z-10 flex items-center justify-center p-8 lg:p-16 overflow-hidden ${step === 'role' ? 'w-full' : 'w-full lg:w-[38%]'}`}>
+      <div className="relative z-10 flex items-center justify-center p-8 lg:p-16 overflow-hidden w-full lg:w-1/2">
         <div className="absolute inset-0 bg-gradient-to-br from-black via-[#1a1a1a] to-black" />
         {/* Aurora dorado + violeta — mismo tratamiento que el hero de Landing */}
         <div className="absolute inset-0 pointer-events-none opacity-60" style={{ background: 'radial-gradient(ellipse at 30% 40%, rgba(139,92,246,0.15) 0%, transparent 60%)' }} />
@@ -143,23 +151,16 @@ export default function Login() {
         <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
         <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-gold/5 blur-[60px]" />
         <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-gold/10 blur-[50px]" />
-        <div className={`relative w-full transition-all duration-300 ${step === 'role' ? 'max-w-[820px]' : 'max-w-[460px]'}`}>
+        <div className={`relative w-full transition-all duration-300 ${step === 'role' ? 'max-w-[560px]' : 'max-w-[460px]'}`}>
           {/* Back to home button */}
-          <Link to="/" className="inline-flex items-center gap-2 px-4 py-2 rounded-[10px] bg-black/60 border border-gold/30 text-gold-ink hover:bg-gold/20 hover:text-white transition-all duration-300 text-sm font-semibold backdrop-blur-sm mb-10">
-            <ArrowLeft size={16} /> Volver al inicio
+          <Link to="/" aria-label="Volver al inicio" className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-black/60 border border-gold/30 text-gold-ink hover:bg-gold/20 hover:text-white transition-all duration-300 backdrop-blur-sm mb-10">
+            <ArrowLeft size={16} />
           </Link>
 
           {step === 'role' ? (
             /* Step 1: Role Selector — recuadro negro-dorado */
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-              className="p-8 rounded-[12px] border border-gold/30 shadow-[0_0_40px_rgba(212,175,55,0.08)] relative overflow-hidden"
-              style={{
-                backgroundImage: 'url("/images/bg-roles.png")',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-              }}>
-              {/* Overlay oscuro para legibilidad */}
-              <div className="absolute inset-0 bg-black/70" />
+              className="p-8 rounded-[12px] border border-gold/30 shadow-[0_0_40px_rgba(212,175,55,0.08)] relative overflow-hidden bg-black/40 backdrop-blur-sm">
               <div className="mb-6">
                 <h1 className="font-[family-name:var(--font-display)] text-3xl uppercase tracking-[.5px] text-white mb-2">
                   Selecciona tu <span className="text-gold-ink">rol</span>
@@ -167,16 +168,10 @@ export default function Login() {
                 <p className="text-sm text-gray-400">Selecciona cómo quieres ingresar al sistema.</p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
-                {/* Izquierda — Jugador/Familiar y Administrador/Organizador, uno arriba y otro abajo */}
-                <div className="flex flex-col gap-4">
-                  {renderRoleCard(roleCards[0], 0)}
-                  {renderRoleCard(roleCards[1], 1)}
-                </div>
-                {/* Derecha — Árbitro, alineado hacia arriba */}
-                <div>
-                  {renderRoleCard(roleCards[2], 2)}
-                </div>
+              <div className="flex flex-col gap-4">
+                {renderRoleCard(roleCards[0], 0)}
+                {renderRoleCard(roleCards[1], 1)}
+                {renderRoleCard(roleCards[2], 2)}
               </div>
             </motion.div>
           ) : (
@@ -250,7 +245,7 @@ export default function Login() {
 
       {/* Right — video, solo en el paso de iniciar sesión */}
       {step === 'login' && (
-        <div className="hidden lg:flex relative z-10 w-[62%] overflow-hidden bg-black">
+        <div className="hidden lg:flex relative z-10 w-1/2 overflow-hidden bg-black">
           <video key={videoIndex} ref={videoRef} autoPlay loop muted playsInline
             className="absolute inset-0 w-full h-full object-cover">
             <source src={videos[videoIndex]} type="video/mp4" />
