@@ -44,8 +44,16 @@ const FRONT_ROLE_TO_API: Record<string, UserRoleAPI> = {
 // ─── Mock fallback ─────────────────────────────────────────
 const MOCK_USER_ID = 'mock-user-001'
 
+/** Deriva un nombre legible a partir del email (ej. "juan.perez@x.com" → "Juan Perez") */
+function nameFromEmail(email: string): string {
+  return email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+}
+
+let mockEmail = 'mock@escuelaing.edu.co'
+
 /** Login + OTP mock (simula el flujo completo) */
-async function mockLogin(_data: LoginRequest): Promise<LoginResponse> {
+async function mockLogin(data: LoginRequest): Promise<LoginResponse> {
+  mockEmail = data.email
   // Simula delay de red
   await new Promise((r) => setTimeout(r, 800))
   return { userId: MOCK_USER_ID, message: 'OTP sent to your email.' }
@@ -57,8 +65,8 @@ async function mockValidateOtp(_data: OtpValidationRequest): Promise<OtpResponse
     token: 'mock-jwt-token',
     user: {
       id: MOCK_USER_ID,
-      fullName: 'Usuario Mock',
-      email: 'mock@escuelaing.edu.co',
+      fullName: nameFromEmail(mockEmail),
+      email: mockEmail,
       userType: 'STUDENT',
       role: 'PLAYER',
       status: 'ACTIVE',

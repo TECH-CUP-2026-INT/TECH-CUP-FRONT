@@ -103,7 +103,7 @@ function TorneosContent() {
         <div className="max-w-[1280px] mx-auto px-8 relative">
           {/* Filters */}
           <motion.div initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:0.6}}
-            className="grid grid-cols-[repeat(3,160px)_1fr_auto] gap-3 items-end mb-8 max-lg:grid-cols-2 max-sm:grid-cols-1
+            className="grid grid-cols-[repeat(2,160px)_1fr_auto] gap-3 items-end mb-8 max-lg:grid-cols-2 max-sm:grid-cols-1
               bg-[#E8DFF5]/70 dark:bg-black/30 border border-[#D4C8E8]/40 dark:border-white/5 rounded-2xl p-5">
             <div>
               <label className="block text-[11px] text-[#7A6B99] dark:text-text-faint font-semibold uppercase tracking-[.4px] mb-1.5">Estado</label>
@@ -131,19 +131,6 @@ function TorneosContent() {
               </Select>
             </div>
             <div>
-              <label className="block text-[11px] text-[#7A6B99] dark:text-text-faint font-semibold uppercase tracking-[.4px] mb-1.5">Categoría</label>
-              <Select value={filterCategoria} onValueChange={v=>{setFilterCategoria(v);setPage(1)}}>
-                <SelectTrigger className="bg-[#E8DFF5]/70 dark:bg-black/20 border border-[#D4C8E8]/40 dark:border-white/10 text-[#3D1A6B] dark:text-gray-light rounded-lg">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="bg-white dark:bg-[#1F1F28] border border-[#D4C8E8]/40 dark:border-white/10">
-                  <SelectItem value="todos" className="text-[#3D1A6B] dark:text-gray-light">Todas</SelectItem>
-                  <SelectItem value="Fútbol 11" className="text-[#3D1A6B] dark:text-gray-light">Fútbol 11</SelectItem>
-                  <SelectItem value="Futsal" className="text-[#3D1A6B] dark:text-gray-light">Futsal</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
               <label className="block text-[11px] text-[#7A6B99] dark:text-text-faint font-semibold uppercase tracking-[.4px] mb-1.5">Buscar</label>
               <div className="relative">
                 <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#7A6B99] dark:text-text-faint" />
@@ -151,9 +138,9 @@ function TorneosContent() {
                   className="w-full bg-[#E8DFF5]/70 dark:bg-black/20 border border-[#D4C8E8]/40 dark:border-white/10 text-[#3D1A6B] dark:text-gray-light rounded-lg py-2.5 pl-9 pr-3 text-[13.5px] outline-none focus:border-purple-mid placeholder:text-[#9B8AB5] dark:placeholder:text-text-faint" />
               </div>
             </div>
-            <Button variant="outline" size="sm" onClick={clearFilters}
-              className="border-gold text-gold rounded-full hover:bg-gold/10 self-end mb-0.5">
-              <RefreshCw size={14} /> Limpiar
+            <Button variant="outline" onClick={clearFilters}
+              className="border-gold text-gold rounded-full hover:bg-gold/10 self-end mb-0.5 h-7 w-20 gap-1 text-xs px-2">
+              <RefreshCw size={12} /> Limpiar
             </Button>
           </motion.div>
 
