@@ -143,14 +143,14 @@ export default function Login() {
       {/* Panel negro-dorado */}
       <div className={`relative z-10 flex items-center justify-center p-8 lg:p-16 overflow-hidden min-w-[320px] ${step === 'role' ? 'w-[42%]' : 'w-1/2'}`}>
         <div className="absolute inset-0 bg-gradient-to-br from-white via-[#F3EEFF] to-white dark:from-black dark:via-[#1a1a1a] dark:to-black" />
-        {/* Aurora dorado + violeta — mismo tratamiento que el hero de Landing */}
-        <div className="absolute inset-0 pointer-events-none opacity-60 bg-[radial-gradient(ellipse_at_30%_40%,rgba(139,92,246,0.08)_0%,transparent_60%)] dark:bg-[radial-gradient(ellipse_at_30%_40%,rgba(139,92,246,0.15)_0%,transparent_60%)]" />
-        <div className="absolute inset-0 pointer-events-none opacity-40 bg-[radial-gradient(ellipse_at_70%_60%,rgba(245,166,35,0.05)_0%,transparent_50%)] dark:bg-[radial-gradient(ellipse_at_70%_60%,rgba(245,166,35,0.08)_0%,transparent_50%)]" />
+        {/* Aurora dorado + violeta — solo en modo oscuro */}
+        <div className="absolute inset-0 pointer-events-none hidden dark:block dark:opacity-60 dark:bg-[radial-gradient(ellipse_at_30%_40%,rgba(139,92,246,0.15)_0%,transparent_60%)]" />
+        <div className="absolute inset-0 pointer-events-none hidden dark:block dark:opacity-40 dark:bg-[radial-gradient(ellipse_at_70%_60%,rgba(245,166,35,0.08)_0%,transparent_50%)]" />
         <div className="absolute inset-0 hidden dark:block dark:bg-black/70" />
         {/* Brillo dorado sutil */}
         <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-        <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-gold/5 blur-[60px]" />
-        <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-gold/10 blur-[50px]" />
+        <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-gold/5 blur-[60px] hidden dark:block" />
+        <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-gold/10 blur-[50px] hidden dark:block" />
         <div className={`relative w-full transition-all duration-300 ${step === 'role' ? 'max-w-[560px]' : 'max-w-[460px]'}`}>
           {/* Logo + back to home button */}
           <div className="flex items-center gap-3 mb-10">
@@ -287,9 +287,6 @@ export default function Login() {
               <h2 className="font-[family-name:var(--font-display)] text-[clamp(28px,3.5vw,52px)] uppercase leading-[.92] tracking-[.5px]">
                 La pasión nos <span className="text-gold-ink">conecta</span>
               </h2>
-              <p className="text-sm text-text-muted mt-4 leading-relaxed">
-                Inicia sesión y vive la emoción del torneo universitario más importante de Ingeniería de Sistemas.
-              </p>
             </div>
           </div>
         </div>
