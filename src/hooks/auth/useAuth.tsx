@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react'
+import { clearJwt, hasJwt } from '@/api/client'
 
 export type UserRole = 'jugador' | 'arbitro' | 'organizador'
 
@@ -48,6 +49,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const stored = localStorage.getItem('techcup_user')
     if (stored) {
       setUser(JSON.parse(stored))
+    } else if (hasJwt()) {
+      // Hay JWT pero no user data → intentar validarlo
+      import('@/services/auth').then(({ validateToken }) => {
+        validateToken().then((res) => {
+          if (res?.valid && res.email) {
+            const role = res.role === 'REFEREE' ? 'arbitro' as const
+              : (res.role === 'ORGANIZER' || res.role === 'ADMIN') ? 'organizador' as const
+              : 'jugador' as const
+            login(res.email, role)
+          } else {
+            clearJwt()
+          }
+        })
+      })
     }
   }, [])
 
@@ -85,6 +100,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = () => {
     setUser(null)
     localStorage.removeItem('techcup_user')
+    clearJwt()
   }
 
   return (
