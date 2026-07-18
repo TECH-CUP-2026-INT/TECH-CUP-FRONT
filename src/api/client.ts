@@ -108,6 +108,14 @@ export async function apiPut<T>(path: string, body: unknown): Promise<T> {
 }
 
 /**
+ * PATCH request al API de TechCup.
+ */
+export async function apiPatch<T>(path: string, body?: unknown): Promise<T> {
+  const res = await api.patch<T>(path, body)
+  return res.data
+}
+
+/**
  * POST multipart/form-data al API de TechCup.
  * La instancia fuerza 'Content-Type: application/json' por defecto, lo que rompe un body
  * FormData (axios lo serializa como JSON en vez de mandarlo como multipart real) — acá se

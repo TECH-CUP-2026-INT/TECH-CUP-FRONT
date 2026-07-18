@@ -232,13 +232,20 @@ export default function Login() {
               <button onClick={() => setStep('role')} className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-gold transition-colors mb-3">
                 <ArrowLeft size={16} /> Elegir otro rol
               </button>
+              {(() => {
+                const card = roleCards.find(c => c.id === selectedRole)
+                const roleImg = card?.img ?? `/images/${selectedRole}.png`
+                const roleLabel = card?.shortName ?? selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)
+                return (
               <div className="flex items-center gap-3 mb-2 p-3 rounded-xl bg-purple-mid/10 border border-gold/20">
-                <img src={`/images/${selectedRole}.png`} alt="" className="w-10 h-10 object-contain" />
+                <img src={roleImg} alt="" className="w-10 h-10 object-contain" />
                 <div>
                   <p className="text-xs text-gold/60 uppercase tracking-wider">Rol seleccionado</p>
-                  <p className="text-sm font-bold text-white">{selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)}</p>
+                  <p className="text-sm font-bold text-white">{roleLabel}</p>
                 </div>
               </div>
+                )
+              })()}
               <h1 className="font-[family-name:var(--font-display)] text-3xl uppercase tracking-[.5px] text-white mb-1">
                 Bienvenido de <span className="text-gold">vuelta</span>
               </h1>

@@ -9,6 +9,8 @@ import { InteractiveHoverButton } from '@/components/common/interactive-hover-bu
 import { Badge } from '@/components/common/badge'
 import ManchasFloating from '@/components/common/ManchasFloating'
 import { torneos, fetchTorneos } from '@/services/torneos'
+import { fetchEventosAuditoria } from '@/services/logistica'
+import type { AuditEvent } from '@/api/logistica'
 import SoccerField3D from '@/components/employees/SoccerField3D'
 import {
   Trophy, CalendarDays, MapPin, Users, Clock, ShieldCheck,
@@ -199,6 +201,8 @@ export default function DashboardAdmin() {
     { id:3, jugador:'Sofía Restrepo', posicion:'Mediocampista', estado:'aceptada' },
     { id:4, jugador:'Tomás Arango', posicion:'Delantero', estado:'rechazada' },
   ])
+  const [eventosAuditoria, setEventosAuditoria] = useState<AuditEvent[]>([])
+  const [logisticaLoading, setLogisticaLoading] = useState(false)
   const [arbitroMatch, setArbitroMatch] = useState(partidosDetalle[0])
   const [eventosTemp, setEventosTemp] = useState<MatchEvent[]>(partidosDetalle[0].eventos)
 
@@ -207,6 +211,16 @@ export default function DashboardAdmin() {
   const torneoActivo = torneos.find(t => t.estado === 'live') || torneos.find(t => t.estado === 'upcoming') || torneos[0] || { equipos: 0, jugadores: 0, canchas: 4, nombre: 'Cargando...', fecha: '', categoria: 'Fútbol 11', estado: 'upcoming' as const, id: '0', semestre: '', tag: '' }
 
   useEffect(() => { fetchTorneos() }, [])
+
+  useEffect(() => {
+    if (adminTab === 'logistica') {
+      setLogisticaLoading(true)
+      fetchEventosAuditoria()
+        .then(setEventosAuditoria)
+        .catch(() => setEventosAuditoria([]))
+        .finally(() => setLogisticaLoading(false))
+    }
+  }, [adminTab])
 
   const handleAprobar = (id: number) => setListaInscripciones(prev => prev.map(i => i.id === id ? { ...i, estado:'approved' } : i))
   const handleRechazar = (id: number) => setListaInscripciones(prev => prev.map(i => i.id === id ? { ...i, estado:'rejected' } : i))
@@ -671,22 +685,59 @@ export default function DashboardAdmin() {
               )}
 
               {adminTab === 'logistica' && (
-                <div className="space-y-3">
-                  <h3 className="font-[family-name:var(--font-display)] uppercase text-lg tracking-[.5px] mb-4">Logística: <span className="text-gold">refrigerios y kits</span></h3>
-                  {listaEquiposLog.map(eq => (
-                    <div key={eq.id} className="flex items-center gap-4 p-3.5 rounded-xl bg-black/30 border border-white/5">
-                      <span className="text-xl w-8 text-center">{eq.emoji}</span>
-                      <div className="flex-1"><span className="font-semibold text-[13.5px]">{eq.nombre}</span><span className="text-[10px] text-text-muted ml-2">📍 {eq.cancha}</span></div>
-                      <button onClick={() => toggleRefrigerio(eq.id)}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-bold border ${eq.refrigerio === 'entregado' ? 'bg-green-500/20 text-green-400 border-green-500/30' : eq.refrigerio === 'pendiente' ? 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30' : 'bg-white/5 text-text-muted border-white/10'}`}>
-                        <Apple size={12} /> {eq.refrigerio === 'entregado' ? 'Entregado' : eq.refrigerio === 'pendiente' ? 'Pendiente' : 'No asignado'}
-                      </button>
-                      <button onClick={() => toggleKit(eq.id)}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-bold border ${eq.kit === 'entregado' ? 'bg-green-500/20 text-green-400 border-green-500/30' : eq.kit === 'pendiente' ? 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30' : 'bg-white/5 text-text-muted border-white/10'}`}>
-                        <Shirt size={12} /> {eq.kit === 'entregado' ? 'Entregado' : eq.kit === 'pendiente' ? 'Pendiente' : 'No asignado'}
-                      </button>
-                    </div>
-                  ))}
+                <div className="space-y-6">
+                  {/* ─── Resumen por equipo (mock → API eventual) ─── */}
+                  <div className="space-y-3">
+                    <h3 className="font-[family-name:var(--font-display)] uppercase text-lg tracking-[.5px]">Refrigerios y <span className="text-gold">kits</span></h3>
+                    <p className="text-xs text-text-muted mb-3">Estado por equipo. Los datos mock serán reemplazados cuando el API de Logística exponga un endpoint de resumen agregado.</p>
+                    {listaEquiposLog.map(eq => (
+                      <div key={eq.id} className="flex items-center gap-4 p-3.5 rounded-xl bg-black/30 border border-white/5">
+                        <span className="text-xl w-8 text-center">{eq.emoji}</span>
+                        <div className="flex-1"><span className="font-semibold text-[13.5px]">{eq.nombre}</span><span className="text-[10px] text-text-muted ml-2">📍 {eq.cancha}</span></div>
+                        <button onClick={() => toggleRefrigerio(eq.id)}
+                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-bold border ${eq.refrigerio === 'entregado' ? 'bg-green-500/20 text-green-400 border-green-500/30' : eq.refrigerio === 'pendiente' ? 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30' : 'bg-white/5 text-text-muted border-white/10'}`}>
+                          <Apple size={12} /> {eq.refrigerio === 'entregado' ? 'Entregado' : eq.refrigerio === 'pendiente' ? 'Pendiente' : 'No asignado'}
+                        </button>
+                        <button onClick={() => toggleKit(eq.id)}
+                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-bold border ${eq.kit === 'entregado' ? 'bg-green-500/20 text-green-400 border-green-500/30' : eq.kit === 'pendiente' ? 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30' : 'bg-white/5 text-text-muted border-white/10'}`}>
+                          <Shirt size={12} /> {eq.kit === 'entregado' ? 'Entregado' : eq.kit === 'pendiente' ? 'Pendiente' : 'No asignado'}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* ─── Feed de auditoría (real API) ─── */}
+                  <div className="space-y-3">
+                    <h3 className="font-[family-name:var(--font-display)] uppercase text-lg tracking-[.5px]">
+                      <RefreshCw size={14} className="inline mr-1.5 text-gold" />
+                      Actividad reciente <span className="text-gold">· Logística</span>
+                    </h3>
+                    {logisticaLoading ? (
+                      <div className="flex items-center gap-2 text-sm text-text-muted py-4">
+                        <Loader2 size={14} className="animate-spin" /> Cargando actividad…
+                      </div>
+                    ) : eventosAuditoria.length > 0 ? (
+                      <div className="space-y-2">
+                        {eventosAuditoria.map((ev, i) => (
+                          <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-black/20 border border-white/5">
+                            <span className="text-sm mt-0.5">
+                              {ev.tipo.startsWith('DEFINICION') ? '📝' : ev.tipo.startsWith('ENTREGA') || ev.tipo === 'DOTACION_ENTREGADA' ? '✅' : ev.tipo === 'DOTACION_DEVUELTA' ? '↩️' : '📦'}
+                            </span>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-[13px] font-medium truncate">{ev.detalle || ev.tipo}</p>
+                              <p className="text-[10px] text-text-muted mt-0.5">
+                                {new Date(ev.timestamp).toLocaleString('es-CO', {
+                                  day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
+                                })}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-xs text-text-muted py-4">No hay eventos de auditoría disponibles. El API requiere rol ADMIN u ORGANIZADOR.</p>
+                    )}
+                  </div>
                 </div>
               )}
 
