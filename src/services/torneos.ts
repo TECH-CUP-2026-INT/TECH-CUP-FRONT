@@ -94,8 +94,9 @@ export function createTorneo(data: {
   fechaFin?: string
   canchas?: number
 }): Torneo {
+  const id = Date.now()
   const torneo: Torneo = {
-    id: 'local-' + Date.now(),
+    id: id.toString(),
     nombre: data.nombre,
     estado: 'upcoming',
     semestre: '2026-II',
@@ -104,7 +105,7 @@ export function createTorneo(data: {
     jugadores: 0,
     canchas: data.canchas ?? 0,
     fecha: data.fechaInicio || '',
-    tag: data.tipo === 'relampago' ? 'Relámpago' : data.tipo ? `${data.tipo}` : 'Próximo',
+    tag: data.tipo === 'relampago' ? 'Relámpago' : 'Próximo',
   }
   _torneos.unshift(torneo)
   return torneo
