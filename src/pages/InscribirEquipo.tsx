@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import Sidebar from '@/components/common/Sidebar'
 import AppTopbar from '@/components/common/AppTopbar'
@@ -9,39 +10,40 @@ import { Button } from '@/components/common/button'
 import { ArrowLeft, ArrowRight, XCircle, CreditCard, Users, Check } from 'lucide-react'
 import { PaymentBrick } from '@/components/PaymentBrick'
 import { createPaymentOrder } from '@/api/pagos'
+import { inscribirEnTorneo } from '@/services/equipos'
+import { torneos } from '@/services/torneos'
 import type { PaymentOrderResponse } from '@/types/pagos'
-
-const torneos = [
-  { id: 1, nombre: 'TechCup 2024-I', fecha: 'Mar 5 - Jun 15', costo: 50000, equipos: 32, cupo: 32, inscripciones: 'Abiertas' },
-  { id: 2, nombre: 'TechCup 2024-II', fecha: 'Ago 20 - Nov 30', costo: 55000, equipos: 32, cupo: 28, inscripciones: 'Abiertas' },
-]
+import type { Torneo } from '@/api/tipos'
 
 export default function InscribirEquipo() {
+  const { state } = useLocation()
+  const teamId = (state as any)?.teamId
+  const torneoSuggested = (state as any)?.torneoId
+
+  const torneosAbiertos = torneos.filter(t => t.estado === 'upcoming' || t.estado === 'live')
+
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [paso, setPaso] = useState(1)
-  const [selectedTorneo, setSelectedTorneo] = useState<number | null>(null)
+  const [selectedTorneo, setSelectedTorneo] = useState<string | null>(torneoSuggested || null)
+  const [enrolling, setEnrolling] = useState(false)
+  const [enrollError, setEnrollError] = useState<string | null>(null)
+  const [enrolled, setEnrolled] = useState(false)
   const [paymentData, setPaymentData] = useState<PaymentOrderResponse | null>(null)
   const [paymentError, setPaymentError] = useState<string | null>(null)
   const [creatingOrder, setCreatingOrder] = useState(false)
-  const torneo = torneos.find(t => t.id === selectedTorneo)
+  const torneo: Torneo | undefined = torneosAbiertos.find(t => t.id === selectedTorneo)
 
-  const handleGoToPayment = async () => {
-    if (!torneo) return
-    setCreatingOrder(true)
-    setPaymentError(null)
+  const handleEnroll = async () => {
+    if (!torneo || !teamId) return
+    setEnrolling(true)
+    setEnrollError(null)
     try {
-      const data = await createPaymentOrder({
-        enrollmentId: `ENR-${Date.now()}`,
-        teamId: 'team-001',
-        tournamentId: `TOR-${torneo.id}`,
-        amount: torneo.costo,
-      })
-      setPaymentData(data)
-      setPaso(3)
+      await inscribirEnTorneo(torneo.id, teamId)
+      setEnrolled(true)
     } catch (err) {
-      setPaymentError(err instanceof Error ? err.message : 'Error al crear la orden de pago')
+      setEnrollError(err instanceof Error ? err.message : 'Error al inscribir')
     } finally {
-      setCreatingOrder(false)
+      setEnrolling(false)
     }
   }
 
@@ -71,18 +73,19 @@ export default function InscribirEquipo() {
                 <motion.div key="p1" initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-20}}>
                   <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Seleccionar <span className="text-gold">torneo</span></h2>
                   <p className="text-sm text-text-muted mb-6">Elegí el torneo en el que querés inscribir a tu equipo.</p>
-                  <div className="space-y-3 mb-6">
-                    {torneos.map(t => (
+                    <div className="space-y-3 mb-6">
+                    {torneosAbiertos.length === 0 && <p className="text-center py-6 text-text-muted">No hay torneos abiertos actualmente.</p>}
+                    {torneosAbiertos.map(t => (
                       <button key={t.id} onClick={() => setSelectedTorneo(t.id)}
                         className={`w-full p-4 rounded-xl border-2 text-left transition-all ${selectedTorneo === t.id ? 'border-gold bg-gold/10' : 'border-border bg-black/50 hover:border-purple-mid/50'}`}>
                         <div className="flex items-center justify-between mb-1">
                           <span className="font-semibold">{t.nombre}</span>
-                          <Badge className="rounded-full bg-green-500/15 text-green-400 border border-green-500/30 text-[10px]">{t.inscripciones}</Badge>
+                          <Badge className="rounded-full bg-green-500/15 text-green-400 border border-green-500/30 text-[10px]">{t.estado === 'live' ? 'En curso' : 'Abierto'}</Badge>
                         </div>
                         <div className="flex items-center gap-4 text-xs text-text-muted">
-                          <span>📅 {t.fecha}</span>
-                          <span>💰 ${t.costo.toLocaleString()}</span>
-                          <span>👥 {t.cupo}/{t.equipos} cupos</span>
+                          <span>📅 {t.fecha || 'Por definir'}</span>
+                          <span>👥 {t.equipos} equipos</span>
+                          <span>🏟️ {t.categoria}</span>
                         </div>
                       </button>
                     ))}
@@ -95,15 +98,14 @@ export default function InscribirEquipo() {
 
               {paso === 2 && (
                 <motion.div key="p2" initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-20}}>
-                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Confirmar <span className="text-gold">datos</span></h2>
-                  <p className="text-sm text-text-muted mb-6">Revisá la información antes de continuar.</p>
+                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Confirmar <span className="text-gold">inscripción</span></h2>
+                  <p className="text-sm text-text-muted mb-6">Revisá la información antes de inscribirte.</p>
                   <div className="bg-black/50 border border-border rounded-xl p-5 space-y-3 mb-6">
                     {[
                       { label: 'Torneo', value: torneo?.nombre },
-                      { label: 'Equipo', value: 'Sistemas FC' },
-                      { label: 'Capitán', value: 'Juan Camilo Rivera' },
-                      { label: 'Jugadores', value: '10 de 12' },
-                      { label: 'Costo', value: `$${torneo?.costo.toLocaleString()}` },
+                      { label: 'Categoría', value: torneo?.categoria },
+                      { label: 'Estado', value: torneo?.estado === 'live' ? 'En curso' : 'Próximo' },
+                      { label: 'Equipos', value: `${torneo?.equipos} equipos` },
                     ].map((d, i) => (
                       <div key={i} className="flex items-center justify-between text-sm">
                         <span className="text-text-muted">{d.label}</span>
@@ -111,19 +113,29 @@ export default function InscribirEquipo() {
                       </div>
                     ))}
                   </div>
+                  {!teamId && (
+                    <div className="p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-xl flex items-center gap-2 text-sm text-yellow-400 mb-4">
+                      <Users size={16} /> Creá un equipo primero antes de inscribirte.
+                    </div>
+                  )}
                   <div className="flex gap-3">
                     <Button variant="outline" onClick={() => setPaso(1)} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1"><ArrowLeft size={16} /> Anterior</Button>
                     <Button
-                      onClick={handleGoToPayment}
-                      disabled={creatingOrder}
+                      onClick={handleEnroll}
+                      disabled={enrolling || !teamId}
                       className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-12 flex-1 disabled:opacity-40"
                     >
-                      {creatingOrder ? 'Creando orden...' : 'Ir a pagar'} <CreditCard size={16} />
+                      {enrolling ? 'Inscribiendo...' : enrolled ? '✓ Inscripto' : 'Inscribir equipo'} <Users size={16} />
                     </Button>
                   </div>
-                  {paymentError && (
+                  {enrollError && (
                     <div className="mt-4 p-3 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-2 text-sm text-red-400">
-                      <XCircle size={16} /> {paymentError}
+                      <XCircle size={16} /> {enrollError}
+                    </div>
+                  )}
+                  {enrolled && (
+                    <div className="mt-4 p-3 bg-green-500/10 border border-green-500/20 rounded-xl flex items-center gap-2 text-sm text-green-400">
+                      <Check size={16} /> Inscripción exitosa! Te notificaremos cuando sea aprobada.
                     </div>
                   )}
                 </motion.div>
