@@ -17,14 +17,17 @@ import UpcomingMatches from '@/components/UpcomingMatches'
 const DIAS_SEMANA = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom']
 
 const teamIcons: Record<string, { icon: typeof Cat; color: string }> = {
-  'Tigres FC': { icon: Cat, color: '#EF4444' },
-  'IA Warriors': { icon: Cpu, color: '#8B5CF6' },
-  'Code United': { icon: Code2, color: '#3B82F6' },
-  'Sistemas FC': { icon: Cog, color: '#22C55E' },
-  'Dragones FC': { icon: Flame, color: '#F97316' },
-  'Los Bits': { icon: HardDrive, color: '#EC4899' },
-  'Titanes': { icon: Shield, color: '#A855F7' },
-  'Fénix': { icon: Feather, color: '#EAB308' },
+  'Vera FC': { icon: Shield, color: '#7C3AED' },
+  'Quiceno United': { icon: Flame, color: '#F97316' },
+  'Bernal Warriors': { icon: Cpu, color: '#8B5CF6' },
+  'Rojas Tigers': { icon: Cat, color: '#EF4444' },
+  'Prieto FC': { icon: Cog, color: '#22C55E' },
+  'García Lions': { icon: Code2, color: '#3B82F6' },
+  'Barrera FC': { icon: HardDrive, color: '#EC4899' },
+  'Arteaga United': { icon: Feather, color: '#14B8A6' },
+  'Modelo FC': { icon: Shield, color: '#A855F7' },
+  'Tinjacá Stars': { icon: Flame, color: '#EAB308' },
+  'Beltrán Referees': { icon: Cat, color: '#DC2626' },
 }
 
 
@@ -39,24 +42,27 @@ function generarDiasMes(mes: number, año: number) {
   const primerDia = new Date(año, mes, 1)
   for (let i = 0; i < (primerDia.getDay() || 7) - 1; i++) dias.push(null)
   for (let d = 1; d <= new Date(año, mes + 1, 0).getDate(); d++) {
-    dias.push({ dia: d, tienePartido: partidos.some(p => p.dia === d && p.mes === 'MAY'), hoy: d === 9 && mes === 6 })
+    dias.push({ dia: d, tienePartido: partidos.some(p => p.dia === d && p.mes === 'JUL'), hoy: d === 18 && mes === 6 })
   }
   return dias
 }
 
 const equiposList = [
-  { nom: 'Tigres FC', icon: Cat,      color: '#EF4444' },
-  { nom: 'Sistemas FC', icon: Cog,     color: '#22C55E' },
-  { nom: 'Code United', icon: Code2,   color: '#3B82F6' },
-  { nom: 'IA Warriors', icon: Cpu,     color: '#8B5CF6' },
-  { nom: 'Dragones FC', icon: Flame,   color: '#F97316' },
-  { nom: 'Los Bits',    icon: HardDrive, color: '#F5A623' },
-  { nom: 'Titanes',     icon: Shield,  color: '#14B8A6' },
-  { nom: 'Fénix',       icon: Feather, color: '#EC4899' },
+  { nom: 'Vera FC', icon: Shield,  color: '#7C3AED' },
+  { nom: 'Quiceno United', icon: Flame, color: '#F97316' },
+  { nom: 'Bernal Warriors', icon: Cpu, color: '#8B5CF6' },
+  { nom: 'Rojas Tigers', icon: Cat,  color: '#EF4444' },
+  { nom: 'Prieto FC', icon: Cog, color: '#22C55E' },
+  { nom: 'García Lions', icon: Code2, color: '#3B82F6' },
+  { nom: 'Barrera FC', icon: HardDrive, color: '#EC4899' },
+  { nom: 'Arteaga United', icon: Feather, color: '#14B8A6' },
+  { nom: 'Modelo FC', icon: Shield, color: '#A855F7' },
+  { nom: 'Tinjacá Stars', icon: Flame, color: '#EAB308' },
+  { nom: 'Beltrán Referees', icon: Cat, color: '#DC2626' },
 ]
 
 function CalendarioContent() {
-  const [mes, setMes] = useState(4)
+  const [mes, setMes] = useState(6)
   const [año] = useState(2026)
   const [vista, setVista] = useState<'calendario' | 'lista'>('calendario')
   const [selectedMatch, setSelectedMatch] = useState<typeof partidos[0] | null>(null)
