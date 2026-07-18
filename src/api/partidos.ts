@@ -10,14 +10,17 @@
 import { apiGet, apiPost } from './client'
 import type { MatchSummaryAPI, MatchDetailAPI, CreateMatchRequest, CreateMatchResponse } from './tipos'
 
-const BASE = '/api/v1/Partidos'
+const DEV = import.meta.env.DEV
+const MATCHES_BASE = DEV
+  ? 'https://matches-service.bluebush-a05ae8bd.eastus2.azurecontainerapps.io'
+  : ''
 
 /**
  * Obtiene todos los partidos.
  * GET /api/partidos
  */
 export async function getPartidosApi(): Promise<MatchSummaryAPI[]> {
-  return apiGet<MatchSummaryAPI[]>(`${BASE}/api/partidos`)
+  return apiGet<MatchSummaryAPI[]>(`${MATCHES_BASE}/api/partidos`)
 }
 
 /**
@@ -27,7 +30,7 @@ export async function getPartidosApi(): Promise<MatchSummaryAPI[]> {
 export async function getPartidoPorIdApi(
   matchId: string
 ): Promise<MatchDetailAPI> {
-  return apiGet<MatchDetailAPI>(`${BASE}/api/partidos/${matchId}`)
+  return apiGet<MatchDetailAPI>(`${MATCHES_BASE}/api/partidos/${matchId}`)
 }
 
 /**
@@ -37,5 +40,5 @@ export async function getPartidoPorIdApi(
 export async function crearPartidoApi(
   data: CreateMatchRequest
 ): Promise<CreateMatchResponse> {
-  return apiPost<CreateMatchResponse>(`${BASE}/api/partidos`, data)
+  return apiPost<CreateMatchResponse>(`${MATCHES_BASE}/api/partidos`, data)
 }
