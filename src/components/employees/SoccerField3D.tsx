@@ -39,38 +39,34 @@ export default function SoccerField3D({
   stats = defaultStats,
 }: SoccerField3DProps) {
   const FORMACIONES: Record<string, { x: number; z: number }[]> = {
-    "4-4-2": [
-      { x: 0, z: -250 }, { x: -160, z: -140 }, { x: -80, z: -160 },
-      { x: 80, z: -160 }, { x: 160, z: -140 }, { x: -160, z: -40 },
-      { x: -80, z: -50 }, { x: 80, z: -50 }, { x: 160, z: -40 },
+    "3-2-1": [
+      { x: 0, z: -250 }, { x: -140, z: -140 }, { x: 0, z: -160 }, { x: 140, z: -140 },
+      { x: -80, z: -40 }, { x: 80, z: -40 },
+      { x: 0, z: 80 },
+    ],
+    "2-3-1": [
+      { x: 0, z: -250 }, { x: -100, z: -140 }, { x: 100, z: -140 },
+      { x: -150, z: -40 }, { x: 0, z: -50 }, { x: 150, z: -40 },
+      { x: 0, z: 80 },
+    ],
+    "3-1-2": [
+      { x: 0, z: -250 }, { x: -140, z: -140 }, { x: 0, z: -160 }, { x: 140, z: -140 },
+      { x: 0, z: -40 },
       { x: -70, z: 80 }, { x: 70, z: 80 },
     ],
-    "4-3-3": [
-      { x: 0, z: -250 }, { x: -160, z: -140 }, { x: -80, z: -160 },
-      { x: 80, z: -160 }, { x: 160, z: -140 }, { x: -120, z: -50 },
-      { x: 0, z: -60 }, { x: 120, z: -50 }, { x: -120, z: 80 },
-      { x: 0, z: 100 }, { x: 120, z: 80 },
-    ],
-    "3-5-2": [
-      { x: 0, z: -250 }, { x: -120, z: -150 }, { x: 0, z: -170 },
-      { x: 120, z: -150 }, { x: -180, z: -50 }, { x: -90, z: -60 },
-      { x: 0, z: -40 }, { x: 90, z: -60 }, { x: 180, z: -50 },
+    "2-2-2": [
+      { x: 0, z: -250 }, { x: -100, z: -140 }, { x: 100, z: -140 },
+      { x: -80, z: -40 }, { x: 80, z: -40 },
       { x: -70, z: 80 }, { x: 70, z: 80 },
-    ],
-    "4-2-3-1": [
-      { x: 0, z: -250 }, { x: -160, z: -140 }, { x: -80, z: -160 },
-      { x: 80, z: -160 }, { x: 160, z: -140 }, { x: -80, z: -70 },
-      { x: 80, z: -70 }, { x: -130, z: 20 }, { x: 0, z: 0 },
-      { x: 130, z: 20 }, { x: 0, z: 90 },
     ],
   }
 
   const [home, setHome] = useState(true)
   const [selected, setSelected] = useState<FieldPlayer | null>(null)
   const [rotating, setRotating] = useState(false)
-  const [formacion, setFormacion] = useState("4-4-2")
+  const [formacion, setFormacion] = useState("3-2-1")
   const [players, setPlayers] = useState(initialHome.map((p, i) => ({
-    ...p, x: FORMACIONES["4-4-2"][i]?.x ?? p.x, z: FORMACIONES["4-4-2"][i]?.z ?? p.z
+    ...p, x: FORMACIONES["3-2-1"][i]?.x ?? p.x, z: FORMACIONES["3-2-1"][i]?.z ?? p.z
   })))
 
   const activeColor = home ? homeColor : awayColor

@@ -276,7 +276,7 @@ export default function MatchDetail() {
                     </div>
                     <div>
                       <p className="text-sm font-semibold">{eq.name}</p>
-                      <p className="text-[11px] text-text-muted">4-4-2 • {eq.wins + eq.draws + eq.losses} PJ</p>
+                      <p className="text-[11px] text-text-muted">3-2-1 • {eq.wins + eq.draws + eq.losses} PJ</p>
                     </div>
                   </div>
                 ))}
@@ -287,28 +287,20 @@ export default function MatchDetail() {
                 <SoccerField3D
                   homePlayers={[
                     { name:"Carlos Ruiz", number:4, posicion:"Defensa", img:"https://i.pravatar.cc/72?img=4", x:-80, z:-100 },
-                    { name:"Miguel Díaz", number:5, posicion:"Defensa", img:"https://i.pravatar.cc/72?img=5", x:-20, z:-100 },
-                    { name:"Andrés Paz", number:3, posicion:"Defensa", img:"https://i.pravatar.cc/72?img=6", x:40, z:-100 },
-                    { name:"Jorge Mora", number:2, posicion:"Defensa", img:"https://i.pravatar.cc/72?img=7", x:100, z:-100 },
-                    { name:"Luis Rojas", number:8, posicion:"Volante", img:"https://i.pravatar.cc/72?img=8", x:-90, z:0 },
-                    { name:"David Gil", number:6, posicion:"Volante", img:"https://i.pravatar.cc/72?img=9", x:-30, z:0 },
-                    { name:"Pablo Cruz", number:10, posicion:"Volante", img:"https://i.pravatar.cc/72?img=10", x:30, z:0 },
-                    { name:"Sergio Peña", number:11, posicion:"Volante", img:"https://i.pravatar.cc/72?img=11", x:90, z:0 },
-                    { name:"Juan Vega", number:9, posicion:"Delantero", img:"https://i.pravatar.cc/72?img=12", x:-40, z:100 },
-                    { name:"Tomás Herrera", number:7, posicion:"Delantero", img:"https://i.pravatar.cc/72?img=13", x:40, z:100 },
+                    { name:"Miguel Díaz", number:5, posicion:"Defensa", img:"https://i.pravatar.cc/72?img=5", x:0, z:-100 },
+                    { name:"Andrés Paz", number:3, posicion:"Defensa", img:"https://i.pravatar.cc/72?img=6", x:80, z:-100 },
+                    { name:"Luis Rojas", number:8, posicion:"Volante", img:"https://i.pravatar.cc/72?img=8", x:-40, z:0 },
+                    { name:"David Gil", number:6, posicion:"Volante", img:"https://i.pravatar.cc/72?img=9", x:40, z:0 },
+                    { name:"Juan Vega", number:9, posicion:"Delantero", img:"https://i.pravatar.cc/72?img=12", x:0, z:100 },
                     { name:"Luis Torres", number:1, posicion:"Portero", img:"https://i.pravatar.cc/72?img=14", x:0, z:-200 },
                   ]}
                   awayPlayers={[
                     { name:"Pedro Gil", number:4, posicion:"Defensa", img:"https://i.pravatar.cc/72?img=15", x:-80, z:-100 },
-                    { name:"Mario Ríos", number:5, posicion:"Defensa", img:"https://i.pravatar.cc/72?img=16", x:-20, z:-100 },
-                    { name:"Alex Torres", number:3, posicion:"Defensa", img:"https://i.pravatar.cc/72?img=17", x:40, z:-100 },
-                    { name:"Fabio Mora", number:2, posicion:"Defensa", img:"https://i.pravatar.cc/72?img=18", x:100, z:-100 },
-                    { name:"Iván Duque", number:8, posicion:"Volante", img:"https://i.pravatar.cc/72?img=19", x:-90, z:0 },
-                    { name:"Óscar Paz", number:6, posicion:"Volante", img:"https://i.pravatar.cc/72?img=20", x:-30, z:0 },
-                    { name:"Julián Roa", number:10, posicion:"Volante", img:"https://i.pravatar.cc/72?img=21", x:30, z:0 },
-                    { name:"Diego Mesa", number:11, posicion:"Volante", img:"https://i.pravatar.cc/72?img=22", x:90, z:0 },
-                    { name:"Henry Vargas", number:9, posicion:"Delantero", img:"https://i.pravatar.cc/72?img=23", x:-40, z:100 },
-                    { name:"Andrés Ruiz", number:7, posicion:"Delantero", img:"https://i.pravatar.cc/72?img=24", x:40, z:100 },
+                    { name:"Mario Ríos", number:5, posicion:"Defensa", img:"https://i.pravatar.cc/72?img=16", x:0, z:-100 },
+                    { name:"Alex Torres", number:3, posicion:"Defensa", img:"https://i.pravatar.cc/72?img=17", x:80, z:-100 },
+                    { name:"Iván Duque", number:8, posicion:"Volante", img:"https://i.pravatar.cc/72?img=19", x:-40, z:0 },
+                    { name:"Óscar Paz", number:6, posicion:"Volante", img:"https://i.pravatar.cc/72?img=20", x:40, z:0 },
+                    { name:"Henry Vargas", number:9, posicion:"Delantero", img:"https://i.pravatar.cc/72?img=23", x:0, z:100 },
                     { name:"Camilo Rojas", number:1, posicion:"Portero", img:"https://i.pravatar.cc/72?img=25", x:0, z:-200 },
                   ]}
                   homeColor={local.color}
