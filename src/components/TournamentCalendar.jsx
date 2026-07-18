@@ -17,22 +17,31 @@ import {
 // ---------- Constantes de equipos ----------
 
 const TEAM_MAP = {
-  'Tigres FC': { short: 'TIG', group: 'B', icon: Cat, bg: '#E7B23A', fg: '#3A2A05' },
-  'IA Warriors': { short: 'IA WAR', group: 'A', icon: Swords, bg: '#E7E7EA', fg: '#3A3A42' },
-  'Code United': { short: 'CODE', group: 'A', icon: Code2, bg: '#2B2B33', fg: '#C9C9D6' },
-  'Sistemas FC': { short: 'SYS FC', group: 'B', icon: Shield, bg: '#7A1F2B', fg: '#F3D9DC' },
-  'Dragones FC': { short: 'DRAG', group: 'C', icon: Flame, bg: '#1A1A1F', fg: '#C9C9D6' },
-  'Los Bits': { short: 'BITS', group: 'C', icon: Zap, bg: '#E7E7EA', fg: '#3A3A42' },
+  'Vera FC': { short: 'VERA', group: 'A', icon: Shield, bg: '#7C3AED', fg: '#F3EEFF' },
+  'Quiceno United': { short: 'QUI', group: 'A', icon: Flame, bg: '#F97316', fg: '#FFF7ED' },
+  'Bernal Warriors': { short: 'BER', group: 'B', icon: Swords, bg: '#8B5CF6', fg: '#F3EEFF' },
+  'Rojas Tigers': { short: 'ROJ', group: 'B', icon: Cat, bg: '#EF4444', fg: '#FEE2E2' },
+  'Prieto FC': { short: 'PRI', group: 'C', icon: Code2, bg: '#22C55E', fg: '#DCFCE7' },
+  'García Lions': { short: 'GAR', group: 'C', icon: Zap, bg: '#3B82F6', fg: '#DBEAFE' },
+  'Barrera FC': { short: 'BAR', group: 'A', icon: Code2, bg: '#EC4899', fg: '#FCE7F3' },
+  'Arteaga United': { short: 'ART', group: 'B', icon: Flame, bg: '#14B8A6', fg: '#CCFBF1' },
+  'Modelo FC': { short: 'MOD', group: 'A', icon: Shield, bg: '#A855F7', fg: '#F3EEFF' },
+  'Tinjacá Stars': { short: 'TIN', group: 'C', icon: Zap, bg: '#EAB308', fg: '#FEF9C3' },
+  'Beltrán Referees': { short: 'BEL', group: 'B', icon: Cat, bg: '#DC2626', fg: '#FEE2E2' },
 }
 
 const TEAM_ICONS = {
-  "SYS FC": { icon: Shield, bg: "#7A1F2B", fg: "#F3D9DC" },
-  "IA WAR": { icon: Swords, bg: "#E7E7EA", fg: "#3A3A42" },
-  TIGG: { icon: Cat, bg: "#E7B23A", fg: "#3A2A05" },
-  TIG: { icon: Cat, bg: "#E7B23A", fg: "#3A2A05" },
-  CODE: { icon: Code2, bg: "#2B2B33", fg: "#C9C9D6" },
-  BITS: { icon: Zap, bg: "#E7E7EA", fg: "#3A3A42" },
-  DRAG: { icon: Flame, bg: "#1A1A1F", fg: "#C9C9D6" },
+  "VERA": { icon: Shield, bg: "#7C3AED", fg: "#F3EEFF" },
+  "BER": { icon: Swords, bg: "#8B5CF6", fg: "#F3EEFF" },
+  "QUI": { icon: Flame, bg: "#F97316", fg: "#FFF7ED" },
+  "ROJ": { icon: Cat, bg: "#EF4444", fg: "#FEE2E2" },
+  "PRI": { icon: Code2, bg: "#22C55E", fg: "#DCFCE7" },
+  "GAR": { icon: Zap, bg: "#3B82F6", fg: "#DBEAFE" },
+  "ART": { icon: Flame, bg: "#14B8A6", fg: "#CCFBF1" },
+  "BAR": { icon: Code2, bg: "#EC4899", fg: "#FCE7F3" },
+  "MOD": { icon: Shield, bg: "#A855F7", fg: "#F3EEFF" },
+  "TIN": { icon: Zap, bg: "#EAB308", fg: "#FEF9C3" },
+  "BEL": { icon: Cat, bg: "#DC2626", fg: "#FEE2E2" },
 };
 
 const GROUP_STYLES = {
@@ -64,7 +73,7 @@ function convertirPartidos(partidos) {
     const info2 = TEAM_MAP[p.eq2] || { short: p.eq2.slice(0, 6).toUpperCase(), group: 'A', icon: Shield, bg: '#2B2B33', fg: '#C9C9D6' }
     return {
       id: idx + 1,
-      day: new Date(2026, 4, p.dia).getDay(), // 0=Dom
+      day: new Date(2026, 6, p.dia).getDay(), // 0=Dom
       start: minutosADesdeMedianoche(p.hora),
       duration: 60,
       group: `Grupo ${info1.group}`,
