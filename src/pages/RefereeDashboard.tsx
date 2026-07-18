@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Sidebar from '@/components/common/Sidebar'
 import AppTopbar from '@/components/common/AppTopbar'
@@ -7,17 +7,45 @@ import ManchasFloating from '@/components/common/ManchasFloating'
 import { SpotlightCard } from '@/components/common/spotlight-card'
 import { Button } from '@/components/common/button'
 import { CalendarDays, MapPin, Clock, Shield } from 'lucide-react'
+import { fetchPartidos } from '@/services/partidos'
+import type { Partido } from '@/api/tipos'
 
-const partidos = [
-  { id: 1, eq1: 'Tigres FC', eq2: 'Sistemas FC', fecha: '24 MAY', hora: '8:00 PM', cancha: 'Cancha 1', estado: 'live', torneo: 'TechCup 2024-I' },
-  { id: 2, eq1: 'Code United', eq2: 'IA Warriors', fecha: '24 MAY', hora: '9:30 PM', cancha: 'Cancha 2', estado: 'upcoming', torneo: 'TechCup 2024-I' },
-  { id: 3, eq1: 'Dragones FC', eq2: 'Los Bits', fecha: '25 MAY', hora: '5:00 PM', cancha: 'Cancha 1', estado: 'upcoming', torneo: 'TechCup 2024-I' },
-  { id: 4, eq1: 'Sistemas FC', eq2: 'Tigres FC', fecha: '18 MAY', hora: '8:00 PM', cancha: 'Cancha 1', estado: 'final', resultado: '2 - 1', torneo: 'TechCup 2024-I' },
-]
+interface PartidoUi {
+  id: string
+  eq1: string
+  eq2: string
+  fecha: string
+  hora: string
+  cancha: string
+  estado: 'live' | 'upcoming' | 'final'
+  resultado?: string
+  torneo: string
+}
+
+// Adapta el Partido del service a la forma que renderiza el dashboard de árbitro.
+function toPartidoUi(p: Partido): PartidoUi {
+  const estado: PartidoUi['estado'] =
+    p.status === 'FINISHED' ? 'final' : p.status === 'IN_PROGRESS' ? 'live' : 'upcoming'
+  return {
+    id: p.id,
+    eq1: p.eq1,
+    eq2: p.eq2,
+    fecha: `${p.dia} ${p.mes}`,
+    hora: p.hora,
+    cancha: p.lugar,
+    estado,
+    resultado: p.homeScore != null && p.awayScore != null ? `${p.homeScore} - ${p.awayScore}` : undefined,
+    torneo: 'TechCup 2026-I',
+  }
+}
 
 const SIDEBAR_KEY = 'techcup_sidebar_collapsed'
 
 export default function RefereeDashboard() {
+  const [partidos, setPartidos] = useState<PartidoUi[]>([])
+  useEffect(() => {
+    fetchPartidos().then(ps => setPartidos(ps.map(toPartidoUi))).catch(() => {})
+  }, [])
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
     const stored = localStorage.getItem(SIDEBAR_KEY)
