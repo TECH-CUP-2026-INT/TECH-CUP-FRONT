@@ -66,12 +66,16 @@ export default function Login() {
   const { login } = useAuth()
 
   const quickDemoLogin = (demoUser: DemoUser) => {
-    setSelectedRole(demoUser.role === 'arbitro' ? 'arbitro' : demoUser.role === 'organizador' ? 'administrador' : 'jugador')
-    setEmail(demoUser.email)
+    const frontRole = demoUser.role === 'arbitro' ? 'arbitro' as const : demoUser.role === 'organizador' ? 'organizador' as const : 'jugador' as const
     setJwt('mock-jwt-' + Date.now())
-    login(demoUser.email, demoUser.role, '', demoUser.name)
+    login(demoUser.email, frontRole, '', demoUser.name)
     if (demoUser.isCaptain) {
-      localStorage.setItem('techcup_user_captain', '1')
+      const stored = localStorage.getItem('techcup_user')
+      if (stored) {
+        const u = JSON.parse(stored)
+        u.isCaptain = true
+        localStorage.setItem('techcup_user', JSON.stringify(u))
+      }
     }
     navigate(demoUser.role === 'arbitro' ? '/arbitro/dashboard' : `/dashboard/${demoUser.role}`)
   }
@@ -256,31 +260,6 @@ export default function Login() {
               </div>
 
               <div className="flex flex-col gap-4">
-                {/* Demo quick-login */}
-                <button onClick={() => setShowDemoUsers(!showDemoUsers)} className="w-full flex items-center justify-between p-3 rounded-xl bg-gold/10 border border-gold/20 hover:bg-gold/15 transition-all">
-                  <span className="text-sm text-gold font-semibold flex items-center gap-2"><UserRoundCheck size={16} /> Demo rápido (11 usuarios)</span>
-                  <ChevronRight size={16} className={`text-gold transition-transform ${showDemoUsers ? 'rotate-90' : ''}`} />
-                </button>
-                {showDemoUsers && (
-                  <div className="grid grid-cols-1 gap-1.5 max-h-[200px] overflow-y-auto p-1">
-                    {DEMO_USERS.map(u => (
-                      <button key={u.email} onClick={() => quickDemoLogin(u)}
-                        className="text-left px-3 py-2 rounded-lg hover:bg-gold/10 transition-all flex items-center justify-between group">
-                        <div>
-                          <p className="text-sm text-gray-light font-medium">{u.name}</p>
-                          <p className="text-[11px] text-text-muted">{u.email}</p>
-                        </div>
-                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                          u.role === 'organizador' ? 'bg-purple-mid/20 text-purple-mid border border-purple-mid/30' :
-                          u.role === 'arbitro' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
-                          'bg-green-500/20 text-green-400 border border-green-500/30'
-                        }`}>
-                          {u.role}{u.isCaptain ? ' 👑' : ''}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                )}
                 {renderRoleCard(roleCards[0], 0)}
                 {renderRoleCard(roleCards[1], 1)}
                 {renderRoleCard(roleCards[2], 2)}
@@ -306,6 +285,27 @@ export default function Login() {
 
             {step === 'login' && (
               <>
+              {/* Demo users filtered by selected role */}
+              <div className="mb-4 p-3 rounded-xl bg-gold/5 border border-gold/10">
+                <p className="text-[11px] text-text-faint uppercase tracking-wider mb-2">Usuarios demo · {selectedRole === 'administrador' ? 'Organizadores' : selectedRole === 'arbitro' ? 'Árbitros' : 'Jugadores'}</p>
+                <div className="grid grid-cols-1 gap-1 max-h-[140px] overflow-y-auto">
+                  {DEMO_USERS.filter(u => {
+                    if (selectedRole === 'administrador') return u.role === 'organizador'
+                    if (selectedRole === 'arbitro') return u.role === 'arbitro'
+                    return u.role === 'jugador'
+                  }).map(u => (
+                    <button key={u.email} onClick={() => { quickDemoLogin(u) }}
+                      className="text-left px-2.5 py-1.5 rounded-lg hover:bg-gold/10 transition-all flex items-center justify-between">
+                      <div className="min-w-0">
+                        <p className="text-[13px] text-gray-light truncate">{u.name}</p>
+                        <p className="text-[11px] text-text-muted truncate">{u.email}</p>
+                      </div>
+                      {u.isCaptain && <span className="text-[11px] ml-2 shrink-0">👑</span>}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-[10px] text-text-faint mt-2">Contraseña: <span className="text-gold">techcup2026</span></p>
+              </div>
               <form onSubmit={handleLoginSubmit} className="space-y-4">
                 <div className="space-y-2">
                   <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Correo electrónico</Label>
