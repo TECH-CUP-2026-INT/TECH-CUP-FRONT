@@ -1,13 +1,15 @@
 import { useState, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { GoogleLogin, type CredentialResponse } from '@react-oauth/google'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Button } from '@/components/common/button'
 import { Input } from '@/components/common/input'
 import { Label } from '@/components/common/label'
 import { Checkbox } from '@/components/common/checkbox'
 import { Eye, EyeOff, Mail, Lock, ArrowLeft, Users, ShieldCheck, UserCog, ChevronRight } from 'lucide-react'
 import { useAuth } from '@/hooks/auth/useAuth'
+import OtpVerify from '@/components/OtpVerify'
+import { login as apiLogin, validateOtp, resendOtp } from '@/services/auth'
 
 const roleCards = [
   {
@@ -47,13 +49,57 @@ const videos = ['/videos/video-arbitro.mp4', '/videos/video-arbitro.mp4']
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState('')
-  const [step, setStep] = useState<'role' | 'login'>('role')
+  const [password, setPassword] = useState('')
+  const [step, setStep] = useState<'role' | 'login' | 'otp'>('role')
   const [selectedRole, setSelectedRole] = useState<string>('jugador')
+  const [userId, setUserId] = useState<string>('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [authError, setAuthError] = useState<string | null>(null)
   const [isPlaying, setIsPlaying] = useState(true)
   const [videoIndex, setVideoIndex] = useState(0)
   const videoRef = useRef<HTMLVideoElement>(null)
   const navigate = useNavigate()
   const { login } = useAuth()
+
+  const handleLoginSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email || !password) return
+    setIsLoading(true)
+    setAuthError(null)
+    try {
+      const res = await apiLogin(email, password)
+      setUserId(res.userId)
+      setStep('otp')
+    } catch (err) {
+      setAuthError(err instanceof Error ? err.message : 'Error al iniciar sesión')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleOtpVerify = async (otpCode: string) => {
+    setIsLoading(true)
+    setAuthError(null)
+    try {
+      const res = await validateOtp(userId, otpCode)
+      const frontRole = selectedRole === 'administrador' ? 'organizador' : selectedRole
+      login(res.user.email, frontRole as import('@/hooks/auth/useAuth').UserRole, '', res.user.fullName)
+      navigate(selectedRole === 'arbitro' ? '/arbitro/dashboard' : `/dashboard/${frontRole}`)
+    } catch (err) {
+      setAuthError(err instanceof Error ? err.message : 'Código incorrecto')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleOtpResend = async () => {
+    if (!userId) return
+    try {
+      await resendOtp(userId)
+    } catch {
+      // Silencioso
+    }
+  }
 
   const decodeJwtPayload = (token: string) => {
     try {
@@ -64,11 +110,20 @@ export default function Login() {
     }
   }
 
-  const handleGoogleSuccess = (response: CredentialResponse) => {
-    const payload = decodeJwtPayload(response.credential || '')
-    const email = payload?.email || `${selectedRole}@google.com`
-    login(email, selectedRole as import('@/hooks/auth/useAuth').UserRole, payload?.picture, payload?.name)
-    navigate(selectedRole === 'arbitro' ? '/arbitro/dashboard' : `/dashboard/${selectedRole}`)
+  const handleGoogleSuccess = async (response: CredentialResponse) => {
+    if (!response.credential) return
+    setIsLoading(true)
+    setAuthError(null)
+    try {
+      const { loginGoogle } = await import('@/services/auth')
+      const res = await loginGoogle(response.credential)
+      setUserId(res.userId)
+      setStep('otp')
+    } catch (err) {
+      setAuthError(err instanceof Error ? err.message : 'Error al iniciar sesión con Google')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleRoleContinue = (role: string) => {
@@ -195,7 +250,9 @@ export default function Login() {
               </h1>
               <p className="text-sm text-text-muted mb-4">Inicia sesión para acceder a tu cuenta.</p>
 
-              <form onSubmit={e => { e.preventDefault(); login(email, selectedRole as import('@/hooks/auth/useAuth').UserRole); navigate(selectedRole === 'arbitro' ? '/arbitro/dashboard' : `/dashboard/${selectedRole}`) }} className="space-y-4">
+            {step === 'login' && (
+              <>
+              <form onSubmit={handleLoginSubmit} className="space-y-4">
                 <div className="space-y-2">
                   <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Correo electrónico</Label>
                   <div className="relative">
@@ -208,18 +265,23 @@ export default function Login() {
                   <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Contraseña</Label>
                   <div className="relative">
                     <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-faint" />
-                    <Input id="password" type={showPassword ? 'text' : 'password'} placeholder="••••••••"
+                    <Input id="password" type={showPassword ? 'text' : 'password'} placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)}
                       className="bg-white/80 dark:bg-purple-deep/40 border-gold/20 text-gray-light placeholder:text-text-faint rounded-xl pl-10 h-12 focus-visible:border-gold focus-visible:ring-1 focus-visible:ring-gold/30" />
                     <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-text-faint hover:text-gold-ink transition-colors">
                       {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>
                   </div>
                 </div>
+
+                {authError && (
+                  <p className="text-xs text-red-400 text-center">{authError}</p>
+                )}
+
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2"><Checkbox id="remember" className="border-border data-[state=checked]:bg-purple-mid data-[state=checked]:border-purple-mid" /><Label htmlFor="remember" className="text-sm text-text-muted cursor-pointer">Recordarme</Label></div>
                   <Link to="/recuperar" className="text-sm text-gold-ink hover:text-gold-dark font-semibold transition-colors">¿Olvidaste tu contraseña?</Link>
                 </div>
-                <Button type="submit" className="w-full rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold h-12 text-sm shadow-lg shadow-gold/20 hover:shadow-gold/30 transition-all">Iniciar sesión</Button>
+                <Button type="submit" disabled={isLoading} className="w-full rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold h-12 text-sm shadow-lg shadow-gold/20 hover:shadow-gold/30 transition-all">{isLoading ? 'Enviando...' : 'Iniciar sesión'}</Button>
               </form>
 
               <div className="flex items-center gap-3"><div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" /><span className="text-xs text-gold-ink font-semibold uppercase">o</span><div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" /></div>
@@ -241,6 +303,19 @@ export default function Login() {
                 </Button>
               )}
               <p className="text-center text-sm text-text-muted">¿No tienes cuenta? <Link to="/registro" className="text-gold-ink font-semibold hover:text-gold-dark transition-colors">Regístrate</Link></p>
+              </>
+            )}
+
+            {step === 'otp' && (
+              <OtpVerify
+                email={email}
+                onVerify={handleOtpVerify}
+                onResend={handleOtpResend}
+                onBack={() => setStep('login')}
+                isLoading={isLoading}
+                error={authError}
+              />
+            )}
             </motion.div>
           )}
         </div>

@@ -116,3 +116,9 @@
   ::-webkit-scrollbar-thumb:hover { background: var(--color-purple-mid); }
 }
 
+/* Mercado Pago Payment Brick overrides (class hash suffix can change between SDK builds) */
+:root:not(.dark) .mp-checkout-bricks__payment-options-_ANPQa,
+:root:not(.dark) [class*="mp-checkout-bricks__payment-options-"] {
+  opacity: 1 !important;
+}
+

@@ -6,7 +6,10 @@ import Footer from '@/components/common/Footer'
 import { SpotlightCard } from '@/components/common/spotlight-card'
 import { Badge } from '@/components/common/badge'
 import { Button } from '@/components/common/button'
-import { ArrowLeft, ArrowRight, Check, Upload, FileText, Clock, DollarSign, Users } from 'lucide-react'
+import { ArrowLeft, ArrowRight, XCircle, CreditCard, Users, Check } from 'lucide-react'
+import { PaymentBrick } from '@/components/PaymentBrick'
+import { createPaymentOrder } from '@/api/pagos'
+import type { PaymentOrderResponse } from '@/types/pagos'
 
 const torneos = [
   { id: 1, nombre: 'TechCup 2024-I', fecha: 'Mar 5 - Jun 15', costo: 50000, equipos: 32, cupo: 32, inscripciones: 'Abiertas' },
@@ -17,9 +20,30 @@ export default function InscribirEquipo() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [paso, setPaso] = useState(1)
   const [selectedTorneo, setSelectedTorneo] = useState<number | null>(null)
-  const [file, setFile] = useState<File | null>(null)
-  const [finalizado, setFinalizado] = useState(false)
+  const [paymentData, setPaymentData] = useState<PaymentOrderResponse | null>(null)
+  const [paymentError, setPaymentError] = useState<string | null>(null)
+  const [creatingOrder, setCreatingOrder] = useState(false)
   const torneo = torneos.find(t => t.id === selectedTorneo)
+
+  const handleGoToPayment = async () => {
+    if (!torneo) return
+    setCreatingOrder(true)
+    setPaymentError(null)
+    try {
+      const data = await createPaymentOrder({
+        enrollmentId: `ENR-${Date.now()}`,
+        teamId: 'team-001',
+        tournamentId: `TOR-${torneo.id}`,
+        amount: torneo.costo,
+      })
+      setPaymentData(data)
+      setPaso(3)
+    } catch (err) {
+      setPaymentError(err instanceof Error ? err.message : 'Error al crear la orden de pago')
+    } finally {
+      setCreatingOrder(false)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-black flex">
@@ -44,7 +68,7 @@ export default function InscribirEquipo() {
             </div>
 
             <AnimatePresence mode="wait">
-              {paso === 1 && !finalizado && (
+              {paso === 1 && (
                 <motion.div key="p1" initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-20}}>
                   <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Seleccionar <span className="text-gold-ink">torneo</span></h2>
                   <p className="text-sm text-text-muted mb-6">Elegí el torneo en el que querés inscribir a tu equipo.</p>
@@ -90,33 +114,39 @@ export default function InscribirEquipo() {
                   </div>
                   <div className="flex gap-3">
                     <Button variant="outline" onClick={() => setPaso(1)} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1"><ArrowLeft size={16} /> Anterior</Button>
-                    <Button onClick={() => setPaso(3)} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-12 flex-1">Continuar <ArrowRight size={16} /></Button>
+                    <Button
+                      onClick={handleGoToPayment}
+                      disabled={creatingOrder}
+                      className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-12 flex-1 disabled:opacity-40"
+                    >
+                      {creatingOrder ? 'Creando orden...' : 'Ir a pagar'} <CreditCard size={16} />
+                    </Button>
                   </div>
+                  {paymentError && (
+                    <div className="mt-4 p-3 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-2 text-sm text-red-400">
+                      <XCircle size={16} /> {paymentError}
+                    </div>
+                  )}
                 </motion.div>
               )}
 
-              {paso === 3 && (
+              {paso === 3 && paymentData && (
                 <motion.div key="p3" initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-20}}>
-                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Comprobante de <span className="text-gold-ink">pago</span></h2>
-                  <p className="text-sm text-text-muted mb-6">Subí el comprobante de pago de la inscripción para que el organizador lo revise.</p>
-                  <div className="border-2 border-dashed border-border rounded-xl p-10 text-center hover:border-gold/50 transition-all cursor-pointer mb-6"
-                    onClick={() => document.getElementById('file-input')?.click()}>
-                    <Upload size={36} className="mx-auto text-text-faint mb-3" />
-                    <p className="text-sm font-semibold">{file ? file.name : 'Click para subir comprobante'}</p>
-                    <p className="text-xs text-text-muted mt-1">{file ? `${(file.size / 1024).toFixed(1)} KB` : 'PDF, PNG, JPG · Max 5MB'}</p>
-                    <input id="file-input" type="file" accept=".pdf,.png,.jpg" className="hidden" onChange={e => setFile(e.target.files?.[0] || null)} />
-                  </div>
-                  <div className="bg-gold/5 border border-gold/20 rounded-xl p-4 flex items-start gap-3 mb-6">
-                    <DollarSign size={18} className="text-gold-ink flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="text-sm font-semibold">Valor de inscripción: <span className="text-gold-ink">${torneo?.costo.toLocaleString()}</span></p>
-                      <p className="text-xs text-text-muted">El pago se realiza por transferencia o consignación. No se procesa en la plataforma.</p>
-                    </div>
-                  </div>
-                  <div className="flex gap-3">
-                    <Button variant="outline" onClick={() => setPaso(2)} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1"><ArrowLeft size={16} /> Anterior</Button>
-                    <Button onClick={() => { setPaso(4); setTimeout(() => setFinalizado(true), 2000) }} disabled={!file} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-12 flex-1 disabled:opacity-40">
-                      Enviar inscripción <ArrowRight size={16} />
+                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Realizar <span className="text-gold-ink">pago</span></h2>
+                  <p className="text-sm text-text-muted mb-6">Paga con tarjeta, PSE o cuenta de Mercado Pago.</p>
+
+                  <PaymentBrick
+                    preferenceId={paymentData.preferenceId}
+                    amount={torneo!.costo}
+                    onSubmit={async () => {
+                      setPaso(4)
+                    }}
+                  />
+
+                  <div className="mt-4">
+                    <Button variant="outline" onClick={() => { setPaso(2); setPaymentData(null); setPaymentError(null) }}
+                      className="rounded-full border-border text-gray-light hover:bg-white/5 h-12">
+                      Cancelar y volver
                     </Button>
                   </div>
                 </motion.div>
@@ -124,38 +154,31 @@ export default function InscribirEquipo() {
 
               {paso === 4 && (
                 <motion.div key="p4" initial={{opacity:0}} animate={{opacity:1}} className="text-center py-6">
-                  {!finalizado ? (
-                    <div>
-                      <motion.div animate={{ rotate: 360 }} transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }} className="w-16 h-16 rounded-full border-4 border-gold/30 border-t-gold mx-auto mb-6" />
-                      <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-2">Enviando <span className="text-gold-ink">inscripción</span></h2>
-                      <p className="text-sm text-text-muted">Estamos procesando tu solicitud...</p>
+                  <motion.div initial={{scale:0.9}} animate={{scale:1}}>
+                    <div className="w-16 h-16 rounded-full bg-green-500/20 border border-green-500/30 flex items-center justify-center mx-auto mb-6">
+                      <Check size={32} className="text-green-400" />
                     </div>
-                  ) : (
-                    <motion.div initial={{scale:0.9}} animate={{scale:1}}>
-                      <div className="w-16 h-16 rounded-full bg-green-500/20 border border-green-500/30 flex items-center justify-center mx-auto mb-6">
-                        <Check size={32} className="text-green-400" />
-                      </div>
-                      <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-2">Inscripción <span className="text-green-400">enviada</span></h2>
-                      <p className="text-sm text-text-muted mb-2">Tu solicitud está <span className="text-gold-ink font-semibold uppercase tracking-wide">En revisión</span></p>
-                      <p className="text-xs text-text-muted mb-6">El organizador revisará el comprobante y aprobará la inscripción. Te notificaremos el resultado.</p>
-                      <div className="bg-surface border border-border rounded-xl p-4 text-left space-y-2 mb-6">
-                        {[
-                          { label: 'Torneo', value: torneo?.nombre },
-                          { label: 'Equipo', value: 'Sistemas FC' },
-                          { label: 'Comprobante', value: file?.name },
-                          { label: 'Estado', value: '🔍 En revisión' },
-                        ].map((d,i) => (
-                          <div key={i} className="flex items-center justify-between text-sm">
-                            <span className="text-text-muted">{d.label}</span>
-                            <span className="font-semibold">{d.value}</span>
-                          </div>
-                        ))}
-                      </div>
-                      <Button onClick={() => { setPaso(1); setFinalizado(false); setSelectedTorneo(null); setFile(null) }} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-12 px-8">
-                        Inscribir otro equipo
-                      </Button>
-                    </motion.div>
-                  )}
+                    <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-2">Pago <span className="text-green-400">procesado</span></h2>
+                    <p className="text-sm text-text-muted mb-6">Tu inscripcion esta en revision. Te notificaremos cuando sea aprobada.</p>
+                    <div className="bg-surface border border-border rounded-xl p-4 text-left space-y-2 mb-6">
+                      {[
+                        { label: 'Torneo', value: torneo?.nombre },
+                        { label: 'Equipo', value: 'Sistemas FC' },
+                        { label: 'Orden', value: paymentData?.paymentOrderId },
+                        { label: 'Monto', value: `$${torneo?.costo.toLocaleString()}` },
+                        { label: 'Estado', value: 'Pago recibido' },
+                      ].map((d,i) => (
+                        <div key={i} className="flex items-center justify-between text-sm">
+                          <span className="text-text-muted">{d.label}</span>
+                          <span className="font-semibold">{d.value}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <Button onClick={() => { setPaso(1); setSelectedTorneo(null); setPaymentData(null); setPaymentError(null) }}
+                      className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-12 px-8">
+                      Inscribir otro equipo
+                    </Button>
+                  </motion.div>
                 </motion.div>
               )}
             </AnimatePresence>
