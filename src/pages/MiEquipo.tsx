@@ -54,20 +54,15 @@ export default function MiEquipo() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [tab, setTab] = useState<Tab>('plantilla')
   const [jugadores, setJugadores] = useState<Jugador[]>([
-    { id: 1, nombre: 'Juan Pérez', dorsal: 10, posicion: 'Delantero', img: 'https://i.pravatar.cc/72?img=1', goles: 6, asistencias: 3, amarillas: 1, rojas: 0, faltas: 4, partidos: 8 },
     { id: 2, nombre: 'Nicolás', dorsal: 7, posicion: 'Volante', img: '/images/nicolas.png', goles: 2, asistencias: 5, amarillas: 2, rojas: 0, faltas: 6, partidos: 8 },
     { id: 3, nombre: 'Thomas', dorsal: 1, posicion: 'Portero', img: '/images/thomas.png', goles: 0, asistencias: 0, amarillas: 0, rojas: 0, faltas: 1, partidos: 8 },
     { id: 4, nombre: 'José', dorsal: 5, posicion: 'Defensa', img: '/images/jose.png', goles: 1, asistencias: 1, amarillas: 3, rojas: 1, faltas: 8, partidos: 7 },
     { id: 5, nombre: 'Jhonathan', dorsal: 8, posicion: 'Volante', img: '/images/jhonathan.png', goles: 3, asistencias: 2, amarillas: 1, rojas: 0, faltas: 3, partidos: 6 },
-    { id: 6, nombre: 'Miguel Ríos', dorsal: 4, posicion: 'Defensa', img: 'https://i.pravatar.cc/72?img=13', goles: 0, asistencias: 0, amarillas: 2, rojas: 0, faltas: 5, partidos: 8 },
-    { id: 7, nombre: 'Diego Salazar', dorsal: 2, posicion: 'Defensa', img: 'https://i.pravatar.cc/72?img=14', goles: 0, asistencias: 1, amarillas: 1, rojas: 0, faltas: 3, partidos: 7 },
-    { id: 8, nombre: 'Sofía Ramírez', dorsal: 3, posicion: 'Defensa', img: 'https://i.pravatar.cc/72?img=25', goles: 1, asistencias: 0, amarillas: 0, rojas: 0, faltas: 2, partidos: 6 },
-    { id: 9, nombre: 'Andrés Cano', dorsal: 6, posicion: 'Volante', img: 'https://i.pravatar.cc/72?img=15', goles: 1, asistencias: 4, amarillas: 1, rojas: 0, faltas: 4, partidos: 8 },
-    { id: 10, nombre: 'Felipe Duarte', dorsal: 9, posicion: 'Delantero', img: 'https://i.pravatar.cc/72?img=16', goles: 4, asistencias: 2, amarillas: 0, rojas: 0, faltas: 2, partidos: 7 },
-    { id: 11, nombre: 'Valentina Rey', dorsal: 11, posicion: 'Delantero', img: 'https://i.pravatar.cc/72?img=26', goles: 5, asistencias: 1, amarillas: 1, rojas: 0, faltas: 3, partidos: 8 },
-    { id: 12, nombre: 'Tomás Vega', dorsal: 12, posicion: 'Portero', img: 'https://i.pravatar.cc/72?img=17', goles: 0, asistencias: 0, amarillas: 0, rojas: 0, faltas: 0, partidos: 2 },
-    { id: 13, nombre: 'Camilo Ortiz', dorsal: 14, posicion: 'Volante', img: 'https://i.pravatar.cc/72?img=18', goles: 1, asistencias: 2, amarillas: 1, rojas: 0, faltas: 5, partidos: 5 },
-    { id: 14, nombre: 'Laura Peña', dorsal: 15, posicion: 'Defensa', img: 'https://i.pravatar.cc/72?img=27', goles: 0, asistencias: 0, amarillas: 1, rojas: 0, faltas: 4, partidos: 4 },
+    { id: 6, nombre: 'Miguel Ríos', dorsal: 4, posicion: 'Defensa', img: '/images/juan-david-rangel.png', goles: 0, asistencias: 0, amarillas: 2, rojas: 0, faltas: 5, partidos: 8 },
+    { id: 7, nombre: 'Diego Salazar', dorsal: 2, posicion: 'Defensa', img: '/images/jhonatan-madero.png', goles: 0, asistencias: 1, amarillas: 1, rojas: 0, faltas: 3, partidos: 7 },
+    { id: 8, nombre: 'Sofía Ramírez', dorsal: 3, posicion: 'Defensa', img: '/images/chimi.png', goles: 1, asistencias: 0, amarillas: 0, rojas: 0, faltas: 2, partidos: 6 },
+    { id: 9, nombre: 'Andrés Cano', dorsal: 6, posicion: 'Volante', img: '/images/hernan.png', goles: 1, asistencias: 4, amarillas: 1, rojas: 0, faltas: 4, partidos: 8 },
+    { id: 10, nombre: 'Felipe Duarte', dorsal: 9, posicion: 'Delantero', img: '/images/mabel.png', goles: 4, asistencias: 2, amarillas: 0, rojas: 0, faltas: 2, partidos: 7 },
   ])
   const [mostrarForm, setMostrarForm] = useState(false)
   const [selectedPlayer, setSelectedPlayer] = useState<Jugador | null>(null)
@@ -120,7 +115,7 @@ export default function MiEquipo() {
               <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-deep to-purple-black border border-gold/30 flex items-center justify-center text-2xl font-black text-gold">SF</div>
               <div className="flex-1">
                 <h1 className="font-[family-name:var(--font-display)] text-3xl uppercase">Sistemas <span className="text-gold">FC</span></h1>
-                <p className="text-sm text-text-muted mt-1">Capitán: Juan Pérez · TechCup 2024-I</p>
+                <p className="text-sm text-text-muted mt-1">Capitán: Nicolás · TechCup 2024-I</p>
                 <Badge className="mt-2 rounded-full bg-gold/15 text-gold border border-gold/40 text-[10px]">📋 En revisión</Badge>
               </div>
               <Link to="/inscribir-equipo" className="flex-shrink-0">
@@ -192,33 +187,35 @@ export default function MiEquipo() {
                 </SpotlightCard>
               )}
 
-              <div className="flex flex-wrap justify-center gap-5">
+              <div className="grid grid-cols-[repeat(auto-fill,minmax(210px,1fr))] gap-4 justify-items-center">
                 {jugadores.map(j => (
-                  <div key={j.id} className="group relative">
-                    <FutPlayerCard
-                      nombre={j.nombre}
-                      dorsal={j.dorsal}
-                      posicion={j.posicion}
-                      img={j.img}
-                      stats={{
-                        goles: j.goles,
-                        asistencias: j.asistencias,
-                        partidos: j.partidos,
-                        amarillas: j.amarillas,
-                        rojas: j.rojas,
-                        faltas: j.faltas,
-                      }}
-                      onClick={() => setSelectedPlayer(j)}
-                      actions={
-                        <button
-                          onClick={(e) => { e.stopPropagation(); eliminar(j.id) }}
-                          className="w-7 h-7 rounded-full bg-red-500/15 border border-red-500/25 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-500/30"
-                          aria-label="Eliminar jugador"
-                        >
-                          <X size={12} className="text-red-400" />
-                        </button>
-                      }
-                    />
+                  <div key={j.id} className="group relative" style={{ width: 210, height: 322 }}>
+                    <div style={{ transform: 'scale(0.7)', transformOrigin: 'top left', width: 300, height: 460 }}>
+                      <FutPlayerCard
+                        nombre={j.nombre}
+                        dorsal={j.dorsal}
+                        posicion={j.posicion}
+                        img={j.img}
+                        stats={{
+                          goles: j.goles,
+                          asistencias: j.asistencias,
+                          partidos: j.partidos,
+                          amarillas: j.amarillas,
+                          rojas: j.rojas,
+                          faltas: j.faltas,
+                        }}
+                        onClick={() => setSelectedPlayer(j)}
+                        actions={
+                          <button
+                            onClick={(e) => { e.stopPropagation(); eliminar(j.id) }}
+                            className="w-7 h-7 rounded-full bg-red-500/15 border border-red-500/25 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-500/30"
+                            aria-label="Eliminar jugador"
+                          >
+                            <X size={12} className="text-red-400" />
+                          </button>
+                        }
+                      />
+                    </div>
                   </div>
                 ))}
               </div>

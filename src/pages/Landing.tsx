@@ -354,7 +354,12 @@ export default function Landing() {
                                   <span className="text-[11px] text-white/60"><strong className="text-white/90">{t.jugadores}</strong> Jugadores</span>
                                   <span className="text-[11px] text-white/60"><strong className="text-white/90">{t.canchas}</strong> Canchas</span>
                                 </div>
-                                <span className="text-[11px] font-bold text-purple-mid bg-purple-mid/10 border border-purple-mid/30 px-3 py-1 rounded-full hover:bg-purple-mid/20 transition-colors cursor-pointer">Ver detalles</span>
+                                <span
+                                  onClick={() => navigate('/torneos')}
+                                  className="text-[11px] font-bold text-purple-mid bg-purple-mid/10 border border-purple-mid/30 px-3 py-1 rounded-full hover:bg-purple-mid/20 transition-colors cursor-pointer"
+                                >
+                                  Ver detalles
+                                </span>
                               </div>
                             </div>
                           </div>

@@ -68,7 +68,7 @@ export default function Estadisticas() {
                 { torneo: '2024-II', goles: 8 },
               ].map((g, i) => (
                 <div key={i} className="flex-1 flex flex-col items-center gap-2">
-                  <span className="text-xs font-bold text-gold">{g.goles}</span>
+                  <span className="text-5xl font-bold text-gold">{g.goles}</span>
                   <div className="w-full rounded-t-lg bg-gradient-to-t from-gold/30 to-gold/60" style={{ height: `${(g.goles / 8) * 100}%` }} />
                   <span className="text-[10px] text-text-faint text-center">{g.torneo}</span>
                 </div>
