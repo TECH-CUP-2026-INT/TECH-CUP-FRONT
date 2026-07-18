@@ -40,24 +40,24 @@ export default function SoccerField3D({
 }: SoccerField3DProps) {
   const FORMACIONES: Record<string, { x: number; z: number }[]> = {
     "3-2-1": [
-      { x: 0, z: -250 }, { x: -140, z: -140 }, { x: 0, z: -160 }, { x: 140, z: -140 },
-      { x: -80, z: -40 }, { x: 80, z: -40 },
-      { x: 0, z: 80 },
+      { x: 0, z: -160 }, { x: -120, z: -90 }, { x: 0, z: -100 }, { x: 120, z: -90 },
+      { x: -70, z: -20 }, { x: 70, z: -20 },
+      { x: 0, z: 60 },
     ],
     "2-3-1": [
-      { x: 0, z: -250 }, { x: -100, z: -140 }, { x: 100, z: -140 },
-      { x: -150, z: -40 }, { x: 0, z: -50 }, { x: 150, z: -40 },
-      { x: 0, z: 80 },
+      { x: 0, z: -160 }, { x: -90, z: -90 }, { x: 90, z: -90 },
+      { x: -130, z: -20 }, { x: 0, z: -30 }, { x: 130, z: -20 },
+      { x: 0, z: 60 },
     ],
     "3-1-2": [
-      { x: 0, z: -250 }, { x: -140, z: -140 }, { x: 0, z: -160 }, { x: 140, z: -140 },
-      { x: 0, z: -40 },
-      { x: -70, z: 80 }, { x: 70, z: 80 },
+      { x: 0, z: -160 }, { x: -120, z: -90 }, { x: 0, z: -100 }, { x: 120, z: -90 },
+      { x: 0, z: -20 },
+      { x: -60, z: 60 }, { x: 60, z: 60 },
     ],
     "2-2-2": [
-      { x: 0, z: -250 }, { x: -100, z: -140 }, { x: 100, z: -140 },
-      { x: -80, z: -40 }, { x: 80, z: -40 },
-      { x: -70, z: 80 }, { x: 70, z: 80 },
+      { x: 0, z: -160 }, { x: -90, z: -90 }, { x: 90, z: -90 },
+      { x: -70, z: -20 }, { x: 70, z: -20 },
+      { x: -60, z: 60 }, { x: 60, z: 60 },
     ],
   }
 
@@ -166,23 +166,35 @@ export default function SoccerField3D({
                 repeating-linear-gradient(0deg, transparent 0px, transparent 49px, rgba(255,255,255,0.06) 49px, rgba(255,255,255,0.06) 50px)
               `
             }}>
-              <svg viewBox="0 0 600 700" className="absolute inset-0 w-full h-full" style={{ zIndex: 4 }}>
-                <rect x="24" y="28" width="552" height="644" fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="3" />
-                <line x1="24" y1="350" x2="576" y2="350" stroke="rgba(255,255,255,0.45)" strokeWidth="3" />
-                <circle cx="300" cy="350" r="120" fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="3" />
-                <rect x="168" y="530" width="264" height="115" fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="3" rx="4" />
-                <rect x="222" y="550" width="156" height="60" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="2" rx="2" />
-                <rect x="168" y="55" width="264" height="115" fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="3" rx="4" />
-                <rect x="222" y="90" width="156" height="60" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="2" rx="2" />
-                <circle cx="300" cy="350" r="2" fill="rgba(255,255,255,0.5)" />
+              <svg viewBox="0 0 600 420" className="absolute inset-0 w-full h-full" style={{ zIndex: 4 }}>
+                {/* Campo exterior fútbol 7 */}
+                <rect x="40" y="20" width="520" height="380" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="3" rx="6" />
+                {/* Línea media */}
+                <line x1="40" y1="210" x2="560" y2="210" stroke="rgba(255,255,255,0.5)" strokeWidth="3" />
+                {/* Círculo central */}
+                <circle cx="300" cy="210" r="70" fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="2.5" />
+                {/* Área grande superior */}
+                <rect x="140" y="20" width="320" height="100" fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="2.5" rx="3" />
+                {/* Área chica superior */}
+                <rect x="200" y="30" width="200" height="50" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="2" rx="2" />
+                {/* Área grande inferior */}
+                <rect x="140" y="300" width="320" height="100" fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="2.5" rx="3" />
+                {/* Área chica inferior */}
+                <rect x="200" y="340" width="200" height="50" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="2" rx="2" />
+                {/* Punto central */}
+                <circle cx="300" cy="210" r="3" fill="rgba(255,255,255,0.6)" />
+                {/* Punto penal superior */}
+                <circle cx="300" cy="100" r="2" fill="rgba(255,255,255,0.4)" />
+                {/* Punto penal inferior */}
+                <circle cx="300" cy="320" r="2" fill="rgba(255,255,255,0.4)" />
               </svg>
             </div>
 
             {/* Players — posicionados en el campo 2D */}
             {players.map((p, i) => {
-              // Mapear coordenadas a píxeles (campo 600x700)
+              // Mapear coordenadas a píxeles (campo 600x420)
               const px = 300 + p.x
-              const py = 350 - p.z
+              const py = 210 - p.z
               return (
               <div key={i}
                 className="absolute cursor-grab active:cursor-grabbing"
