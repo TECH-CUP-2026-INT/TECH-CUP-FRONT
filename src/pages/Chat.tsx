@@ -1,157 +1,293 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import type { Client, IMessage, StompSubscription } from '@stomp/stompjs'
 import Sidebar from '@/components/common/Sidebar'
-import { Menu, Send, Paperclip, Smile, Image, ArrowLeft } from 'lucide-react'
-import { Input } from '@/components/common/input'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/common/dropdown-menu'
+import { Menu, Send } from 'lucide-react'
+import { getMiPerfil, getPerfilPublico, type PerfilPublicoResponse } from '@/api/usuarios'
+import { getUserChats, getChatMessages, sendMessage, type Chat as ChatDto, type Message } from '@/api/chat'
+import { createChatSocket, subscribeToChat } from '@/api/ws'
+import { getTeamName } from '@/utils/teamNameCache'
+import { getInitialsAvatar } from '@/utils/avatar'
 
-interface Message {
-  id: number
-  user: string
-  avatar: string
-  text: string
-  time: string
-  isMe: boolean
+function chatLabel(chat: ChatDto): string {
+  if (chat.type === 'SUPPORT') return 'Soporte'
+  if (chat.teamId) return getTeamName(chat.teamId) ?? 'Equipo'
+  return 'Chat'
 }
 
-const conversations = [
-  { id: 1, name: 'Sistemas FC', avatar: 'https://i.pravatar.cc/72?img=11', lastMsg: '¿A qué hora es el partido?', unread: 2, online: true },
-  { id: 2, name: 'ManchasBot', avatar: 'https://i.pravatar.cc/72?img=15', lastMsg: '¡Hola! ¿En qué puedo ayudarte?', unread: 0, online: true },
-  { id: 3, name: 'Carlos López', avatar: 'https://i.pravatar.cc/72?img=12', lastMsg: 'Nos vemos en la cancha', unread: 0, online: false },
-  { id: 4, name: 'Ana Martínez', avatar: 'https://i.pravatar.cc/72?img=9', lastMsg: 'Gracias por la invitación', unread: 1, online: true },
-]
-
-const messages: Message[] = [
-  { id: 1, user: 'Carlos López', avatar: 'https://i.pravatar.cc/72?img=12', text: '¿Listos para el partido de mañana?', time: '10:30', isMe: false },
-  { id: 2, user: 'Juan Camilo', avatar: 'https://i.pravatar.cc/72?img=13', text: '¡Sí! Todos confirmados 💪', time: '10:31', isMe: true },
-  { id: 3, user: 'Ana Martínez', avatar: 'https://i.pravatar.cc/72?img=9', text: 'Yo llego temprano a calentar', time: '10:32', isMe: false },
-  { id: 4, user: 'Juan Camilo', avatar: 'https://i.pravatar.cc/72?img=13', text: 'Perfecto, nos vemos a las 7PM en la cancha', time: '10:33', isMe: true },
-  { id: 5, user: 'Carlos López', avatar: 'https://i.pravatar.cc/72?img=12', text: 'Llevo el balón ⚽', time: '10:34', isMe: false },
-  { id: 6, user: 'Juan Camilo', avatar: 'https://i.pravatar.cc/72?img=13', text: 'Perfecto, yo llevo los petos 🟡🟣', time: '10:35', isMe: true },
-]
+function formatTime(iso: string): string {
+  return new Date(iso).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })
+}
 
 export default function Chat() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [selectedChat, setSelectedChat] = useState(1)
-  const [input, setInput] = useState('')
   const navigate = useNavigate()
-  const activeConv = conversations.find(c => c.id === selectedChat)
+
+  const [myUserId, setMyUserId] = useState<string | null>(null)
+  const [profileError, setProfileError] = useState<string | null>(null)
+
+  const [chats, setChats] = useState<ChatDto[]>([])
+  const [chatsLoading, setChatsLoading] = useState(true)
+  const [chatsError, setChatsError] = useState<string | null>(null)
+  const [chatsRetry, setChatsRetry] = useState(0)
+
+  const [selectedChatId, setSelectedChatId] = useState<string | null>(null)
+  const [messages, setMessages] = useState<Message[]>([])
+  const [messagesLoading, setMessagesLoading] = useState(false)
+  const [messagesError, setMessagesError] = useState<string | null>(null)
+  const [messagesRetry, setMessagesRetry] = useState(0)
+
+  const [input, setInput] = useState('')
+  const [sendError, setSendError] = useState<string | null>(null)
+
+  const profileCache = useRef<Map<string, PerfilPublicoResponse>>(new Map())
+  const [, forceRerender] = useState(0)
+  const stompClientRef = useRef<Client | null>(null)
+  const subscriptionRef = useRef<StompSubscription | null>(null)
+
+  const selectedChat = chats.find(c => c.id === selectedChatId)
+
+  // 1. Quién soy — sin tocar useAuth, se resuelve llamando al perfil real.
+  useEffect(() => {
+    getMiPerfil()
+      .then(perfil => setMyUserId(perfil.id))
+      .catch(() => setProfileError('No pudimos cargar tu perfil.'))
+  }, [])
+
+  // 2. Mis chats (GROUP + SUPPORT) + conexión WS, una vez que sé quién soy.
+  useEffect(() => {
+    if (!myUserId) return
+
+    setChatsLoading(true)
+    setChatsError(null)
+    getUserChats(myUserId)
+      .then(all => {
+        const filtered = all.filter(c => c.type === 'GROUP' || c.type === 'SUPPORT')
+        setChats(filtered)
+        if (filtered.length > 0) setSelectedChatId(filtered[0].id)
+      })
+      .catch(() => setChatsError('No pudimos cargar tus chats.'))
+      .finally(() => setChatsLoading(false))
+
+    const client = createChatSocket()
+    client.activate()
+    stompClientRef.current = client
+
+    return () => {
+      client.deactivate()
+      stompClientRef.current = null
+    }
+  }, [myUserId, chatsRetry])
+
+  // 3. Historial + suscripción en vivo del chat seleccionado.
+  useEffect(() => {
+    subscriptionRef.current?.unsubscribe()
+    subscriptionRef.current = null
+    setMessages([])
+
+    if (!selectedChatId) return
+
+    setMessagesLoading(true)
+    setMessagesError(null)
+    getChatMessages(selectedChatId)
+      .then(page => {
+        setMessages(page.content)
+        resolveSenderProfiles(page.content)
+      })
+      .catch(() => setMessagesError('No pudimos cargar los mensajes.'))
+      .finally(() => setMessagesLoading(false))
+
+    // Los chats SUPPORT broadcastean a /topic/support/{ticketId}, no a /topic/chat/{chatId};
+    // ChatResponse no expone el ticketId, así que por ahora solo GROUP tiene tiempo real.
+    if (selectedChat?.type !== 'GROUP') return
+
+    const client = stompClientRef.current
+    if (!client) return
+
+    const subscribeNow = () => {
+      subscriptionRef.current = subscribeToChat(client, selectedChatId, (msg: IMessage) => {
+        const message: Message = JSON.parse(msg.body)
+        setMessages(prev => [...prev, message])
+        resolveSenderProfiles([message])
+      })
+    }
+
+    if (client.connected) {
+      subscribeNow()
+    } else {
+      client.onConnect = subscribeNow
+    }
+
+    return () => {
+      subscriptionRef.current?.unsubscribe()
+      subscriptionRef.current = null
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedChatId, messagesRetry])
+
+  function resolveSenderProfiles(msgs: Message[]) {
+    const unknown = [...new Set(msgs.map(m => m.senderId))].filter(
+      id => id !== myUserId && !profileCache.current.has(id),
+    )
+    if (unknown.length === 0) return
+    Promise.all(
+      unknown.map(id =>
+        getPerfilPublico(id)
+          .then(perfil => profileCache.current.set(id, perfil))
+          .catch(() => {}),
+      ),
+    ).then(() => forceRerender(n => n + 1))
+  }
+
+  async function handleSend() {
+    if (!input.trim() || !selectedChatId) return
+    setSendError(null)
+    try {
+      await sendMessage(selectedChatId, input.trim())
+      setInput('')
+    } catch {
+      setSendError('No se pudo enviar el mensaje. Intentá de nuevo.')
+    }
+  }
+
+  function senderName(senderId: string): string {
+    if (senderId === myUserId) return 'Tú'
+    return profileCache.current.get(senderId)?.nombreCompleto ?? 'Usuario'
+  }
+
+  function senderAvatar(senderId: string): string {
+    return getInitialsAvatar(senderName(senderId))
+  }
 
   return (
     <div className="min-h-screen bg-black flex flex-col">
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      
-      {/* Background glow */}
+
       <div className="fixed top-[-10%] right-[-5%] w-[400px] h-[400px] rounded-full bg-purple-mid/15 blur-[120px] pointer-events-none" />
       <div className="fixed bottom-[-5%] left-[-5%] w-[350px] h-[350px] rounded-full bg-gold/15 blur-[100px] pointer-events-none" />
 
       <div className="flex-1 flex flex-col h-screen relative z-10">
-        {/* Topbar exacta como la del Dashboard */}
         <header className="sticky top-0 z-10 flex items-center justify-between px-4 md:px-6 py-3 bg-black/85 backdrop-blur-md border-b border-border">
           <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
           <div className="flex items-center gap-3">
             <button className="text-gray-light hover:text-gold transition-colors p-1" onClick={() => setSidebarOpen(true)}>
               <Menu size={20} />
             </button>
-            {activeConv && (
+            {selectedChat && (
               <div className="flex items-center gap-3 ml-1">
-                <div className="relative">
-                  <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-gold/60 ring-offset-2 ring-offset-black shadow-lg shadow-gold/20">
-                    <img src={activeConv.avatar} alt="" className="w-full h-full object-cover" />
-                  </div>
-                  {activeConv.online && (
-                    <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-green-500 ring-2 ring-black" />
-                  )}
+                <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-gold/60 ring-offset-2 ring-offset-black shadow-lg shadow-gold/20">
+                  <img src={getInitialsAvatar(chatLabel(selectedChat))} alt="" className="w-full h-full object-cover" />
                 </div>
-                <div>
-                  <h1 className="text-[17px] font-bold">{activeConv.name}</h1>
-                  <p className="text-[11px] text-green-400/80 font-medium flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                    En línea
-                  </p>
-                </div>
+                <h1 className="text-[17px] font-bold">{chatLabel(selectedChat)}</h1>
               </div>
             )}
           </div>
-          <div className="flex items-center gap-[18px]">
-            <button className="relative text-gray-light bg-transparent border-none p-0 hover:text-gold transition-colors group" aria-label="Notificaciones">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="group-hover:fill-gold/20 transition-all"><path d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 003.4 0"/></svg>
-            </button>
-            <button
-              onClick={() => navigate('/dashboard')}
-              className="w-9 h-9 rounded-full overflow-hidden ring-2 ring-gold/40 ring-offset-2 ring-offset-black hover:ring-gold transition-all cursor-pointer"
-            >
-              <img className="w-full h-full object-cover" src="https://i.pravatar.cc/72?img=13" alt="" />
-            </button>
-          </div>
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="w-9 h-9 rounded-full overflow-hidden ring-2 ring-gold/40 ring-offset-2 ring-offset-black hover:ring-gold transition-all cursor-pointer"
+          >
+            <img className="w-full h-full object-cover" src={getInitialsAvatar('Tú')} alt="" />
+          </button>
         </header>
 
-        {/* Chat messages - glass style */}
-        <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-3">
-          {messages.map((msg) => (
-            <div key={msg.id} className={`flex items-end gap-2.5 ${msg.isMe ? 'flex-row-reverse' : ''}`}>
-              {/* Avatar con ring que sobresale */}
-              <div className={`flex-shrink-0 ${msg.isMe ? 'ml-0' : 'mr-0'}`}>
-                <div className={`w-8 h-8 rounded-full overflow-hidden ring-2 shadow-lg ${
-                  msg.isMe ? 'ring-purple-mid/60 ring-offset-2 ring-offset-black' : 'ring-gold/40 ring-offset-2 ring-offset-black'
-                }`}>
-                  <img src={msg.avatar} alt="" className="w-full h-full object-cover" />
-                </div>
+        <div className="flex-1 flex overflow-hidden">
+          {/* Lista de conversaciones */}
+          <div className="w-full md:w-72 shrink-0 border-r border-white/5 overflow-y-auto hidden md:block">
+            {profileError && <p className="p-4 text-sm text-red-400">{profileError}</p>}
+            {chatsLoading && <p className="p-4 text-sm text-text-faint">Cargando chats…</p>}
+            {chatsError && (
+              <div className="p-4 text-sm text-red-400 space-y-2">
+                <p>{chatsError}</p>
+                <button className="text-gold underline" onClick={() => setChatsRetry(n => n + 1)}>Reintentar</button>
               </div>
-              
-              {/* Burbuja glass */}
-              <div className={`max-w-[75%] md:max-w-[60%] ${msg.isMe ? 'mr-0' : 'ml-0'}`}>
-                <div className={`rounded-2xl px-4 py-2.5 text-sm leading-relaxed backdrop-blur-md border ${
-                  msg.isMe 
-                    ? 'bg-purple-mid/15 border-purple-mid/20 rounded-br-md' 
-                    : 'bg-white/5 border-white/10 rounded-bl-md'
-                }`}>
-                  <p className="text-gray-light">{msg.text}</p>
-                </div>
-                <p className={`text-[10px] text-text-faint/60 mt-1 ${msg.isMe ? 'text-right' : 'text-left'}`}>
-                  {msg.time}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Glass input */}
-        <div className="border-t border-white/5 bg-black/60 backdrop-blur-xl p-3 md:p-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-2xl px-4 py-2 focus-within:border-gold/40 focus-within:bg-white/10 transition-all group">
-              <button className="text-text-faint hover:text-gold transition-colors p-1">
-                <Paperclip size={18} />
-              </button>
-              <button className="text-text-faint hover:text-gold transition-colors p-1">
-                <Image size={18} />
-              </button>
-              <input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Escribí un mensaje..."
-                className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-text-faint text-sm px-2 py-2"
-                onKeyDown={(e) => e.key === 'Enter' && input && setInput('')}
-              />
-              <button className="text-text-faint hover:text-gold transition-colors p-1">
-                <Smile size={18} />
-              </button>
+            )}
+            {!chatsLoading && !chatsError && chats.length === 0 && (
+              <p className="p-4 text-sm text-text-faint">Todavía no tenés chats.</p>
+            )}
+            {chats.map(chat => (
               <button
-                onClick={() => input && setInput('')}
-                className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all ${
-                  input.trim() 
-                    ? 'bg-gold text-[#1A1206] hover:bg-gold-dark shadow-lg shadow-gold/20' 
-                    : 'bg-white/5 text-text-faint'
+                key={chat.id}
+                onClick={() => setSelectedChatId(chat.id)}
+                className={`w-full text-left flex items-center gap-3 px-4 py-3 border-b border-white/5 transition-colors ${
+                  chat.id === selectedChatId ? 'bg-white/10' : 'hover:bg-white/5'
                 }`}
               >
-                <Send size={16} />
+                <div className="w-9 h-9 rounded-full overflow-hidden ring-2 ring-gold/40 shrink-0">
+                  <img src={getInitialsAvatar(chatLabel(chat))} alt="" className="w-full h-full object-cover" />
+                </div>
+                <span className="text-sm text-gray-light truncate">{chatLabel(chat)}</span>
               </button>
+            ))}
+          </div>
+
+          {/* Mensajes */}
+          <div className="flex-1 flex flex-col overflow-hidden">
+            <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-3">
+              {messagesLoading && <p className="text-sm text-text-faint">Cargando mensajes…</p>}
+              {messagesError && (
+                <div className="text-sm text-red-400 space-y-2">
+                  <p>{messagesError}</p>
+                  <button className="text-gold underline" onClick={() => setMessagesRetry(n => n + 1)}>
+                    Reintentar
+                  </button>
+                </div>
+              )}
+              {!selectedChatId && !chatsLoading && chats.length > 0 && (
+                <p className="text-sm text-text-faint">Elegí un chat para empezar.</p>
+              )}
+              {messages.map((msg) => {
+                const isMe = msg.senderId === myUserId
+                return (
+                  <div key={msg.id} className={`flex items-end gap-2.5 ${isMe ? 'flex-row-reverse' : ''}`}>
+                    <div className="flex-shrink-0">
+                      <div className={`w-8 h-8 rounded-full overflow-hidden ring-2 shadow-lg ${
+                        isMe ? 'ring-purple-mid/60 ring-offset-2 ring-offset-black' : 'ring-gold/40 ring-offset-2 ring-offset-black'
+                      }`}>
+                        <img src={senderAvatar(msg.senderId)} alt="" className="w-full h-full object-cover" />
+                      </div>
+                    </div>
+                    <div className="max-w-[75%] md:max-w-[60%]">
+                      <div className={`rounded-2xl px-4 py-2.5 text-sm leading-relaxed backdrop-blur-md border ${
+                        isMe
+                          ? 'bg-purple-mid/15 border-purple-mid/20 rounded-br-md'
+                          : 'bg-white/5 border-white/10 rounded-bl-md'
+                      }`}>
+                        <p className="text-gray-light">{msg.content}</p>
+                      </div>
+                      <p className={`text-[10px] text-text-faint/60 mt-1 ${isMe ? 'text-right' : 'text-left'}`}>
+                        {formatTime(msg.sentAt)}
+                      </p>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+
+            <div className="border-t border-white/5 bg-black/60 backdrop-blur-xl p-3 md:p-4">
+              <div className="max-w-4xl mx-auto space-y-2">
+                {sendError && <p className="text-xs text-red-400">{sendError}</p>}
+                <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-2xl px-4 py-2 focus-within:border-gold/40 focus-within:bg-white/10 transition-all">
+                  <input
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    placeholder="Escribí un mensaje..."
+                    disabled={!selectedChatId}
+                    className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-text-faint text-sm px-2 py-2 disabled:opacity-50"
+                    onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                  />
+                  <button
+                    onClick={handleSend}
+                    disabled={!input.trim() || !selectedChatId}
+                    className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all ${
+                      input.trim() && selectedChatId
+                        ? 'bg-gold text-[#1A1206] hover:bg-gold-dark shadow-lg shadow-gold/20'
+                        : 'bg-white/5 text-text-faint'
+                    }`}
+                  >
+                    <Send size={16} />
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

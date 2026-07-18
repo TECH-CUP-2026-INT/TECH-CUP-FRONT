@@ -1,3 +1,14 @@
+// ─── Equipos ────────────────────────────────────────────────
+export interface Team {
+  id: string
+  name: string
+  colors: string // string libre, ej "#FF0000,#FFFFFF" — CreateTeamRequest.colors es String
+  captainId: string
+  memberCount: number
+  createdAt: string
+  updatedAt: string
+}
+
 // ─── Torneos ────────────────────────────────────────────────
 export type EstadoTorneo = 'live' | 'upcoming' | 'closed'
 export type Categoria = 'Fútbol 11' | 'Futsal'
