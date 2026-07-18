@@ -155,6 +155,44 @@ export default function Login() {
     setIsPlaying(true)
   }
 
+  const renderRoleCard = (role: typeof roleCards[number], i: number) => {
+    const Icon = role.icon
+    return (
+      <motion.button
+        key={role.id}
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: i * 0.1 }}
+        onClick={() => handleRoleContinue(role.id)}
+        className="group relative flex items-stretch gap-0 rounded-[10px] overflow-hidden border border-gold/20 bg-[#F3EEFF]/70 dark:bg-black/60 hover:border-gold/50 transition-all duration-300 text-left w-full cursor-pointer"
+      >
+        {/* Imagen lateral */}
+        <div className="relative w-[120px] min-h-[140px] flex-shrink-0 overflow-hidden bg-[#F3EEFF] dark:bg-black/80 flex items-center justify-center max-sm:hidden">
+          <img src={role.img} alt="" className="w-full h-full object-contain p-3 transition-transform duration-500 group-hover:scale-110" />
+          <div className="absolute inset-0 hidden dark:block dark:bg-[linear-gradient(90deg,transparent_40%,rgba(0,0,0,0.8)_100%)]" />
+        </div>
+        {/* Contenido */}
+        <div className="flex-1 p-4 flex flex-col justify-center relative">
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: 'linear-gradient(135deg, rgba(212,175,55,0.08), transparent)' }} />
+          <div className="relative z-10 flex items-start justify-between gap-4">
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1.5">
+                <Icon size={16} className="text-gold" />
+              </div>
+              <h3 className="font-[family-name:var(--font-display)] text-lg normal-case tracking-[.3px] text-gold mb-1">{role.name}</h3>
+              <p className="text-xs normal-case text-text-muted leading-relaxed">{role.desc}</p>
+            </div>
+              <div className="flex-shrink-0 mt-1">
+                <div className="w-9 h-9 rounded-[8px] flex items-center justify-center transition-all duration-300 group-hover:bg-gold/20 border border-gold/30">
+                  <ChevronRight size={16} className="text-gold" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.button>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-black flex relative overflow-hidden">
 
