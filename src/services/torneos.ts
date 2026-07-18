@@ -64,8 +64,20 @@ function updateTorneos(data: Torneo[]): void {
 export async function fetchTorneos(): Promise<Torneo[]> {
   try {
     const data = await apiGetTorneosActivos()
-    updateTorneos(data)
-    return data
+    if (Array.isArray(data) && data.length > 0) {
+      updateTorneos(data)
+      return data
+    }
+    // Si el API devolvió un solo objeto con id, lo integramos al mock
+    if (data && typeof data === 'object' && 'id' in data) {
+      const realId = (data as unknown as { id: string }).id
+      // Actualizar el torneo live con el ID real
+      const liveIdx = _torneos.findIndex(t => t.estado === 'live')
+      if (liveIdx >= 0) {
+        _torneos[liveIdx] = { ..._torneos[liveIdx], id: realId }
+      }
+    }
+    return [..._torneos]
   } catch (error) {
     console.warn('[torneos] Error fetching from API, usando mock:', error)
     return [..._torneos]
