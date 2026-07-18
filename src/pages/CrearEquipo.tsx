@@ -12,9 +12,31 @@ import { ArrowLeft, ArrowRight, Check, Upload, CalendarDays, MapPin, Trophy } fr
 import { torneos } from '@/services/torneos'
 import { useAuth } from '@/hooks/auth/useAuth'
 import type { Torneo } from '@/services/torneos'
+import { getMiPerfil } from '@/api/usuarios'
+import { crearEquipo } from '@/api/teams'
+import { createChat } from '@/api/chat'
+import { rememberTeamName } from '@/utils/teamNameCache'
 
 const colores = ['#6D28D9','#F5A623','#22C55E','#EF4444','#3B82F6','#EC4899','#14B8A6','#F97316','#8B5CF6','#000000','#FFFFFF','#1F1F28']
 const diseños = ['SF','TC','FC','🚀','⚡','🛡️','🐯','🔥']
+
+/** Genera un logo placeholder a partir de los colores/diseño ya elegidos en el wizard. */
+function generarLogoPlaceholder(colorP: string, colorS: string, diseno: string): Promise<Blob> {
+  const canvas = document.createElement('canvas')
+  canvas.width = 256
+  canvas.height = 256
+  const ctx = canvas.getContext('2d')!
+  ctx.fillStyle = colorP
+  ctx.fillRect(0, 0, 256, 256)
+  ctx.fillStyle = colorS
+  ctx.font = 'bold 96px Arial'
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+  ctx.fillText(diseno, 128, 128)
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(blob => (blob ? resolve(blob) : reject(new Error('No se pudo generar el logo'))), 'image/png')
+  })
+}
 
 export default function CrearEquipo() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -24,9 +46,45 @@ export default function CrearEquipo() {
   const [colorP, setColorP] = useState('#6D28D9')
   const [colorS, setColorS] = useState('#F5A623')
   const [diseno, setDiseno] = useState('SF')
+  const [creating, setCreating] = useState(false)
+  const [createError, setCreateError] = useState<string | null>(null)
+  const [createdTeamId, setCreatedTeamId] = useState<string | null>(null)
   const navigate = useNavigate()
   const { user } = useAuth()
   const isCaptain = user?.isCaptain ?? false
+
+  async function crearChatDelEquipo(teamId: string) {
+    const miPerfil = await getMiPerfil()
+    await createChat('GROUP', teamId, [{ userId: miPerfil.id, role: 'MODERATOR' }])
+  }
+
+  async function handleCrearEquipo() {
+    setCreating(true)
+    setCreateError(null)
+    try {
+      if (!createdTeamId) {
+        const miPerfil = await getMiPerfil()
+        const logo = await generarLogoPlaceholder(colorP, colorS, diseno)
+        const team = await crearEquipo(miPerfil.nombreCompleto, nombre, `${colorP},${colorS}`, logo)
+        setCreatedTeamId(team.id)
+        rememberTeamName(team.id, team.name)
+        await crearChatDelEquipo(team.id)
+      } else {
+        // El equipo ya se creó en un intento anterior — solo reintentamos el chat, para no
+        // duplicar el equipo si el usuario reenvía el wizard completo.
+        await crearChatDelEquipo(createdTeamId)
+      }
+      navigate('/inscribir-equipo', { state: { teamId: createdTeamId } })
+    } catch {
+      setCreateError(
+        createdTeamId
+          ? 'El equipo ya se creó, pero no pudimos crear su chat. Reintentá solo esa parte.'
+          : 'No pudimos crear el equipo. Intentá de nuevo.',
+      )
+    } finally {
+      setCreating(false)
+    }
+  }
 
   const torneosActivos = torneos.filter(t => t.estado === 'upcoming' || t.estado === 'live')
 
@@ -159,14 +217,15 @@ export default function CrearEquipo() {
                       ))}
                     </div>
                   </div>
-                  <Button variant="outline" className="w-full rounded-full border-border text-gray-light hover:bg-white/5 h-12 mb-6 gap-2">
-                    <Upload size={16} /> Subir escudo propio
+                  <Button variant="outline" disabled className="w-full rounded-full border-border text-gray-light hover:bg-white/5 h-12 mb-6 gap-2 opacity-50">
+                    <Upload size={16} /> Subir escudo propio (próximamente)
                   </Button>
                   {preview}
+                  {createError && <p className="text-sm text-red-400 mt-4">{createError}</p>}
                   <div className="flex gap-3 mt-6">
-                    <Button variant="outline" onClick={() => setPaso(3)} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1"><ArrowLeft size={16} /> Anterior</Button>
-                    <Button onClick={() => { alert(`✅ Equipo "${nombre}" creado para torneo "${torneoElegido?.nombre}"`); navigate('/inscribir-equipo') }} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-12 flex-1">
-                      <Check size={16} /> Crear equipo
+                    <Button variant="outline" onClick={() => setPaso(3)} disabled={creating} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1"><ArrowLeft size={16} /> Anterior</Button>
+                    <Button onClick={handleCrearEquipo} disabled={creating} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-12 flex-1 disabled:opacity-60">
+                      <Check size={16} /> {creating ? 'Creando…' : createdTeamId ? 'Reintentar chat' : 'Crear equipo'}
                     </Button>
                   </div>
                 </motion.div>

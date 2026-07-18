@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import DashboardLayout from '@/components/common/DashboardLayout'
 import { SpotlightCard } from '@/components/common/spotlight-card'
@@ -47,6 +48,7 @@ const tabs = [
 ]
 
 export default function Notificaciones() {
+  const navigate = useNavigate()
   const [notificaciones, setNotificaciones] = useState(notificacionesMock)
   const [tab, setTab] = useState<TipoNotif>('todas')
 
@@ -138,7 +140,7 @@ export default function Notificaciones() {
                           <div className="flex items-center gap-2 mt-2">
                             <span className="text-[10px] text-text-faint">{n.hora}</span>
                             {n.accion === 'responder' && (
-                              <Button size="sm" className="rounded-full bg-purple-mid text-white text-[10px] h-auto py-1 px-3 hover:bg-purple-deep gap-1" onClick={e => { e.stopPropagation() }}>
+                              <Button size="sm" className="rounded-full bg-purple-mid text-white text-[10px] h-auto py-1 px-3 hover:bg-purple-deep gap-1" onClick={e => { e.stopPropagation(); navigate('/invitaciones') }}>
                                 Ver invitación <ChevronRight size={12} />
                               </Button>
                             )}
