@@ -19,9 +19,9 @@ import type { Partido, Posicion, CreateMatchRequest, CreateMatchResponse } from 
 // ─── Mock data (fallback + enrichment) ───────────────────────
 
 const MOCK_PARTIDOS: Partido[] = [
-  { id: 'mock-1', dia: 11, mes: 'MAY', eq1: 'Sistemas FC',   eq2: 'Los Bits',     hora: '6:00 PM',  lugar: 'Cancha Principal Sede Norte' },
-  { id: 'mock-2', dia: 11, mes: 'MAY', eq1: 'Tigres FC',     eq2: 'Code United',  hora: '8:00 PM',  lugar: 'Cancha Principal Sede Norte' },
-  { id: 'mock-3', dia: 12, mes: 'MAY', eq1: 'Dragones FC',   eq2: 'IA Warriors',  hora: '7:00 PM',  lugar: 'Cancha Principal Sede Norte 2' },
+  { id: 'mock-1', dia: 11, mes: 'MAY', eq1: 'Sistemas FC',   eq2: 'Los Bits',     hora: '6:00 PM',  lugar: 'Cancha Principal Sede Norte',   status: 'FINISHED', homeScore: 3, awayScore: 1 },
+  { id: 'mock-2', dia: 11, mes: 'MAY', eq1: 'Tigres FC',     eq2: 'Code United',  hora: '8:00 PM',  lugar: 'Cancha Principal Sede Norte',   status: 'FINISHED', homeScore: 2, awayScore: 2 },
+  { id: 'mock-3', dia: 12, mes: 'MAY', eq1: 'Dragones FC',   eq2: 'IA Warriors',  hora: '7:00 PM',  lugar: 'Cancha Principal Sede Norte 2', status: 'FINISHED', homeScore: 0, awayScore: 4 },
   { id: 'mock-4', dia: 12, mes: 'MAY', eq1: 'Code United',   eq2: 'Los Bits',     hora: '9:00 PM',  lugar: 'Cancha Principal Sede Norte' },
   { id: 'mock-5', dia: 13, mes: 'MAY', eq1: 'Tigres FC',     eq2: 'Dragones FC',  hora: '6:30 PM',  lugar: 'Cancha Principal Sede Norte' },
   { id: 'mock-6', dia: 13, mes: 'MAY', eq1: 'IA Warriors',   eq2: 'Sistemas FC',  hora: '8:30 PM',  lugar: 'Auditorio Principal Sede Norte' },
