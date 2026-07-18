@@ -187,7 +187,7 @@ export default function MiEquipo() {
                 </SpotlightCard>
               )}
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 justify-items-center">
+              <div className="grid grid-cols-[repeat(auto-fill,minmax(210px,1fr))] gap-4 justify-items-center">
                 {jugadores.map(j => (
                   <div key={j.id} className="group relative" style={{ width: 210, height: 322 }}>
                     <div style={{ transform: 'scale(0.7)', transformOrigin: 'top left', width: 300, height: 460 }}>
