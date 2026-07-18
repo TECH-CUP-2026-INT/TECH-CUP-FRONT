@@ -136,7 +136,7 @@ export default function Login() {
       {step === 'role' && (
         <div className="block relative w-[58%] min-w-[380px] overflow-hidden bg-[#F6F5FA] dark:bg-black">
           <img src="/images/bg-roles.png" alt="" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: '63% center' }} />
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/10 to-black/50" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[rgba(0,0,0,0.1)] to-[rgba(0,0,0,0.5)]" />
         </div>
       )}
 
