@@ -82,4 +82,25 @@ export async function apiPost<T>(path: string, body: unknown): Promise<T> {
   return res.data
 }
 
+/**
+ * POST multipart/form-data (para uploads).
+ */
+export async function apiPostForm<T>(path: string, form: FormData): Promise<T> {
+  const res = await api.post<T>(path, form, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  })
+  return res.data
+}
+
+/**
+ * PUT request.
+ */
+export async function apiPut<T>(path: string, body: unknown): Promise<T> {
+  const res = await api.put<T>(path, body)
+  return res.data
+}
+
+/** Prefix para el Teams Service dentro del APIM */
+export const TEAMS_SERVICE_PREFIX = '/api/v1'
+
 export default api

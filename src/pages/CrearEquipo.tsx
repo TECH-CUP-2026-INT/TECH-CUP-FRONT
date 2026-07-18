@@ -9,7 +9,8 @@ import { Button } from '@/components/common/button'
 import { Input } from '@/components/common/input'
 import { Label } from '@/components/common/label'
 import { ArrowLeft, ArrowRight, Check, Upload, CalendarDays, MapPin, Trophy } from 'lucide-react'
-import { torneos } from '@/services/torneos'
+import { torneos, fetchTorneos } from '@/services/torneos'
+import { crearEquipo } from '@/services/equipos'
 import { useAuth } from '@/hooks/auth/useAuth'
 import type { Torneo } from '@/services/torneos'
 
@@ -24,11 +25,31 @@ export default function CrearEquipo() {
   const [colorP, setColorP] = useState('#6D28D9')
   const [colorS, setColorS] = useState('#F5A623')
   const [diseno, setDiseno] = useState('SF')
+  const [creating, setCreating] = useState(false)
+  const [createdTeamId, setCreatedTeamId] = useState<string | null>(null)
   const navigate = useNavigate()
   const { user } = useAuth()
   const isCaptain = user?.isCaptain ?? false
 
   const torneosActivos = torneos.filter(t => t.estado === 'upcoming' || t.estado === 'live')
+
+  async function handleCrearEquipo() {
+    if (!torneoElegido) return
+    setCreating(true)
+    try {
+      const team = await crearEquipo(
+        user?.name || nombre,
+        nombre,
+        `${colorP},${colorS}`,
+      )
+      if (team) setCreatedTeamId(team.id)
+      navigate('/inscribir-equipo', { state: { teamId: team?.id, torneoId: torneoElegido.id } })
+    } catch {
+      navigate('/inscribir-equipo')
+    } finally {
+      setCreating(false)
+    }
+  }
 
   const preview = (
     <div className="flex items-center gap-4 p-4 rounded-xl bg-black/50 border border-border">
@@ -164,8 +185,8 @@ export default function CrearEquipo() {
                   {preview}
                   <div className="flex gap-3 mt-6">
                     <Button variant="outline" onClick={() => setPaso(3)} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1"><ArrowLeft size={16} /> Anterior</Button>
-                    <Button onClick={() => { alert(`✅ Equipo "${nombre}" creado para torneo "${torneoElegido?.nombre}"`); navigate('/inscribir-equipo') }} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-12 flex-1">
-                      <Check size={16} /> Crear equipo
+                    <Button onClick={handleCrearEquipo} disabled={creating} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-12 flex-1 disabled:opacity-60">
+                      <Check size={16} /> {creating ? 'Creando…' : 'Crear equipo'}
                     </Button>
                   </div>
                 </motion.div>

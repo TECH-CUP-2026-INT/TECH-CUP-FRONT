@@ -26,11 +26,25 @@ const MOCK_TORNEOS: Torneo[] = [
   { id:'8', nombre:'TechCup Apertura 2026', estado:'live', semestre:'2026-I', categoria:'Fútbol 11', equipos:8, jugadores:96, canchas:2, fecha:'Mar 5 – Jun 15, 2026', tag:'Torneo oficial' },
 ]
 
+// ── localStorage persistence ──────────────────────────────────
+const STORAGE_KEY = 'techcup_torneos_creados'
+
+function loadCreados(): Torneo[] {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    return raw ? JSON.parse(raw) : []
+  } catch { return [] }
+}
+
+function saveCreados(creados: Torneo[]): void {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(creados)) } catch {}
+}
+
 // ── Module-level array ───────────────────────────────────────
 // El array compartido: las páginas que importan `torneos` obtienen
 // esta misma referencia. Al mutar _torneos, `torneos` refleja los cambios
 // automáticamente porque apuntan al mismo objeto Array.
-const _torneos: Torneo[] = [...MOCK_TORNEOS]
+const _torneos: Torneo[] = [...MOCK_TORNEOS, ...loadCreados()]
 
 /**
  * Referencia directa al array de torneos.
@@ -66,6 +80,37 @@ export async function fetchTorneos(): Promise<Torneo[]> {
     console.warn('[torneos] Error fetching from API, usando mock:', error)
     return [..._torneos]
   }
+}
+
+/**
+ * Crea un torneo nuevo y lo persiste en localStorage + memoria.
+ */
+export function createTorneo(data: {
+  nombre: string
+  tipo?: string
+  fechaInicio?: string
+  fechaFin?: string
+  canchas?: number
+  categoria?: string
+}): Torneo {
+  const torneo: Torneo = {
+    id: 't-' + Date.now(),
+    nombre: data.nombre,
+    estado: 'upcoming',
+    semestre: '2026-II',
+    categoria: (data.categoria as any) || 'Fútbol 11',
+    equipos: 0,
+    jugadores: 0,
+    canchas: data.canchas ?? 0,
+    fecha: data.fechaInicio || '',
+    tag: data.tipo === 'relampago' ? 'Relámpago' : 'Próximo',
+  }
+  _torneos.unshift(torneo)
+  // Persistir solo los creados localmente (no los mock ni API)
+  const creados = loadCreados()
+  creados.unshift(torneo)
+  saveCreados(creados)
+  return torneo
 }
 
 /**
