@@ -137,9 +137,9 @@ export default function DashboardJugador() {
           </section>
 
           {/* ═══════════ PLAYER GRID (no capitán o siempre visible) ═══════════ */}
-          <section className="grid grid-cols-3 max-lg:grid-cols-1 gap-5 mb-[26px]">
+          <section className="flex flex-wrap justify-center gap-5 mb-[26px]">
             {/* Equipo */}
-            <SpotlightCard accent="purple" className="p-5 bg-[#E8DFF5]/70 dark:bg-black/40 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-purple-mid/30 rounded-2xl shadow-lg shadow-purple-mid/10">
+            <SpotlightCard accent="purple" className="w-full max-w-[380px] p-5 bg-[#E8DFF5]/70 dark:bg-black/40 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-purple-mid/30 rounded-2xl shadow-lg shadow-purple-mid/10">
               <h3 className="text-[14.5px] font-semibold tracking-[.3px] mb-3 flex items-center gap-2 text-[#3D1A6B] dark:text-white">
                 <span className="text-gold">{isCaptain ? MI_EQUIPO.emoji : '👥'}</span> <span className="text-gold">{isCaptain ? MI_EQUIPO.nombre : 'Mi equipo'}</span>
               </h3>
@@ -171,7 +171,7 @@ export default function DashboardJugador() {
 
 
             {/* Invitaciones */}
-            <SpotlightCard accent="purple" className="p-5 bg-[#E8DFF5]/70 dark:bg-black/40 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-purple-mid/30 rounded-2xl shadow-lg shadow-purple-mid/10">
+            <SpotlightCard accent="purple" className="w-full max-w-[380px] p-5 bg-[#E8DFF5]/70 dark:bg-black/40 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-purple-mid/30 rounded-2xl shadow-lg shadow-purple-mid/10">
               <h3 className="text-[14.5px] font-semibold tracking-[.3px] mb-3 flex items-center gap-2 text-[#3D1A6B] dark:text-white"><span className="text-gold">📨</span> <span className="text-gold">Invitaciones</span></h3>
               <div className="text-center py-4">
                 <img src="/images/icono-invitaciones.png" alt="" className="w-16 h-16 mx-auto mb-2 object-contain" />
