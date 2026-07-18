@@ -12,6 +12,7 @@ interface OtpVerifyProps {
   onBack: () => void
   isLoading?: boolean
   error?: string | null
+  otpCode?: string | null
 }
 
 export default function OtpVerify({
@@ -21,6 +22,7 @@ export default function OtpVerify({
   onBack,
   isLoading = false,
   error = null,
+  otpCode = null,
 }: OtpVerifyProps) {
   const [otp, setOtp] = useState<string[]>(Array(OTP_LENGTH).fill(''))
   const [resending, setResending] = useState(false)
@@ -111,6 +113,14 @@ export default function OtpVerify({
         <p className="text-sm text-text-muted mb-6">
           Ingresá el código de 6 dígitos enviado a <strong className="text-gold">{maskedEmail}</strong>
         </p>
+
+        {/* Dev mode OTP display */}
+        {otpCode && (
+          <div className="mb-4 py-2 px-4 rounded-xl bg-yellow-500/10 border border-yellow-500/30 text-center">
+            <p className="text-xs text-yellow-400/70 mb-0.5">Modo desarrollo — código OTP</p>
+            <p className="text-2xl font-bold text-yellow-300 tracking-[8px] font-mono">{otpCode}</p>
+          </div>
+        )}
 
         {/* OTP Inputs */}
         <div className="flex justify-center gap-2 mb-6" onPaste={handlePaste}>

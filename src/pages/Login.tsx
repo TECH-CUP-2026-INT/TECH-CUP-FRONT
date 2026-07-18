@@ -54,6 +54,7 @@ export default function Login() {
   const [step, setStep] = useState<'role' | 'login' | 'otp'>('role')
   const [selectedRole, setSelectedRole] = useState<string>('jugador')
   const [userId, setUserId] = useState<string>('')
+  const [otpCode, setOtpCode] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [authError, setAuthError] = useState<string | null>(null)
   const [isPlaying, setIsPlaying] = useState(true)
@@ -77,6 +78,7 @@ export default function Login() {
     try {
       const res = await apiLogin(email, password)
       setUserId(res.userId)
+      setOtpCode(res.otpCode ?? null)
       setStep('otp')
     } catch {
       // Backend no disponible — login local directo
@@ -119,6 +121,7 @@ export default function Login() {
       const { loginGoogle } = await import('@/services/auth')
       const res = await loginGoogle(response.credential)
       setUserId(res.userId)
+      setOtpCode(res.otpCode ?? null)
       setStep('otp')
     } catch {
       // Backend no disponible o token inválido — login local directo
@@ -320,9 +323,10 @@ export default function Login() {
                 email={email}
                 onVerify={handleOtpVerify}
                 onResend={handleOtpResend}
-                onBack={() => setStep('login')}
+                onBack={() => { setStep('login'); setOtpCode(null) }}
                 isLoading={isLoading}
                 error={authError}
+                otpCode={otpCode}
               />
             )}
             </motion.div>
