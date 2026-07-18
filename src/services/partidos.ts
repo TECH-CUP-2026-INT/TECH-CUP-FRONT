@@ -8,8 +8,8 @@
  *    desde datos mock hasta que el servicio los incluya
  */
 
-import { getPartidosApi } from '@/api/partidos'
-import type { Partido, Posicion } from '@/api/tipos'
+import { getPartidosApi, crearPartidoApi } from '@/api/partidos'
+import type { Partido, Posicion, CreateMatchRequest, CreateMatchResponse } from '@/api/tipos'
 
 // ─── Mock data (fallback + enrichment) ───────────────────────
 
@@ -97,5 +97,43 @@ export async function fetchPartidos(): Promise<Partido[]> {
   } catch (error) {
     console.warn('[partidos] API falló, usando mock:', error)
     return [..._partidos]
+  }
+}
+
+// ─── Crear partido ─────────────────────────────────────────────
+
+let _matchIdCounter = 1000
+
+/**
+ * Crea un partido nuevo. Intenta contra el API real; si falla, lo agrega a los mocks.
+ */
+export async function crearPartido(data: CreateMatchRequest): Promise<CreateMatchResponse> {
+  try {
+    return await crearPartidoApi(data)
+  } catch (error) {
+    console.warn('[partidos] crearPartido API falló, usando mock:', error)
+    // Mock: agregar a la lista local
+    const eq1 = data.homeTeamId === 'mock-1' ? 'Tigres FC' : data.homeTeamId === 'mock-2' ? 'Sistemas FC' : 'Code United'
+    const eq2 = data.awayTeamId === 'mock-1' ? 'Tigres FC' : data.awayTeamId === 'mock-2' ? 'Sistemas FC' : 'IA Warriors'
+    const id = `mock-${++_matchIdCounter}`
+    const newMatch: Partido = {
+      id,
+      dia: new Date(data.scheduledDate).getDate(),
+      mes: new Date(data.scheduledDate).toLocaleString('es', { month: 'short' }).toUpperCase().replace('.',''),
+      eq1, eq2,
+      hora: new Date(data.scheduledDate).toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit', hour12: true }).replace('.',''),
+      lugar: data.venue,
+      status: 'SCHEDULED',
+    }
+    _partidos.push(newMatch)
+    return {
+      id,
+      homeTeamName: eq1,
+      awayTeamName: eq2,
+      tournamentId: data.tournamentId,
+      scheduledDate: data.scheduledDate,
+      status: 'SCHEDULED',
+      message: 'Partido creado exitosamente (mock)',
+    }
   }
 }

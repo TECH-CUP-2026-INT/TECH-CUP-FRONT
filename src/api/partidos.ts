@@ -4,10 +4,11 @@
  * Endpoints del Matches Service expuestos via APIM:
  *   GET /api/partidos            → listado de partidos
  *   GET /api/partidos/{matchId}  → detalle de un partido
+ *   POST /api/partidos           → crear un nuevo partido
  */
 
-import { apiGet } from './client'
-import type { MatchSummaryAPI, MatchDetailAPI } from './tipos'
+import { apiGet, apiPost } from './client'
+import type { MatchSummaryAPI, MatchDetailAPI, CreateMatchRequest, CreateMatchResponse } from './tipos'
 
 const BASE = '/api/v1/Partidos'
 
@@ -27,4 +28,14 @@ export async function getPartidoPorIdApi(
   matchId: string
 ): Promise<MatchDetailAPI> {
   return apiGet<MatchDetailAPI>(`${BASE}/api/partidos/${matchId}`)
+}
+
+/**
+ * Crea un nuevo partido.
+ * POST /api/partidos
+ */
+export async function crearPartidoApi(
+  data: CreateMatchRequest
+): Promise<CreateMatchResponse> {
+  return apiPost<CreateMatchResponse>(`${BASE}/api/partidos`, data)
 }

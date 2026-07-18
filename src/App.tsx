@@ -29,6 +29,7 @@ import DetalleTorneo from '@/pages/DetalleTorneo'
 import Arbitraje from '@/pages/Arbitraje'
 import RefereeDashboard from '@/pages/RefereeDashboard'
 import CrearEquipo from '@/pages/CrearEquipo'
+import CrearPartido from '@/pages/CrearPartido'
 import CrearTorneo from '@/pages/CrearTorneo'
 import InscribirEquipo from '@/pages/InscribirEquipo'
 import Llaves from '@/pages/Llaves'
@@ -74,6 +75,7 @@ export default function App() {
         <Route path="/arbitraje" element={<Arbitraje />} />
         <Route path="/arbitro/dashboard" element={<RefereeDashboard />} />
         <Route path="/crear-equipo" element={<CrearEquipo />} />
+        <Route path="/crear-partido" element={<CrearPartido />} />
         <Route path="/inscribir-equipo" element={<InscribirEquipo />} />
         <Route path="/llaves" element={<Llaves />} />
         <Route path="/registro" element={<Register />} />

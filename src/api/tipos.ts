@@ -87,6 +87,24 @@ export interface MatchDetailAPI {
   endedAt: string
 }
 
+export interface CreateMatchRequest {
+  tournamentId: string
+  homeTeamId: string
+  awayTeamId: string
+  scheduledDate: string
+  venue: string
+}
+
+export interface CreateMatchResponse {
+  id: string
+  homeTeamName: string
+  awayTeamName: string
+  tournamentId: string
+  scheduledDate: string
+  status: string
+  message: string
+}
+
 // ─── Rankings ────────────────────────────────────────────────
 export type RankingType = 'GOALS' | 'WINS' | 'FOULS' | 'MINUTES'
 
