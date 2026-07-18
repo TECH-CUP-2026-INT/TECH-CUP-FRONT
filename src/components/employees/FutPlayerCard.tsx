@@ -4,8 +4,9 @@ import { type ReactNode } from "react"
 import { cn } from "@/utils/cn"
 
 /* ============================================================
-   FutPlayerCard — réplica fiel del diseño FIFA Ultimate Team
-   Basado exactamente en: https://codepen.io/selimdoyranli/pen/qvNEzv
+   FutPlayerCard — tarjeta de jugador estilo ECI
+   Fondo morado/dorado, número de dorsal gigante de fondo,
+   insignia ECI y cápsulas de info sobre la silueta del jugador.
    ============================================================ */
 
 // ── Tipos ────────────────────────────────────────────────
@@ -33,12 +34,6 @@ export interface FutPlayerCardProps {
   techcup?: boolean
 }
 
-// ── Constantes TechCup ───────────────────────────────────
-
-const GOLD = "#e9cc74"
-const PURPLE = "#6D28D9"
-const CARD_BG = "https://selimdoyranli.com/cdn/fut-player-card/img/card_bg.png"
-
 const POS_MAP: Record<string, string> = {
   Portero: "POR",
   Defensa: "DEF",
@@ -46,23 +41,8 @@ const POS_MAP: Record<string, string> = {
   Delantero: "DEL",
 }
 
-// ── Helpers ──────────────────────────────────────────────
-
-function computeRating(s: FutPlayerStats): number {
-  let r = 50
-  r += Math.min(s.goles * 5, 25)
-  r += Math.min(s.asistencias * 5, 15)
-  r += Math.min(s.partidos * 2, 10)
-  r -= Math.min(s.amarillas * 2 + s.rojas * 5, 15)
-  return Math.max(40, Math.min(99, r))
-}
-
-function stat99(value: number, maxRef: number): number {
-  if (maxRef <= 0) return 40
-  return Math.min(99, Math.max(30, Math.round((value / maxRef) * 99)))
-}
-
-// ── Componente principal ─────────────────────────────────
+/** Jugadores cuya imagen ya es una ficha completa (diseño horneado) — se muestran full-bleed, sin la plantilla. */
+const FULL_CARD_IMAGES = ["nicolas.png", "thomas.png", "jose.png", "jhonathan.png"]
 
 export function FutPlayerCard({
   nombre,
@@ -73,278 +53,93 @@ export function FutPlayerCard({
   className,
   onClick,
   actions,
-  teamName = "TC",
 }: FutPlayerCardProps) {
   const shortPos = POS_MAP[posicion] || posicion.substring(0, 3).toUpperCase()
-  const rating = computeRating(stats)
-  const firstName = nombre.split(" ")[0]
-  const lastName = nombre.split(" ").slice(1).join(" ")
+  const isFullCard = FULL_CARD_IMAGES.some((f) => img.endsWith(f))
 
-  // Stats normalizados 0-99
-  const maxVals = { goles: 8, asistencias: 6, partidos: 10, amarillas: 4, rojas: 2, faltas: 8 }
-  const s = {
-    gol: stat99(stats.goles, maxVals.goles),
-    asi: stat99(stats.asistencias, maxVals.asistencias),
-    par: stat99(stats.partidos, maxVals.partidos),
-    ama: 99 - stat99(stats.amarillas, maxVals.amarillas),
-    roj: 99 - stat99(stats.rojas, maxVals.rojas),
-    fal: 99 - stat99(stats.faltas, maxVals.faltas),
+  if (isFullCard) {
+    return (
+      <div
+        className={cn(
+          "fut-player-card relative w-[300px] h-[460px] select-none shrink-0 overflow-hidden rounded-[22px]",
+          "transition-transform duration-200 ease-in hover:-translate-y-1",
+          onClick && "cursor-pointer",
+          className
+        )}
+        onClick={onClick}
+        style={{ boxShadow: "0 12px 30px rgba(0,0,0,0.45)" }}
+      >
+        <img src={img} alt={nombre} draggable={false} className="w-full h-full object-cover" />
+        {actions && <div className="absolute top-2 left-2 z-20">{actions}</div>}
+      </div>
+    )
   }
 
   return (
     <div
       className={cn(
-        "fut-player-card",
-        "relative w-[300px] h-[485px] select-none shrink-0",
-        "transition-[200ms_ease-in] hover:-translate-y-1",
+        "fut-player-card relative w-[300px] h-[460px] select-none shrink-0 overflow-hidden rounded-[22px]",
+        "transition-transform duration-200 ease-in hover:-translate-y-1",
         onClick && "cursor-pointer",
         className
       )}
       onClick={onClick}
       style={{
-        backgroundImage: `url(${CARD_BG})`,
-        backgroundPosition: "center center",
-        backgroundSize: "100% 100%",
-        backgroundRepeat: "no-repeat",
-        padding: "3.8rem 0",
+        background: "linear-gradient(150deg, #2A0F4E 0%, #3D1873 42%, #6D28D9 68%, #D4AF37 100%)",
+        boxShadow: "0 12px 30px rgba(0,0,0,0.45)",
+        border: "1px solid rgba(233,204,116,0.25)",
       }}
     >
-      {/* ── PLAYER CARD TOP ── */}
-      <div
-        className="player-card-top relative flex"
-        style={{ color: GOLD, padding: "0 1.5rem" }}
+      {/* Número de dorsal gigante de fondo */}
+      <span
+        aria-hidden
+        className="absolute -left-3 top-0 font-black leading-none pointer-events-none select-none"
+        style={{
+          fontSize: "11rem",
+          color: "transparent",
+          WebkitTextStroke: "2px rgba(233,204,116,0.35)",
+        }}
       >
-        {/* Player Master Info */}
-        <div
-          className="player-master-info"
-          style={{
-            position: "absolute",
-            lineHeight: "2.2rem",
-            fontWeight: 300,
-            padding: "1.5rem 0",
-            textTransform: "uppercase",
-          }}
-        >
-          <div className="player-rating" style={{ fontSize: "2rem", color: GOLD }}>
-            <span>{rating}</span>
-          </div>
-          <div className="player-position" style={{ fontSize: "1.4rem", color: PURPLE }}>
-            <span>{shortPos}</span>
-          </div>
-          {/* Nation = dorsal */}
-          <span className="player-nation" style={{ display: "block", width: "2rem", height: "25px", margin: "0.3rem 0" }}>
-            <span
-              style={{
-                width: "100%",
-                height: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                background: PURPLE,
-                border: `1px solid ${GOLD}60`,
-                borderRadius: "3px",
-                fontSize: "10px",
-                fontWeight: 900,
-                color: GOLD,
-              }}
-            >
-              #{dorsal}
-            </span>
-          </span>
-          {/* Club badge */}
-          <span className="player-club" style={{ display: "block", width: "2.1rem", height: "40px" }}>
-            <span
-              style={{
-                width: "100%",
-                height: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                background: PURPLE,
-                border: `1px solid ${GOLD}60`,
-                borderRadius: "3px",
-                fontSize: "8px",
-                fontWeight: 900,
-                color: GOLD,
-                textAlign: "center",
-                lineHeight: 1.1,
-              }}
-            >
-              TC
-            </span>
-          </span>
-        </div>
+        {String(dorsal).padStart(2, "0")}
+      </span>
 
-        {/* Player Picture */}
-        <div
-          className="player-picture"
-          style={{
-            width: "200px",
-            height: "200px",
-            margin: "0 auto",
-            overflow: "hidden",
-            position: "relative",
+      {/* Insignia ECI */}
+      <div className="absolute top-3 right-3 w-11 h-14 rounded-xl bg-white flex items-center justify-center overflow-hidden shadow-md">
+        <img src="/assets/logo-eci.png" alt="" className="w-9 h-9 object-contain" />
+      </div>
+
+      {/* Foto del jugador */}
+      <div className="absolute inset-x-0 top-8 bottom-[100px] flex items-end justify-center">
+        <img
+          src={img}
+          alt={nombre}
+          draggable={false}
+          className="max-h-full max-w-[85%] object-contain"
+          style={{ filter: "drop-shadow(0 10px 18px rgba(0,0,0,0.5))" }}
+          onError={(e) => {
+            const target = e.currentTarget
+            if (target.src !== img) target.src = img
           }}
-        >
-          <img
-            src={img.replace("72", "200")}
-            alt={nombre}
-            draggable="false"
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "contain",
-              position: "relative",
-              right: "-1.5rem",
-              bottom: 0,
-            }}
-            onError={(e) => {
-              const target = e.currentTarget
-              if (target.src !== img) {
-                target.src = img
-              }
-            }}
-          />
-          {/* Player extra tags */}
-          <div
-            className="player-extra"
-            style={{
-              position: "absolute",
-              right: 0,
-              bottom: "-0.5rem",
-              overflow: "hidden",
-              fontSize: "1rem",
-              fontWeight: 700,
-              textTransform: "uppercase",
-              width: "100%",
-              height: "2rem",
-              padding: "0 1.5rem",
-              textAlign: "right",
-              background: "none",
-            }}
-          >
-            <span style={{ marginLeft: "0.6rem", textShadow: "2px 2px #333", color: PURPLE }}>
-              ⚽ {stats.goles}
-            </span>
-            <span style={{ marginLeft: "0.6rem", textShadow: "2px 2px #333", color: PURPLE }}>
-              🅰 {stats.asistencias}
-            </span>
-          </div>
+        />
+      </div>
+
+      {/* Info inferior */}
+      <div className="absolute bottom-3 left-3 right-3 flex flex-col gap-1.5 z-10">
+        <div className="rounded-full bg-gradient-to-r from-teal-800/90 to-teal-500/80 backdrop-blur-sm px-4 py-2 text-center shadow-lg">
+          <p className="text-white font-bold uppercase tracking-wide text-[15px] leading-tight">{nombre}</p>
+        </div>
+        <div className="rounded-full bg-gradient-to-r from-teal-800/80 to-teal-600/70 px-4 py-1.5 text-center">
+          <p className="text-white/85 text-[12px]">{shortPos} · #{dorsal}</p>
+        </div>
+        <div className="rounded-full bg-gradient-to-r from-teal-800/70 to-teal-600/60 px-4 py-1 text-center">
+          <p className="text-white/80 text-[11px]">⚽ {stats.goles} · 🅰 {stats.asistencias}</p>
         </div>
       </div>
 
-      {/* ── PLAYER CARD BOTTOM ── */}
-      <div className="player-card-bottom" style={{ position: "relative" }}>
-        <div
-          className="player-info"
-          style={{
-            display: "block",
-            padding: "0.3rem 0",
-            color: GOLD,
-            width: "90%",
-            margin: "0 auto",
-            height: "auto",
-            position: "relative",
-            zIndex: 2,
-          }}
-        >
-          {/* Player Name */}
-          <div
-            className="player-name"
-            style={{
-              width: "100%",
-              display: "block",
-              textAlign: "center",
-              fontSize: "1.6rem",
-              textTransform: "uppercase",
-              borderBottom: `2px solid ${GOLD}1A`,
-              paddingBottom: "0.3rem",
-              overflow: "hidden",
-            }}
-          >
-            <span style={{ display: "block", textShadow: "2px 2px #111" }}>
-              {firstName}
-            </span>
-            {lastName && (
-              <span
-                style={{
-                  display: "block",
-                  textShadow: "2px 2px #111",
-                  fontSize: "1.3rem",
-                  marginTop: "-2px",
-                }}
-              >
-                {lastName}
-              </span>
-            )}
-          </div>
-
-          {/* Player Features */}
-          <div
-            className="player-features"
-            style={{
-              margin: "0.5rem auto",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            {/* Col 1: GOL / PAR / AMA */}
-            <div
-              className="player-features-col"
-              style={{
-                borderRight: `2px solid ${GOLD}1A`,
-                padding: "0 2rem",
-              }}
-            >
-              <StatRow value={s.gol} label="GOL" />
-              <StatRow value={s.par} label="PAR" />
-              <StatRow value={s.ama} label="AMA" />
-            </div>
-
-            {/* Col 2: ASI / ROJ / FAL */}
-            <div
-              className="player-features-col"
-              style={{ padding: "0 2rem", border: 0 }}
-            >
-              <StatRow value={s.asi} label="ASI" />
-              <StatRow value={s.roj} label="ROJ" />
-              <StatRow value={s.fal} label="FAL" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Optional actions ── */}
+      {/* Optional actions */}
       {actions && (
-        <div className="absolute top-2 right-2 z-20">{actions}</div>
+        <div className="absolute top-2 left-2 z-20">{actions}</div>
       )}
     </div>
-  )
-}
-
-// ── Sub-component: stat row ──
-
-function StatRow({ value, label }: { value: number; label: string }) {
-  return (
-    <span
-      style={{
-        display: "flex",
-        fontSize: "1.2rem",
-        textTransform: "uppercase",
-      }}
-    >
-      <span
-        className="player-feature-value"
-        style={{ marginRight: "0.3rem", fontWeight: 700, color: PURPLE }}
-      >
-        {value}
-      </span>
-      <span
-        className="player-feature-title"
-        style={{ fontWeight: 300, color: GOLD }}
-      >
-        {label}
-      </span>
-    </span>
   )
 }
