@@ -71,17 +71,27 @@ export default function TechCupHero() {
                 }}
               >
                 <img
-                  src="/images/mercado-pago.png"
+                  src="/images/mercado-pago.jpg"
                   alt="Mercado Pago"
                   style={{
-                    width: "160px",
+                    width: "220px",
                     height: "auto",
                     display: "block",
-                    rotate: "-90deg",
                   }}
                 />
               </div>
             </div>
+            <p
+              style={{
+                fontSize: "14px",
+                lineHeight: 1.5,
+                color: "#A9A2C3",
+                margin: 0,
+              }}
+            >
+              Recibimos pagos por PSE, tarjetas de crédito/débito y todos los
+              medios disponibles en Mercado Pago.
+            </p>
           </div>
         </div>
 
