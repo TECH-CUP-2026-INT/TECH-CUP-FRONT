@@ -285,27 +285,6 @@ export default function Login() {
 
             {step === 'login' && (
               <>
-              {/* Demo users filtered by selected role */}
-              <div className="mb-4 p-3 rounded-xl bg-gold/5 border border-gold/10">
-                <p className="text-[11px] text-text-faint uppercase tracking-wider mb-2">Usuarios demo · {selectedRole === 'administrador' ? 'Organizadores' : selectedRole === 'arbitro' ? 'Árbitros' : 'Jugadores'}</p>
-                <div className="grid grid-cols-1 gap-1 max-h-[140px] overflow-y-auto">
-                  {DEMO_USERS.filter(u => {
-                    if (selectedRole === 'administrador') return u.role === 'organizador'
-                    if (selectedRole === 'arbitro') return u.role === 'arbitro'
-                    return u.role === 'jugador'
-                  }).map(u => (
-                    <button key={u.email} onClick={() => { quickDemoLogin(u) }}
-                      className="text-left px-2.5 py-1.5 rounded-lg hover:bg-gold/10 transition-all flex items-center justify-between">
-                      <div className="min-w-0">
-                        <p className="text-[13px] text-gray-light truncate">{u.name}</p>
-                        <p className="text-[11px] text-text-muted truncate">{u.email}</p>
-                      </div>
-                      {u.isCaptain && <span className="text-[11px] ml-2 shrink-0">👑</span>}
-                    </button>
-                  ))}
-                </div>
-                <p className="text-[10px] text-text-faint mt-2">Contraseña: <span className="text-gold">techcup2026</span></p>
-              </div>
               <form onSubmit={handleLoginSubmit} className="space-y-4">
                 <div className="space-y-2">
                   <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Correo electrónico</Label>
