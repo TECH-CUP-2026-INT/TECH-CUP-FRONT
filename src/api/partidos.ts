@@ -35,10 +35,16 @@ export async function getPartidoPorIdApi(
 
 /**
  * Crea un nuevo partido.
- * POST /api/partidos
+ * POST /api/partidos/crear
  */
 export async function crearPartidoApi(
   data: CreateMatchRequest
 ): Promise<CreateMatchResponse> {
-  return apiPost<CreateMatchResponse>(`${MATCHES_BASE}/api/partidos`, data)
+  return apiPost<CreateMatchResponse>(`${MATCHES_BASE}/api/partidos/crear`, {
+    tournamentId: data.tournamentId,
+    homeTeamName: data.homeTeamId === 'eq-1' ? 'Tigres FC' : data.homeTeamId === 'eq-2' ? 'Sistemas FC' : data.homeTeamId === 'eq-3' ? 'Code United' : data.homeTeamId === 'eq-4' ? 'IA Warriors' : data.homeTeamId === 'eq-5' ? 'Dragones FC' : data.homeTeamId === 'eq-6' ? 'Los Bits' : 'Equipo',
+    awayTeamName: data.awayTeamId === 'eq-1' ? 'Tigres FC' : data.awayTeamId === 'eq-2' ? 'Sistemas FC' : data.awayTeamId === 'eq-3' ? 'Code United' : data.awayTeamId === 'eq-4' ? 'IA Warriors' : data.awayTeamId === 'eq-5' ? 'Dragones FC' : data.awayTeamId === 'eq-6' ? 'Los Bits' : 'Equipo',
+    scheduledDate: data.scheduledDate,
+    venue: data.venue,
+  })
 }

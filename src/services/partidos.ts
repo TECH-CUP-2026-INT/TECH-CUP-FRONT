@@ -8,7 +8,7 @@
  *    desde datos mock hasta que el servicio los incluya
  */
 
-import { getPartidosApi, crearPartidoApi } from '@/api/partidos'
+import { getPartidosApi } from '@/api/partidos'
 import type { Partido, Posicion, CreateMatchRequest, CreateMatchResponse } from '@/api/tipos'
 
 // ─── Mock data (fallback + enrichment) ───────────────────────
@@ -108,32 +108,26 @@ let _matchIdCounter = 1000
  * Crea un partido nuevo. Intenta contra el API real; si falla, lo agrega a los mocks.
  */
 export async function crearPartido(data: CreateMatchRequest): Promise<CreateMatchResponse> {
-  try {
-    return await crearPartidoApi(data)
-  } catch (error) {
-    console.warn('[partidos] crearPartido API falló, usando mock:', error)
-    // Mock: agregar a la lista local
-    const eq1 = data.homeTeamId === 'mock-1' ? 'Tigres FC' : data.homeTeamId === 'mock-2' ? 'Sistemas FC' : 'Code United'
-    const eq2 = data.awayTeamId === 'mock-1' ? 'Tigres FC' : data.awayTeamId === 'mock-2' ? 'Sistemas FC' : 'IA Warriors'
-    const id = `mock-${++_matchIdCounter}`
-    const newMatch: Partido = {
-      id,
-      dia: new Date(data.scheduledDate).getDate(),
-      mes: new Date(data.scheduledDate).toLocaleString('es', { month: 'short' }).toUpperCase().replace('.',''),
-      eq1, eq2,
-      hora: new Date(data.scheduledDate).toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit', hour12: true }).replace('.',''),
-      lugar: data.venue,
-      status: 'SCHEDULED',
-    }
-    _partidos.push(newMatch)
-    return {
-      id,
-      homeTeamName: eq1,
-      awayTeamName: eq2,
-      tournamentId: data.tournamentId,
-      scheduledDate: data.scheduledDate,
-      status: 'SCHEDULED',
-      message: 'Partido creado exitosamente (mock)',
-    }
+  const eq1 = data.homeTeamId === 'eq-1' ? 'Tigres FC' : data.homeTeamId === 'eq-2' ? 'Sistemas FC' : data.homeTeamId === 'eq-3' ? 'Code United' : data.homeTeamId === 'eq-4' ? 'IA Warriors' : data.homeTeamId === 'eq-5' ? 'Dragones FC' : data.homeTeamId === 'eq-6' ? 'Los Bits' : 'Equipo'
+  const eq2 = data.awayTeamId === 'eq-1' ? 'Tigres FC' : data.awayTeamId === 'eq-2' ? 'Sistemas FC' : data.awayTeamId === 'eq-3' ? 'Code United' : data.awayTeamId === 'eq-4' ? 'IA Warriors' : data.awayTeamId === 'eq-5' ? 'Dragones FC' : data.awayTeamId === 'eq-6' ? 'Los Bits' : 'Equipo'
+  const id = `mock-${++_matchIdCounter}`
+  const newMatch: Partido = {
+    id,
+    dia: new Date(data.scheduledDate).getDate(),
+    mes: new Date(data.scheduledDate).toLocaleString('es', { month: 'short' }).toUpperCase().replace('.',''),
+    eq1, eq2,
+    hora: new Date(data.scheduledDate).toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit', hour12: true }).replace('.',''),
+    lugar: data.venue,
+    status: 'SCHEDULED',
+  }
+  _partidos.push(newMatch)
+  return {
+    id,
+    homeTeamName: eq1,
+    awayTeamName: eq2,
+    tournamentId: data.tournamentId,
+    scheduledDate: data.scheduledDate,
+    status: 'SCHEDULED',
+    message: 'Partido creado exitosamente (mock)',
   }
 }
