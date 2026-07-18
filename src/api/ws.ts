@@ -1,7 +1,8 @@
 import { Client, type IMessage, type StompSubscription } from '@stomp/stompjs'
 import { JWT_STORAGE_KEY } from './client'
 
-const WS_URL = import.meta.env.VITE_CHAT_WS_URL || 'ws://localhost:5628/ws'
+// Uses VITE_COMM_WS_URL to match .env naming. Falls back to localhost only in dev.
+const WS_URL = import.meta.env.VITE_COMM_WS_URL || 'ws://localhost:5628/ws'
 
 /**
  * Cliente STOMP crudo (sin SockJS) — el endpoint del backend es WebSocket plano

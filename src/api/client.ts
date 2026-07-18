@@ -4,6 +4,14 @@ const DEV = import.meta.env.DEV
 const BASE_URL = DEV ? '' : (import.meta.env.VITE_API_BASE_URL || 'https://techapi.azure-api.net')
 const APIM_KEY = import.meta.env.VITE_APIM_KEY
 
+if (!DEV && !APIM_KEY) {
+  // eslint-disable-next-line no-console
+  console.error(
+    '[techcup] VITE_APIM_KEY missing in production. APIM will reject every request with 401. ' +
+      'Set it in Cloudflare Pages → Settings → Environment variables.',
+  )
+}
+
 // ── Prefijos por servicio en el gateway ──────────────────────
 export const CHAT_SERVICE_PREFIX = '/communication'
 export const USERS_SERVICE_PREFIX = '/users'

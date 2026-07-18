@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import DashboardLayout from '@/components/common/DashboardLayout'
 import { SpotlightCard } from '@/components/common/spotlight-card'
@@ -6,23 +6,98 @@ import { Badge } from '@/components/common/badge'
 import { Button } from '@/components/common/button'
 import { X, MapPin, Clock, Trophy, Swords, CalendarDays, Shirt } from 'lucide-react'
 import SoccerField3D from '@/components/employees/SoccerField3D'
+import { fetchPartidos } from '@/services/partidos'
+import type { Partido } from '@/api/tipos'
 
 type Tab = 'proximos' | 'envivo' | 'finalizados'
 
-const partidos = [
-  { torneo: 'TechCup 2024-I', eq1: 'Sistemas FC', eq2: 'Tigres FC', fecha: '24 MAY', hora: '8:00 PM', cancha: 'Cancha 1', estado: 'upcoming', detalle: 'En 2 días' },
-  { torneo: 'TechCup 2024-I', eq1: 'Sistemas FC', eq2: 'Code United', fecha: '18 MAY', hora: '8:00 PM', cancha: 'Cancha 2', estado: 'final', resultado: '3 - 1' },
-  { torneo: 'TechCup 2024-I', eq1: 'Sistemas FC', eq2: 'IA Warriors', fecha: '11 MAY', hora: '5:00 PM', cancha: 'Cancha 1', estado: 'final', resultado: '2 - 2' },
-  { torneo: 'TechCup 2024-I', eq1: 'Sistemas FC', eq2: 'Los Bits', fecha: '28 MAY', hora: '7:00 PM', cancha: 'Cancha 3', estado: 'upcoming', detalle: 'En 5 días' },
-  { torneo: 'TechCup 2024-I', eq1: 'Sistemas FC', eq2: 'Dragones FC', fecha: '20 MAY', hora: '6:00 PM', cancha: 'Cancha 1', estado: 'live', resultado: '1 - 0' },
-]
+// Maps API MatchStatus to the UI tab state.
+function statusToEstado(status?: Partido['status']): 'upcoming' | 'live' | 'final' {
+  switch (status) {
+    case 'IN_PROGRESS':
+    case 'PAUSED':
+      return 'live'
+    case 'FINISHED':
+      return 'final'
+    case 'SCHEDULED':
+    default:
+      return 'upcoming'
+  }
+}
+
+interface DisplayPartido {
+  id: string
+  torneo: string
+  eq1: string
+  eq2: string
+  fecha: string
+  hora: string
+  cancha: string
+  estado: 'upcoming' | 'live' | 'final'
+  resultado?: string
+  detalle?: string
+}
+
+function toDisplay(p: Partido): DisplayPartido {
+  const estado = statusToEstado(p.status)
+  const fecha = `${p.dia} ${p.mes}`
+  const resultado =
+    p.homeScore !== undefined && p.awayScore !== undefined
+      ? `${p.homeScore} - ${p.awayScore}`
+      : undefined
+  // Detalle opcional para próximos: días restantes estimados a partir del día.
+  let detalle: string | undefined
+  if (estado === 'upcoming' && p.homeScore === undefined) {
+    detalle = 'Próximo'
+  }
+  return {
+    id: p.id,
+    torneo: 'TechCup',
+    eq1: p.eq1,
+    eq2: p.eq2,
+    fecha,
+    hora: p.hora,
+    cancha: p.lugar,
+    estado,
+    resultado,
+    detalle,
+  }
+}
 
 export default function MisPartidos() {
   const [tab, setTab] = useState<Tab>('proximos')
-  const [selectedMatch, setSelectedMatch] = useState<typeof partidos[0] | null>(null)
+  const [partidos, setPartidos] = useState<DisplayPartido[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [selectedMatch, setSelectedMatch] = useState<DisplayPartido | null>(null)
   const [detailTab, setDetailTab] = useState<'resumen' | 'estadisticas' | 'alineaciones'>('resumen')
 
-  const filtrados = partidos.filter(p => p.estado === (tab === 'proximos' ? 'upcoming' : tab === 'envivo' ? 'live' : 'final'))
+  useEffect(() => {
+    let mounted = true
+    setLoading(true)
+    setError(null)
+    fetchPartidos()
+      .then((data) => {
+        if (!mounted) return
+        setPartidos(data.map(toDisplay))
+      })
+      .catch((err) => {
+        if (!mounted) return
+        console.error('[MisPartidos] fetchPartidos failed:', err)
+        setError('No se pudieron cargar los partidos. Intentá de nuevo.')
+      })
+      .finally(() => {
+        if (mounted) setLoading(false)
+      })
+    return () => {
+      mounted = false
+    }
+  }, [])
+
+  const filtrados = useMemo(
+    () => partidos.filter((p) => p.estado === (tab === 'proximos' ? 'upcoming' : tab === 'envivo' ? 'live' : 'final')),
+    [partidos, tab],
+  )
 
   return (
     <DashboardLayout title="Mis partidos">
@@ -40,7 +115,24 @@ export default function MisPartidos() {
             ))}
           </div>
 
-          {filtrados.length === 0 && (
+          {loading && (
+            <div className="text-center py-16">
+              <Swords size={40} className="mx-auto text-text-faint mb-4 animate-pulse" />
+              <p className="text-text-muted">Cargando partidos…</p>
+            </div>
+          )}
+
+          {!loading && error && (
+            <div className="text-center py-16">
+              <Swords size={40} className="mx-auto text-text-faint mb-4" />
+              <p className="text-text-muted mb-3">{error}</p>
+              <Button size="sm" onClick={() => window.location.reload()} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark text-xs h-auto py-1.5 px-4">
+                Reintentar
+              </Button>
+            </div>
+          )}
+
+          {!loading && !error && filtrados.length === 0 && (
             <div className="text-center py-16">
               <Swords size={40} className="mx-auto text-text-faint mb-4" />
               <p className="text-text-muted">No hay partidos en esta categoría.</p>
@@ -49,7 +141,7 @@ export default function MisPartidos() {
 
           <div className="space-y-3">
             {filtrados.map((p, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
+              <motion.div key={p.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
                 <SpotlightCard accent={p.estado === 'live' ? 'gold' : 'purple'} className="bg-surface border border-border rounded-2xl">
                   <div className="p-5">
                     <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
