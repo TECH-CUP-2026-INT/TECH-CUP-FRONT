@@ -31,13 +31,24 @@ const AuthContext = createContext<AuthContextType>({
 })
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<User | null>(() => {
+    // Si no hay sesión guardada, crear usuario demo automaticamente
+    const stored = localStorage.getItem('techcup_user')
+    if (stored) return JSON.parse(stored)
+    if (hasJwt()) return null
+    const demo: User = {
+      name: 'Usuario Demo',
+      email: 'demo@techcup.com',
+      avatar: getInitialsAvatar('Usuario Demo'),
+      role: 'jugador',
+      isCaptain: false,
+    }
+    localStorage.setItem('techcup_user', JSON.stringify(demo))
+    return demo
+  })
 
   useEffect(() => {
-    const stored = localStorage.getItem('techcup_user')
-    if (stored) {
-      setUser(JSON.parse(stored))
-    } else if (hasJwt()) {
+    if (!localStorage.getItem('techcup_user') && hasJwt()) {
       // Hay JWT pero no user data → intentar validarlo
       import('@/services/auth').then(({ validateToken }) => {
         validateToken().then((res) => {

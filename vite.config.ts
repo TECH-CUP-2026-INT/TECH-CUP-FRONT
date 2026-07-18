@@ -21,11 +21,16 @@ export default defineConfig({
       '/identity': {
         target: 'https://techapi.azure-api.net',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/identity/, '/identity'),
+        headers: {
+          'Ocp-Apim-Subscription-Key': '4eff9bdd419b49308dc37fd491741c47',
+        },
       },
       '/api': {
         target: 'https://techapi.azure-api.net',
         changeOrigin: true,
+        headers: {
+          'Ocp-Apim-Subscription-Key': '4eff9bdd419b49308dc37fd491741c47',
+        },
       },
     },
   },

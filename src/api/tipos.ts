@@ -25,6 +25,7 @@ export interface Torneo {
   fecha: string
   tag: string
   sub?: string
+  imagen?: string
 }
 
 // ─── Partidos ──────────────────────────────────────────────────

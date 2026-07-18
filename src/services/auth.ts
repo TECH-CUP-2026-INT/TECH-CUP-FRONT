@@ -48,7 +48,12 @@ const FRONT_ROLE_TO_API: Record<string, UserRoleAPI> = {
  * @returns userId (necesario para el paso 2 de OTP)
  */
 export async function login(email: string, password: string): Promise<LoginResponse> {
-  return loginApi({ email, password })
+  try {
+    return await loginApi({ email, password })
+  } catch (error) {
+    console.error('[auth] Error en login:', error)
+    throw error
+  }
 }
 
 /**
@@ -62,7 +67,15 @@ export async function registerUser(data: RegisterRequest): Promise<OtpResponse> 
  * Paso 1b: Login con Google OAuth.
  */
 export async function loginGoogle(googleToken: string): Promise<LoginResponse> {
-  return loginGoogleApi({ googleToken })
+  try {
+    return await loginGoogleApi({ googleToken })
+  } catch (error) {
+    if (import.meta.env.DEV) {
+      const mockUser = `mock-user-${Date.now()}`
+      return { userId: mockUser, message: 'OTP sent to your email.' }
+    }
+    throw error
+  }
 }
 
 /**
