@@ -14,6 +14,7 @@ export interface LoginRequest {
 export interface LoginResponse {
   userId: string
   message: string
+  otpCode?: string
 }
 
 export interface OtpValidationRequest {
@@ -64,6 +65,24 @@ export interface TokenValidationResponse {
   role?: UserRoleAPI
 }
 
+export interface RegisterRequest {
+  fullName: string
+  email: string
+  password: string
+  userType: UserTypeAPI
+  documentType: string
+  documentNumber: string
+  birthDate: string
+  gender: string
+  phone: string
+  address: string
+  program?: string
+  semester?: string
+  position?: string
+  jerseyNumber?: string
+  googleToken?: string
+}
+
 export interface AuditEvent {
   id: string
   userId: string
@@ -93,6 +112,15 @@ export async function loginApi(data: LoginRequest): Promise<LoginResponse> {
  */
 export async function loginGoogleApi(data: GoogleLoginRequest): Promise<LoginResponse> {
   return apiPost<LoginResponse>(`${AUTH}/login/google`, data)
+}
+
+/**
+ * Registro de nuevo usuario. Crea la cuenta y devuelve JWT + datos del usuario.
+ */
+export async function registerApi(data: RegisterRequest): Promise<OtpResponse> {
+  const res = await apiPost<OtpResponse>(`${AUTH}/register`, data)
+  setJwt(res.token)
+  return res
 }
 
 /**

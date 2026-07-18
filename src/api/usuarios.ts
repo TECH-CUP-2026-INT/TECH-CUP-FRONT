@@ -23,10 +23,12 @@ export interface PerfilPublicoResponse {
   programaAcademico?: string
 }
 
+/** Perfil propio, resuelto por el backend a partir del JWT — no requiere pasar el id. */
 export async function getMiPerfil(): Promise<PerfilResponse> {
   try {
     return await apiGet<PerfilResponse>(`${USERS_SERVICE_PREFIX}/usuarios/perfil`)
   } catch {
+    console.warn('[usuarios] API no disponible, usando mock')
     return {
       id: 'mock-user-001',
       nombreCompleto: 'Usuario Demo',
@@ -42,6 +44,7 @@ export async function getMiPerfil(): Promise<PerfilResponse> {
   }
 }
 
+/** Perfil público de cualquier usuario, usado para mostrar nombre real en el chat. */
 export function getPerfilPublico(userId: string): Promise<PerfilPublicoResponse> {
   return apiGet<PerfilPublicoResponse>(`${USERS_SERVICE_PREFIX}/usuarios/${userId}/perfil`)
 }

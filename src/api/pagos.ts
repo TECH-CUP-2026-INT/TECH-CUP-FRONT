@@ -1,3 +1,4 @@
+import { apiGet, apiPost } from './client'
 import type {
   CreatePaymentOrderRequest,
   PaymentOrderResponse,
@@ -6,36 +7,16 @@ import type {
   PaymentStatusResponse,
 } from '@/types/pagos'
 
-const PAYMENTS_API = import.meta.env.PROD ? 'http://20.12.84.133' : ''
-
-async function request<T>(path: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(`${PAYMENTS_API}${path}`, {
-    headers: { 'Content-Type': 'application/json' },
-    ...options,
-  })
-
-  if (!res.ok) {
-    const error = await res.json().catch(() => ({ message: res.statusText }))
-    throw new Error(error.message || error.error || `Error ${res.status}`)
-  }
-
-  return res.json()
-}
+const PAYMENTS_PATH = '/api/v1/Payment'
 
 export function createPaymentOrder(data: CreatePaymentOrderRequest) {
-  return request<PaymentOrderResponse>('/payment-orders', {
-    method: 'POST',
-    body: JSON.stringify(data),
-  })
+  return apiPost<PaymentOrderResponse>(`${PAYMENTS_PATH}/payment-orders`, data)
 }
 
 export function submitPseTransaction(enrollmentId: string, data: PseTransactionRequest) {
-  return request<PseTransactionResponse>(`/payment-orders/${enrollmentId}/pse`, {
-    method: 'POST',
-    body: JSON.stringify(data),
-  })
+  return apiPost<PseTransactionResponse>(`${PAYMENTS_PATH}/payment-orders/${enrollmentId}/pse`, data)
 }
 
 export function getPaymentOrderStatus(enrollmentId: string) {
-  return request<PaymentStatusResponse>(`/payment-orders/${enrollmentId}`)
+  return apiGet<PaymentStatusResponse>(`${PAYMENTS_PATH}/payment-orders/${enrollmentId}`)
 }

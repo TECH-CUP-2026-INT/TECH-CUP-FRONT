@@ -38,10 +38,23 @@ export default function InscribirEquipo() {
     setEnrolling(true)
     setEnrollError(null)
     try {
-      await inscribirEnTorneo(torneo.id, teamId)
-      setEnrolled(true)
+      console.log('[Pago] Creando orden de pago...')
+      const data = await createPaymentOrder({
+        enrollmentId: `ENR-${Date.now()}`,
+        teamId: 'team-001',
+        tournamentId: `TOR-${torneo.id}`,
+        amount: torneo.costo,
+      })
+      console.log('[Pago] Orden creada:', data)
+      if (!data.preferenceId) {
+        throw new Error('El servidor no devolvió un preferenceId')
+      }
+      setPaymentData(data)
+      setPaso(3)
     } catch (err) {
-      setEnrollError(err instanceof Error ? err.message : 'Error al inscribir')
+      console.error('[Pago] Error creando orden:', err)
+      const msg = err instanceof Error ? err.message : 'Error al crear la orden de pago'
+      setPaymentError(`${msg} — Si el error es de red, el Payment Service (20.12.84.133) no está accesible desde tu entorno local.`)
     } finally {
       setEnrolling(false)
     }
@@ -151,6 +164,10 @@ export default function InscribirEquipo() {
                     amount={torneo!.costo}
                     onSubmit={async () => {
                       setPaso(4)
+                    }}
+                    onError={(err) => {
+                      console.error('[Pago] Error del Brick:', err)
+                      setPaymentError(typeof err === 'string' ? err : 'Error al cargar el medio de pago. Revisá la consola para más detalles.')
                     }}
                   />
 

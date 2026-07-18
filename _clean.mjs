@@ -1,0 +1,11 @@
+import pkg from 'mongodb';
+const { MongoClient } = pkg;
+const uri = 'mongodb+srv://juanbueno5555_db_user:h2ss1PLAhDZrohCd@cluster0.zrczynn.mongodb.net/identity_service?retryWrites=true';
+const client = new MongoClient(uri);
+await client.connect();
+const id = client.db('identity_service');
+const usersDel = await id.collection('users').deleteMany({ _id: { $type: 'string' } });
+console.log('Usuarios string eliminados:', usersDel.deletedCount);
+const otpsDel = await id.collection('otp_tokens').deleteMany({ userId: { $type: 'string' } });
+console.log('OTPs string eliminados:', otpsDel.deletedCount);
+await client.close();

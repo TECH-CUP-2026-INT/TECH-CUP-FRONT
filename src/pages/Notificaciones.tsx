@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import DashboardLayout from '@/components/common/DashboardLayout'
 import { SpotlightCard } from '@/components/common/spotlight-card'
@@ -47,6 +48,7 @@ const tabs = [
 ]
 
 export default function Notificaciones() {
+  const navigate = useNavigate()
   const [notificaciones, setNotificaciones] = useState(notificacionesMock)
   const [tab, setTab] = useState<TipoNotif>('todas')
   const [invitacionActiva, setInvitacionActiva] = useState<Notificacion | null>(null)

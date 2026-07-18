@@ -1,3 +1,14 @@
+// ─── Equipos ────────────────────────────────────────────────
+export interface Team {
+  id: string
+  name: string
+  colors: string // string libre, ej "#FF0000,#FFFFFF" — CreateTeamRequest.colors es String
+  captainId: string
+  memberCount: number
+  createdAt: string
+  updatedAt: string
+}
+
 // ─── Torneos ────────────────────────────────────────────────
 export type EstadoTorneo = 'live' | 'upcoming' | 'closed'
 export type Categoria = 'Fútbol 11' | 'Futsal'
@@ -14,16 +25,25 @@ export interface Torneo {
   fecha: string
   tag: string
   sub?: string
+  imagen?: string
 }
 
-// ─── Partidos (mock hasta que Matches Service esté disponible) ──
+// ─── Partidos ──────────────────────────────────────────────────
+export type MatchStatus = 'SCHEDULED' | 'IN_PROGRESS' | 'PAUSED' | 'FINISHED'
+
 export interface Partido {
+  id: string
   dia: number
   mes: string
   eq1: string
   eq2: string
   hora: string
   lugar: string
+  homeScore?: number
+  awayScore?: number
+  status?: MatchStatus
+  homeTeamId?: string
+  awayTeamId?: string
 }
 
 export interface Posicion {
@@ -32,6 +52,57 @@ export interface Posicion {
   pj: number
   dg: number
   pts: number
+}
+
+// ─── API types para Matches Service ─────────────────────────────
+export interface MatchSummaryAPI {
+  id: string
+  competenciaMatchId: string
+  homeTeamName: string
+  awayTeamName: string
+  status: MatchStatus
+  manageable: boolean
+  homeScore: number
+  awayScore: number
+}
+
+export interface MatchDetailAPI {
+  id: string
+  competenciaMatchId: string
+  tournamentId: string
+  phase: string
+  homeTeamId: string
+  awayTeamId: string
+  homeTeamName: string
+  awayTeamName: string
+  refereeId: string
+  status: MatchStatus
+  currentPeriod: string
+  homeScore: number
+  awayScore: number
+  addedMinutesFirstHalf: number
+  addedMinutesSecondHalf: number
+  currentMinute: number
+  startedAt: string
+  endedAt: string
+}
+
+export interface CreateMatchRequest {
+  tournamentId: string
+  homeTeamId: string
+  awayTeamId: string
+  scheduledDate: string
+  venue: string
+}
+
+export interface CreateMatchResponse {
+  id: string
+  homeTeamName: string
+  awayTeamName: string
+  tournamentId: string
+  scheduledDate: string
+  status: string
+  message: string
 }
 
 // ─── Rankings ────────────────────────────────────────────────
@@ -143,4 +214,121 @@ export interface CreateRecognitionRequest {
   playerId: string
   type: string
   description: string
+}
+
+// =================================================================
+// Tipos para servicio de Estadísticas (Statistics Service)
+// =================================================================
+
+export interface StandingsDisplay {
+  pos: number
+  teamId: string
+  equipo: string
+  pj: number
+  g: number
+  e: number
+  p: number
+  gf: number
+  gc: number
+  dg: number
+  pts: number
+  cambio?: 'sube' | 'baja' | 'igual'
+}
+
+export interface GoleadorDisplay {
+  pos: number
+  playerId: string
+  nombre: string
+  equipo: string
+  goles: number
+  asistencias: number
+  partidos: number
+}
+
+export interface PorteroDisplay {
+  pos: number
+  playerId: string
+  nombre: string
+  equipo: string
+  golesRecibidos: number
+  partidos: number
+  vallasInvictas: number
+}
+
+export interface FairPlayDisplay {
+  pos: number
+  equipo: string
+  amarillas: number
+  rojas: number
+  puntos: number
+}
+
+export interface PlayerStatsDisplay {
+  goles: number
+  asistencias: number
+  tarjetas: number
+  faltas: number
+  partidos: number
+  minutos: number
+  avgGoles: number
+  avgAsistencias: number
+  avgFaltas: number
+}
+
+export interface TeamStatsDisplay {
+  matchesPlayed: number
+  wins: number
+  draws: number
+  losses: number
+  goalsFor: number
+  goalsAgainst: number
+  goalDifference: number
+  points: number
+}
+
+export interface MatchStatDisplay {
+  label: string
+  local: number | string
+  visitor: number | string
+}
+
+// ─── Equipos ────────────────────────────────────────────────
+export type UUID = string
+
+export interface EquipoDisplay {
+  id: UUID
+  nombre: string
+  logoUrl?: string
+  colores?: string
+  capitanId?: UUID
+  capitanNombre?: string
+  miembros?: number
+  stats?: {
+    pj: number
+    g?: number
+    e?: number
+    p?: number
+    gf: number
+    gc: number
+    pts: number
+  }
+}
+
+export interface EquipoRosterDisplay {
+  teamId: UUID | null
+  memberIds: UUID[]
+}
+
+export interface InvitacionDisplay {
+  id: UUID
+  teamId: UUID
+  teamName: string
+  estado: 'pendiente' | 'aceptada' | 'rechazada'
+  createdAt: string
+}
+
+export interface InscripcionDisplay {
+  enrollmentId: UUID
+  status: string
+  vence: string
 }

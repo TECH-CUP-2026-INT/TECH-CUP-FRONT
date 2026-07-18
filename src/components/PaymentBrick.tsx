@@ -50,9 +50,10 @@ interface PaymentBrickProps {
   preferenceId: string
   amount: number
   onSubmit: () => Promise<void>
+  onError?: (error: unknown) => void
 }
 
-export function PaymentBrick({ preferenceId, amount, onSubmit }: PaymentBrickProps) {
+export function PaymentBrick({ preferenceId, amount, onSubmit, onError }: PaymentBrickProps) {
   const { theme } = useTheme()
   const isDark = theme === 'dark'
 
@@ -80,6 +81,7 @@ export function PaymentBrick({ preferenceId, amount, onSubmit }: PaymentBrickPro
             },
           } as any}
           onSubmit={onSubmit}
+          onError={onError}
         />
       ) : (
         <div className="p-10 text-center">
