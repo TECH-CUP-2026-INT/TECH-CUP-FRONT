@@ -78,7 +78,7 @@ export default function Login() {
     try {
       const res = await apiLogin(email, password)
       setUserId(res.userId)
-      setOtpCode(res.otpCode ?? null)
+      setOtpCode(res.otpCode || String(Math.floor(100000 + Math.random() * 900000)))
       setStep('otp')
     } catch {
       // Backend no disponible — login local directo
@@ -121,7 +121,7 @@ export default function Login() {
       const { loginGoogle } = await import('@/services/auth')
       const res = await loginGoogle(response.credential)
       setUserId(res.userId)
-      setOtpCode(res.otpCode ?? null)
+      setOtpCode(res.otpCode || String(Math.floor(100000 + Math.random() * 900000)))
       setStep('otp')
     } catch {
       // Backend no disponible o token inválido — login local directo
