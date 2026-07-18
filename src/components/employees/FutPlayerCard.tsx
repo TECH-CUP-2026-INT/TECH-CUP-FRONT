@@ -42,7 +42,17 @@ const POS_MAP: Record<string, string> = {
 }
 
 /** Jugadores cuya imagen ya es una ficha completa (diseño horneado) — se muestran full-bleed, sin la plantilla. */
-const FULL_CARD_IMAGES = ["nicolas.png", "thomas.png", "jose.png", "jhonathan.png"]
+const FULL_CARD_IMAGES = [
+  "nicolas.png",
+  "thomas.png",
+  "jose.png",
+  "jhonathan.png",
+  "juan-david-rangel.png",
+  "jhonatan-madero.png",
+  "chimi.png",
+  "hernan.png",
+  "mabel.png",
+]
 
 export function FutPlayerCard({
   nombre,
