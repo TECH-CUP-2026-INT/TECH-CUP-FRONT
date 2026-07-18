@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { GoogleLogin, type CredentialResponse } from '@react-oauth/google'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -42,11 +42,16 @@ const roleCards = [
   },
 ]
 
+const videos = ['/hero-video.mp4', '/videos/video-arbitro.mp4']
+
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState('')
   const [step, setStep] = useState<'role' | 'login'>('role')
   const [selectedRole, setSelectedRole] = useState<string>('jugador')
+  const [isPlaying, setIsPlaying] = useState(true)
+  const [videoIndex, setVideoIndex] = useState(0)
+  const videoRef = useRef<HTMLVideoElement>(null)
   const navigate = useNavigate()
   const { login } = useAuth()
 
@@ -69,6 +74,21 @@ export default function Login() {
   const handleRoleContinue = (role: string) => {
     setSelectedRole(role)
     setStep('login')
+    setVideoIndex(role === 'arbitro' ? 1 : 0)
+    setIsPlaying(true)
+  }
+
+  const togglePlay = () => {
+    if (!videoRef.current) return
+    if (isPlaying) videoRef.current.pause()
+    else videoRef.current.play()
+    setIsPlaying(!isPlaying)
+  }
+
+  const nextVideo = () => {
+    const next = (videoIndex + 1) % videos.length
+    setVideoIndex(next)
+    setIsPlaying(true)
   }
 
   const renderRoleCard = (role: typeof roleCards[number], i: number) => {
@@ -94,10 +114,9 @@ export default function Login() {
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1.5">
                 <Icon size={16} className="text-gold-ink" />
-                <span className="text-[10px] font-bold tracking-[1.6px] uppercase text-gold-ink">Rol</span>
               </div>
-              <h3 className="font-[family-name:var(--font-display)] text-lg uppercase tracking-[.3px] text-white mb-1">{role.name}</h3>
-              <p className="text-xs text-gray-400 leading-relaxed">{role.desc}</p>
+              <h3 className="font-[family-name:var(--font-display)] text-lg normal-case tracking-[.3px] text-gold mb-1">{role.name}</h3>
+              <p className="text-xs normal-case text-gray-400 leading-relaxed">{role.desc}</p>
             </div>
             <div className="flex-shrink-0 mt-1">
               <div className="w-9 h-9 rounded-[8px] flex items-center justify-center transition-all duration-300 group-hover:bg-gold/20 border border-gold/30">
@@ -113,8 +132,8 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-black flex relative overflow-hidden">
 
-      {/* Panel negro-dorado — centrado en toda la página */}
-      <div className="relative z-10 w-full flex items-center justify-center p-8 lg:p-16 overflow-hidden">
+      {/* Panel negro-dorado */}
+      <div className={`relative z-10 flex items-center justify-center p-8 lg:p-16 overflow-hidden ${step === 'role' ? 'w-full' : 'w-full lg:w-[38%]'}`}>
         <div className="absolute inset-0 bg-gradient-to-br from-black via-[#1a1a1a] to-black" />
         {/* Aurora dorado + violeta — mismo tratamiento que el hero de Landing */}
         <div className="absolute inset-0 pointer-events-none opacity-60" style={{ background: 'radial-gradient(ellipse at 30% 40%, rgba(139,92,246,0.15) 0%, transparent 60%)' }} />
@@ -228,6 +247,55 @@ export default function Login() {
           )}
         </div>
       </div>
+
+      {/* Right — video, solo en el paso de iniciar sesión */}
+      {step === 'login' && (
+        <div className="hidden lg:flex relative z-10 w-[62%] overflow-hidden bg-black">
+          <video key={videoIndex} ref={videoRef} autoPlay loop muted playsInline
+            className="absolute inset-0 w-full h-full object-cover">
+            <source src={videos[videoIndex]} type="video/mp4" />
+          </video>
+          {/* Overlay gradiente para que el texto sea legible y transición con el panel izquierdo */}
+          <div className="absolute inset-0"
+            style={{
+              background: 'linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 20%, transparent 40%)',
+            }}
+          />
+
+          {/* Controles de video */}
+          <div className="absolute top-6 right-6 z-30 flex items-center gap-3">
+            <button onClick={togglePlay}
+              className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all text-white">
+              {isPlaying ? <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                : <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>}
+            </button>
+            <button onClick={nextVideo}
+              className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all text-white">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,4 15,12 5,20"/><rect x="17" y="4" width="2" height="16"/></svg>
+            </button>
+          </div>
+
+          {/* Texto superpuesto — esquina inferior derecha */}
+          <div className="absolute bottom-0 right-0 z-20 p-10 lg:p-14 text-right">
+            <div className="max-w-[420px] ml-auto">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 rounded-xl overflow-hidden bg-purple-black shadow-lg shadow-gold/20">
+                  <img src="/assets/logo.png" alt="" className="w-full h-full object-cover" />
+                </div>
+                <span className="font-[family-name:var(--font-display)] text-2xl tracking-[1px]">
+                  TECH<span className="text-gold-ink">CUP</span>
+                </span>
+              </div>
+              <h2 className="font-[family-name:var(--font-display)] text-[clamp(28px,3.5vw,52px)] uppercase leading-[.92] tracking-[.5px]">
+                La pasión nos <span className="text-gold-ink">conecta</span>
+              </h2>
+              <p className="text-sm text-text-muted mt-4 leading-relaxed">
+                Inicia sesión y vive la emoción del torneo universitario más importante de Ingeniería de Sistemas.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
