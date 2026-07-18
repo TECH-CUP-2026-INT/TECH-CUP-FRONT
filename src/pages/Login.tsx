@@ -42,7 +42,7 @@ const roleCards = [
   },
 ]
 
-const videos = ['/hero-video.mp4', '/videos/video-arbitro.mp4']
+const videos = ['/videos/video-arbitro.mp4', '/videos/video-arbitro.mp4']
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false)
