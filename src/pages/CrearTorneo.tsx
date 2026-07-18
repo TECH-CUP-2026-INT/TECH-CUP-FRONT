@@ -65,7 +65,6 @@ export default function CrearTorneo() {
         <div className="min-w-0 flex-1">
           <AppTopbar title="Crear torneo" onMenuClick={() => setSidebarOpen(true)} />
           <div className="fixed top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-purple-mid/15 blur-[150px] pointer-events-none" />
-          <div className="fixed bottom-[-5%] left-[-5%] w-[450px] h-[450px] rounded-full bg-gold/15 blur-[120px] pointer-events-none" />
           <main className="flex items-center justify-center min-h-[80vh] relative z-10">
             <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-center max-w-md">
               <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-6">
@@ -102,7 +101,6 @@ export default function CrearTorneo() {
       <div className="min-w-0 flex-1">
         <AppTopbar title="Crear torneo" onMenuClick={() => setSidebarOpen(true)} />
         <div className="fixed top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-purple-mid/15 blur-[150px] pointer-events-none" />
-        <div className="fixed bottom-[-5%] left-[-5%] w-[450px] h-[450px] rounded-full bg-gold/15 blur-[120px] pointer-events-none" />
 
         <main className="max-w-[600px] mx-auto px-8 py-8 pb-[60px] relative z-10">
           <SpotlightCard accent="gold" className="bg-surface border border-border rounded-2xl p-8">

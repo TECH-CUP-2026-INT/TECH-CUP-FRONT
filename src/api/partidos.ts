@@ -1,12 +1,30 @@
 /**
- * TODO: Reemplazar cuando el Matches Service (am-matches-service) esté deployado.
+ * Matches Service — API Client
  *
- * Endpoints esperados bajo el APIM:
- *   GET /matches                    → listado de partidos
- *   GET /matches/{id}               → detalle de un partido
- *   GET /tournaments/{id}/matches   → partidos de un torneo
- *
- * Por ahora re-exportamos los datos mock desde services.
+ * Endpoints del Matches Service expuestos via APIM:
+ *   GET /api/partidos            → listado de partidos
+ *   GET /api/partidos/{matchId}  → detalle de un partido
  */
-export { partidos, posiciones } from '@/services/partidos'
-export type { Partido, Posicion } from '@/services/partidos'
+
+import { apiGet } from './client'
+import type { MatchSummaryAPI, MatchDetailAPI } from './tipos'
+
+const BASE = '/api/v1/Partidos'
+
+/**
+ * Obtiene todos los partidos.
+ * GET /api/partidos
+ */
+export async function getPartidosApi(): Promise<MatchSummaryAPI[]> {
+  return apiGet<MatchSummaryAPI[]>(`${BASE}/api/partidos`)
+}
+
+/**
+ * Obtiene detalle de un partido por ID.
+ * GET /api/partidos/{matchId}
+ */
+export async function getPartidoPorIdApi(
+  matchId: string
+): Promise<MatchDetailAPI> {
+  return apiGet<MatchDetailAPI>(`${BASE}/api/partidos/${matchId}`)
+}

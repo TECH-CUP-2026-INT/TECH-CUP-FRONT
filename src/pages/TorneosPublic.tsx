@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Navbar from '@/components/common/Navbar'
@@ -10,7 +10,7 @@ import {
 } from '@/components/common/select'
 import { Search, RefreshCw, LayoutGrid, List, CalendarDays, MapPin, Clock, Download } from 'lucide-react'
 import { ThreeDCarousel } from '@/components/common/three-d-carousel'
-import { torneos, type Torneo } from '@/services/torneos'
+import { torneos, type Torneo, fetchTorneos } from '@/services/torneos'
 
 const PAGE_SIZE = 6
 
@@ -23,6 +23,8 @@ function TorneosContent() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const [modalTournament, setModalTournament] = useState<Torneo | null>(null)
   const [modalTab, setModalTab] = useState('info')
+
+  useEffect(() => { fetchTorneos() }, [])
 
   const filtered = useMemo(() => {
     return torneos.filter(t => {

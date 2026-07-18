@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import Sidebar from '@/components/common/Sidebar'
@@ -12,8 +12,8 @@ import { useAuth } from '@/hooks/auth/useAuth'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/common/avatar'
 import ManchasFloating from '@/components/common/ManchasFloating'
 import FallingBalls from '@/components/FallingBalls'
-import { partidos, posiciones } from '@/services/partidos'
-import { torneos } from '@/services/torneos'
+import { partidos, posiciones, fetchPartidos } from '@/services/partidos'
+import { torneos, fetchTorneos } from '@/services/torneos'
 import {
   X, CalendarDays, Trophy, Clock, MapPin, Download, Medal, Users, Package, QrCode, Check, RefreshCw, Swords, Shirt, Apple, Smartphone, Truck, ChevronRight, UserCheck, ClipboardList, Search, Plus, ArrowLeft, UserPlus, Send, Trash2, Edit3
 } from 'lucide-react'
@@ -85,6 +85,8 @@ export default function DashboardJugador() {
 
   const isCaptain = user?.isCaptain ?? false
 
+  useEffect(() => { fetchTorneos(); fetchPartidos() }, [])
+
   const handleCollapse = (val: boolean) => {
     setSidebarCollapsed(val)
     localStorage.setItem(SIDEBAR_KEY, JSON.stringify(val))
@@ -121,7 +123,7 @@ export default function DashboardJugador() {
 
           {/* ═══════════ PERFIL ═══════════ */}
           <section className="rounded-2xl mb-[26px] relative overflow-hidden border border-purple-mid/30" style={{ minHeight: '280px' }}>
-            <img src="/dash-board.jpg" alt="" className="absolute inset-0 w-full h-full" style={{ objectFit: 'cover', objectPosition: 'center center' }} />
+            <img src="/images/estadio-dashboard.png" alt="" className="absolute inset-0 w-full h-full" style={{ objectFit: 'cover', objectPosition: 'center center' }} />
             <div className="absolute inset-0 bg-gradient-to-r from-[rgba(10,6,20,0.6)] via-[rgba(10,6,20,0.3)] to-transparent" />
             <div className="relative z-10 flex flex-col items-center justify-center gap-3 h-full min-h-[280px] px-10 w-fit">
               <div className="w-28 h-28 rounded-full overflow-hidden ring-4 ring-gold/50 shadow-xl shadow-black/40 flex-shrink-0">
@@ -160,7 +162,7 @@ export default function DashboardJugador() {
                 </div>
               ) : (
                 <div className="text-center py-4">
-                  <p className="text-4xl mb-2 opacity-60">🏠</p>
+                  <img src="/images/icono-equipo.png" alt="" className="w-16 h-16 mx-auto mb-2 object-contain" />
                   <p className="text-sm text-text-muted mb-4">No pertenecés a ningún equipo aún</p>
                   <div className="flex gap-2 justify-center">
                     <Button onClick={() => setBrowseTeamsOpen(true)} className="rounded-full bg-gold/15 backdrop-blur-md border border-gold/40 text-gold hover:bg-gold/25 hover:text-white shadow-lg shadow-gold/10 text-xs font-bold px-4">Buscar equipo</Button>
@@ -176,7 +178,7 @@ export default function DashboardJugador() {
             <SpotlightCard accent="purple" className="p-5 bg-[#E8DFF5]/70 dark:bg-black/40 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-purple-mid/30 rounded-2xl shadow-lg shadow-purple-mid/10">
               <h3 className="text-[14.5px] font-semibold tracking-[.3px] mb-3 flex items-center gap-2 text-[#3D1A6B] dark:text-white"><span className="text-gold">📨</span> <span className="text-gold">Invitaciones</span></h3>
               <div className="text-center py-4">
-                <p className="text-4xl mb-2 opacity-60">🔔</p>
+                <img src="/images/icono-invitaciones.png" alt="" className="w-16 h-16 mx-auto mb-2 object-contain" />
                 <p className="text-sm text-text-muted">No tenés invitaciones pendientes</p>
                 <p className="text-xs text-text-faint mt-1">{isCaptain ? 'Las solicitudes de jugadores aparecen en tu panel de capitán' : 'Las invitaciones de capitanes aparecerán acá'}</p>
               </div>
@@ -597,7 +599,7 @@ export default function DashboardJugador() {
               <div className="max-h-[45vh] overflow-y-auto p-6 pt-2 space-y-3">
                 {equiposDisponibles.filter(eq => eq.nom.toLowerCase().includes(teamSearch.toLowerCase())).map((eq, i) => (
                   <div key={i} className="flex items-center gap-4 p-4 rounded-2xl bg-[#E8DFF5]/70 dark:bg-black/30 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-purple-mid/20 hover:border-purple-mid/50 transition-all group">
-                    <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 ring-2 ring-gold/30 bg-[#E8DFF5]/70 dark:bg-black/40">
+                    <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 ring-2 ring-gold/30 bg-white">
                       <img src={eq.img} alt="" className="w-full h-full object-contain" />
                     </div>
                     <div className="flex-1 min-w-0">

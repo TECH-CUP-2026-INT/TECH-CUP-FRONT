@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Sidebar from '@/components/common/Sidebar'
@@ -7,7 +7,7 @@ import Footer from '@/components/common/Footer'
 import { Badge } from '@/components/common/badge'
 import { SpotlightCard } from '@/components/common/spotlight-card'
 import { CalendarDays, MapPin, Clock, Trophy, Swords, Shirt } from 'lucide-react'
-import { partidos } from '@/services/partidos'
+import { partidos, fetchPartidos } from '@/services/partidos'
 import SoccerField3D from '@/components/employees/SoccerField3D'
 
 interface TeamInfo {
@@ -58,12 +58,14 @@ function PlayerDot({ name, number, color, x, y, isGoal, image, onClick }: { name
 
 export default function MatchDetail() {
   const { id } = useParams()
-  const partido = partidos[Number(id) - 1]
+  const partido = partidos.find(p => p.id === id)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [activeTab, setActiveTab] = useState<'resumen' | 'estadisticas' | 'alineaciones'>('resumen')
   const [selectedTeam, setSelectedTeam] = useState<'local' | 'visitor' | 'both'>('both')
   const local = equipos[0]
   const visitor = equipos[1]
+
+  useEffect(() => { fetchPartidos() }, [])
 
   if (!partido) {
     return (
@@ -147,7 +149,6 @@ export default function MatchDetail() {
       {/* Detalles del partido */}
       <section className="py-10 pb-[80px] relative">
         <div className="absolute top-[10%] left-[-5%] w-[400px] h-[400px] rounded-full bg-purple-mid/10 blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-[20%] right-[-5%] w-[300px] h-[300px] rounded-full bg-gold/10 blur-[100px] pointer-events-none" />
 
         <div className="max-w-[900px] mx-auto px-8 relative">
           

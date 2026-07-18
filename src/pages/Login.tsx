@@ -161,8 +161,6 @@ export default function Login() {
         <div className="absolute inset-0 pointer-events-none opacity-40" style={{ background: 'radial-gradient(ellipse at 70% 60%, rgba(245,166,35,0.08) 0%, transparent 50%)' }} />
         {/* Brillo dorado sutil */}
         <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-        <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-gold/5 blur-[60px]" />
-        <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-gold/10 blur-[50px]" />
         <div className="relative w-full max-w-[460px]">
           {/* Back to home button */}
           <Link to="/" className="inline-flex items-center gap-2 px-4 py-2 rounded-[10px] bg-black/60 border border-gold/30 text-gold hover:bg-gold/20 hover:text-white transition-all duration-300 text-sm font-semibold backdrop-blur-sm mb-10">

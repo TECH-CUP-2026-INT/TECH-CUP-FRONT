@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import Sidebar from '@/components/common/Sidebar'
@@ -9,7 +9,7 @@ import { Button } from '@/components/common/button'
 import { Input } from '@/components/common/input'
 import { Label } from '@/components/common/label'
 import { ArrowLeft, ArrowRight, Check, Upload, CalendarDays, MapPin, Trophy } from 'lucide-react'
-import { torneos } from '@/services/torneos'
+import { torneos, fetchTorneos } from '@/services/torneos'
 import { useAuth } from '@/hooks/auth/useAuth'
 import type { Torneo } from '@/services/torneos'
 
@@ -27,6 +27,8 @@ export default function CrearEquipo() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const isCaptain = user?.isCaptain ?? false
+
+  useEffect(() => { fetchTorneos() }, [])
 
   const torneosActivos = torneos.filter(t => t.estado === 'upcoming' || t.estado === 'live')
 
@@ -48,7 +50,6 @@ export default function CrearEquipo() {
       <div className="min-w-0 flex-1">
         <AppTopbar title="Crear equipo" onMenuClick={() => setSidebarOpen(true)} />
         <div className="fixed top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-purple-mid/15 blur-[150px] pointer-events-none" />
-        <div className="fixed bottom-[-5%] left-[-5%] w-[450px] h-[450px] rounded-full bg-gold/15 blur-[120px] pointer-events-none" />
         
         <main className="max-w-[600px] mx-auto px-8 py-8 pb-[60px] relative z-10">
           <SpotlightCard accent="gold" className="bg-surface border border-border rounded-2xl p-8">

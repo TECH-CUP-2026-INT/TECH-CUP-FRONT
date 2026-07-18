@@ -79,7 +79,7 @@ export default function Perfil() {
                 </h1>
                 <div className="flex items-center gap-3 mt-2 flex-wrap max-md:justify-center">
                   <Badge className="rounded-full bg-purple-mid/20 text-purple-mid border border-purple-mid/30 text-[11px] uppercase font-bold">
-                    {user?.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : 'Jugador'}
+                    {user?.isCaptain ? 'Capitán' : user?.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : 'Jugador'}
                   </Badge>
                   <span className="text-sm text-text-muted">Sistemas FC</span>
                   <span className="w-1 h-1 rounded-full bg-text-faint" />

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import Sidebar from '@/components/common/Sidebar'
 import AppTopbar from '@/components/common/AppTopbar'
@@ -7,9 +7,9 @@ import { Button } from '@/components/common/button'
 import { SpotlightCard } from '@/components/common/spotlight-card'
 import { InteractiveHoverButton } from '@/components/common/interactive-hover-button'
 import ManchasFloating from '@/components/common/ManchasFloating'
-import { partidos, posiciones } from '@/services/partidos'
+import { partidos, posiciones, fetchPartidos } from '@/services/partidos'
 import { Input } from '@/components/common/input'
-import { torneos, type Torneo } from '@/services/torneos'
+import { torneos, type Torneo, fetchTorneos } from '@/services/torneos'
 import { Badge } from '@/components/common/badge'
 import { CalendarDays, MapPin, Users, Trophy, Clock, Download } from 'lucide-react'
 
@@ -26,6 +26,8 @@ export default function Dashboard() {
   const [torneoModal, setTorneoModal] = useState<Torneo | null>(null)
   const [modalTab, setModalTab] = useState('info')
   const navigate = useNavigate()
+
+  useEffect(() => { fetchTorneos(); fetchPartidos() }, [])
 
   const handleCollapse = (val: boolean) => {
     setSidebarCollapsed(val)
@@ -44,7 +46,6 @@ export default function Dashboard() {
         <main className="p-8 pb-[60px] max-md:p-5 relative">
           {/* Background glow - más intenso */}
           <div className="fixed top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-purple-mid/15 blur-[150px] pointer-events-none" />
-          <div className="fixed bottom-[-5%] left-[-5%] w-[450px] h-[450px] rounded-full bg-gold/15 blur-[120px] pointer-events-none" />
           <div className="fixed top-[40%] left-[30%] w-[300px] h-[300px] rounded-full bg-purple-deep/10 blur-[100px] pointer-events-none" />
           
           {/* Hero */}
