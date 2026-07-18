@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import Sidebar from '@/components/common/Sidebar'
@@ -9,7 +9,7 @@ import { Button } from '@/components/common/button'
 import { Input } from '@/components/common/input'
 import { Label } from '@/components/common/label'
 import { ArrowLeft, ArrowRight, Check, Upload, CalendarDays, MapPin, Trophy } from 'lucide-react'
-import { torneos } from '@/services/torneos'
+import { torneos, fetchTorneos } from '@/services/torneos'
 import { useAuth } from '@/hooks/auth/useAuth'
 import type { Torneo } from '@/services/torneos'
 
@@ -27,6 +27,8 @@ export default function CrearEquipo() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const isCaptain = user?.isCaptain ?? false
+
+  useEffect(() => { fetchTorneos() }, [])
 
   const torneosActivos = torneos.filter(t => t.estado === 'upcoming' || t.estado === 'live')
 

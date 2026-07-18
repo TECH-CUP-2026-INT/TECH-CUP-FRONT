@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Sidebar from '@/components/common/Sidebar'
 import AppTopbar from '@/components/common/AppTopbar'
@@ -8,7 +8,7 @@ import { SpotlightCard } from '@/components/common/spotlight-card'
 import { InteractiveHoverButton } from '@/components/common/interactive-hover-button'
 import { Badge } from '@/components/common/badge'
 import ManchasFloating from '@/components/common/ManchasFloating'
-import { torneos } from '@/services/torneos'
+import { torneos, fetchTorneos } from '@/services/torneos'
 import SoccerField3D from '@/components/employees/SoccerField3D'
 import {
   Trophy, CalendarDays, MapPin, Users, Clock, ShieldCheck,
@@ -205,6 +205,8 @@ export default function DashboardAdmin() {
   const handleCollapse = (val: boolean) => { setSidebarCollapsed(val); localStorage.setItem(SIDEBAR_KEY, JSON.stringify(val)) }
   const sidebarWidth = sidebarOpen ? (sidebarCollapsed ? '72px' : '260px') : '0px'
   const torneoActivo = torneos.find(t => t.estado === 'live') || torneos.find(t => t.estado === 'upcoming') || torneos[0]
+
+  useEffect(() => { fetchTorneos() }, [])
 
   const handleAprobar = (id: number) => setListaInscripciones(prev => prev.map(i => i.id === id ? { ...i, estado:'approved' } : i))
   const handleRechazar = (id: number) => setListaInscripciones(prev => prev.map(i => i.id === id ? { ...i, estado:'rejected' } : i))

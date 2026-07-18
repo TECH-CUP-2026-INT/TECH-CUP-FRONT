@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import Sidebar from '@/components/common/Sidebar'
@@ -12,8 +12,8 @@ import { useAuth } from '@/hooks/auth/useAuth'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/common/avatar'
 import ManchasFloating from '@/components/common/ManchasFloating'
 import FallingBalls from '@/components/FallingBalls'
-import { partidos, posiciones } from '@/services/partidos'
-import { torneos } from '@/services/torneos'
+import { partidos, posiciones, fetchPartidos } from '@/services/partidos'
+import { torneos, fetchTorneos } from '@/services/torneos'
 import {
   X, CalendarDays, Trophy, Clock, MapPin, Download, Medal, Users, Package, QrCode, Check, RefreshCw, Swords, Shirt, Apple, Smartphone, Truck, ChevronRight, UserCheck, ClipboardList, Search, Plus, ArrowLeft, UserPlus, Send, Trash2, Edit3
 } from 'lucide-react'
@@ -84,6 +84,8 @@ export default function DashboardJugador() {
   const [dotacion, setDotacion] = useState(dotacionItems)
 
   const isCaptain = user?.isCaptain ?? false
+
+  useEffect(() => { fetchTorneos(); fetchPartidos() }, [])
 
   const handleCollapse = (val: boolean) => {
     setSidebarCollapsed(val)

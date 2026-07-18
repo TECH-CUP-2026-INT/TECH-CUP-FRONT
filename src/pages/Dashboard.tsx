@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import Sidebar from '@/components/common/Sidebar'
 import AppTopbar from '@/components/common/AppTopbar'
@@ -7,9 +7,9 @@ import { Button } from '@/components/common/button'
 import { SpotlightCard } from '@/components/common/spotlight-card'
 import { InteractiveHoverButton } from '@/components/common/interactive-hover-button'
 import ManchasFloating from '@/components/common/ManchasFloating'
-import { partidos, posiciones } from '@/services/partidos'
+import { partidos, posiciones, fetchPartidos } from '@/services/partidos'
 import { Input } from '@/components/common/input'
-import { torneos, type Torneo } from '@/services/torneos'
+import { torneos, type Torneo, fetchTorneos } from '@/services/torneos'
 import { Badge } from '@/components/common/badge'
 import { CalendarDays, MapPin, Users, Trophy, Clock, Download } from 'lucide-react'
 
@@ -26,6 +26,8 @@ export default function Dashboard() {
   const [torneoModal, setTorneoModal] = useState<Torneo | null>(null)
   const [modalTab, setModalTab] = useState('info')
   const navigate = useNavigate()
+
+  useEffect(() => { fetchTorneos(); fetchPartidos() }, [])
 
   const handleCollapse = (val: boolean) => {
     setSidebarCollapsed(val)

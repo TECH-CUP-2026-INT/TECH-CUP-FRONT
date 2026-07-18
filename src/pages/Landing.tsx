@@ -8,7 +8,7 @@ import { Button } from '@/components/common/button'
 import { Badge } from '@/components/common/badge'
 import { SpotlightCard } from '@/components/common/spotlight-card'
 import { Marquee } from '@/components/common/marquee'
-import { torneos } from '@/services/torneos'
+import { torneos, fetchTorneos } from '@/services/torneos'
 
 const featureSlides = [
   { title: 'Torneos organizados', desc: 'Compite en torneos temáticos con reglas claras y justas.', color: '#FFD700', icon: Trophy },
@@ -64,6 +64,8 @@ export default function Landing() {
   const [heroImg, setHeroImg] = useState(0)
   const [activeTorneo, setActiveTorneo] = useState(0)
   const [torneoDir, setTorneoDir] = useState(1)
+
+  useEffect(() => { fetchTorneos() }, [])
 
   const prevTorneo = () => {
     setTorneoDir(-1)
