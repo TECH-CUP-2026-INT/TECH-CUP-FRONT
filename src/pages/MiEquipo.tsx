@@ -54,10 +54,10 @@ export default function MiEquipo() {
   const [tab, setTab] = useState<Tab>('plantilla')
   const [jugadores, setJugadores] = useState<Jugador[]>([
     { id: 1, nombre: 'Juan Pérez', dorsal: 10, posicion: 'Delantero', img: 'https://i.pravatar.cc/72?img=1', goles: 6, asistencias: 3, amarillas: 1, rojas: 0, faltas: 4, partidos: 8 },
-    { id: 2, nombre: 'Pedro Gómez', dorsal: 7, posicion: 'Volante', img: 'https://i.pravatar.cc/72?img=2', goles: 2, asistencias: 5, amarillas: 2, rojas: 0, faltas: 6, partidos: 8 },
-    { id: 3, nombre: 'Luis Torres', dorsal: 1, posicion: 'Portero', img: 'https://i.pravatar.cc/72?img=3', goles: 0, asistencias: 0, amarillas: 0, rojas: 0, faltas: 1, partidos: 8 },
-    { id: 4, nombre: 'Ana Martínez', dorsal: 5, posicion: 'Defensa', img: 'https://i.pravatar.cc/72?img=9', goles: 1, asistencias: 1, amarillas: 3, rojas: 1, faltas: 8, partidos: 7 },
-    { id: 5, nombre: 'Carlos López', dorsal: 8, posicion: 'Volante', img: 'https://i.pravatar.cc/72?img=12', goles: 3, asistencias: 2, amarillas: 1, rojas: 0, faltas: 3, partidos: 6 },
+    { id: 2, nombre: 'Nicolás', dorsal: 7, posicion: 'Volante', img: '/images/nicolas.png', goles: 2, asistencias: 5, amarillas: 2, rojas: 0, faltas: 6, partidos: 8 },
+    { id: 3, nombre: 'Thomas', dorsal: 1, posicion: 'Portero', img: '/images/thomas.png', goles: 0, asistencias: 0, amarillas: 0, rojas: 0, faltas: 1, partidos: 8 },
+    { id: 4, nombre: 'José', dorsal: 5, posicion: 'Defensa', img: '/images/jose.png', goles: 1, asistencias: 1, amarillas: 3, rojas: 1, faltas: 8, partidos: 7 },
+    { id: 5, nombre: 'Jhonathan', dorsal: 8, posicion: 'Volante', img: '/images/jhonathan.png', goles: 3, asistencias: 2, amarillas: 1, rojas: 0, faltas: 3, partidos: 6 },
   ])
   const [mostrarForm, setMostrarForm] = useState(false)
   const [selectedPlayer, setSelectedPlayer] = useState<Jugador | null>(null)
