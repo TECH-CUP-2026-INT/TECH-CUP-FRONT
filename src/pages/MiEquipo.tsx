@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import DashboardLayout from '@/components/common/DashboardLayout'
 import { FutPlayerCard } from '@/components/employees/FutPlayerCard'
+import LineupBoard from '@/components/employees/LineupBoard'
 import { SpotlightCard } from '@/components/common/spotlight-card'
 import { Badge } from '@/components/common/badge'
 import { Button } from '@/components/common/button'
 import { Input } from '@/components/common/input'
-import { Swords, Calendar, BarChart3, Plus, X, Edit3, Users, Clock, Goal, ShieldAlert, UserPlus, Send, Check, Crown, ArrowLeftRight, CheckCircle, XCircle } from 'lucide-react'
+import { Swords, Calendar, LayoutGrid, BarChart3, Plus, X, Edit3, Users, Clock, Goal, ShieldAlert, UserPlus, Send, Check, Crown, ArrowLeftRight, CheckCircle, XCircle } from 'lucide-react'
 
-type Tab = 'plantilla' | 'calendario' | 'estadisticas'
+type Tab = 'plantilla' | 'calendario' | 'alineacion' | 'estadisticas'
 
 interface Jugador {
   id: number
@@ -58,6 +59,15 @@ export default function MiEquipo() {
     { id: 3, nombre: 'Luis Torres', dorsal: 1, posicion: 'Portero', img: 'https://i.pravatar.cc/72?img=3', goles: 0, asistencias: 0, amarillas: 0, rojas: 0, faltas: 1, partidos: 8 },
     { id: 4, nombre: 'Ana Martínez', dorsal: 5, posicion: 'Defensa', img: 'https://i.pravatar.cc/72?img=9', goles: 1, asistencias: 1, amarillas: 3, rojas: 1, faltas: 8, partidos: 7 },
     { id: 5, nombre: 'Carlos López', dorsal: 8, posicion: 'Volante', img: 'https://i.pravatar.cc/72?img=12', goles: 3, asistencias: 2, amarillas: 1, rojas: 0, faltas: 3, partidos: 6 },
+    { id: 6, nombre: 'Miguel Ríos', dorsal: 4, posicion: 'Defensa', img: 'https://i.pravatar.cc/72?img=13', goles: 0, asistencias: 0, amarillas: 2, rojas: 0, faltas: 5, partidos: 8 },
+    { id: 7, nombre: 'Diego Salazar', dorsal: 2, posicion: 'Defensa', img: 'https://i.pravatar.cc/72?img=14', goles: 0, asistencias: 1, amarillas: 1, rojas: 0, faltas: 3, partidos: 7 },
+    { id: 8, nombre: 'Sofía Ramírez', dorsal: 3, posicion: 'Defensa', img: 'https://i.pravatar.cc/72?img=25', goles: 1, asistencias: 0, amarillas: 0, rojas: 0, faltas: 2, partidos: 6 },
+    { id: 9, nombre: 'Andrés Cano', dorsal: 6, posicion: 'Volante', img: 'https://i.pravatar.cc/72?img=15', goles: 1, asistencias: 4, amarillas: 1, rojas: 0, faltas: 4, partidos: 8 },
+    { id: 10, nombre: 'Felipe Duarte', dorsal: 9, posicion: 'Delantero', img: 'https://i.pravatar.cc/72?img=16', goles: 4, asistencias: 2, amarillas: 0, rojas: 0, faltas: 2, partidos: 7 },
+    { id: 11, nombre: 'Valentina Rey', dorsal: 11, posicion: 'Delantero', img: 'https://i.pravatar.cc/72?img=26', goles: 5, asistencias: 1, amarillas: 1, rojas: 0, faltas: 3, partidos: 8 },
+    { id: 12, nombre: 'Tomás Vega', dorsal: 12, posicion: 'Portero', img: 'https://i.pravatar.cc/72?img=17', goles: 0, asistencias: 0, amarillas: 0, rojas: 0, faltas: 0, partidos: 2 },
+    { id: 13, nombre: 'Camilo Ortiz', dorsal: 14, posicion: 'Volante', img: 'https://i.pravatar.cc/72?img=18', goles: 1, asistencias: 2, amarillas: 1, rojas: 0, faltas: 5, partidos: 5 },
+    { id: 14, nombre: 'Laura Peña', dorsal: 15, posicion: 'Defensa', img: 'https://i.pravatar.cc/72?img=27', goles: 0, asistencias: 0, amarillas: 1, rojas: 0, faltas: 4, partidos: 4 },
   ])
   const [mostrarForm, setMostrarForm] = useState(false)
   const [selectedPlayer, setSelectedPlayer] = useState<Jugador | null>(null)
@@ -141,12 +151,12 @@ export default function MiEquipo() {
 
           {/* Tabs */}
           <div className="flex items-center gap-1 bg-surface/50 border border-border/60 rounded-2xl p-1 mb-6 overflow-x-auto">
-            {(['plantilla','calendario','estadisticas'] as Tab[]).map(t => (
+            {(['plantilla','calendario','alineacion','estadisticas'] as Tab[]).map(t => (
               <button key={t} onClick={() => setTab(t)}
                 className={`flex items-center gap-2 py-2.5 px-4 rounded-xl text-sm font-semibold capitalize whitespace-nowrap transition-all ${
                   tab === t ? 'bg-purple-mid text-white shadow-lg shadow-purple-mid/25' : 'text-text-muted hover:text-white'
                 }`}>
-                {t === 'plantilla' ? <Swords size={16} /> : t === 'calendario' ? <Calendar size={16} /> : <BarChart3 size={16} />}
+                {t === 'plantilla' ? <Swords size={16} /> : t === 'calendario' ? <Calendar size={16} /> : t === 'alineacion' ? <LayoutGrid size={16} /> : <BarChart3 size={16} />}
                 {t}
               </button>
             ))}
@@ -215,7 +225,17 @@ export default function MiEquipo() {
             </>
           )}
 
-          {tab !== 'plantilla' && (
+          {/* Alineación */}
+          {tab === 'alineacion' && (
+            <>
+              <div className="flex items-center gap-2 text-xs text-text-muted mb-4">
+                <Clock size={12} /> Definí tu once titular como director técnico, arrastrando jugadores entre la cancha y el banquillo
+              </div>
+              <LineupBoard jugadores={jugadores} onSelectPlayer={id => setSelectedPlayer(jugadores.find(j => j.id === id) ?? null)} />
+            </>
+          )}
+
+          {(tab === 'calendario' || tab === 'estadisticas') && (
             <div className="text-center py-16">
               <p className="text-text-muted">Próximamente</p>
             </div>
