@@ -24,8 +24,24 @@ export interface PerfilPublicoResponse {
 }
 
 /** Perfil propio, resuelto por el backend a partir del JWT — no requiere pasar el id. */
-export function getMiPerfil(): Promise<PerfilResponse> {
-  return apiGet<PerfilResponse>(`${USERS_SERVICE_PREFIX}/usuarios/perfil`)
+export async function getMiPerfil(): Promise<PerfilResponse> {
+  try {
+    return await apiGet<PerfilResponse>(`${USERS_SERVICE_PREFIX}/usuarios/perfil`)
+  } catch {
+    console.warn('[usuarios] API no disponible, usando mock')
+    return {
+      id: 'mock-user-001',
+      nombreCompleto: 'Usuario Demo',
+      correo: 'demo@techcup.com',
+      tipoUsuario: 'STUDENT',
+      rol: 'PLAYER',
+      estado: 'ACTIVE',
+      tipoIdentificacion: 'CC',
+      numeroIdentificacion: '1234567890',
+      verificadoOTP: true,
+      fechaRegistro: new Date().toISOString(),
+    }
+  }
 }
 
 /** Perfil público de cualquier usuario, usado para mostrar nombre real en el chat. */

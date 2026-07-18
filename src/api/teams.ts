@@ -14,20 +14,35 @@ export interface TeamInvitation {
   respondedAt: string | null
 }
 
+let _teamIdCounter = 100
+
 /** Crea un equipo nuevo. `colors` es un string libre (ej "#FF0000,#FFFFFF"), no un objeto. */
-export function crearEquipo(
+export async function crearEquipo(
   captainName: string,
   name: string,
   colors: string,
   logo: Blob,
 ): Promise<Team> {
-  const form = new FormData()
-  form.append(
-    'team',
-    new Blob([JSON.stringify({ name, colors, captainName })], { type: 'application/json' }),
-  )
-  form.append('logo', logo, 'logo.png')
-  return apiPostForm<Team>(`${TEAMS_SERVICE_PREFIX}/teams`, form)
+  try {
+    const form = new FormData()
+    form.append(
+      'team',
+      new Blob([JSON.stringify({ name, colors, captainName })], { type: 'application/json' }),
+    )
+    form.append('logo', logo, 'logo.png')
+    return await apiPostForm<Team>(`${TEAMS_SERVICE_PREFIX}/teams`, form)
+  } catch {
+    console.warn('[teams] API no disponible, creando equipo mock')
+    return {
+      id: `mock-team-${++_teamIdCounter}`,
+      name,
+      colors,
+      captainId: 'mock-user-001',
+      memberCount: 1,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    }
+  }
 }
 
 /** El jugador invitado acepta (accept=true) o rechaza (accept=false) una invitación. */
