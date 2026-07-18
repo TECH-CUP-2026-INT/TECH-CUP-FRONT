@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import DashboardLayout from '@/components/common/DashboardLayout'
 import { SpotlightCard } from '@/components/common/spotlight-card'
@@ -8,89 +8,18 @@ import {
   Trophy, Goal, ShieldCheck, Swords, Medal,
   ArrowUp, ArrowDown, Minus, Shuffle, Shield,
 } from 'lucide-react'
+import { fetchStandings, fetchTopScorers, fetchGoalkeeperRanking, fetchFairPlay } from '@/services/estadisticas'
+import type { StandingsDisplay, GoleadorDisplay, PorteroDisplay, FairPlayDisplay } from '@/api/tipos'
 
 type RankingTab = 'posiciones' | 'goleadores' | 'valla' | 'fairplay' | 'llaves'
 
-interface TablaEquipo {
-  pos: number
-  nombre: string
-  pj: number
-  g: number
-  e: number
-  p: number
-  gf: number
-  gc: number
-  dg: number
-  pts: number
-  cambio: 'sube' | 'baja' | 'igual'
-}
 
-interface Goleador {
-  pos: number
-  nombre: string
-  equipo: string
-  goles: number
-  asistencias: number
-  partidos: number
-}
 
-interface PorteroRanking {
-  pos: number
-  nombre: string
-  equipo: string
-  golesRecibidos: number
-  partidos: number
-  vallasInvictas: number
-}
 
-interface FairPlay {
-  pos: number
-  equipo: string
-  amarillas: number
-  rojas: number
-  puntos: number
-}
 
-const tablaMock: TablaEquipo[] = [
-  { pos: 1, nombre: 'Tigres FC', pj: 12, g: 9, e: 2, p: 1, gf: 28, gc: 10, dg: 18, pts: 29, cambio: 'sube' },
-  { pos: 2, nombre: 'Sistemas FC', pj: 12, g: 8, e: 2, p: 2, gf: 22, gc: 10, dg: 12, pts: 26, cambio: 'igual' },
-  { pos: 3, nombre: 'IA Warriors', pj: 12, g: 7, e: 3, p: 2, gf: 20, gc: 12, dg: 8, pts: 24, cambio: 'sube' },
-  { pos: 4, nombre: 'Code United', pj: 12, g: 6, e: 2, p: 4, gf: 18, gc: 14, dg: 4, pts: 20, cambio: 'baja' },
-  { pos: 5, nombre: 'Dragones FC', pj: 12, g: 4, e: 3, p: 5, gf: 15, gc: 18, dg: -3, pts: 15, cambio: 'igual' },
-  { pos: 6, nombre: 'Los Bits', pj: 12, g: 3, e: 2, p: 7, gf: 12, gc: 22, dg: -10, pts: 11, cambio: 'sube' },
-  { pos: 7, nombre: 'Titanes', pj: 12, g: 2, e: 1, p: 9, gf: 8, gc: 25, dg: -17, pts: 7, cambio: 'baja' },
-  { pos: 8, nombre: 'Fénix', pj: 12, g: 1, e: 1, p: 10, gf: 6, gc: 28, dg: -22, pts: 4, cambio: 'igual' },
-]
 
-const goleadoresMock: Goleador[] = [
-  { pos: 1, nombre: 'Juan Pérez', equipo: 'Tigres FC', goles: 8, asistencias: 3, partidos: 10 },
-  { pos: 2, nombre: 'Esteban Quintero', equipo: 'IA Warriors', goles: 6, asistencias: 4, partidos: 11 },
-  { pos: 3, nombre: 'Daniel Castro', equipo: 'Tigres FC', goles: 5, asistencias: 2, partidos: 9 },
-  { pos: 4, nombre: 'Laura Gómez', equipo: 'Tigres FC', goles: 5, asistencias: 5, partidos: 12 },
-  { pos: 5, nombre: 'Pedro Gómez', equipo: 'Sistemas FC', goles: 4, asistencias: 6, partidos: 12 },
-  { pos: 6, nombre: 'Miguel Ángel', equipo: 'Code United', goles: 4, asistencias: 2, partidos: 10 },
-  { pos: 7, nombre: 'Carlos Marín', equipo: 'Sistemas FC', goles: 3, asistencias: 4, partidos: 11 },
-  { pos: 8, nombre: 'Sofía López', equipo: 'Code United', goles: 3, asistencias: 3, partidos: 10 },
-]
 
-const porterosMock: PorteroRanking[] = [
-  { pos: 1, nombre: 'Luis Torres', equipo: 'Sistemas FC', golesRecibidos: 10, partidos: 12, vallasInvictas: 5 },
-  { pos: 2, nombre: 'Carlos Martínez', equipo: 'Tigres FC', golesRecibidos: 10, partidos: 12, vallasInvictas: 4 },
-  { pos: 3, nombre: 'Andrés Ramírez', equipo: 'IA Warriors', golesRecibidos: 12, partidos: 12, vallasInvictas: 3 },
-  { pos: 4, nombre: 'Felipe Rojas', equipo: 'Code United', golesRecibidos: 14, partidos: 12, vallasInvictas: 3 },
-  { pos: 5, nombre: 'David Ocampo', equipo: 'IA Warriors', golesRecibidos: 18, partidos: 11, vallasInvictas: 2 },
-]
 
-const fairplayMock: FairPlay[] = [
-  { pos: 1, equipo: 'Sistemas FC', amarillas: 8, rojas: 0, puntos: 8 },
-  { pos: 2, equipo: 'Code United', amarillas: 10, rojas: 0, puntos: 10 },
-  { pos: 3, equipo: 'Tigres FC', amarillas: 10, rojas: 1, puntos: 13 },
-  { pos: 4, equipo: 'IA Warriors', amarillas: 12, rojas: 1, puntos: 15 },
-  { pos: 5, equipo: 'Dragones FC', amarillas: 14, rojas: 1, puntos: 17 },
-  { pos: 6, equipo: 'Los Bits', amarillas: 15, rojas: 2, puntos: 21 },
-  { pos: 7, equipo: 'Titanes', amarillas: 18, rojas: 2, puntos: 24 },
-  { pos: 8, equipo: 'Fénix', amarillas: 20, rojas: 3, puntos: 29 },
-]
 
 const tabs = [
   { id: 'posiciones' as RankingTab, label: 'Tabla de posiciones', icon: Trophy },
@@ -108,6 +37,19 @@ function CambioIcon({ cambio }: { cambio: 'sube' | 'baja' | 'igual' }) {
 
 export default function Rankings() {
   const [tab, setTab] = useState<RankingTab>('posiciones')
+
+  // Datos reales del stats-service (con fallback a mock dentro del service).
+  const [standings, setStandings] = useState<StandingsDisplay[]>([])
+  const [goleadores, setGoleadores] = useState<GoleadorDisplay[]>([])
+  const [porteros, setPorteros] = useState<PorteroDisplay[]>([])
+  const [fairplay, setFairplay] = useState<FairPlayDisplay[]>([])
+
+  useEffect(() => {
+    fetchStandings().then(setStandings).catch(() => {})
+    fetchTopScorers().then(setGoleadores).catch(() => {})
+    fetchGoalkeeperRanking().then(setPorteros).catch(() => {})
+    fetchFairPlay().then(setFairplay).catch(() => {})
+  }, [])
 
   const rankColors = (pos: number) => {
     if (pos <= 3) return 'text-gold'
@@ -172,15 +114,15 @@ export default function Rankings() {
                   </tr>
                 </thead>
                 <tbody>
-                  {tablaMock.map((r, i) => (
+                  {standings.map((r, i) => (
                     <tr key={i} className={`border-t border-border hover:bg-white/5 transition-colors ${i < 3 ? 'bg-gold/[0.02]' : ''}`}>
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-1">
                           {i < 3 ? <Medal size={14} className="text-gold" /> : <span className="text-text-muted">{r.pos}</span>}
-                          <CambioIcon cambio={r.cambio} />
+                          <CambioIcon cambio={r.cambio ?? 'igual'} />
                         </div>
                       </td>
-                      <td className="py-3 px-4 font-semibold">{r.nombre}</td>
+                      <td className="py-3 px-4 font-semibold">{r.equipo}</td>
                       <td className="py-3 px-4 text-center text-text-muted">{r.pj}</td>
                       <td className="py-3 px-4 text-center text-green-400">{r.g}</td>
                       <td className="py-3 px-4 text-center text-yellow-400">{r.e}</td>
@@ -200,7 +142,7 @@ export default function Rankings() {
         {/* Goleadores */}
         {tab === 'goleadores' && (
           <div className="space-y-2">
-            {goleadoresMock.map((g, i) => (
+            {goleadores.map((g, i) => (
               <SpotlightCard key={i} accent={i < 3 ? 'gold' : 'purple'} className={`bg-surface border rounded-2xl p-4 ${i < 3 ? 'border-gold/30' : 'border-border'}`}>
                 <div className="flex items-center gap-4">
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-black ${rankBg(i + 1)} border`}>
@@ -223,7 +165,7 @@ export default function Rankings() {
         {/* Valla menos vencida */}
         {tab === 'valla' && (
           <div className="space-y-2">
-            {porterosMock.map((p, i) => (
+            {porteros.map((p, i) => (
               <SpotlightCard key={i} accent={i < 3 ? 'gold' : 'purple'} className={`bg-surface border rounded-2xl p-4 ${i < 3 ? 'border-gold/30' : 'border-border'}`}>
                 <div className="flex items-center gap-4">
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-black ${rankBg(i + 1)} border`}>
@@ -274,7 +216,7 @@ export default function Rankings() {
                   </tr>
                 </thead>
                 <tbody>
-                  {fairplayMock.map((f, i) => (
+                  {fairplay.map((f, i) => (
                     <tr key={i} className={`border-t border-border hover:bg-white/5 transition-colors ${i < 3 ? 'bg-gold/[0.02]' : ''}`}>
                       <td className="py-3 px-4">
                         {i < 3 ? ['🥇', '🥈', '🥉'][i] : <span className="text-text-muted">{f.pos}</span>}
