@@ -2,15 +2,16 @@
  * Auth — Service layer
  *
  * Estrategia:
- * 1. Intenta llamar al API real del Identity Service
- * 2. Si el API no responde (error de red), usa datos mock
- * 3. El JWT se guarda/limpia automáticamente via client.ts
+ * - Llama al API real del Identity Service
+ * - Los errores del API se propagan a la UI
+ * - El JWT se guarda/limpia automáticamente via client.ts
  */
 
 import { clearJwt, hasJwt } from '@/api/client'
 import {
   loginApi,
   loginGoogleApi,
+  registerApi,
   validateOtpApi,
   resendOtpApi,
   logoutApi,
@@ -18,10 +19,9 @@ import {
   resetPasswordApi,
   validateTokenApi,
   type LoginRequest,
-  type OtpValidationRequest,
+  type RegisterRequest,
   type LoginResponse,
   type OtpResponse,
-  type UserResponse,
   type UserRoleAPI,
 } from '@/api/auth'
 
@@ -41,31 +41,6 @@ const FRONT_ROLE_TO_API: Record<string, UserRoleAPI> = {
   administrador: 'ORGANIZER',
 }
 
-// ─── Mock fallback ─────────────────────────────────────────
-const MOCK_USER_ID = 'mock-user-001'
-
-/** Login + OTP mock (simula el flujo completo) */
-async function mockLogin(_data: LoginRequest): Promise<LoginResponse> {
-  // Simula delay de red
-  await new Promise((r) => setTimeout(r, 800))
-  return { userId: MOCK_USER_ID, message: 'OTP sent to your email.' }
-}
-
-async function mockValidateOtp(_data: OtpValidationRequest): Promise<OtpResponse> {
-  await new Promise((r) => setTimeout(r, 600))
-  return {
-    token: 'mock-jwt-token',
-    user: {
-      id: MOCK_USER_ID,
-      fullName: 'Usuario Mock',
-      email: 'mock@escuelaing.edu.co',
-      userType: 'STUDENT',
-      role: 'PLAYER',
-      status: 'ACTIVE',
-    },
-  }
-}
-
 // ─── Service Functions ─────────────────────────────────────
 
 /**
@@ -73,51 +48,36 @@ async function mockValidateOtp(_data: OtpValidationRequest): Promise<OtpResponse
  * @returns userId (necesario para el paso 2 de OTP)
  */
 export async function login(email: string, password: string): Promise<LoginResponse> {
-  try {
-    return await loginApi({ email, password })
-  } catch (error) {
-    console.warn('[auth] API login falló, usando mock:', error)
-    return mockLogin({ email, password })
-  }
+  return loginApi({ email, password })
+}
+
+/**
+ * Registro de nuevo usuario.
+ */
+export async function registerUser(data: RegisterRequest): Promise<OtpResponse> {
+  return registerApi(data)
 }
 
 /**
  * Paso 1b: Login con Google OAuth.
  */
 export async function loginGoogle(googleToken: string): Promise<LoginResponse> {
-  try {
-    return await loginGoogleApi({ googleToken })
-  } catch (error) {
-    console.warn('[auth] API Google login falló, usando mock:', error)
-    return { userId: MOCK_USER_ID, message: 'OTP sent to your email.' }
-  }
+  return loginGoogleApi({ googleToken })
 }
 
 /**
  * Paso 2: Validar OTP → obtiene JWT + datos del usuario.
- * Autoguarda el JWT automáticamente.
- * @returns OtpResponse con token y datos del usuario
  */
 export async function validateOtp(userId: string, otpCode: string): Promise<OtpResponse> {
-  try {
-    return await validateOtpApi({ userId, otpCode })
-  } catch (error) {
-    console.warn('[auth] API OTP validation falló, usando mock:', error)
-    return mockValidateOtp({ userId, otpCode })
-  }
+  return validateOtpApi({ userId, otpCode })
 }
 
 /**
  * Reenviar OTP.
  */
 export async function resendOtp(userId: string): Promise<string> {
-  try {
-    const res = await resendOtpApi({ userId })
-    return res.message
-  } catch (error) {
-    console.warn('[auth] API resend OTP falló:', error)
-    return 'OTP re-sent (mock).'
-  }
+  const res = await resendOtpApi({ userId })
+  return res.message
 }
 
 /**
@@ -125,7 +85,6 @@ export async function resendOtp(userId: string): Promise<string> {
  */
 export function logout(): void {
   clearJwt()
-  // También limpiamos el user del localStorage
   localStorage.removeItem('techcup_user')
 }
 
@@ -137,16 +96,11 @@ export function isLoggedIn(): boolean {
 }
 
 /**
- * Recuperación de contraseña: solicita código al correo.
+ * Recuperación de contraseña.
  */
 export async function requestPasswordRecovery(email: string): Promise<string> {
-  try {
-    const res = await requestRecoveryApi({ email })
-    return res.message
-  } catch (error) {
-    console.warn('[auth] API recovery falló, usando mock:', error)
-    return 'Si el correo existe, recibirás un código de recuperación.'
-  }
+  const res = await requestRecoveryApi({ email })
+  return res.message
 }
 
 /**
@@ -157,13 +111,8 @@ export async function resetPassword(
   recoveryCode: string,
   newPassword: string,
 ): Promise<string> {
-  try {
-    const res = await resetPasswordApi({ email, recoveryCode, newPassword })
-    return res.message
-  } catch (error) {
-    console.warn('[auth] API reset password falló, usando mock:', error)
-    return 'Contraseña restablecida exitosamente.'
-  }
+  const res = await resetPasswordApi({ email, recoveryCode, newPassword })
+  return res.message
 }
 
 /**

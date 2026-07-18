@@ -1,6 +1,7 @@
 ﻿import axios, { type AxiosInstance, type InternalAxiosRequestConfig } from 'axios'
 
-const BASE_URL = 'https://techapi.azure-api.net'
+const DEV = import.meta.env.DEV
+const BASE_URL = DEV ? '' : 'https://techapi.azure-api.net'
 const SUBSCRIPTION_KEY = '4eff9bdd419b49308dc37fd491741c47'
 
 const api: AxiosInstance = axios.create({
@@ -37,7 +38,7 @@ api.interceptors.response.use(
       if (status === 401) {
         localStorage.removeItem(JWT_STORAGE_KEY)
       }
-      throw new Error(`API Error ${status}: ${message}`)
+      throw new Error(message)
     }
     if (error.request) {
       throw new Error('Sin respuesta del servidor — revisá la conexión')

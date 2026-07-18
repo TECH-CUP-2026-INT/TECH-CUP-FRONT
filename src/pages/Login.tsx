@@ -7,7 +7,7 @@ import { Input } from '@/components/common/input'
 import { Label } from '@/components/common/label'
 import { Checkbox } from '@/components/common/checkbox'
 import { Eye, EyeOff, Mail, Lock, ArrowLeft, Users, ShieldCheck, UserCog, ChevronRight } from 'lucide-react'
-import { useAuth } from '@/hooks/auth/useAuth'
+import { useAuth, type UserRole } from '@/hooks/auth/useAuth'
 import OtpVerify from '@/components/OtpVerify'
 import { login as apiLogin, validateOtp, resendOtp } from '@/services/auth'
 

@@ -1,11 +1,12 @@
 import { useState, useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { GoogleLogin, type CredentialResponse } from '@react-oauth/google'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/common/button'
 import { Input } from '@/components/common/input'
 import { Label } from '@/components/common/label'
-import { ArrowLeft, ArrowRight, Check, ChevronLeft, Camera } from 'lucide-react'
+import { registerStudentApi, registerGuestApi, mapTipoDoc } from '@/api/register'
+import { ArrowLeft, ArrowRight, Check, ChevronLeft, Camera, Loader2 } from 'lucide-react'
 
 type Position = 'portero' | 'defensa' | 'volante' | 'delantero'
 
@@ -64,7 +65,11 @@ export default function Register() {
   const [fechaExpedicion, setFechaExpedicion] = useState('')
   const [otp, setOtp] = useState(['', '', '', '', '', ''])
   const [googleVerified, setGoogleVerified] = useState(false)
+  const [googleToken, setGoogleToken] = useState('')
   const [showSuccess, setShowSuccess] = useState(false)
+  const [isRegistering, setIsRegistering] = useState(false)
+  const [registerError, setRegisterError] = useState<string | null>(null)
+  const navigate = useNavigate()
 
   const isExterno = form.userType === 'externo'
 
@@ -145,10 +150,42 @@ export default function Register() {
     }
   }
 
-  const handleFinish = () => {
-    console.log('Registro completado:', { ...form, foto: form.foto?.name })
-    setShowSuccess(true)
-    setTimeout(() => setShowSuccess(false), 4000)
+  const handleFinish = async () => {
+    setIsRegistering(true)
+    setRegisterError(null)
+    try {
+      const tipoDoc = mapTipoDoc(form.tipoDoc)
+
+      if (form.userType === 'interno') {
+        await registerStudentApi({
+          nombreCompleto: form.nombre,
+          correoInstitucional: form.email,
+          contrasena: form.password,
+          programaAcademico: form.programa,
+          semestre: parseInt(form.semestre),
+          tipoIdentificacion: tipoDoc,
+          numeroIdentificacion: form.nroDoc,
+        })
+      } else {
+        await registerGuestApi({
+          nombreCompleto: form.nombre,
+          correo: form.email,
+          contrasena: form.password,
+          tipoIdentificacion: tipoDoc,
+          numeroIdentificacion: form.nroDoc,
+        })
+      }
+
+      setShowSuccess(true)
+      setTimeout(() => {
+        navigate('/login', { replace: true })
+      }, 1500)
+    } catch (error) {
+      console.error('[register] Error al crear usuario:', error)
+      setRegisterError(error instanceof Error ? error.message : 'Error al registrar. Intentalo de nuevo.')
+    } finally {
+      setIsRegistering(false)
+    }
   }
 
   return (
@@ -182,7 +219,7 @@ export default function Register() {
               <h2 className="font-[family-name:var(--font-display)] text-3xl uppercase tracking-[.5px] mb-2">
                 ¡Registro <span className="text-gold">exitoso!</span>
               </h2>
-              <p className="text-text-muted">Bienvenido a TechCup. Revisa tu correo para verificar tu cuenta.</p>
+              <p className="text-text-muted">Bienvenido a TechCup. Redirigiendo al inicio de sesión...</p>
             </div>
           </motion.div>
         )}
@@ -353,7 +390,10 @@ export default function Register() {
                       <div className="mb-6 flex justify-center">
                         {import.meta.env.VITE_GOOGLE_CLIENT_ID ? (
                           <GoogleLogin
-                            onSuccess={(_response: CredentialResponse) => setGoogleVerified(true)}
+                            onSuccess={(response: CredentialResponse) => {
+                              setGoogleVerified(true)
+                              setGoogleToken(response.credential || '')
+                            }}
                             onError={() => console.error('Google registration failed')}
                             text="signup_with"
                             shape="pill"
@@ -368,12 +408,15 @@ export default function Register() {
                         )}
                       </div>
                     )}
+                    {registerError && (
+                      <p className="text-sm text-red-400 mb-4 text-center">{registerError}</p>
+                    )}
                     <div className="flex gap-3">
-                      <Button variant="outline" onClick={() => setStep(3)} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1">
+                      <Button variant="outline" onClick={() => setStep(3)} disabled={isRegistering} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1">
                         <ChevronLeft size={16} /> Anterior
                       </Button>
-                      <Button onClick={nextStep} disabled={!googleVerified} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold h-12 flex-1 disabled:opacity-40">
-                        Finalizar <ArrowRight size={16} />
+                      <Button onClick={nextStep} disabled={!googleVerified || isRegistering} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold h-12 flex-1 disabled:opacity-40">
+                        {isRegistering ? <><Loader2 size={16} className="animate-spin" /> Creando cuenta</> : <>Finalizar <ArrowRight size={16} /></>}
                       </Button>
                     </div>
                   </>
@@ -443,12 +486,15 @@ export default function Register() {
                     </label>
                   </div>
                 </div>
+                {registerError && (
+                  <p className="text-sm text-red-400 mt-4 text-center">{registerError}</p>
+                )}
                 <div className="flex gap-3 mt-8">
-                  <Button variant="outline" onClick={() => setStep(4)} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1">
+                  <Button variant="outline" onClick={() => setStep(4)} disabled={isRegistering} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1">
                     <ChevronLeft size={16} /> Anterior
                   </Button>
-                  <Button onClick={handleFinish} disabled={!form.posicion} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold h-12 flex-1 disabled:opacity-40">
-                    Finalizar <Check size={16} />
+                  <Button onClick={handleFinish} disabled={!form.posicion || isRegistering} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold h-12 flex-1 disabled:opacity-40">
+                    {isRegistering ? <><Loader2 size={16} className="animate-spin" /> Creando cuenta</> : <>Finalizar <Check size={16} /></>}
                   </Button>
                 </div>
               </motion.div>
