@@ -360,7 +360,12 @@ export default function Register() {
                       </div>
                     ) : (
                       <div className="mb-6 flex justify-center">
-                        {import.meta.env.VITE_GOOGLE_CLIENT_ID ? (
+                        {import.meta.env.DEV ? (
+                          <button type="button" onClick={() => setGoogleVerified(true)}
+                            className="inline-flex items-center justify-center gap-3 rounded-full border border-gold/30 bg-purple-deep/30 text-gold hover:bg-gold/10 hover:text-white h-12 px-6 text-sm font-semibold transition-all">
+                            Continuar sin Google (Dev)
+                          </button>
+                        ) : import.meta.env.VITE_GOOGLE_CLIENT_ID ? (
                           <GoogleLogin
                             onSuccess={(_response: CredentialResponse) => setGoogleVerified(true)}
                             onError={() => console.error('Google registration failed')}
@@ -460,7 +465,7 @@ export default function Register() {
                   <Button variant="outline" onClick={() => setStep(4)} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1">
                     <ChevronLeft size={16} /> Anterior
                   </Button>
-                  <Button onClick={handleFinish} disabled={!form.posicion} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold h-12 flex-1 disabled:opacity-40">
+                  <Button onClick={handleFinish} disabled={!form.posicion && !import.meta.env.DEV} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold h-12 flex-1 disabled:opacity-40">
                     Finalizar <Check size={16} />
                   </Button>
                 </div>
