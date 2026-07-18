@@ -165,7 +165,7 @@ export async function actualizarTorneo(
     // Actualizar en el array local
     const idx = _torneos.findIndex(t => t.id === id)
     if (idx >= 0) {
-      _torneos[idx] = { ..._torneos[idx], ...data }
+      _torneos[idx] = { ..._torneos[idx], ...data } as Torneo
     }
     return result
   } catch (error) {
@@ -173,11 +173,11 @@ export async function actualizarTorneo(
     // Fallback: actualizar en localStorage
     const idx = _torneos.findIndex(t => t.id === id)
     if (idx >= 0) {
-      _torneos[idx] = { ..._torneos[idx], ...data }
+      _torneos[idx] = { ..._torneos[idx], ...data } as Torneo
       const creados = loadCreados()
       const cIdx = creados.findIndex(t => t.id === id)
       if (cIdx >= 0) {
-        creados[cIdx] = { ...creados[cIdx], ...data }
+        creados[cIdx] = { ...creados[cIdx], ...data } as Torneo
         saveCreados(creados)
       }
       return _torneos[idx]
