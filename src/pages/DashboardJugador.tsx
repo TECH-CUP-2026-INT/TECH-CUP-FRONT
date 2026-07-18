@@ -132,7 +132,7 @@ export default function DashboardJugador() {
               </div>
               <div className="text-center">
                 <h2 className="text-2xl font-bold text-white leading-tight">{user?.name || 'Juan Camilo Rivera'}</h2>
-                <p className="text-sm text-gold font-semibold uppercase tracking-[.4px] mt-1.5">Delantero</p>
+                <p className="text-sm text-gold-ink font-semibold uppercase tracking-[.4px] mt-1.5">Delantero</p>
                 <p className="text-[13px] text-white/50 mt-1">Camiseta #7{isCaptain ? ` · ${MI_EQUIPO.emoji} Capitán de ${MI_EQUIPO.nombre}` : ''}</p>
               </div>
             </div>
@@ -143,7 +143,7 @@ export default function DashboardJugador() {
             {/* Equipo */}
             <SpotlightCard accent="purple" className="p-5 bg-[#E8DFF5]/70 dark:bg-black/40 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-purple-mid/30 rounded-2xl shadow-lg shadow-purple-mid/10">
               <h3 className="text-[14.5px] font-semibold tracking-[.3px] mb-3 flex items-center gap-2 text-[#3D1A6B] dark:text-white">
-                <span className="text-gold">{isCaptain ? MI_EQUIPO.emoji : '👥'}</span> <span className="text-gold">{isCaptain ? MI_EQUIPO.nombre : 'Mi equipo'}</span>
+                <span className="text-gold-ink">{isCaptain ? MI_EQUIPO.emoji : '👥'}</span> <span className="text-gold-ink">{isCaptain ? MI_EQUIPO.nombre : 'Mi equipo'}</span>
               </h3>
               {isCaptain ? (
                 <div className="space-y-2">
@@ -152,9 +152,9 @@ export default function DashboardJugador() {
                     <span className="font-bold text-[#3D1A6B] dark:text-white">{MI_EQUIPO.jugadores.length}/12</span>
                   </div>
                   <div className="flex items-center gap-2 text-xs text-[#4B2D7A] dark:text-white/60">
-                    <Medal size={12} className="text-gold" /> Capitán: {MI_EQUIPO.capitan}
+                    <Medal size={12} className="text-gold-ink" /> Capitán: {MI_EQUIPO.capitan}
                   </div>
-                  <Button onClick={() => navigate('/mi-equipo')} size="sm" className="w-full rounded-full bg-gold/15 backdrop-blur-md border border-gold/40 text-gold hover:bg-gold/25 hover:text-white shadow-lg shadow-gold/10 text-xs h-8 font-bold mt-1">
+                  <Button onClick={() => navigate('/mi-equipo')} size="sm" className="w-full rounded-full bg-gold/15 backdrop-blur-md border border-gold/40 text-gold-ink hover:bg-gold/25 hover:text-white shadow-lg shadow-gold/10 text-xs h-8 font-bold mt-1">
                     <Users size={13} className="mr-1" /> Gestionar equipo
                   </Button>
                 </div>
@@ -163,8 +163,8 @@ export default function DashboardJugador() {
                   <p className="text-4xl mb-2 opacity-60">🏠</p>
                   <p className="text-sm text-text-muted mb-4">No pertenecés a ningún equipo aún</p>
                   <div className="flex gap-2 justify-center">
-                    <Button onClick={() => setBrowseTeamsOpen(true)} className="rounded-full bg-gold/15 backdrop-blur-md border border-gold/40 text-gold hover:bg-gold/25 hover:text-white shadow-lg shadow-gold/10 text-xs font-bold px-4">Buscar equipo</Button>
-                    <Button onClick={handleCrearEquipo} variant="outline" className="rounded-full bg-black/5 dark:bg-white/5 backdrop-blur-md border border-[#D4C8E8]/40 dark:border-purple-mid/40 text-gold hover:bg-gold/15 hover:border-gold/60 hover:text-white text-xs px-4">Crear equipo</Button>
+                    <Button onClick={() => setBrowseTeamsOpen(true)} className="rounded-full bg-gold/15 backdrop-blur-md border border-gold/40 text-gold-ink hover:bg-gold/25 hover:text-white shadow-lg shadow-gold/10 text-xs font-bold px-4">Buscar equipo</Button>
+                    <Button onClick={handleCrearEquipo} variant="outline" className="rounded-full bg-black/5 dark:bg-white/5 backdrop-blur-md border border-[#D4C8E8]/40 dark:border-purple-mid/40 text-gold-ink hover:bg-gold/15 hover:border-gold/60 hover:text-white text-xs px-4">Crear equipo</Button>
                   </div>
                 </div>
               )}
@@ -174,7 +174,7 @@ export default function DashboardJugador() {
 
             {/* Invitaciones */}
             <SpotlightCard accent="purple" className="p-5 bg-[#E8DFF5]/70 dark:bg-black/40 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-purple-mid/30 rounded-2xl shadow-lg shadow-purple-mid/10">
-              <h3 className="text-[14.5px] font-semibold tracking-[.3px] mb-3 flex items-center gap-2 text-[#3D1A6B] dark:text-white"><span className="text-gold">📨</span> <span className="text-gold">Invitaciones</span></h3>
+              <h3 className="text-[14.5px] font-semibold tracking-[.3px] mb-3 flex items-center gap-2 text-[#3D1A6B] dark:text-white"><span className="text-gold-ink">📨</span> <span className="text-gold-ink">Invitaciones</span></h3>
               <div className="text-center py-4">
                 <p className="text-4xl mb-2 opacity-60">🔔</p>
                 <p className="text-sm text-text-muted">No tenés invitaciones pendientes</p>
@@ -188,17 +188,17 @@ export default function DashboardJugador() {
             <SpotlightCard accent="purple" className="p-[22px_24px] bg-[#E8DFF5]/70 dark:bg-black/30 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-purple-mid/30 rounded-2xl shadow-lg shadow-purple-mid/10">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-[14.5px] font-semibold tracking-[.3px] text-[#3D1A6B] dark:text-white">🏆 Torneos disponibles</h3>
-                <Link to="/torneos" className="text-xs text-gold font-bold hover:text-gold-dark transition-colors">Ver todos →</Link>
+                <Link to="/torneos" className="text-xs text-gold-ink font-bold hover:text-gold-dark transition-colors">Ver todos →</Link>
               </div>
               <div className="space-y-3">
                 {torneosDisponibles.map((t) => (
                   <button key={t.id} onClick={() => { setTorneoModal(t); setModalTab('info') }}
                     className="w-full flex items-center justify-between p-3 rounded-xl bg-[#E8DFF5]/70 dark:bg-black/30 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-purple-mid/20 hover:border-gold/40 hover:bg-purple-deep/40 transition-all cursor-pointer group text-left">
                     <div>
-                      <p className="text-sm font-semibold text-[#3D1A6B] dark:text-white group-hover:text-gold transition-colors">{t.nombre}</p>
+                      <p className="text-sm font-semibold text-[#3D1A6B] dark:text-white group-hover:text-gold-ink transition-colors">{t.nombre}</p>
                       <p className="text-xs text-text-muted">{t.fecha} · {t.categoria}</p>
                     </div>
-                    <span className={`text-[10px] font-bold uppercase px-2 py-1 rounded-full ${t.estado === 'live' ? 'bg-green-500/20 text-green-400 border border-green-400/30' : 'bg-gold/20 text-gold border border-purple-mid/40'}`}>
+                    <span className={`text-[10px] font-bold uppercase px-2 py-1 rounded-full ${t.estado === 'live' ? 'bg-green-500/20 text-green-400 border border-green-400/30' : 'bg-gold/20 text-gold-ink border border-purple-mid/40'}`}>
                       {t.estado === 'live' ? 'En vivo' : 'Próximo'}
                     </span>
                   </button>
@@ -209,7 +209,7 @@ export default function DashboardJugador() {
             <SpotlightCard accent="purple" className="p-[22px_24px] bg-[#E8DFF5]/70 dark:bg-black/40 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-purple-mid/30 rounded-2xl shadow-lg shadow-purple-mid/10">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-[14.5px] font-semibold tracking-[.3px] text-[#3D1A6B] dark:text-white">📅 Próximos partidos</h3>
-                <Link to="/mis-partidos" className="text-xs text-gold font-bold hover:text-gold-dark transition-colors">Ver todos →</Link>
+                <Link to="/mis-partidos" className="text-xs text-gold-ink font-bold hover:text-gold-dark transition-colors">Ver todos →</Link>
               </div>
               {misPartidos.map((m, i) => (
                 <Link key={i} to={`/partido/${i + 1}`} className="flex items-center gap-3.5 py-3 border-b border-gold/10 last:border-b-0 hover:bg-black/5 dark:hover:bg-white/[0.05] transition-all rounded-lg -mx-2 px-2 group">
@@ -221,7 +221,7 @@ export default function DashboardJugador() {
                     {m.eq1} <span className="text-text-faint">vs</span> {m.eq2}
                     <small className="block font-normal text-text-muted text-[11.5px] mt-0.5">{m.lugar}</small>
                   </div>
-                  <div className="text-xs text-gold font-bold bg-gold/10 px-2.5 py-1 rounded-full">{m.hora}</div>
+                  <div className="text-xs text-gold-ink font-bold bg-gold/10 px-2.5 py-1 rounded-full">{m.hora}</div>
                 </Link>
               ))}
             </SpotlightCard>
@@ -239,11 +239,11 @@ export default function DashboardJugador() {
                 <div className="relative z-10 p-8 max-md:p-5 flex items-center justify-between max-md:flex-col max-md:gap-4">
                   <div>
                     <h2 className="font-[family-name:var(--font-display)] uppercase text-2xl leading-tight mb-1">
-                      {MI_EQUIPO.emoji} Panel de <span className="text-gold">Capitán</span>
+                      {MI_EQUIPO.emoji} Panel de <span className="text-gold-ink">Capitán</span>
                     </h2>
                     <p className="text-sm text-white/60">Gestioná tu equipo, logística y validaciones de {MI_EQUIPO.nombre}.</p>
                   </div>
-                  <Badge className="rounded-full bg-gold/20 text-gold border border-purple-mid/40 h-auto px-3 py-1.5 text-[11px] font-bold">
+                  <Badge className="rounded-full bg-gold/20 text-gold-ink border border-purple-mid/40 h-auto px-3 py-1.5 text-[11px] font-bold">
                     {MI_EQUIPO.emoji} {MI_EQUIPO.capitan}
                   </Badge>
                 </div>
@@ -259,7 +259,7 @@ export default function DashboardJugador() {
                 ]).map(t => (
                   <button key={t.id} onClick={() => setCapitanTab(t.id)}
                     className={`flex items-center gap-2 px-4 py-2 rounded-lg text-[12.5px] font-semibold transition-all whitespace-nowrap ${
-                      capitanTab === t.id ? 'bg-gold/20 backdrop-blur-md border border-gold/40 text-gold' : 'text-[#4B2D7A] dark:text-white/50 backdrop-blur-sm hover:text-[#3D1A6B] dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10'
+                      capitanTab === t.id ? 'bg-gold/20 backdrop-blur-md border border-gold/40 text-gold-ink' : 'text-[#4B2D7A] dark:text-white/50 backdrop-blur-sm hover:text-[#3D1A6B] dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10'
                     }`}>
                     <t.icon size={16} /> {t.label}
                   </button>
@@ -277,7 +277,7 @@ export default function DashboardJugador() {
                       { icon:'📋', num:`${dotacion.filter(d => d.estado === 'entregado').length}/${dotacion.length}`, label:'Dotación recibida', accent:'gold' },
                     ].map((s, i) => (
                       <SpotlightCard key={i} accent={s.accent as 'gold'|'purple'} className="p-5 flex gap-3.5 items-center bg-surface border-border rounded-2xl">
-                        <span className={`w-[46px] h-[46px] rounded-xl flex items-center justify-center flex-shrink-0 ${s.accent === 'purple' ? 'bg-purple-mid/20 text-[#b39ef2]' : 'bg-gold/15 text-gold'}`}>{s.icon}</span>
+                        <span className={`w-[46px] h-[46px] rounded-xl flex items-center justify-center flex-shrink-0 ${s.accent === 'purple' ? 'bg-purple-mid/20 text-[#b39ef2]' : 'bg-gold/15 text-gold-ink'}`}>{s.icon}</span>
                         <div><div className="font-[family-name:var(--font-display)] text-[26px] leading-none">{s.num}</div><div className="text-xs text-text-muted mt-1">{s.label}</div></div>
                       </SpotlightCard>
                     ))}
@@ -286,8 +286,8 @@ export default function DashboardJugador() {
                   <div className="grid grid-cols-[1.3fr_1fr] gap-5 mb-[22px] items-start max-lg:grid-cols-1">
                     <SpotlightCard accent="purple" className="p-[22px_24px] bg-surface border-border rounded-2xl">
                       <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-[14.5px] font-semibold tracking-[.3px] flex items-center gap-2"><CalendarDays size={16} className="text-gold" /> Próximos partidos</h3>
-                        <button onClick={() => setCalExpandido(!calExpandido)} className="text-xs text-gold font-bold">{calExpandido ? 'Ver menos ↑' : 'Ver todos →'}</button>
+                        <h3 className="text-[14.5px] font-semibold tracking-[.3px] flex items-center gap-2"><CalendarDays size={16} className="text-gold-ink" /> Próximos partidos</h3>
+                        <button onClick={() => setCalExpandido(!calExpandido)} className="text-xs text-gold-ink font-bold">{calExpandido ? 'Ver menos ↑' : 'Ver todos →'}</button>
                       </div>
                       {partidos.slice(0, calExpandido ? partidos.length : 2).map((m, i) => (
                         <button key={i} onClick={() => navigate(`/partido/${i + 1}`)}
@@ -300,14 +300,14 @@ export default function DashboardJugador() {
                             {m.eq1} <span className="text-text-faint">vs</span> {m.eq2}
                             <small className="block font-normal text-text-muted text-[11.5px] mt-0.5">{m.lugar}</small>
                           </div>
-                          <div className="text-xs text-gold font-bold">{m.hora}</div>
+                          <div className="text-xs text-gold-ink font-bold">{m.hora}</div>
                         </button>
                       ))}
                     </SpotlightCard>
 
                     <SpotlightCard accent="purple" className="p-[22px_24px] bg-surface border-border rounded-2xl">
                       <h3 className="text-[14.5px] font-semibold tracking-[.3px] flex items-center gap-2 mb-4">
-                        <Trophy size={16} className="text-gold" /> Posiciones
+                        <Trophy size={16} className="text-gold-ink" /> Posiciones
                       </h3>
                       <table className="w-full border-collapse">
                         <thead>
@@ -319,7 +319,7 @@ export default function DashboardJugador() {
                           {posiciones.slice(0, 5).map((r, i) => {
                             const isMine = r.equipo === MI_EQUIPO.nombre
                             return (
-                              <tr key={i} className={`text-[13px] ${isMine ? 'text-gold font-bold bg-gold/5' : ''}`}>
+                              <tr key={i} className={`text-[13px] ${isMine ? 'text-gold-ink font-bold bg-gold/5' : ''}`}>
                                 <td className="py-2 text-text-muted w-[26px]">{r.pos}</td>
                                 <td className="py-2 border-t border-border">{i === 0 ? '🏆 ' : ''}{r.equipo} {isMine && '👈'}</td>
                                 <td className="py-2 border-t border-border">{r.pj}</td>
@@ -344,7 +344,7 @@ export default function DashboardJugador() {
                       <div>
                         <h3 className="text-[16px] font-bold">{MI_EQUIPO.nombre}</h3>
                         <div className="flex items-center gap-2 text-[11px] text-text-muted">
-                          <Medal size={11} className="text-gold" /> Capitán: {MI_EQUIPO.capitan}
+                          <Medal size={11} className="text-gold-ink" /> Capitán: {MI_EQUIPO.capitan}
                           <span>• {MI_EQUIPO.jugadores.length} jug.</span>
                         </div>
                       </div>
@@ -369,7 +369,7 @@ export default function DashboardJugador() {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-1">
                               <span className="text-[12.5px] font-semibold">{j.nombre}</span>
-                              {j.nombre === MI_EQUIPO.capitan && <Medal size={9} className="text-gold" />}
+                              {j.nombre === MI_EQUIPO.capitan && <Medal size={9} className="text-gold-ink" />}
                             </div>
                             <span className="text-[9.5px] text-text-muted">{j.posicion === 'Arquero' ? '🧤' : j.posicion === 'Defensor' ? '🛡️' : j.posicion === 'Mediocampista' ? '🎯' : '⚡'} {j.posicion}</span>
                           </div>
@@ -377,14 +377,14 @@ export default function DashboardJugador() {
                       ))}
                     </div>
                     <div className="flex items-center gap-2 mt-4 pt-4 border-t border-[#D4C8E8]/40 dark:border-white/5">
-                      <Button className="flex-1 rounded-full bg-gold/15 backdrop-blur-md border border-gold/40 text-gold hover:bg-gold/25 hover:text-white shadow-lg shadow-gold/10 text-[11px] h-8 font-bold"><Swords size={13} className="mr-1" /> Elegir alineación</Button>
+                      <Button className="flex-1 rounded-full bg-gold/15 backdrop-blur-md border border-gold/40 text-gold-ink hover:bg-gold/25 hover:text-white shadow-lg shadow-gold/10 text-[11px] h-8 font-bold"><Swords size={13} className="mr-1" /> Elegir alineación</Button>
                       <Button variant="outline" className="rounded-full border-[#D4C8E8]/40 dark:border-white/20 text-[#3D1A6B] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 text-[11px] h-8"><UserPlus size={13} className="mr-1" /> Invitar jugador</Button>
                     </div>
                   </SpotlightCard>
 
                   <SpotlightCard accent="purple" className="p-[22px_24px] bg-surface border-border rounded-2xl">
                     <h3 className="text-[14.5px] font-semibold tracking-[.3px] flex items-center gap-2 mb-4">
-                      <ClipboardList size={16} className="text-gold" /> Solicitudes
+                      <ClipboardList size={16} className="text-gold-ink" /> Solicitudes
                     </h3>
                     {[
                       { id:1, jugador:'Jorge Hernández', posicion:'Defensor', estado:'pendiente' as const },
@@ -411,20 +411,20 @@ export default function DashboardJugador() {
                 <div className="space-y-5">
                   <div className="flex items-center justify-between">
                     <h3 className="font-[family-name:var(--font-display)] uppercase text-lg tracking-[.5px]">
-                      Logística: <span className="text-gold">refrigerios y kits</span>
+                      Logística: <span className="text-gold-ink">refrigerios y kits</span>
                     </h3>
-                    <Button onClick={() => setCapitanTab('qr')} className="rounded-full bg-gold/15 backdrop-blur-md border border-gold/40 text-gold hover:bg-gold/25 hover:text-white shadow-lg shadow-gold/10 text-xs h-9 px-4 font-bold">
+                    <Button onClick={() => setCapitanTab('qr')} className="rounded-full bg-gold/15 backdrop-blur-md border border-gold/40 text-gold-ink hover:bg-gold/25 hover:text-white shadow-lg shadow-gold/10 text-xs h-9 px-4 font-bold">
                       <QrCode size={14} className="mr-1.5" /> Generar QR
                     </Button>
                   </div>
                   <SpotlightCard accent="purple" className="p-[22px_24px] bg-surface border-border rounded-2xl">
                     <h3 className="text-[14.5px] font-semibold tracking-[.3px] flex items-center gap-2 mb-4">
-                      <Package size={16} className="text-gold" /> Dotación del equipo
+                      <Package size={16} className="text-gold-ink" /> Dotación del equipo
                     </h3>
                     <div className="space-y-2">
                       {dotacion.map(item => (
                         <div key={item.id} className="flex items-center gap-4 p-3 rounded-xl bg-[#E8DFF5]/70 dark:bg-black/30 border border-[#D4C8E8]/40 dark:border-white/5 hover:border-purple-mid/30 transition-all">
-                          <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${item.tipo === 'kit' ? 'bg-purple-mid/20 text-[#b39ef2]' : 'bg-gold/15 text-gold'}`}>
+                          <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${item.tipo === 'kit' ? 'bg-purple-mid/20 text-[#b39ef2]' : 'bg-gold/15 text-gold-ink'}`}>
                             {item.tipo === 'kit' ? <Shirt size={18} /> : <Apple size={18} />}
                           </div>
                           <div className="flex-1">
@@ -443,7 +443,7 @@ export default function DashboardJugador() {
                   </SpotlightCard>
                   <SpotlightCard accent="purple" className="p-[22px_24px] bg-surface border-border rounded-2xl">
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-gold/15 flex items-center justify-center flex-shrink-0"><Smartphone size={22} className="text-gold" /></div>
+                      <div className="w-12 h-12 rounded-xl bg-gold/15 flex items-center justify-center flex-shrink-0"><Smartphone size={22} className="text-gold-ink" /></div>
                       <div>
                         <h3 className="font-semibold text-[14px] mb-1">¿Cómo funciona la validación?</h3>
                         <p className="text-[11.5px] text-text-muted leading-relaxed">
@@ -462,7 +462,7 @@ export default function DashboardJugador() {
               {capitanTab === 'qr' && (
                 <div className="max-w-lg mx-auto space-y-6">
                   <div className="text-center">
-                    <h3 className="font-[family-name:var(--font-display)] uppercase text-xl tracking-[.5px] mb-2">QR de <span className="text-gold">dotación</span></h3>
+                    <h3 className="font-[family-name:var(--font-display)] uppercase text-xl tracking-[.5px] mb-2">QR de <span className="text-gold-ink">dotación</span></h3>
                     <p className="text-[12px] text-text-muted">Generá el código QR para que el administrador escanee y valide la entrega.</p>
                   </div>
                   <SpotlightCard accent="purple" className="p-8 bg-surface border-border rounded-2xl">
@@ -471,7 +471,7 @@ export default function DashboardJugador() {
                         <div className="w-[250px] h-[250px] rounded-2xl bg-[#E8DFF5]/70 dark:bg-black/40 border-2 border-dashed border-[#D4C8E8]/40 dark:border-white/10 flex flex-col items-center justify-center gap-3">
                           <QrCode size={48} className="text-text-faint" />
                           <span className="text-[12px] text-text-muted">QR no generado</span>
-                          <Button onClick={() => setQrGenerado(true)} className="rounded-full bg-gold/15 backdrop-blur-md border border-gold/40 text-gold hover:bg-gold/25 hover:text-white shadow-lg shadow-gold/10 text-xs h-9 px-5 font-bold">
+                          <Button onClick={() => setQrGenerado(true)} className="rounded-full bg-gold/15 backdrop-blur-md border border-gold/40 text-gold-ink hover:bg-gold/25 hover:text-white shadow-lg shadow-gold/10 text-xs h-9 px-5 font-bold">
                             <RefreshCw size={14} className="mr-1.5" /> Generar QR ahora
                           </Button>
                         </div>
@@ -512,7 +512,7 @@ export default function DashboardJugador() {
                     </div>
                   </SpotlightCard>
                   <SpotlightCard accent="purple" className="p-[22px_24px] bg-surface border-border rounded-2xl">
-                    <h3 className="text-[14.5px] font-semibold tracking-[.3px] flex items-center gap-2 mb-4"><Truck size={16} className="text-gold" /> Historial de entregas</h3>
+                    <h3 className="text-[14.5px] font-semibold tracking-[.3px] flex items-center gap-2 mb-4"><Truck size={16} className="text-gold-ink" /> Historial de entregas</h3>
                     <div className="space-y-2">
                       {[
                         { fecha:'12/07/2026', items:'Medias, Barras energéticas', responsable:'Roberto Gómez (Admin)', estado:'entregado' as const },
@@ -560,7 +560,7 @@ export default function DashboardJugador() {
             <div className="p-6 text-center">
               <h3 className="font-[family-name:var(--font-display)] text-xl text-[#3D1A6B] dark:text-white">{torneoModal.nombre}</h3>
               <p className="text-text-muted text-sm mt-1">{torneoModal.fecha} · {torneoModal.categoria}</p>
-              <Button onClick={() => { setTorneoModal(null); navigate(`/torneo/${torneoModal.id}`) }} className="mt-4 rounded-full bg-gold/15 backdrop-blur-md border border-gold/40 text-gold hover:bg-gold/25 hover:text-white shadow-lg shadow-gold/10 font-bold">Ver detalle</Button>
+              <Button onClick={() => { setTorneoModal(null); navigate(`/torneo/${torneoModal.id}`) }} className="mt-4 rounded-full bg-gold/15 backdrop-blur-md border border-gold/40 text-gold-ink hover:bg-gold/25 hover:text-white shadow-lg shadow-gold/10 font-bold">Ver detalle</Button>
             </div>
           </div>
         </div>
@@ -576,11 +576,11 @@ export default function DashboardJugador() {
 
               <div className="px-8 pt-10 pb-6 text-center border-b border-[#D4C8E8]/40 dark:border-white/5">
                 <button onClick={() => setBrowseTeamsOpen(false)} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center hover:bg-gold transition-colors"><X size={16} /></button>
-                <span className="inline-flex items-center gap-2 text-[11.5px] font-bold tracking-[1.6px] uppercase text-gold bg-gold/10 border border-gold/30 px-3.5 py-1.5 rounded-full mb-4">
+                <span className="inline-flex items-center gap-2 text-[11.5px] font-bold tracking-[1.6px] uppercase text-gold-ink bg-gold/10 border border-gold/30 px-3.5 py-1.5 rounded-full mb-4">
                   👥 Equipos disponibles
                 </span>
                 <h2 className="font-[family-name:var(--font-display-alt)] font-bold text-[clamp(28px,3.5vw,42px)] leading-[.92] tracking-[.5px] uppercase italic mb-3">
-                  <span className="text-[#3D1A6B] dark:text-white">Explorá los</span> <span className="text-gold">equipos</span>
+                  <span className="text-[#3D1A6B] dark:text-white">Explorá los</span> <span className="text-gold-ink">equipos</span>
                 </h2>
                 <p className="text-base leading-relaxed text-[#7A6B99] max-w-[560px] mx-auto">
                   Descubre los equipos inscritos, mirá sus vacantes y enviá solicitud para unirte.
@@ -615,7 +615,7 @@ export default function DashboardJugador() {
                     </div>
                     <button disabled={eq.vac === 0}
                       onClick={() => { if (eq.vac > 0) { alert(`Solicitud enviada a ${eq.nom} ✅`); setBrowseTeamsOpen(false) } }}
-                      className={`shrink-0 px-4 py-2 rounded-full text-xs font-bold transition-all ${eq.vac > 0 ? 'bg-gold/20 text-gold hover:bg-gold/30 cursor-pointer' : 'bg-black/5 dark:bg-white/5 text-[#9B8AB5]/70 dark:text-white/30 cursor-not-allowed'}`}>
+                      className={`shrink-0 px-4 py-2 rounded-full text-xs font-bold transition-all ${eq.vac > 0 ? 'bg-gold/20 text-gold-ink hover:bg-gold/30 cursor-pointer' : 'bg-black/5 dark:bg-white/5 text-[#9B8AB5]/70 dark:text-white/30 cursor-not-allowed'}`}>
                       Unirme
                     </button>
                   </div>

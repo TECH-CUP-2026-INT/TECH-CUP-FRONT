@@ -45,7 +45,7 @@ export default function Navbar() {
           </div>
           <div className="flex flex-col leading-none">
             <span className="font-[family-name:var(--font-display)] font-black italic text-2xl tracking-[.5px]">
-              T<span className="text-gold">C</span>
+              T<span className="text-gold-ink">C</span>
             </span>
             <span className="text-[9px] tracking-[1.5px] text-text-muted/80 font-semibold mt-[3px] whitespace-nowrap">
               INGENIERÍA DE SISTEMAS
@@ -60,8 +60,8 @@ export default function Navbar() {
               <Link
                 to={link.href}
                 className={cn(
-                  'text-[13.5px] font-semibold tracking-[.4px] text-gray-light pb-1.5 border-b-2 border-transparent transition-colors hover:text-gold',
-                  pathname === link.href && 'text-gold border-gold'
+                  'text-[13.5px] font-semibold tracking-[.4px] text-gray-light pb-1.5 border-b-2 border-transparent transition-colors hover:text-gold-ink',
+                  pathname === link.href && 'text-gold-ink border-gold'
                 )}
               >
                 {link.label}
@@ -98,7 +98,7 @@ export default function Navbar() {
             </div>
           ) : (
             <Link to="/login">
-              <Button className="rounded-full bg-transparent text-gold border border-gold/50 hover:bg-gold/10 font-bold text-sm px-6 py-2.5 h-auto transition-all duration-300">
+              <Button className="rounded-full bg-transparent text-gold-ink border border-gold/50 hover:bg-gold/10 font-bold text-sm px-6 py-2.5 h-auto transition-all duration-300">
                 Iniciar sesión
               </Button>
             </Link>
@@ -129,8 +129,8 @@ export default function Navbar() {
                   to={link.href}
                   onClick={() => setMobileOpen(false)}
                   className={cn(
-                    'text-sm font-semibold tracking-[.4px] text-gray-light transition-colors hover:text-gold',
-                    pathname === link.href && 'text-gold'
+                    'text-sm font-semibold tracking-[.4px] text-gray-light transition-colors hover:text-gold-ink',
+                    pathname === link.href && 'text-gold-ink'
                   )}
                 >
                   {link.label}

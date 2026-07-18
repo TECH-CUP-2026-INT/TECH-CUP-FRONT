@@ -105,7 +105,7 @@ export default function Sidebar({ open, onClose, collapsed: collapsedProp, onCol
     <>
       {/* Overlay solo en mobile — en desktop el contenido se corre */}
       {open && (
-        <div className="fixed inset-0 bg-black/60 z-40 lg:hidden" onClick={onClose} />
+        <div className="fixed inset-0 bg-[#0A0614]/60 z-40 lg:hidden" onClick={onClose} />
       )}
 
       <aside
@@ -127,7 +127,7 @@ export default function Sidebar({ open, onClose, collapsed: collapsedProp, onCol
               </div>
               <div className="flex flex-col leading-none">
                 <span className="font-[family-name:var(--font-display)] font-bold text-lg tracking-[.5px]">
-                  TECH<span className="text-gold">CUP</span>
+                  TECH<span className="text-gold-ink">CUP</span>
                 </span>
                 <span className="text-[8.5px] tracking-[1.6px] text-text-muted font-semibold">
                   FÚTBOL · ING. SISTEMAS
@@ -137,7 +137,7 @@ export default function Sidebar({ open, onClose, collapsed: collapsedProp, onCol
           )}
           <div className="flex items-center gap-1">
             <button
-              className="text-gray-light hover:text-gold transition-colors p-1"
+              className="text-gray-light hover:text-gold-ink transition-colors p-1"
               onClick={handleCollapse}
               aria-label="Colapsar"
             >
@@ -182,7 +182,7 @@ export default function Sidebar({ open, onClose, collapsed: collapsedProp, onCol
         {!sideCollapsed && user?.isCaptain && (
           <div className="mx-3 mt-3 rounded-2xl p-4 bg-gradient-to-br from-purple-deep to-purple-black border border-white/10">
             <p className="font-[family-name:var(--font-display)] text-sm leading-tight uppercase mb-3">
-              ¡Lleva a tu equipo <span className="text-gold">a la gloria!</span>
+              ¡Lleva a tu equipo <span className="text-gold-ink">a la gloria!</span>
             </p>
             <button onClick={() => { navigate('/crear-equipo'); onClose() }} className="w-full rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold text-xs h-auto py-2 transition-colors">
               Crear equipo →

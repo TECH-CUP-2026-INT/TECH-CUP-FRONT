@@ -54,7 +54,7 @@ export default function Dashboard() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-purple-black/30" />
             <div className="relative z-10">
               <h2 className="font-[family-name:var(--font-display)] uppercase text-3xl leading-tight max-w-[480px] mb-5">
-                LA PASIÓN NOS UNE,<br />LA <span className="text-gold">INGENIERÍA</span> NOS IMPULSA.
+                LA PASIÓN NOS UNE,<br />LA <span className="text-gold-ink">INGENIERÍA</span> NOS IMPULSA.
               </h2>
               <Button className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold">
                 Explorar torneos →
@@ -71,7 +71,7 @@ export default function Dashboard() {
               { icon:'📊', num:'128', label:'Goles marcados', accent:'gold' },
             ].map((s, i) => (
               <SpotlightCard key={i} accent={s.accent as 'gold' | 'purple'} className="p-5 flex gap-3.5 items-center bg-surface border-border rounded-2xl">
-                <span className={`w-[46px] h-[46px] rounded-xl flex items-center justify-center flex-shrink-0 ${s.accent === 'purple' ? 'bg-purple-mid/20 text-[#b39ef2]' : 'bg-gold/15 text-gold'}`}>
+                <span className={`w-[46px] h-[46px] rounded-xl flex items-center justify-center flex-shrink-0 ${s.accent === 'purple' ? 'bg-purple-mid/20 text-[#b39ef2]' : 'bg-gold/15 text-gold-ink'}`}>
                   {s.icon}
                 </span>
                 <div>
@@ -85,8 +85,8 @@ export default function Dashboard() {
           {/* Torneos */}
           <section className="mb-[26px]">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-[14.5px] font-semibold tracking-[.3px] flex items-center gap-2"><Trophy size={16} className="text-gold" /> Torneos</h3>
-              <Link to="/torneos" className="text-xs text-gold font-bold hover:text-gold-dark">Ver todos →</Link>
+              <h3 className="text-[14.5px] font-semibold tracking-[.3px] flex items-center gap-2"><Trophy size={16} className="text-gold-ink" /> Torneos</h3>
+              <Link to="/torneos" className="text-xs text-gold-ink font-bold hover:text-gold-dark">Ver todos →</Link>
             </div>
             <div className="grid grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1 gap-4">
               {torneos.filter(t => t.estado !== 'closed').slice(0, 3).map(t => (
@@ -96,7 +96,7 @@ export default function Dashboard() {
                     t.estado === 'live' ? 'bg-green-500/20 text-green-400 border-green-500/30'
                     : 'bg-blue-500/20 text-blue-400 border-blue-500/30'
                   }`}>{t.estado === 'live' ? '🔴 En curso' : '📅 Próximo'}</Badge>
-                  <h4 className="font-semibold text-[14px] group-hover:text-gold transition-colors">{t.nombre}</h4>
+                  <h4 className="font-semibold text-[14px] group-hover:text-gold-ink transition-colors">{t.nombre}</h4>
                   <p className="text-[11px] text-text-muted mt-1">{t.fecha} · {t.categoria}</p>
                   <div className="flex items-center gap-3 mt-2.5 text-[10px] text-text-muted">
                     <span>👥 {t.equipos} equipos</span>
@@ -112,7 +112,7 @@ export default function Dashboard() {
             <SpotlightCard accent="purple" className="p-[22px_24px] bg-surface border-border rounded-2xl">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-[14.5px] font-semibold tracking-[.3px]">Próximos partidos</h3>
-                <button onClick={() => setCalExpandido(!calExpandido)} className="text-xs text-gold font-bold hover:text-gold-dark transition-colors">
+                <button onClick={() => setCalExpandido(!calExpandido)} className="text-xs text-gold-ink font-bold hover:text-gold-dark transition-colors">
                   {calExpandido ? 'Ver menos ↑' : 'Ver calendario completo →'}
                 </button>
               </div>
@@ -126,7 +126,7 @@ export default function Dashboard() {
                     {m.eq1} <span className="text-text-faint">vs</span> {m.eq2}
                     <small className="block font-normal text-text-muted text-[11.5px] mt-0.5">{m.lugar}</small>
                   </div>
-                  <div className="text-xs text-gold font-bold">{m.hora}</div>
+                  <div className="text-xs text-gold-ink font-bold">{m.hora}</div>
                 </Link>
               ))}
             </SpotlightCard>
@@ -134,7 +134,7 @@ export default function Dashboard() {
             <SpotlightCard accent="gold" className="p-[22px_24px] bg-surface border-border rounded-2xl">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-[14.5px] font-semibold tracking-[.3px]">Tabla de posiciones</h3>
-                <button onClick={() => setPosExpandida(!posExpandida)} className="text-xs text-gold font-bold hover:text-gold-dark transition-colors">
+                <button onClick={() => setPosExpandida(!posExpandida)} className="text-xs text-gold-ink font-bold hover:text-gold-dark transition-colors">
                   {posExpandida ? 'Ver menos ↑' : 'Ver completa →'}
                 </button>
               </div>
@@ -146,7 +146,7 @@ export default function Dashboard() {
                 </thead>
                 <tbody>
                   {posiciones.slice(0, posExpandida ? posiciones.length : 3).map((r, i) => (
-                    <tr key={i} className={`text-[13px] ${i === 0 ? 'text-gold font-bold' : ''}`}>
+                    <tr key={i} className={`text-[13px] ${i === 0 ? 'text-gold-ink font-bold' : ''}`}>
                       <td className="py-2 text-text-muted w-[26px]">{r.pos}</td>
                       <td className="py-2 border-t border-border">{i === 0 ? '🏆 ' : ''}{r.equipo}</td>
                       <td className="py-2 border-t border-border">{r.pj}</td>
@@ -203,26 +203,26 @@ export default function Dashboard() {
                   <span className="inline-block rounded-full text-[10px] font-bold uppercase tracking-[.4px] px-2.5 py-0.5 mb-2 bg-white/15 text-white border border-white/20 backdrop-blur-sm">
                     {t.estado === 'live' ? 'En curso' : t.estado === 'upcoming' ? 'Próximo' : 'Finalizado'}
                   </span>
-                  <span className="block text-[10px] tracking-[1.2px] text-gold font-bold uppercase mb-1">{t.tag}</span>
+                  <span className="block text-[10px] tracking-[1.2px] text-gold-ink font-bold uppercase mb-1">{t.tag}</span>
                   <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase text-white leading-tight">{t.nombre}</h2>
                   <p className="text-[12px] text-white/60 mt-1">{t.categoria} — {t.semestre}</p>
                 </div>
-                <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gold/20 text-gold border border-gold/40 hover:bg-gold/30 text-[10px] font-bold transition-all flex-shrink-0">
+                <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gold/20 text-gold-ink border border-gold/40 hover:bg-gold/30 text-[10px] font-bold transition-all flex-shrink-0">
                   <Download size={12} /> Reglamento
                 </button>
               </div>
             </div>
             <div className="flex border-b border-white/10">
               <button onClick={() => setModalTab('info')}
-                className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'info' ? 'text-gold border-b-2 border-gold' : 'text-white/50 hover:text-gold'}`}>Información</button>
+                className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'info' ? 'text-gold-ink border-b-2 border-gold' : 'text-white/50 hover:text-gold-ink'}`}>Información</button>
               <button onClick={() => setModalTab('equipos')}
-                className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'equipos' ? 'text-gold border-b-2 border-gold' : 'text-white/50 hover:text-gold'}`}>Equipos</button>
+                className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'equipos' ? 'text-gold-ink border-b-2 border-gold' : 'text-white/50 hover:text-gold-ink'}`}>Equipos</button>
               <button onClick={() => setModalTab('calendario')}
-                className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'calendario' ? 'text-gold border-b-2 border-gold' : 'text-white/50 hover:text-gold'}`}>Calendario</button>
+                className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'calendario' ? 'text-gold-ink border-b-2 border-gold' : 'text-white/50 hover:text-gold-ink'}`}>Calendario</button>
               <button onClick={() => setModalTab('tabla')}
-                className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'tabla' ? 'text-gold border-b-2 border-gold' : 'text-white/50 hover:text-gold'}`}>Tabla</button>
+                className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'tabla' ? 'text-gold-ink border-b-2 border-gold' : 'text-white/50 hover:text-gold-ink'}`}>Tabla</button>
               {!isUpcoming && <button onClick={() => setModalTab('llaves')}
-                className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'llaves' ? 'text-gold border-b-2 border-gold' : 'text-white/50 hover:text-gold'}`}>Llaves</button>}
+                className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'llaves' ? 'text-gold-ink border-b-2 border-gold' : 'text-white/50 hover:text-gold-ink'}`}>Llaves</button>}
             </div>
             <div className="p-5 max-h-[50vh] overflow-y-auto">
               {modalTab === 'info' && (
@@ -281,7 +281,7 @@ export default function Dashboard() {
                           <MapPin size={10} /> {m.lugar.slice(0, 18)}...
                         </div>
                       </div>
-                      {m.resultado && <span className="text-sm font-bold text-gold">{m.resultado}</span>}
+                      {m.resultado && <span className="text-sm font-bold text-gold-ink">{m.resultado}</span>}
                     </div>
                   ))}
                 </div>
@@ -307,7 +307,7 @@ export default function Dashboard() {
                           <td className="py-3 px-3 text-center text-yellow-400">{r.e}</td>
                           <td className="py-3 px-3 text-center text-red-400">{r.p}</td>
                           <td className="py-3 px-3 text-center text-green-400">+{r.dg}</td>
-                          <td className="py-3 px-4 text-right font-bold text-gold">{r.pts}</td>
+                          <td className="py-3 px-4 text-right font-bold text-gold-ink">{r.pts}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -320,19 +320,19 @@ export default function Dashboard() {
                   <div className="bg-white/5 border border-white/10 rounded-2xl p-6 overflow-x-auto">
                     <div className="flex items-center justify-center gap-8 min-w-[500px]">
                       <div className="space-y-4">
-                        <div className="p-3 rounded-xl bg-white/5 border border-white/10"><span className="text-sm font-semibold text-white">🐯 Tigres FC <span className="text-gold">2</span></span></div>
-                        <div className="p-3 rounded-xl bg-white/5 border border-white/10"><span className="text-sm font-semibold text-white">⚙️ Sistemas FC <span className="text-gold">1</span></span></div>
+                        <div className="p-3 rounded-xl bg-white/5 border border-white/10"><span className="text-sm font-semibold text-white">🐯 Tigres FC <span className="text-gold-ink">2</span></span></div>
+                        <div className="p-3 rounded-xl bg-white/5 border border-white/10"><span className="text-sm font-semibold text-white">⚙️ Sistemas FC <span className="text-gold-ink">1</span></span></div>
                         <div className="text-center text-[10px] text-white/40 uppercase tracking-wider mt-1">Cuartos</div>
                       </div>
-                      <div className="text-gold text-2xl">⟶</div>
+                      <div className="text-gold-ink text-2xl">⟶</div>
                       <div className="space-y-4">
-                        <div className="p-3 rounded-xl border border-gold/30 bg-gold/10"><span className="text-sm font-semibold text-white">🐯 Tigres FC <span className="text-gold">1</span></span></div>
-                        <div className="p-3 rounded-xl bg-white/5 border border-white/10"><span className="text-sm font-semibold text-white">🔵 Code United <span className="text-gold">0</span></span></div>
+                        <div className="p-3 rounded-xl border border-gold/30 bg-gold/10"><span className="text-sm font-semibold text-white">🐯 Tigres FC <span className="text-gold-ink">1</span></span></div>
+                        <div className="p-3 rounded-xl bg-white/5 border border-white/10"><span className="text-sm font-semibold text-white">🔵 Code United <span className="text-gold-ink">0</span></span></div>
                         <div className="text-center text-[10px] text-white/40 uppercase tracking-wider mt-1">Semifinal</div>
                       </div>
-                      <div className="text-gold text-2xl">⟶</div>
+                      <div className="text-gold-ink text-2xl">⟶</div>
                       <div className="space-y-4">
-                        <div className="p-4 rounded-xl bg-gradient-to-b from-gold/20 to-gold/5 border border-gold/40"><span className="text-sm font-semibold text-white">🏆🐯 Tigres FC <span className="text-gold">3</span></span></div>
+                        <div className="p-4 rounded-xl bg-gradient-to-b from-gold/20 to-gold/5 border border-gold/40"><span className="text-sm font-semibold text-white">🏆🐯 Tigres FC <span className="text-gold-ink">3</span></span></div>
                         <div className="text-center text-[10px] text-white/40 uppercase tracking-wider mt-1">Final</div>
                       </div>
                     </div>

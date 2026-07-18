@@ -122,7 +122,7 @@ export default function Arbitraje() {
               </div>
               <div className="flex items-center gap-3">
                 <span className="font-[family-name:var(--font-display)] text-6xl font-bold tabular-nums">{golA}</span>
-                <span className="font-[family-name:var(--font-display)] text-xl text-gold">VS</span>
+                <span className="font-[family-name:var(--font-display)] text-xl text-gold-ink">VS</span>
                 <span className="font-[family-name:var(--font-display)] text-6xl font-bold tabular-nums">{golB}</span>
               </div>
               <div className="flex flex-col items-center w-[120px]">
@@ -132,13 +132,13 @@ export default function Arbitraje() {
             </div>
             <div className="text-center mt-2">
               <div className="flex items-center justify-center gap-4">
-                <span className={`font-mono text-2xl font-bold tabular-nums ${corriendo ? 'text-green-400' : 'text-gold'}`}>{formatTime(segundos)}</span>
+                <span className={`font-mono text-2xl font-bold tabular-nums ${corriendo ? 'text-green-400' : 'text-gold-ink'}`}>{formatTime(segundos)}</span>
                 {finalizado ? (
                   <span className="text-xs font-bold text-red-400 bg-red-500/10 px-3 py-1 rounded-full">⏹️ FINALIZADO</span>
                 ) : corriendo ? (
                   <span className="text-xs font-bold text-green-400 bg-green-500/10 px-3 py-1 rounded-full flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" /> EN VIVO</span>
                 ) : (
-                  <span className="text-xs font-bold text-gold bg-gold/10 px-3 py-1 rounded-full">⏸️ PAUSADO</span>
+                  <span className="text-xs font-bold text-gold-ink bg-gold/10 px-3 py-1 rounded-full">⏸️ PAUSADO</span>
                 )}
               </div>
             </div>
@@ -173,7 +173,7 @@ export default function Arbitraje() {
           />
           <div className="grid grid-cols-2 gap-2 mb-3 mt-4">
             <button onClick={() => setCorriendo(!corriendo)}
-              className={`h-12 rounded-xl font-bold text-sm active:scale-95 transition-all flex items-center justify-center gap-2 ${corriendo ? 'bg-gold/20 border-2 border-gold/40 text-gold' : 'bg-green-600/20 border-2 border-green-500/40 text-green-400'}`}>
+              className={`h-12 rounded-xl font-bold text-sm active:scale-95 transition-all flex items-center justify-center gap-2 ${corriendo ? 'bg-gold/20 border-2 border-gold/40 text-gold-ink' : 'bg-green-600/20 border-2 border-green-500/40 text-green-400'}`}>
               {corriendo ? <><span className="text-xl">⏸️</span> PAUSAR</> : <><span className="text-xl">▶️</span> REANUDAR</>}
             </button>
             <button onClick={() => { setCorriendo(false); setFinalizado(true) }}
@@ -188,7 +188,7 @@ export default function Arbitraje() {
               {planillaSubida ? <><Eye size={16} /> PLANILLA SUBIDA</> : <><Upload size={16} /> SUBIR PLANILLA</>}
             </button>
             <button onClick={() => setShowModal(true)}
-              className="h-11 rounded-xl bg-gold/20 border-2 border-gold/40 text-gold font-bold text-xs active:scale-95 transition-all flex items-center justify-center gap-2">
+              className="h-11 rounded-xl bg-gold/20 border-2 border-gold/40 text-gold-ink font-bold text-xs active:scale-95 transition-all flex items-center justify-center gap-2">
               <span className="text-lg">⚡</span> REGISTRAR
             </button>
           </div>
@@ -196,7 +196,7 @@ export default function Arbitraje() {
           {/* Observaciones */}
           <div className="bg-surface/50 border border-border/60 rounded-xl p-3 mb-3">
             <h3 className="font-[family-name:var(--font-display)] text-xs uppercase tracking-[.3px] mb-2 flex items-center gap-1.5">
-              <FileText size={13} className="text-gold" /> OBSERVACIONES
+              <FileText size={13} className="text-gold-ink" /> OBSERVACIONES
             </h3>
             <div className="flex gap-2 mb-2">
               <Input value={observacion} onChange={e => setObservacion(e.target.value)}
@@ -210,7 +210,7 @@ export default function Arbitraje() {
               <div className="space-y-1 max-h-[100px] overflow-y-auto">
                 {observaciones.map((o, i) => (
                   <div key={i} className="flex items-start gap-2 text-xs py-1.5 px-2 rounded-lg bg-white/5 border border-white/5">
-                    <span className="font-mono text-gold font-bold min-w-[24px] flex-shrink-0">{o.min}</span>
+                    <span className="font-mono text-gold-ink font-bold min-w-[24px] flex-shrink-0">{o.min}</span>
                     <span className="text-gray-light">{o.texto}</span>
                   </div>
                 ))}
@@ -227,7 +227,7 @@ export default function Arbitraje() {
               {eventos.length === 0 && <p className="text-xs text-text-muted text-center py-3">No hay eventos</p>}
               {eventos.map((e, i) => (
                 <div key={i} className="flex items-center gap-2 text-xs py-1.5 px-2 rounded-lg bg-white/5 border border-white/5">
-                  <span className="font-mono text-gold font-bold min-w-[24px]">{e.min}</span>
+                  <span className="font-mono text-gold-ink font-bold min-w-[24px]">{e.min}</span>
                   <span>{e.icon}</span>
                   <span className="text-gray-light truncate">{e.desc}</span>
                 </div>
@@ -253,7 +253,7 @@ export default function Arbitraje() {
               className="bg-surface border border-border rounded-2xl p-6 w-full max-w-sm" onClick={e => e.stopPropagation()}>
               <div className="flex items-center justify-between mb-5">
                 <h2 className="font-[family-name:var(--font-display)] text-xl uppercase flex items-center gap-2">
-                  <Upload size={20} className="text-gold" /> Planilla del <span className="text-gold">árbitro</span>
+                  <Upload size={20} className="text-gold-ink" /> Planilla del <span className="text-gold-ink">árbitro</span>
                 </h2>
                 <button onClick={() => setShowPlanillaModal(false)} className="text-text-muted hover:text-white transition-colors"><X size={20} /></button>
               </div>
@@ -261,7 +261,7 @@ export default function Arbitraje() {
               <label className="flex flex-col items-center justify-center h-32 rounded-xl border-2 border-dashed border-border bg-black/50 cursor-pointer hover:border-gold/50 transition-colors mb-4">
                 {planillaFile ? (
                   <div className="text-center">
-                    <FileText size={24} className="text-gold mx-auto mb-1" />
+                    <FileText size={24} className="text-gold-ink mx-auto mb-1" />
                     <p className="text-sm font-bold text-white">{planillaFile.name}</p>
                     <p className="text-[10px] text-text-muted">{(planillaFile.size / 1024 / 1024).toFixed(1)} MB</p>
                   </div>
@@ -301,7 +301,7 @@ export default function Arbitraje() {
               {step === 'player' && (
                 <>
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-[family-name:var(--font-display)] text-lg uppercase text-white">Elegí un <span className="text-gold">jugador</span></h3>
+                    <h3 className="font-[family-name:var(--font-display)] text-lg uppercase text-white">Elegí un <span className="text-gold-ink">jugador</span></h3>
                     <span className="text-xs text-gold/60 bg-gold/10 px-3 py-1 rounded-full">{equipoSel === 'A' ? 'Tigres FC' : 'Sistemas FC'}</span>
                   </div>
                   <div className="space-y-2 mb-4 max-h-[320px] overflow-y-auto">
@@ -322,7 +322,7 @@ export default function Arbitraje() {
                     ))}
                   </div>
                   <Button variant="outline" onClick={() => { setShowModal(false); setSelectedPlayer(null) }}
-                    className="w-full rounded-full border-gold/30 text-gold hover:bg-gold/10 h-11 text-sm">Cancelar</Button>
+                    className="w-full rounded-full border-gold/30 text-gold-ink hover:bg-gold/10 h-11 text-sm">Cancelar</Button>
                 </>
               )}
 
@@ -336,7 +336,7 @@ export default function Arbitraje() {
                     <p className="text-white font-bold">{selectedPlayer}</p>
                     <p className="text-xs text-text-muted">#{jugadores[equipoSel].find(j => j.nombre === selectedPlayer)?.dorsal} · {equipoSel === 'A' ? 'Tigres FC' : 'Sistemas FC'}</p>
                   </div>
-                  <h3 className="font-[family-name:var(--font-display)] text-base uppercase text-center text-white mb-4">¿Qué <span className="text-gold">acción</span>?</h3>
+                  <h3 className="font-[family-name:var(--font-display)] text-base uppercase text-center text-white mb-4">¿Qué <span className="text-gold-ink">acción</span>?</h3>
                   <div className="grid grid-cols-2 gap-3 mb-4">
                     <button onClick={() => handleAccion('gol')} className="h-16 rounded-xl bg-gradient-to-br from-green-600 to-green-800 border-2 border-green-500/40 text-white font-bold text-sm active:scale-95 transition-all flex flex-col items-center justify-center shadow-lg shadow-green-900/30">
                       <span className="text-2xl">⚽</span> Gol
@@ -352,7 +352,7 @@ export default function Arbitraje() {
                     </button>
                   </div>
                   <div className="flex gap-2">
-                    <Button variant="outline" onClick={() => setStep('player')} className="flex-1 rounded-full border-gold/30 text-gold hover:bg-gold/10 h-10 text-xs">← Cambiar jugador</Button>
+                    <Button variant="outline" onClick={() => setStep('player')} className="flex-1 rounded-full border-gold/30 text-gold-ink hover:bg-gold/10 h-10 text-xs">← Cambiar jugador</Button>
                     <Button variant="outline" onClick={() => { setShowModal(false); setSelectedPlayer(null); setStep('player') }} className="flex-1 rounded-full border-border text-gray-light hover:bg-white/5 h-10 text-xs">Cancelar</Button>
                   </div>
                 </>

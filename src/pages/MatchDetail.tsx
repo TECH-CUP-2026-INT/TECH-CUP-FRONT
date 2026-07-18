@@ -70,7 +70,7 @@ export default function MatchDetail() {
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
           <p className="text-text-muted mb-4">Partido no encontrado</p>
-          <Link to="/" className="text-gold underline">Volver al inicio</Link>
+          <Link to="/" className="text-gold-ink underline">Volver al inicio</Link>
         </div>
       </div>
     )
@@ -84,7 +84,7 @@ export default function MatchDetail() {
 
         {/* Hero VS — estilo Paramount+ */}
         <div className="relative z-10">
-          <Link to="/dashboard" className="absolute top-[100px] left-8 z-20 inline-flex items-center gap-2 text-sm text-text-muted hover:text-gold transition-colors">
+          <Link to="/dashboard" className="absolute top-[100px] left-8 z-20 inline-flex items-center gap-2 text-sm text-text-muted hover:text-gold-ink transition-colors">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
             Volver
           </Link>
@@ -124,8 +124,8 @@ export default function MatchDetail() {
                 <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-[0_0_25px_-5px_rgba(245,166,35,.4)]">
                   <Swords size={18} className="text-[#1A1206]" />
                 </div>
-                <span className="font-[family-name:var(--font-display)] text-xl md:text-3xl font-bold text-gold mt-1 tracking-wider">VS</span>
-                <Badge className="mt-1 rounded-full bg-gold/15 text-gold border border-gold/40 text-[9px] uppercase font-bold">Semifinal</Badge>
+                <span className="font-[family-name:var(--font-display)] text-xl md:text-3xl font-bold text-gold-ink mt-1 tracking-wider">VS</span>
+                <Badge className="mt-1 rounded-full bg-gold/15 text-gold-ink border border-gold/40 text-[9px] uppercase font-bold">Semifinal</Badge>
               </motion.div>
 
               <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3, duration: 0.5 }}
@@ -175,7 +175,7 @@ export default function MatchDetail() {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className="flex-1 py-3 px-6 text-sm font-semibold capitalize relative z-[2] transition-colors duration-300 min-w-[90px]"
+                className="flex-1 py-3 px-6 text-sm font-semibold relative z-[2] transition-colors duration-300 min-w-[90px]"
                 style={{
                   color: activeTab === tab ? '#fff' : '#e5e5e5',
                   letterSpacing: "0.3px",
@@ -191,7 +191,7 @@ export default function MatchDetail() {
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
               <SpotlightCard accent="gold" className="bg-surface/70 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
                 <h3 className="font-[family-name:var(--font-display)] text-lg uppercase tracking-[.3px] mb-4">
-                  Previo del <span className="text-gold">partido</span>
+                  Previo del <span className="text-gold-ink">partido</span>
                 </h3>
                 <div className="space-y-3">
                   {[
@@ -214,7 +214,7 @@ export default function MatchDetail() {
               <div className="grid grid-cols-2 gap-4">
                 <SpotlightCard accent="purple" className="bg-surface/70 backdrop-blur-sm border border-white/10 rounded-2xl p-5">
                   <div className="flex items-center gap-3">
-                    <Trophy size={20} className="text-gold" />
+                    <Trophy size={20} className="text-gold-ink" />
                     <div>
                       <p className="text-xs text-text-muted">Último encuentro</p>
                       <p className="text-sm font-semibold">{partido.eq1} vs {partido.eq2}</p>
@@ -223,7 +223,7 @@ export default function MatchDetail() {
                 </SpotlightCard>
                 <SpotlightCard accent="gold" className="bg-surface/70 backdrop-blur-sm border border-white/10 rounded-2xl p-5">
                   <div className="flex items-center gap-3">
-                    <Trophy size={20} className="text-gold" />
+                    <Trophy size={20} className="text-gold-ink" />
                     <div>
                       <p className="text-xs text-text-muted">{partido.lugar}</p>
                       <p className="text-sm font-semibold text-green-400">{partido.hora}</p>
@@ -239,7 +239,7 @@ export default function MatchDetail() {
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
               <SpotlightCard accent="gold" className="bg-surface/70 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
                 <h3 className="font-[family-name:var(--font-display)] text-lg uppercase tracking-[.3px] mb-6 text-center">
-                  <span className="text-gold">Estadísticas</span> del torneo
+                  <span className="text-gold-ink">Estadísticas</span> del torneo
                 </h3>
                 <div className="space-y-5">
                   {[

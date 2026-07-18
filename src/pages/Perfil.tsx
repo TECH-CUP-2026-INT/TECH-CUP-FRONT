@@ -75,7 +75,7 @@ export default function Perfil() {
 
               <div className="flex-1">
                 <h1 className="font-[family-name:var(--font-display)] text-3xl uppercase tracking-[.5px]">
-                  {(user?.name || 'Usuario').split(' ').slice(0, -1).join(' ')} <span className="text-gold">{(user?.name || 'Usuario').split(' ').pop()}</span>
+                  {(user?.name || 'Usuario').split(' ').slice(0, -1).join(' ')} <span className="text-gold-ink">{(user?.name || 'Usuario').split(' ').pop()}</span>
                 </h1>
                 <div className="flex items-center gap-3 mt-2 flex-wrap max-md:justify-center">
                   <Badge className="rounded-full bg-purple-mid/20 text-purple-mid border border-purple-mid/30 text-[11px] uppercase font-bold">
@@ -91,7 +91,7 @@ export default function Perfil() {
                 <Button size="sm" onClick={() => { setEditingProfile(true); setEditName(user?.name || '') }} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark text-xs h-auto py-2 px-4">
                   Editar perfil
                 </Button>
-                <Button size="sm" variant="outline" className="rounded-full border-gold text-gold hover:bg-gold/10 text-xs h-auto py-2 px-4">
+                <Button size="sm" variant="outline" className="rounded-full border-gold text-gold-ink hover:bg-gold/10 text-xs h-auto py-2 px-4">
                   Subir foto
                 </Button>
               </div>
@@ -104,7 +104,7 @@ export default function Perfil() {
               <button
                 key={t}
                 onClick={() => setTab(t)}
-                className={`flex-1 py-2.5 px-4 rounded-xl text-sm font-semibold capitalize transition-all ${
+                className={`flex-1 py-2.5 px-4 rounded-xl text-sm font-semibold transition-all ${
                   tab === t ? 'bg-purple-mid text-white shadow-lg shadow-purple-mid/25' : 'text-text-muted hover:text-white'
                 }`}
               >
@@ -127,7 +127,7 @@ export default function Perfil() {
                 { label: 'Género', value: editGender === 'masculino' ? 'Masculino' : editGender === 'femenino' ? 'Femenino' : 'Otro', icon: <Trophy size={18} /> },
               ].map((info, i) => (
                 <SpotlightCard key={i} accent={i % 2 === 0 ? 'gold' : 'purple'} className="bg-surface border border-border rounded-2xl p-5 flex items-center gap-4">
-                  <span className="w-11 h-11 rounded-xl flex items-center justify-center bg-purple-mid/20 text-gold">{info.icon}</span>
+                  <span className="w-11 h-11 rounded-xl flex items-center justify-center bg-purple-mid/20 text-gold-ink">{info.icon}</span>
                   <div>
                     <p className="text-xs text-text-faint uppercase tracking-[.4px] font-semibold">{info.label}</p>
                     <p className="text-sm font-bold mt-0.5">{info.value}</p>
@@ -152,7 +152,7 @@ export default function Perfil() {
               {/* Promedios */}
               <SpotlightCard accent="gold" className="bg-surface border border-border rounded-2xl p-5">
                 <h3 className="font-[family-name:var(--font-display)] text-lg uppercase tracking-[.3px] mb-4">
-                  Promedios por <span className="text-gold">partido</span>
+                  Promedios por <span className="text-gold-ink">partido</span>
                 </h3>
                 <div className="grid grid-cols-3 gap-4">
                   {[
@@ -161,7 +161,7 @@ export default function Perfil() {
                     { label: 'Faltas', value: '0.25' },
                   ].map((p, i) => (
                     <div key={i} className="text-center">
-                      <p className="font-[family-name:var(--font-display)] text-2xl text-gold">{p.value}</p>
+                      <p className="font-[family-name:var(--font-display)] text-2xl text-gold-ink">{p.value}</p>
                       <p className="text-xs text-text-muted">{p.label}</p>
                     </div>
                   ))}
@@ -183,7 +183,7 @@ export default function Perfil() {
                       { label: 'Tarjetas', value: h.tarjetas },
                     ].map((d, j) => (
                       <div key={j} className="text-center p-3 rounded-xl bg-white/5 border border-white/5">
-                        <p className="font-[family-name:var(--font-display)] text-xl text-gold">{d.value}</p>
+                        <p className="font-[family-name:var(--font-display)] text-xl text-gold-ink">{d.value}</p>
                         <p className="text-xs text-text-muted">{d.label}</p>
                       </div>
                     ))}
@@ -207,7 +207,7 @@ export default function Perfil() {
               onClick={e => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-5">
-                <h2 className="font-[family-name:var(--font-display)] text-xl uppercase tracking-[.5px] text-white">Editar <span className="text-gold">perfil</span></h2>
+                <h2 className="font-[family-name:var(--font-display)] text-xl uppercase tracking-[.5px] text-white">Editar <span className="text-gold-ink">perfil</span></h2>
                 <button onClick={() => setEditingProfile(false)} className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-red-500/20 transition-colors">
                   <X size={16} className="text-gray-light" />
                 </button>
@@ -297,7 +297,7 @@ export default function Perfil() {
               )}
 
               <div className="flex gap-3 justify-end">
-                <Button variant="outline" onClick={() => setEditingProfile(false)} className="rounded-full border-gold/30 text-gold hover:bg-gold/10 h-11 px-6 text-sm">Cancelar</Button>
+                <Button variant="outline" onClick={() => setEditingProfile(false)} className="rounded-full border-gold/30 text-gold-ink hover:bg-gold/10 h-11 px-6 text-sm">Cancelar</Button>
                 <Button onClick={handleSaveProfile} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold h-11 px-6 text-sm">Guardar cambios</Button>
               </div>
             </motion.div>

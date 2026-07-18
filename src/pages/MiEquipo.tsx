@@ -107,27 +107,27 @@ export default function MiEquipo() {
           {/* Header equipo */}
           <SpotlightCard accent="gold" className="bg-surface border border-border rounded-2xl p-6 mb-6">
             <div className="flex items-center gap-5 max-md:flex-col max-md:text-center">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-deep to-purple-black border border-gold/30 flex items-center justify-center text-2xl font-black text-gold">SF</div>
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-deep to-purple-black border border-gold/30 flex items-center justify-center text-2xl font-black text-gold-ink">SF</div>
               <div className="flex-1">
-                <h1 className="font-[family-name:var(--font-display)] text-3xl uppercase">Sistemas <span className="text-gold">FC</span></h1>
+                <h1 className="font-[family-name:var(--font-display)] text-3xl uppercase">Sistemas <span className="text-gold-ink">FC</span></h1>
                 <p className="text-sm text-text-muted mt-1">Capitán: Juan Pérez · TechCup 2024-I</p>
-                <Badge className="mt-2 rounded-full bg-gold/15 text-gold border border-gold/40 text-[10px]">📋 En revisión</Badge>
+                <Badge className="mt-2 rounded-full bg-gold/15 text-gold-ink border border-gold/40 text-[10px]">📋 En revisión</Badge>
               </div>
               <Link to="/inscribir-equipo" className="flex-shrink-0">
                 <Button size="sm" className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark text-xs h-auto py-2 px-4">Inscribir en torneo</Button>
               </Link>
               <div className="flex gap-4 text-sm">
-                <span className="text-center"><b className="block text-gold text-lg">12</b>PJ</span>
+                <span className="text-center"><b className="block text-gold-ink text-lg">12</b>PJ</span>
                 <span className="text-center"><b className="block text-green-400 text-lg">28</b>GF</span>
                 <span className="text-center"><b className="block text-red-400 text-lg">12</b>GC</span>
-                <span className="text-center"><b className="block text-gold text-lg">25</b>PTS</span>
+                <span className="text-center"><b className="block text-gold-ink text-lg">25</b>PTS</span>
               </div>
             </div>
             <div className="flex gap-2 mt-4 flex-wrap">
               <Button size="sm" onClick={() => setShowInviteModal(true)} className="rounded-full bg-purple-mid/20 border border-purple-mid/30 text-purple-mid hover:bg-purple-mid/30 text-xs h-auto py-2 px-4 gap-1.5">
                 <UserPlus size={14} /> Invitar jugador
               </Button>
-              <Button size="sm" onClick={() => setShowCaptainModal(true)} className="rounded-full bg-gold/10 border border-gold/30 text-gold hover:bg-gold/20 text-xs h-auto py-2 px-4 gap-1.5">
+              <Button size="sm" onClick={() => setShowCaptainModal(true)} className="rounded-full bg-gold/10 border border-gold/30 text-gold-ink hover:bg-gold/20 text-xs h-auto py-2 px-4 gap-1.5">
                 <Crown size={14} /> Transferir capitanía
               </Button>
             </div>
@@ -143,7 +143,7 @@ export default function MiEquipo() {
           <div className="flex items-center gap-1 bg-surface/50 border border-border/60 rounded-2xl p-1 mb-6 overflow-x-auto">
             {(['plantilla','calendario','estadisticas'] as Tab[]).map(t => (
               <button key={t} onClick={() => setTab(t)}
-                className={`flex items-center gap-2 py-2.5 px-4 rounded-xl text-sm font-semibold capitalize whitespace-nowrap transition-all ${
+                className={`flex items-center gap-2 py-2.5 px-4 rounded-xl text-sm font-semibold whitespace-nowrap transition-all ${
                   tab === t ? 'bg-purple-mid text-white shadow-lg shadow-purple-mid/25' : 'text-text-muted hover:text-white'
                 }`}>
                 {t === 'plantilla' ? <Swords size={16} /> : t === 'calendario' ? <Calendar size={16} /> : <BarChart3 size={16} />}
@@ -167,7 +167,7 @@ export default function MiEquipo() {
               {/* Form agregar */}
               {mostrarForm && (
                 <SpotlightCard accent="gold" className="bg-surface border border-border rounded-2xl p-4 mb-4">
-                  <p className="text-xs text-gold font-semibold uppercase tracking-[.4px] mb-3">Nuevo jugador</p>
+                  <p className="text-xs text-gold-ink font-semibold uppercase tracking-[.4px] mb-3">Nuevo jugador</p>
                   <div className="grid grid-cols-3 gap-2 mb-3">
                     <Input placeholder="Nombre" value={nuevoJugador.nombre} onChange={e => setNuevoJugador({...nuevoJugador, nombre: e.target.value})} className="bg-black border-border text-white rounded-lg h-9 text-sm col-span-2 focus-visible:border-gold" />
                     <Input placeholder="Dorsal" type="number" min={1} max={99} value={nuevoJugador.dorsal} onChange={e => setNuevoJugador({...nuevoJugador, dorsal: e.target.value})} className="bg-black border-border text-white rounded-lg h-9 text-sm focus-visible:border-gold" />
@@ -232,7 +232,7 @@ export default function MiEquipo() {
               className="bg-surface border border-border rounded-2xl p-6 w-full max-w-md max-h-[80vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
               <div className="flex items-center justify-between mb-5">
                 <h2 className="font-[family-name:var(--font-display)] text-xl uppercase flex items-center gap-2">
-                  <UserPlus size={20} className="text-gold" /> Gestionar <span className="text-gold">invitaciones</span>
+                  <UserPlus size={20} className="text-gold-ink" /> Gestionar <span className="text-gold-ink">invitaciones</span>
                 </h2>
                 <button onClick={() => setShowInviteModal(false)} className="text-text-muted hover:text-white transition-colors"><X size={20} /></button>
               </div>
@@ -313,7 +313,7 @@ export default function MiEquipo() {
               className="bg-surface border border-border rounded-2xl p-6 w-full max-w-sm" onClick={e => e.stopPropagation()}>
               <div className="flex items-center justify-between mb-5">
                 <h2 className="font-[family-name:var(--font-display)] text-xl uppercase flex items-center gap-2">
-                  <Crown size={20} className="text-gold" /> Transferir <span className="text-gold">capitanía</span>
+                  <Crown size={20} className="text-gold-ink" /> Transferir <span className="text-gold-ink">capitanía</span>
                 </h2>
                 <button onClick={() => setShowCaptainModal(false)} className="text-text-muted hover:text-white transition-colors"><X size={20} /></button>
               </div>
@@ -327,7 +327,7 @@ export default function MiEquipo() {
                       <p className="text-sm font-bold">{j.nombre}</p>
                       <p className="text-xs text-text-muted">#{j.dorsal} · {j.posicion}</p>
                     </div>
-                    {captainTarget === j.id && <CheckCircle size={20} className="text-gold" />}
+                    {captainTarget === j.id && <CheckCircle size={20} className="text-gold-ink" />}
                   </button>
                 ))}
               </div>

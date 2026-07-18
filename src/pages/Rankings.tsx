@@ -105,7 +105,7 @@ export default function Rankings() {
   const [tab, setTab] = useState<RankingTab>('posiciones')
 
   const rankColors = (pos: number) => {
-    if (pos <= 3) return 'text-gold'
+    if (pos <= 3) return 'text-gold-ink'
     if (pos <= 5) return 'text-white'
     return 'text-text-muted'
   }
@@ -120,11 +120,11 @@ export default function Rankings() {
       <main className="max-w-[900px] mx-auto px-8 py-8 pb-[60px]">
         <div className="flex items-center gap-3 mb-6">
           <div className="w-11 h-11 rounded-xl bg-gold/15 border border-gold/20 flex items-center justify-center">
-            <Trophy size={22} className="text-gold" />
+            <Trophy size={22} className="text-gold-ink" />
           </div>
           <div>
             <h1 className="font-[family-name:var(--font-display)] text-2xl uppercase">
-              Rankings <span className="text-gold">públicos</span>
+              Rankings <span className="text-gold-ink">públicos</span>
             </h1>
             <p className="text-xs text-text-muted">TechCup 2026-I</p>
           </div>
@@ -135,7 +135,7 @@ export default function Rankings() {
             const Icon = t.icon
             return (
               <button key={t.id} onClick={() => setTab(t.id)}
-                className={`flex items-center gap-1.5 py-2.5 px-4 rounded-xl text-sm font-semibold capitalize whitespace-nowrap transition-all ${tab === t.id ? 'bg-purple-mid text-white shadow-lg shadow-purple-mid/25' : 'text-text-muted hover:text-white'}`}>
+                className={`flex items-center gap-1.5 py-2.5 px-4 rounded-xl text-sm font-semibold whitespace-nowrap transition-all ${tab === t.id ? 'bg-purple-mid text-white shadow-lg shadow-purple-mid/25' : 'text-text-muted hover:text-white'}`}>
                 <Icon size={16} /> {t.label}
               </button>
             )
@@ -147,7 +147,7 @@ export default function Rankings() {
           <SpotlightCard accent="gold" className="bg-surface border border-border rounded-2xl overflow-hidden">
             <div className="p-5 pb-3 border-b border-border">
               <h3 className="font-[family-name:var(--font-display)] text-lg uppercase flex items-center gap-2">
-                <Medal size={18} className="text-gold" /> Tabla de <span className="text-gold">posiciones</span>
+                <Medal size={18} className="text-gold-ink" /> Tabla de <span className="text-gold-ink">posiciones</span>
               </h3>
             </div>
             <div className="overflow-x-auto">
@@ -171,7 +171,7 @@ export default function Rankings() {
                     <tr key={i} className={`border-t border-border hover:bg-white/5 transition-colors ${i < 3 ? 'bg-gold/[0.02]' : ''}`}>
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-1">
-                          {i < 3 ? <Medal size={14} className="text-gold" /> : <span className="text-text-muted">{r.pos}</span>}
+                          {i < 3 ? <Medal size={14} className="text-gold-ink" /> : <span className="text-text-muted">{r.pos}</span>}
                           <CambioIcon cambio={r.cambio} />
                         </div>
                       </td>
@@ -183,7 +183,7 @@ export default function Rankings() {
                       <td className="py-3 px-4 text-center">{r.gf}</td>
                       <td className="py-3 px-4 text-center text-text-muted">{r.gc}</td>
                       <td className={`py-3 px-4 text-center font-mono ${r.dg > 0 ? 'text-green-400' : r.dg < 0 ? 'text-red-400' : 'text-text-muted'}`}>{r.dg > 0 ? `+${r.dg}` : r.dg}</td>
-                      <td className="py-3 px-4 text-right font-bold text-gold">{r.pts}</td>
+                      <td className="py-3 px-4 text-right font-bold text-gold-ink">{r.pts}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -206,7 +206,7 @@ export default function Rankings() {
                     <p className="text-xs text-text-muted">{g.equipo}</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-[family-name:var(--font-display)] text-2xl font-bold text-gold">{g.goles}</p>
+                    <p className="font-[family-name:var(--font-display)] text-2xl font-bold text-gold-ink">{g.goles}</p>
                     <p className="text-[10px] text-text-faint">{g.partidos} PJ · {g.asistencias} asist.</p>
                   </div>
                 </div>
@@ -253,7 +253,7 @@ export default function Rankings() {
           <SpotlightCard accent="gold" className="bg-surface border border-border rounded-2xl overflow-hidden">
             <div className="p-5 pb-3 border-b border-border">
               <h3 className="font-[family-name:var(--font-display)] text-lg uppercase flex items-center gap-2">
-                <Swords size={18} className="text-gold" /> Tabla de <span className="text-gold">Fair Play</span>
+                <Swords size={18} className="text-gold-ink" /> Tabla de <span className="text-gold-ink">Fair Play</span>
               </h3>
               <p className="text-xs text-text-muted mt-1">Menos puntos = más limpio (🟨=1, 🟥=3)</p>
             </div>
@@ -277,7 +277,7 @@ export default function Rankings() {
                       <td className="py-3 px-4 font-semibold">{f.equipo}</td>
                       <td className="py-3 px-4 text-center text-yellow-400">{f.amarillas}</td>
                       <td className="py-3 px-4 text-center text-red-400">{f.rojas}</td>
-                      <td className="py-3 px-4 text-right font-bold text-gold">{f.puntos}</td>
+                      <td className="py-3 px-4 text-right font-bold text-gold-ink">{f.puntos}</td>
                     </tr>
                   ))}
                 </tbody>

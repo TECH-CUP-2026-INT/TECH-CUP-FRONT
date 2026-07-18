@@ -87,21 +87,21 @@ function TorneosContent() {
             }
           `}</style>
           <div className="text-center max-w-[700px] mx-auto relative z-10">
-            <motion.span initial={{opacity:0,y:-10}} animate={{opacity:1,y:0}} transition={{delay:0.2}} className="inline-flex items-center gap-2 text-[11.5px] font-bold tracking-[1.6px] uppercase text-gold bg-gold/10 border border-gold/30 px-3.5 py-1.5 rounded-full mb-[22px]">
+            <motion.span initial={{opacity:0,y:-10}} animate={{opacity:1,y:0}} transition={{delay:0.2}} className="inline-flex items-center gap-2 text-[11.5px] font-bold tracking-[1.6px] uppercase text-gold-ink bg-gold/10 border border-gold/30 px-3.5 py-1.5 rounded-full mb-[22px]">
               <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" /> Torneos
             </motion.span>
             <motion.h1 initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:0.3}} className="font-[family-name:var(--font-display-alt)] font-bold text-[clamp(42px,6vw,72px)] leading-[.92] tracking-[.5px] uppercase italic mb-4">
-              <span className="text-[#3D1A6B] dark:text-[#F7EDE2]">Torneos</span> <span className="text-gold">y Equipos</span>
+              <span className="text-[#3D1A6B] dark:text-[#F7EDE2]">Torneos</span> <span className="text-gold-ink">y Equipos</span>
             </motion.h1>
             <motion.p initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.5}} className="text-base leading-relaxed text-[#7A6B99] dark:text-text-muted max-w-[560px] mx-auto">
               Descubre los torneos disponibles, explora los equipos inscritos y sé parte de la competencia más emocionante de Ingeniería de Sistemas.
             </motion.p>
             <motion.div initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{delay:0.7}} className="flex items-center justify-center gap-6 mt-5 text-[13px] text-[#7A6B99] dark:text-text-muted">
-              <span><strong className="text-gold">{torneos.length}</strong> torneos</span>
+              <span><strong className="text-gold-ink">{torneos.length}</strong> torneos</span>
               <span className="w-px h-4 bg-black/10 dark:bg-white/10" />
-              <span><strong className="text-gold">{torneos.reduce((a,t)=>a+t.equipos,0)}</strong> equipos</span>
+              <span><strong className="text-gold-ink">{torneos.reduce((a,t)=>a+t.equipos,0)}</strong> equipos</span>
               <span className="w-px h-4 bg-black/10 dark:bg-white/10" />
-              <span><strong className="text-gold">{torneos.reduce((a,t)=>a+t.jugadores,0)}+</strong> jugadores</span>
+              <span><strong className="text-gold-ink">{torneos.reduce((a,t)=>a+t.jugadores,0)}+</strong> jugadores</span>
             </motion.div>
           </div>
         </div>
@@ -163,7 +163,7 @@ function TorneosContent() {
               </div>
             </div>
             <Button variant="outline" size="sm" onClick={clearFilters}
-              className="border-gold text-gold rounded-full hover:bg-gold/10 self-end mb-0.5">
+              className="border-gold text-gold-ink rounded-full hover:bg-gold/10 self-end mb-0.5">
               <RefreshCw size={14} /> Limpiar
             </Button>
           </motion.div>
@@ -245,11 +245,11 @@ function TorneosContent() {
                     <span className="inline-block rounded-full text-[10px] font-bold uppercase tracking-[.4px] px-2.5 py-0.5 mb-2 bg-white/15 text-white border border-white/20 backdrop-blur-sm">
                       {t.estado === 'live' ? 'En curso' : t.estado === 'upcoming' ? 'Próximo' : 'Finalizado'}
                     </span>
-                    <span className="block text-[10px] tracking-[1.2px] text-gold font-bold uppercase mb-1">{t.tag}</span>
+                    <span className="block text-[10px] tracking-[1.2px] text-gold-ink font-bold uppercase mb-1">{t.tag}</span>
                     <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase text-white leading-tight">{t.nombre}</h2>
                     <p className="text-[12px] text-white/60 mt-1">{t.categoria} — {t.semestre}</p>
                   </div>
-                  <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gold/20 text-gold border border-gold/40 hover:bg-gold/30 text-[10px] font-bold transition-all flex-shrink-0">
+                  <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gold/20 text-gold-ink border border-gold/40 hover:bg-gold/30 text-[10px] font-bold transition-all flex-shrink-0">
                     <Download size={12} /> Reglamento
                   </button>
                 </div>
@@ -258,15 +258,15 @@ function TorneosContent() {
                 {/* Tabs como DetalleTorneo */}
                 <div className="flex border-b border-[#D4C8E8]/40 dark:border-white/10">
                   <button onClick={() => setModalTab('info')}
-                    className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'info' ? 'text-gold border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold'}`}>Información</button>
+                    className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'info' ? 'text-gold-ink border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold-ink'}`}>Información</button>
                   <button onClick={() => setModalTab('equipos')}
-                    className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'equipos' ? 'text-gold border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold'}`}>Equipos</button>
+                    className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'equipos' ? 'text-gold-ink border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold-ink'}`}>Equipos</button>
                   <button onClick={() => setModalTab('calendario')}
-                    className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'calendario' ? 'text-gold border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold'}`}>Calendario</button>
+                    className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'calendario' ? 'text-gold-ink border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold-ink'}`}>Calendario</button>
                   <button onClick={() => setModalTab('tabla')}
-                    className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'tabla' ? 'text-gold border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold'}`}>Tabla</button>
+                    className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'tabla' ? 'text-gold-ink border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold-ink'}`}>Tabla</button>
                   {!isUpcoming && <button onClick={() => setModalTab('llaves')}
-                    className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'llaves' ? 'text-gold border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold'}`}>Llaves</button>}
+                    className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'llaves' ? 'text-gold-ink border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold-ink'}`}>Llaves</button>}
                 </div>
 
                 {/* Content estandarizado como DetalleTorneo */}
@@ -329,7 +329,7 @@ function TorneosContent() {
                               <MapPin size={10} /> {m.lugar.slice(0, 18)}...
                             </div>
                           </div>
-                          {m.resultado && <span className="text-sm font-bold text-gold">{m.resultado}</span>}
+                          {m.resultado && <span className="text-sm font-bold text-gold-ink">{m.resultado}</span>}
                         </div>
                       ))}
                     </div>
@@ -356,7 +356,7 @@ function TorneosContent() {
                               <td className="py-3 px-3 text-center text-yellow-400">{r.e}</td>
                               <td className="py-3 px-3 text-center text-red-400">{r.p}</td>
                               <td className="py-3 px-3 text-center text-green-400">+{r.dg}</td>
-                              <td className="py-3 px-4 text-right font-bold text-gold">{r.pts}</td>
+                              <td className="py-3 px-4 text-right font-bold text-gold-ink">{r.pts}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -370,19 +370,19 @@ function TorneosContent() {
                       <div className="bg-[#E8DFF5]/50 dark:bg-white/5 border border-[#D4C8E8]/40 dark:border-white/10 rounded-2xl p-6 overflow-x-auto">
                         <div className="flex items-center justify-center gap-8 min-w-[500px]">
                           <div className="space-y-4">
-                            <div className="p-3 rounded-xl bg-white/5 border border-white/10"><span className="text-sm font-semibold text-[#3D1A6B] dark:text-white">🐯 Tigres FC <span className="text-gold">2</span></span></div>
-                            <div className="p-3 rounded-xl bg-white/5 border border-white/10"><span className="text-sm font-semibold text-[#3D1A6B] dark:text-white">⚙️ Sistemas FC <span className="text-gold">1</span></span></div>
+                            <div className="p-3 rounded-xl bg-white/5 border border-white/10"><span className="text-sm font-semibold text-[#3D1A6B] dark:text-white">🐯 Tigres FC <span className="text-gold-ink">2</span></span></div>
+                            <div className="p-3 rounded-xl bg-white/5 border border-white/10"><span className="text-sm font-semibold text-[#3D1A6B] dark:text-white">⚙️ Sistemas FC <span className="text-gold-ink">1</span></span></div>
                             <div className="text-center text-[10px] text-[#7A6B99] dark:text-text-faint uppercase tracking-wider mt-1">Cuartos</div>
                           </div>
-                          <div className="text-gold text-2xl">⟶</div>
+                          <div className="text-gold-ink text-2xl">⟶</div>
                           <div className="space-y-4">
-                            <div className="p-3 rounded-xl border border-gold/30 bg-gold/10"><span className="text-sm font-semibold text-[#3D1A6B] dark:text-white">🐯 Tigres FC <span className="text-gold">1</span></span></div>
-                            <div className="p-3 rounded-xl bg-white/5 border border-white/10"><span className="text-sm font-semibold text-[#3D1A6B] dark:text-white">🔵 Code United <span className="text-gold">0</span></span></div>
+                            <div className="p-3 rounded-xl border border-gold/30 bg-gold/10"><span className="text-sm font-semibold text-[#3D1A6B] dark:text-white">🐯 Tigres FC <span className="text-gold-ink">1</span></span></div>
+                            <div className="p-3 rounded-xl bg-white/5 border border-white/10"><span className="text-sm font-semibold text-[#3D1A6B] dark:text-white">🔵 Code United <span className="text-gold-ink">0</span></span></div>
                             <div className="text-center text-[10px] text-[#7A6B99] dark:text-text-faint uppercase tracking-wider mt-1">Semifinal</div>
                           </div>
-                          <div className="text-gold text-2xl">⟶</div>
+                          <div className="text-gold-ink text-2xl">⟶</div>
                           <div className="space-y-4">
-                            <div className="p-4 rounded-xl bg-gradient-to-b from-gold/20 to-gold/5 border border-gold/40"><span className="text-sm font-semibold text-[#3D1A6B] dark:text-white">🏆🐯 Tigres FC <span className="text-gold">3</span></span></div>
+                            <div className="p-4 rounded-xl bg-gradient-to-b from-gold/20 to-gold/5 border border-gold/40"><span className="text-sm font-semibold text-[#3D1A6B] dark:text-white">🏆🐯 Tigres FC <span className="text-gold-ink">3</span></span></div>
                             <div className="text-center text-[10px] text-[#7A6B99] dark:text-text-faint uppercase tracking-wider mt-1">Final</div>
                           </div>
                         </div>
@@ -424,7 +424,7 @@ export default function TorneosPublic() {
 function TorneoCard({ torneo: t, onClick }: { torneo: Torneo; onClick: () => void }) {
   const badgeText = t.estado === 'live' ? 'En curso' : t.estado === 'upcoming' ? 'Próximo' : 'Finalizado'
   const badgeStyle = t.estado === 'live' ? 'bg-purple-mid text-white'
-    : t.estado === 'upcoming' ? 'bg-gold/20 text-gold border border-gold/40'
+    : t.estado === 'upcoming' ? 'bg-gold/20 text-gold-ink border border-gold/40'
     : 'bg-white/15 text-white border border-white/20 backdrop-blur-sm'
   const imgSrc = `/images/fondo-${((Number(t.id) - 1) % 6) + 1}.png`
 
@@ -443,7 +443,7 @@ function TorneoCard({ torneo: t, onClick }: { torneo: Torneo; onClick: () => voi
               <span className={`inline-block rounded-full text-[10px] font-bold uppercase tracking-[.4px] px-2.5 py-0.5 ${badgeStyle}`}>{badgeText}</span>
               {t.estado === 'live' && <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />}
             </div>
-            <span className="block text-[10px] tracking-[1.2px] text-gold font-bold uppercase mb-1">{t.tag}</span>
+            <span className="block text-[10px] tracking-[1.2px] text-gold-ink font-bold uppercase mb-1">{t.tag}</span>
             <h3 className="font-[family-name:var(--font-display)] text-xl uppercase text-white leading-tight">{t.nombre}</h3>
             <p className="text-[12px] text-white/60 mt-1">Ingeniería de Sistemas</p>
           </div>
@@ -458,7 +458,7 @@ function TorneoCard({ torneo: t, onClick }: { torneo: Torneo; onClick: () => voi
                 <span className="text-[11px] text-white/60"><strong className="text-white/90">{t.jugadores}</strong> Jugadores</span>
                 <span className="text-[11px] text-white/60"><strong className="text-white/90">{t.canchas}</strong> Canchas</span>
               </div>
-              <span className="text-[11px] font-bold text-gold bg-gold/10 border border-gold/30 px-3 py-1 rounded-full group-hover:bg-gold/20 group-hover:border-gold/60 transition-all duration-300">
+              <span className="text-[11px] font-bold text-gold-ink bg-gold/10 border border-gold/30 px-3 py-1 rounded-full group-hover:bg-gold/20 group-hover:border-gold/60 transition-all duration-300">
                 {t.estado === 'closed' ? 'Ver resumen' : 'Ver detalles'}
               </span>
             </div>

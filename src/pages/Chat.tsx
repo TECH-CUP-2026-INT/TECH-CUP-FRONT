@@ -56,7 +56,7 @@ export default function Chat() {
         <header className="sticky top-0 z-10 flex items-center justify-between px-4 md:px-6 py-3 bg-black/85 backdrop-blur-md border-b border-border">
           <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
           <div className="flex items-center gap-3">
-            <button className="text-gray-light hover:text-gold transition-colors p-1" onClick={() => setSidebarOpen(true)}>
+            <button className="text-gray-light hover:text-gold-ink transition-colors p-1" onClick={() => setSidebarOpen(true)}>
               <Menu size={20} />
             </button>
             {activeConv && (
@@ -80,7 +80,7 @@ export default function Chat() {
             )}
           </div>
           <div className="flex items-center gap-[18px]">
-            <button className="relative text-gray-light bg-transparent border-none p-0 hover:text-gold transition-colors group" aria-label="Notificaciones">
+            <button className="relative text-gray-light bg-transparent border-none p-0 hover:text-gold-ink transition-colors group" aria-label="Notificaciones">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="group-hover:fill-gold/20 transition-all"><path d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 003.4 0"/></svg>
             </button>
             <button
@@ -126,10 +126,10 @@ export default function Chat() {
         <div className="border-t border-white/5 bg-black/60 backdrop-blur-xl p-3 md:p-4">
           <div className="max-w-4xl mx-auto">
             <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-2xl px-4 py-2 focus-within:border-gold/40 focus-within:bg-white/10 transition-all group">
-              <button className="text-text-faint hover:text-gold transition-colors p-1">
+              <button className="text-text-faint hover:text-gold-ink transition-colors p-1">
                 <Paperclip size={18} />
               </button>
-              <button className="text-text-faint hover:text-gold transition-colors p-1">
+              <button className="text-text-faint hover:text-gold-ink transition-colors p-1">
                 <Image size={18} />
               </button>
               <input
@@ -139,7 +139,7 @@ export default function Chat() {
                 className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-text-faint text-sm px-2 py-2"
                 onKeyDown={(e) => e.key === 'Enter' && input && setInput('')}
               />
-              <button className="text-text-faint hover:text-gold transition-colors p-1">
+              <button className="text-text-faint hover:text-gold-ink transition-colors p-1">
                 <Smile size={18} />
               </button>
               <button
