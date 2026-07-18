@@ -117,7 +117,4 @@ export async function apiPut<T>(path: string, body: unknown): Promise<T> {
   return res.data
 }
 
-/** Prefix para el Teams Service dentro del APIM */
-export const TEAMS_SERVICE_PREFIX = '/api/v1'
-
 export default api

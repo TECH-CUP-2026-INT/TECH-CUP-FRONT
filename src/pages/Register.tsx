@@ -7,7 +7,7 @@ import { Input } from '@/components/common/input'
 import { Label } from '@/components/common/label'
 import { mapTipoDoc, registerStudentApi, registerGuestApi } from '@/api/register'
 import { validateOtp, resendOtp } from '@/services/auth'
-import { useAuth } from '@/hooks/auth/useAuth'
+import { setJwt } from '@/api/client'; import { useAuth } from '@/hooks/auth/useAuth'
 import { ArrowLeft, ArrowRight, Check, ChevronLeft, Camera, Loader2 } from 'lucide-react'
 
 type Position = 'portero' | 'defensa' | 'volante' | 'delantero'
@@ -659,3 +659,4 @@ export default function Register() {
     </div>
   )
 }
+

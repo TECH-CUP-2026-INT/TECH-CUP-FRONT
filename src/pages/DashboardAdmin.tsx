@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import Sidebar from '@/components/common/Sidebar'
 import AppTopbar from '@/components/common/AppTopbar'
 import Footer from '@/components/common/Footer'
@@ -7,6 +7,7 @@ import { Button } from '@/components/common/button'
 import { SpotlightCard } from '@/components/common/spotlight-card'
 import { InteractiveHoverButton } from '@/components/common/interactive-hover-button'
 import { Badge } from '@/components/common/badge'
+import { Label } from '@/components/common/label'
 import ManchasFloating from '@/components/common/ManchasFloating'
 import { torneos, fetchTorneos } from '@/services/torneos'
 import { fetchEventosAuditoria } from '@/services/logistica'
@@ -18,12 +19,13 @@ import {
   Filter, MoreHorizontal, AlertCircle, Loader2,
   Shirt, Apple, Truck, RefreshCw, Swords,
   Goal, Medal, Phone, Mail, ChevronRight, Eye,
-  ArrowLeft, Activity, Flag, PlusCircle, UserCheck
+  ArrowLeft, Activity, Flag, PlusCircle, UserCheck,
+  Plus, Trash2
 } from 'lucide-react'
 
 const SIDEBAR_KEY = 'techcup_sidebar_collapsed'
 type RolView = 'admin' | 'arbitro' | 'capitan'
-type AdminTab = 'dashboard' | 'inscripciones' | 'arbitros' | 'torneos' | 'logistica' | 'reportes'
+type AdminTab = 'dashboard' | 'inscripciones' | 'arbitros' | 'torneos' | 'partidos' | 'logistica' | 'reportes'
 
 interface Jugador { id: number; nombre: string; posicion: string; dorsal: number; estaJugando: boolean }
 interface TeamDetail {
@@ -174,6 +176,14 @@ export default function DashboardAdmin() {
   const [playerModal, setPlayerModal] = useState<PlayerStats | null>(null)
   const [lineupModal, setLineupModal] = useState<TeamDetail | null>(null)
   const [posExpandida, setPosExpandida] = useState(false)
+  const [nuevoPartido, setNuevoPartido] = useState({ local: '', visitante: '', fecha: '', hora: '20:00', cancha: 'Cancha Principal Sede Norte' })
+  const [partidosCreados, setPartidosCreados] = useState<{ local: string; visitante: string; fecha: string; hora: string; cancha: string }[]>([])
+
+  const handleCrearPartido = () => {
+    if (!nuevoPartido.local || !nuevoPartido.visitante || !nuevoPartido.fecha) return
+    setPartidosCreados(prev => [...prev, { ...nuevoPartido }])
+    setNuevoPartido({ local: '', visitante: '', fecha: '', hora: '20:00', cancha: 'Cancha Principal Sede Norte' })
+  }
 
   const [listaInscripciones, setListaInscripciones] = useState([
     { id:1, equipo:'Tigres FC', emoji:'🐯', capitan:'Carlos Martínez', torneo:'TechCup 2026-II', fecha:'10/07/2026', comprobante:'comprobante_001.pdf', estado:'pending' as const, jugadores:11 },
@@ -516,12 +526,12 @@ export default function DashboardAdmin() {
           {rolActivo === 'admin' && (
             <>
               <div className="flex items-center gap-1 mb-6 bg-white/5 border border-white/10 rounded-xl p-1 overflow-x-auto">
-                {(['dashboard','inscripciones','arbitros','torneos','logistica','reportes'] as AdminTab[]).map(id => (
+                {(['dashboard','inscripciones','arbitros','torneos','partidos','logistica','reportes'] as AdminTab[]).map(id => (
                   <button key={id} onClick={() => setAdminTab(id)}
                     className={`flex items-center gap-2 px-4 py-2 rounded-lg text-[12.5px] font-semibold transition-all whitespace-nowrap ${
                       adminTab === id ? 'bg-purple-mid text-white shadow-lg shadow-purple-mid/25' : 'text-gray-600 dark:text-white/60 hover:text-gray-900 dark:text-white hover:bg-white/5'
                     }`}>
-                    {id === 'dashboard' ? <Trophy size={16} /> : id === 'inscripciones' ? <ClipboardList size={16} /> : id === 'arbitros' ? <UserPlus size={16} /> : id === 'torneos' ? <CalendarDays size={16} /> : id === 'logistica' ? <Package size={16} /> : <Activity size={16} />}
+                    {id === 'dashboard' ? <Trophy size={16} /> : id === 'inscripciones' ? <ClipboardList size={16} /> : id === 'arbitros' ? <UserPlus size={16} /> : id === 'torneos' ? <CalendarDays size={16} /> : id === 'partidos' ? <Swords size={16} /> : id === 'logistica' ? <Package size={16} /> : <Activity size={16} />}
                     {id.charAt(0).toUpperCase() + id.slice(1)}
                   </button>
                 ))}
@@ -684,6 +694,71 @@ export default function DashboardAdmin() {
                       <Button variant="outline" size="sm" className="rounded-full border-white/20 text-gray-900 dark:text-white hover:bg-white/10 text-xs h-8 px-3"><Settings size={12} className="mr-1" /> Configurar</Button>
                     </div>
                   ))}
+                </div>
+              )}
+
+              {adminTab === 'partidos' && (
+                <div className="space-y-4">
+                  <h3 className="font-[family-name:var(--font-display)] uppercase text-lg tracking-[.5px]">Gestión de <span className="text-gold">partidos</span></h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Equipo local</Label>
+                      <select value={nuevoPartido.local} onChange={e => setNuevoPartido(p => ({ ...p, local: e.target.value }))}
+                        className="w-full rounded-xl px-3.5 py-3 text-[13px] bg-black/30 border border-white/10 text-white outline-none mt-1.5">
+                        <option value="">Seleccionar</option>
+                        {equiposDetalle.map(e => <option key={e.nombre} value={e.nombre}>{e.emoji} {e.nombre}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Equipo visitante</Label>
+                      <select value={nuevoPartido.visitante} onChange={e => setNuevoPartido(p => ({ ...p, visitante: e.target.value }))}
+                        className="w-full rounded-xl px-3.5 py-3 text-[13px] bg-black/30 border border-white/10 text-white outline-none mt-1.5">
+                        <option value="">Seleccionar</option>
+                        {equiposDetalle.map(e => <option key={e.nombre} value={e.nombre}>{e.emoji} {e.nombre}</option>)}
+                      </select>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-4">
+                    <div>
+                      <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Fecha</Label>
+                      <input type="date" value={nuevoPartido.fecha} onChange={e => setNuevoPartido(p => ({ ...p, fecha: e.target.value }))}
+                        className="w-full rounded-xl px-3.5 py-3 text-[13px] bg-black/30 border border-white/10 text-white outline-none mt-1.5" />
+                    </div>
+                    <div>
+                      <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Hora</Label>
+                      <input type="time" value={nuevoPartido.hora} onChange={e => setNuevoPartido(p => ({ ...p, hora: e.target.value }))}
+                        className="w-full rounded-xl px-3.5 py-3 text-[13px] bg-black/30 border border-white/10 text-white outline-none mt-1.5" />
+                    </div>
+                    <div>
+                      <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Cancha</Label>
+                      <select value={nuevoPartido.cancha} onChange={e => setNuevoPartido(p => ({ ...p, cancha: e.target.value }))}
+                        className="w-full rounded-xl px-3.5 py-3 text-[13px] bg-black/30 border border-white/10 text-white outline-none mt-1.5">
+                        <option value="">Seleccionar</option>
+                        <option value="Cancha Principal Sede Norte">Cancha Principal</option>
+                        <option value="Cancha Principal Sede Norte 2">Cancha 2</option>
+                        <option value="Auditorio Principal Sede Norte">Auditorio</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="flex gap-3">
+                    <Button onClick={handleCrearPartido} disabled={!nuevoPartido.local || !nuevoPartido.visitante || !nuevoPartido.fecha}
+                      className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-11 px-6 text-sm font-bold">
+                      <Plus size={16} className="mr-1" /> Crear partido
+                    </Button>
+                  </div>
+                  {partidosCreados.length > 0 && (
+                    <div className="space-y-2 mt-4">
+                      <h4 className="text-sm font-semibold text-text-muted">Partidos creados ({partidosCreados.length})</h4>
+                      {partidosCreados.map((p, i) => (
+                        <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-black/20 border border-white/5 text-sm">
+                          <span className="font-semibold">{p.local}</span>
+                          <span className="text-gold text-xs">VS</span>
+                          <span className="font-semibold">{p.visitante}</span>
+                          <span className="text-text-muted text-xs ml-auto">{p.fecha} · {p.hora} · {p.cancha}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
 
