@@ -29,6 +29,9 @@ const api: AxiosInstance = axios.create({
 /** Key donde guardamos el JWT en localStorage */
 export const JWT_STORAGE_KEY = 'techcup_jwt'
 
+/** Flag que indica si el JWT es real (del backend) o mock (offline) */
+const JWT_REAL_KEY = 'techcup_jwt_real'
+
 /** Error de API que conserva el status HTTP para que el caller pueda ramificar sobre él. */
 export class ApiError extends Error {
   readonly status: number
@@ -73,18 +76,26 @@ api.interceptors.response.use(
 )
 
 /** Helper para guardar el JWT después de login exitoso */
-export function setJwt(token: string): void {
+export function setJwt(token: string, real = false): void {
   localStorage.setItem(JWT_STORAGE_KEY, token)
+  if (real) localStorage.setItem(JWT_REAL_KEY, '1')
+  else localStorage.removeItem(JWT_REAL_KEY)
 }
 
 /** Helper para limpiar el JWT al hacer logout */
 export function clearJwt(): void {
   localStorage.removeItem(JWT_STORAGE_KEY)
+  localStorage.removeItem(JWT_REAL_KEY)
 }
 
 /** Saber si hay un JWT guardado */
 export function hasJwt(): boolean {
   return !!localStorage.getItem(JWT_STORAGE_KEY)
+}
+
+/** Saber si el JWT actual es real (del backend) — necesario para Teams/Logistics */
+export function isRealJwt(): boolean {
+  return localStorage.getItem(JWT_REAL_KEY) === '1'
 }
 
 /**

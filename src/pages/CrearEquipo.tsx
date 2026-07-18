@@ -16,6 +16,7 @@ import type { Torneo } from '@/services/torneos'
 import { getMiPerfil } from '@/api/usuarios'
 import { crearEquipo } from '@/api/teams'
 import { createChat } from '@/api/chat'
+import { ApiError } from '@/api/client'
 import { rememberTeamName } from '@/utils/teamNameCache'
 
 const colores = ['#6D28D9','#F5A623','#22C55E','#EF4444','#3B82F6','#EC4899','#14B8A6','#F97316','#8B5CF6','#000000','#FFFFFF','#1F1F28']
@@ -87,7 +88,13 @@ export default function CrearEquipo() {
       navigate('/inscribir-equipo', { state: { teamId } })
     } catch (err) {
       console.error('[CrearEquipo] Error al crear equipo:', err)
-      setCreateError('No pudimos crear el equipo. Intentá de nuevo.')
+      if (err instanceof ApiError) {
+        if (err.status === 401) setCreateError('Necesitás iniciar sesión para crear un equipo.')
+        else if (err.status === 403) setCreateError('No tenés permisos. Solo capitanes y organizadores pueden crear equipos.')
+        else setCreateError(`Error del servidor (${err.status}). Intentá de nuevo.`)
+      } else {
+        setCreateError('No pudimos crear el equipo. Intentá de nuevo.')
+      }
     } finally {
       setCreating(false)
     }

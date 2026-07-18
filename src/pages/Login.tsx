@@ -93,7 +93,7 @@ export default function Login() {
     setAuthError(null)
     try {
       const res = await validateOtp(userId, otpCode)
-      setJwt(res.token)
+      setJwt(res.token, true)
       const frontRole = selectedRole === 'administrador' ? 'organizador' : selectedRole
       const userEmail = res.user?.email || email || `${selectedRole}@techcup.com`
       const userName = res.user?.fullName || userEmail
