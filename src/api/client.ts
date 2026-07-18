@@ -5,6 +5,7 @@ const SUBSCRIPTION_KEY = '4eff9bdd419b49308dc37fd491741c47'
 
 const api: AxiosInstance = axios.create({
   baseURL: BASE_URL,
+  params: APIM_KEY ? { 'subscription-key': APIM_KEY } : {},
   headers: {
     'Ocp-Apim-Subscription-Key': SUBSCRIPTION_KEY,
     'Content-Type': 'application/json',
@@ -86,6 +87,14 @@ export async function apiPost<T>(path: string, body: unknown): Promise<T> {
  * PATCH request al API de TechCup.
  */
 export async function apiPatch<T>(path: string, body?: unknown): Promise<T> {
+  const res = await api.patch<T>(path, body)
+  return res.data
+}
+
+/**
+ * PATCH request.
+ */
+export async function apiPatch<T>(path: string, body: unknown): Promise<T> {
   const res = await api.patch<T>(path, body)
   return res.data
 }

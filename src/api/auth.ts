@@ -85,7 +85,9 @@ const TOKEN = '/identity/api/v1/token'
  * Paso 1 del login: email + password → devuelve userId + envía OTP al correo.
  */
 export async function loginApi(data: LoginRequest): Promise<LoginResponse> {
-  return apiPost<LoginResponse>(`${AUTH}/login`, data)
+  const res = await apiPost<LoginResponse>(`${AUTH}/login`, data)
+  console.log('[loginApi] respuesta cruda:', JSON.stringify(res))
+  return res
 }
 
 /**
@@ -101,6 +103,10 @@ export async function loginGoogleApi(data: GoogleLoginRequest): Promise<LoginRes
  */
 export async function validateOtpApi(data: OtpValidationRequest): Promise<OtpResponse> {
   const res = await apiPost<OtpResponse>(`${OTP}/validate`, data)
+  console.log('[validateOtpApi] respuesta cruda:', JSON.stringify(res))
+  if (!res.token || !res.user) {
+    throw new Error('Respuesta inválida del servidor: falta token o datos del usuario')
+  }
   setJwt(res.token)
   return res
 }
