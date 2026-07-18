@@ -121,7 +121,7 @@ export default function DashboardJugador() {
 
           {/* ═══════════ PERFIL ═══════════ */}
           <section className="rounded-2xl mb-[26px] relative overflow-hidden border border-purple-mid/30" style={{ minHeight: '280px' }}>
-            <img src="/dash-board.jpg" alt="" className="absolute inset-0 w-full h-full" style={{ objectFit: 'cover', objectPosition: 'center center' }} />
+            <img src="/images/estadio-dashboard.png" alt="" className="absolute inset-0 w-full h-full" style={{ objectFit: 'cover', objectPosition: 'center center' }} />
             <div className="absolute inset-0 bg-gradient-to-r from-[rgba(10,6,20,0.6)] via-[rgba(10,6,20,0.3)] to-transparent" />
             <div className="relative z-10 flex flex-col items-center justify-center gap-3 h-full min-h-[280px] px-10 w-fit">
               <div className="w-28 h-28 rounded-full overflow-hidden ring-4 ring-gold/50 shadow-xl shadow-black/40 flex-shrink-0">
@@ -160,7 +160,7 @@ export default function DashboardJugador() {
                 </div>
               ) : (
                 <div className="text-center py-4">
-                  <p className="text-4xl mb-2 opacity-60">🏠</p>
+                  <img src="/images/icono-equipo.png" alt="" className="w-16 h-16 mx-auto mb-2 object-contain" />
                   <p className="text-sm text-text-muted mb-4">No pertenecés a ningún equipo aún</p>
                   <div className="flex gap-2 justify-center">
                     <Button onClick={() => setBrowseTeamsOpen(true)} className="rounded-full bg-gold/15 backdrop-blur-md border border-gold/40 text-gold hover:bg-gold/25 hover:text-white shadow-lg shadow-gold/10 text-xs font-bold px-4">Buscar equipo</Button>
@@ -176,7 +176,7 @@ export default function DashboardJugador() {
             <SpotlightCard accent="purple" className="p-5 bg-[#E8DFF5]/70 dark:bg-black/40 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-purple-mid/30 rounded-2xl shadow-lg shadow-purple-mid/10">
               <h3 className="text-[14.5px] font-semibold tracking-[.3px] mb-3 flex items-center gap-2 text-[#3D1A6B] dark:text-white"><span className="text-gold">📨</span> <span className="text-gold">Invitaciones</span></h3>
               <div className="text-center py-4">
-                <p className="text-4xl mb-2 opacity-60">🔔</p>
+                <img src="/images/icono-invitaciones.png" alt="" className="w-16 h-16 mx-auto mb-2 object-contain" />
                 <p className="text-sm text-text-muted">No tenés invitaciones pendientes</p>
                 <p className="text-xs text-text-faint mt-1">{isCaptain ? 'Las solicitudes de jugadores aparecen en tu panel de capitán' : 'Las invitaciones de capitanes aparecerán acá'}</p>
               </div>
