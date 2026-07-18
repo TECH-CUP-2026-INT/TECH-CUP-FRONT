@@ -62,6 +62,13 @@ export default function Login() {
   const navigate = useNavigate()
   const { login } = useAuth()
 
+  const doLocalLogin = (userEmail: string, displayName?: string) => {
+    const frontRole = selectedRole === 'administrador' ? 'organizador' : selectedRole
+    setJwt('mock-jwt-' + Date.now())
+    login(userEmail, frontRole as import('@/hooks/auth/useAuth').UserRole, '', displayName ?? userEmail)
+    navigate(selectedRole === 'arbitro' ? '/arbitro/dashboard' : `/dashboard/${frontRole}`)
+  }
+
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!email || !password) return
@@ -81,11 +88,8 @@ export default function Login() {
         throw new Error('No OTP code returned')
       }
     } catch {
-      // Fallback: login local sin backend
-      const frontRole = selectedRole === 'administrador' ? 'organizador' : selectedRole
-      setJwt('mock-jwt-' + Date.now())
-      login(email, frontRole as import('@/hooks/auth/useAuth').UserRole)
-      navigate(selectedRole === 'arbitro' ? '/arbitro/dashboard' : `/dashboard/${frontRole}`)
+      // Backend no disponible — login local directo
+      doLocalLogin(email)
     } finally {
       setIsLoading(false)
     }
@@ -124,14 +128,21 @@ export default function Login() {
     }
   }
 
-  const handleGoogleSuccess = (_response: CredentialResponse) => {
+  const handleGoogleSuccess = async (response: CredentialResponse) => {
+    if (!response.credential) return
     setIsLoading(true)
     setAuthError(null)
-    const frontRole = selectedRole === 'administrador' ? 'organizador' : selectedRole
-    setJwt('mock-jwt-' + Date.now())
-    login(email || `${frontRole}@techcup.com`, frontRole as import('@/hooks/auth/useAuth').UserRole, '', frontRole === 'arbitro' ? 'Árbitro TechCup' : frontRole === 'organizador' ? 'Admin TechCup' : 'Jugador TechCup')
-    navigate(selectedRole === 'arbitro' ? '/arbitro/dashboard' : `/dashboard/${frontRole}`)
-    setIsLoading(false)
+    try {
+      const { loginGoogle } = await import('@/services/auth')
+      await loginGoogle(response.credential)
+      // Backend respondió → login local
+      doLocalLogin(email || `${selectedRole}@techcup.com`, 'Google User')
+    } catch {
+      // Backend no disponible o token inválido — login local directo
+      doLocalLogin(email || `${selectedRole}@techcup.com`)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleRoleContinue = (roleId: string) => {
