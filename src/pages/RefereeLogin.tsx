@@ -1,12 +1,24 @@
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/common/button'
 import { Input } from '@/components/common/input'
 import { Label } from '@/components/common/label'
 import { Shield, ArrowLeft, Mail, Lock } from 'lucide-react'
+import { useAuth } from '@/hooks/auth/useAuth'
 
 export default function RefereeLogin() {
   const navigate = useNavigate()
+  const { login } = useAuth()
+  const [email, setEmail] = useState('')
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    // Crea una sesión de árbitro fresca, sobreescribiendo cualquier sesión previa
+    // (antes solo navegaba, dejando activa la última sesión — p.ej. la del admin).
+    login(email || 'arbitro@techcup.com', 'arbitro')
+    navigate('/arbitro/dashboard')
+  }
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4 relative overflow-hidden">
@@ -51,12 +63,12 @@ export default function RefereeLogin() {
             Los árbitros son creados por el organizador. Si no tenés credenciales, contactalo.
           </div>
 
-          <form onSubmit={(e) => { e.preventDefault(); navigate('/arbitro/dashboard') }} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Correo electrónico</Label>
               <div className="relative mt-1.5">
                 <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-faint" />
-                <Input type="email" placeholder="arbitro@escuelaing.edu.co" className="bg-black border-border text-white placeholder:text-text-faint rounded-xl pl-10 h-12 focus-visible:border-gold" />
+                <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="arbitro@escuelaing.edu.co" className="bg-black border-border text-white placeholder:text-text-faint rounded-xl pl-10 h-12 focus-visible:border-gold" />
               </div>
             </div>
             <div>

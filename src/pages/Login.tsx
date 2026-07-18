@@ -9,7 +9,7 @@ import { Checkbox } from '@/components/common/checkbox'
 import { Eye, EyeOff, Mail, Lock, ArrowLeft, Users, ShieldCheck, UserCog, ChevronRight } from 'lucide-react'
 import { useAuth } from '@/hooks/auth/useAuth'
 import OtpVerify from '@/components/OtpVerify'
-import { login as apiLogin, validateOtp, resendOtp } from '@/services/auth'
+import { login as apiLogin, validateOtp, resendOtp, mapApiRoleToFront } from '@/services/auth'
 import { setJwt } from '@/api/client'
 
 const roleCards = [
@@ -94,11 +94,14 @@ export default function Login() {
     try {
       const res = await validateOtp(userId, otpCode)
       setJwt(res.token, true)
-      const frontRole = selectedRole === 'administrador' ? 'organizador' : selectedRole
+      // El rol lo decide el BACKEND (res.user.role), no el dropdown de la UI.
+      // Antes se usaba selectedRole, por eso un árbitro podía entrar como otro rol.
+      const fallbackRole = selectedRole === 'administrador' ? 'organizador' : selectedRole
+      const frontRole = (res.user?.role ? mapApiRoleToFront(res.user.role) : fallbackRole) as import('@/hooks/auth/useAuth').UserRole
       const userEmail = res.user?.email || email || `${selectedRole}@techcup.com`
       const userName = res.user?.fullName || userEmail
-      login(userEmail, frontRole as import('@/hooks/auth/useAuth').UserRole, '', userName)
-      navigate(selectedRole === 'arbitro' ? '/arbitro/dashboard' : `/dashboard/${frontRole}`)
+      login(userEmail, frontRole, '', userName)
+      navigate(frontRole === 'arbitro' ? '/arbitro/dashboard' : `/dashboard/${frontRole}`)
     } catch (err) {
       // Si la API no responde, intentar login local
       if (!userId) return setAuthError('Error de conexión')
