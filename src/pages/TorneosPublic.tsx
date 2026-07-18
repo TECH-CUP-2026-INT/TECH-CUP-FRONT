@@ -59,10 +59,12 @@ function TorneosContent() {
 
         {/* 3D Carousel de fondo */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <ThreeDCarousel images={[
-            { src: '/images/fondo-1.png', alt: '' },
-            { src: '/images/fondo-2.png', alt: '' },
-            { src: '/images/fondo-3.png', alt: '' },
+          <ThreeDCarousel spotlightOffsetY={50} images={[
+            { src: '/images/carrusel-2.png', alt: '' },
+            { src: '/images/carrusel-3.png', alt: '' },
+            { src: '/images/carrusel-4.png', alt: '' },
+            { src: '/images/carrusel-5.png', alt: '' },
+            { src: '/images/carrusel-8.png', alt: '' },
           ]} />
         </div>
 
@@ -88,16 +90,10 @@ function TorneosContent() {
               animation: scroll 60s linear infinite;
             }
           `}</style>
-          <div className="text-center max-w-[700px] mx-auto relative z-10">
-            <motion.span initial={{opacity:0,y:-10}} animate={{opacity:1,y:0}} transition={{delay:0.2}} className="inline-flex items-center gap-2 text-[11.5px] font-bold tracking-[1.6px] uppercase text-gold bg-gold/10 border border-gold/30 px-3.5 py-1.5 rounded-full mb-[22px]">
-              <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" /> Torneos
-            </motion.span>
+          <div className="text-center max-w-[700px] mx-auto relative z-10 mt-[222px]">
             <motion.h1 initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:0.3}} className="font-[family-name:var(--font-display-alt)] font-bold text-[clamp(42px,6vw,72px)] leading-[.92] tracking-[.5px] uppercase italic mb-4">
               <span className="text-[#3D1A6B] dark:text-[#F7EDE2]">Torneos</span> <span className="text-gold">y Equipos</span>
             </motion.h1>
-            <motion.p initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.5}} className="text-base leading-relaxed text-[#7A6B99] dark:text-text-muted max-w-[560px] mx-auto">
-              Descubre los torneos disponibles, explora los equipos inscritos y sé parte de la competencia más emocionante de Ingeniería de Sistemas.
-            </motion.p>
             <motion.div initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{delay:0.7}} className="flex items-center justify-center gap-6 mt-5 text-[13px] text-[#7A6B99] dark:text-text-muted">
               <span><strong className="text-gold">{torneos.length}</strong> torneos</span>
               <span className="w-px h-4 bg-black/10 dark:bg-white/10" />

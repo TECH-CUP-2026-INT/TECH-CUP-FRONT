@@ -3,9 +3,13 @@ import { motion } from 'framer-motion'
 import DashboardLayout from '@/components/common/DashboardLayout'
 import { SpotlightCard } from '@/components/common/spotlight-card'
 import { Badge } from '@/components/common/badge'
-import { Trophy, Goal, ShieldCheck, Swords, Medal, ArrowUp, ArrowDown, Minus } from 'lucide-react'
+import { Button } from '@/components/common/button'
+import {
+  Trophy, Goal, ShieldCheck, Swords, Medal,
+  ArrowUp, ArrowDown, Minus, Shuffle, Shield,
+} from 'lucide-react'
 
-type RankingTab = 'posiciones' | 'goleadores' | 'valla' | 'fairplay'
+type RankingTab = 'posiciones' | 'goleadores' | 'valla' | 'fairplay' | 'llaves'
 
 interface TablaEquipo {
   pos: number
@@ -93,6 +97,7 @@ const tabs = [
   { id: 'goleadores' as RankingTab, label: 'Goleadores', icon: Goal },
   { id: 'valla' as RankingTab, label: 'Valla menos vencida', icon: ShieldCheck },
   { id: 'fairplay' as RankingTab, label: 'Fair Play', icon: Swords },
+  { id: 'llaves' as RankingTab, label: 'Llaves', icon: Shield },
 ]
 
 function CambioIcon({ cambio }: { cambio: 'sube' | 'baja' | 'igual' }) {
@@ -285,7 +290,299 @@ export default function Rankings() {
             </div>
           </SpotlightCard>
         )}
+
+        {/* ===== LLAVES ELIMINATORIAS ===== */}
+        {tab === 'llaves' && <LlavesBracket />}
       </main>
     </DashboardLayout>
+  )
+}
+
+/* ─────────────────────── WORLD CUP BRACKET ─────────────────────── */
+
+type EquipoB = { nom: string; emoji: string; color: string; bandera: string }
+
+type PartidoB = {
+  eq1: EquipoB
+  eq2: EquipoB
+  res1: number | null
+  res2: number | null
+  ganador: string | null
+  penales?: boolean
+  penRes1?: number
+  penRes2?: number
+}
+
+type RondaB = {
+  nombre: string
+  abbr: string
+  partidos: PartidoB[]
+}
+
+const equiposB: EquipoB[] = [
+  { nom: 'Tigres FC', emoji: '🐯', color: '#EF4444', bandera: '🇲🇽' },
+  { nom: 'Sistemas FC', emoji: '⚙️', color: '#22C55E', bandera: '🇨🇴' },
+  { nom: 'Code United', emoji: '🔵', color: '#3B82F6', bandera: '🇺🇸' },
+  { nom: 'IA Warriors', emoji: '🦁', color: '#8B5CF6', bandera: '🇬🇧' },
+]
+
+function simularPartido(e1: EquipoB, e2: EquipoB): PartidoB {
+  const a = Math.random() * 4 | 0
+  const b = Math.random() * 4 | 0
+  let penales = false
+  let p1: number | undefined
+  let p2: number | undefined
+  let gan: string
+  if (a !== b) {
+    gan = a > b ? e1.nom : e2.nom
+  } else {
+    penales = true
+    p1 = (Math.random() * 5 | 0) + 1
+    p2 = (Math.random() * 5 | 0) + 1
+    while (p1 === p2) { p1 = (Math.random() * 5 | 0) + 1 }
+    gan = p1 > p2 ? e1.nom : e2.nom
+  }
+  return { eq1: e1, eq2: e2, res1: a, res2: b, ganador: gan, penales, penRes1: p1, penRes2: p2 }
+}
+
+function generarBracket(): RondaB[] {
+  const mezcla = [...equiposB].sort(() => Math.random() - 0.5)
+
+  const semi1 = simularPartido(mezcla[0], mezcla[1])
+  const semi2 = simularPartido(mezcla[2], mezcla[3])
+
+  const g1 = equiposB.find(e => e.nom === semi1.ganador)!
+  const g2 = equiposB.find(e => e.nom === semi2.ganador)!
+  const final = simularPartido(g1, g2)
+
+  return [
+    { nombre: 'Semifinal', abbr: 'SEMIS', partidos: [semi1, semi2] },
+    { nombre: 'Final', abbr: 'FINAL', partidos: [final] },
+  ]
+}
+
+function MatchCardB({ partido, index }: { partido: PartidoB; index: number }) {
+  const esGanador = (nom: string) => partido.ganador === nom
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: index * 0.04, duration: 0.3 }}
+      className="mb-1.5"
+    >
+      <div className="bg-surface/80 border-4 dark:border-white/20 border-gray-500/50 rounded-lg overflow-hidden shadow-sm">
+        {/* Team 1 */}
+        <div className={`flex items-center gap-1.5 px-2.5 py-1.5 border-b border-border/50 transition-all ${
+          esGanador(partido.eq1.nom)
+            ? 'bg-gold/10 border-l-2 border-l-gold'
+            : partido.ganador && !esGanador(partido.eq1.nom)
+            ? 'opacity-50'
+            : ''
+        }`}>
+          <span className="text-xs">{partido.eq1.emoji}</span>
+          <span className="font-semibold flex-1 truncate text-xs">{partido.eq1.nom}</span>
+          {esGanador(partido.eq1.nom) && <Trophy size={10} className="text-gold mr-1" />}
+          <span className={`font-bold font-mono text-xs ${esGanador(partido.eq1.nom) ? 'text-gold' : 'text-text-muted'}`}>
+            {partido.res1 ?? '-'}
+          </span>
+        </div>
+
+        {/* Team 2 */}
+        <div className={`flex items-center gap-1.5 px-2.5 py-1.5 transition-all ${
+          esGanador(partido.eq2.nom)
+            ? 'bg-gold/10 border-l-2 border-l-gold'
+            : partido.ganador && !esGanador(partido.eq2.nom)
+            ? 'opacity-50'
+            : ''
+        }`}>
+          <span className="text-xs">{partido.eq2.emoji}</span>
+          <span className="font-semibold flex-1 truncate text-xs">{partido.eq2.nom}</span>
+          {esGanador(partido.eq2.nom) && <Trophy size={10} className="text-gold mr-1" />}
+          <span className={`font-bold font-mono text-xs ${esGanador(partido.eq2.nom) ? 'text-gold' : 'text-text-muted'}`}>
+            {partido.res2 ?? '-'}
+          </span>
+        </div>
+
+        {partido.penales && partido.penRes1 != null && partido.penRes2 != null && (
+          <div className="flex items-center justify-center gap-2 px-2 py-0.5 bg-purple-black/50 border-t border-border/30">
+            <span className="text-[8px] text-text-faint uppercase tracking-[1px]">Pen</span>
+            <span className="text-[10px] font-bold font-mono text-purple-mid">{partido.penRes1} - {partido.penRes2}</span>
+          </div>
+        )}
+      </div>
+    </motion.div>
+  )
+}
+
+function LlavesBracket() {
+  const [generado, setGenerado] = useState(false)
+  const [rondas, setRondas] = useState<RondaB[]>([])
+
+  const handleGenerar = () => {
+    setRondas(generarBracket())
+    setGenerado(true)
+  }
+
+  const champion = rondas.length > 1 && rondas[1].partidos[0]?.ganador
+    ? equiposB.find(e => e.nom === rondas[1].partidos[0].ganador)
+    : null
+
+  if (!generado) {
+    return (
+      <SpotlightCard accent="gold" className="bg-surface border-4 dark:border-white/15 border-gray-500/40 rounded-2xl overflow-hidden mt-2">
+        <div className="p-5 pb-3 border-b-4 dark:border-b-white/10 border-b-gray-500/30">
+          <h3 className="font-[family-name:var(--font-display)] text-lg uppercase flex items-center gap-2">
+            <Shield size={18} className="text-gold" /> Fase <span className="text-gold">eliminatoria</span>
+          </h3>
+        </div>
+        <div className="flex items-center justify-between px-5 py-3">
+          <p className="text-xs text-text-muted">Semifinales · 4 equipos</p>
+          <Button onClick={handleGenerar} size="sm"
+            className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark text-xs h-auto py-2 px-4 flex items-center gap-1.5">
+            <Shuffle size={14} /> Generar llaves
+          </Button>
+        </div>
+        <div className="text-center py-14">
+          <Swords size={40} className="mx-auto text-text-faint mb-3" />
+          <p className="text-text-muted text-sm">Presioná <span className="text-gold font-semibold">"Generar llaves"</span> para crear el bracket</p>
+        </div>
+      </SpotlightCard>
+    )
+  }
+
+  return (
+    <SpotlightCard accent="gold" className="bg-surface border-4 dark:border-white/15 border-gray-500/40 rounded-2xl overflow-hidden mt-2">
+      <div className="p-5 pb-3 border-b-4 dark:border-b-white/10 border-b-gray-500/30 flex items-center justify-between max-md:flex-col gap-3">
+        <div>
+          <h3 className="font-[family-name:var(--font-display)] text-lg uppercase flex items-center gap-2">
+            <Shield size={18} className="text-gold" /> Fase <span className="text-gold">eliminatoria</span>
+          </h3>
+          <p className="text-xs text-text-muted">Semifinales · 4 equipos</p>
+        </div>
+        <Button onClick={handleGenerar} size="sm"
+          className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark text-xs h-auto py-2 px-4 flex items-center gap-1.5">
+          <Shuffle size={14} /> Regenerar
+        </Button>
+      </div>
+
+      <div className="overflow-x-auto p-5">
+        <div className="min-w-[700px]">
+          {/* Round badges alineados con las columnas de abajo */}
+          <div className="flex items-center gap-0 mb-5">
+            <div className="min-w-[185px] text-center">
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[9px] uppercase font-bold tracking-[1.5px] bg-purple-black/60 text-text-faint border-4 dark:border-white/15 border-gray-500/40">
+                SEMIS
+              </span>
+            </div>
+            <div className="w-12 flex-shrink-0" />
+            <div className="min-w-[185px] text-center">
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[9px] uppercase font-bold tracking-[1.5px] bg-gold/15 text-gold border-4 border-gold/40">
+                <Trophy size={11} className="text-gold" /> FINAL
+              </span>
+            </div>
+            <div className="w-12 flex-shrink-0" />
+            {champion && (
+              <div className="min-w-[130px] text-center">
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[9px] uppercase font-bold tracking-[1.5px] bg-gold/20 text-gold border-4 border-gold/50">
+                  <Medal size={11} /> CAMPEÓN
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Bracket — estilo árbol tipo mundial */}
+          <div className="flex items-stretch gap-0">
+            {/* ─── Columna Semifinales ─── */}
+            <div className="flex flex-col justify-between min-w-[185px]">
+              {rondas[0].partidos.map((p, pi) => (
+                <MatchCardB key={pi} partido={p} index={pi} />
+              ))}
+            </div>
+
+            {/* ─── Conector tipo árbol: ramas que convergen ─── */}
+            <div className="w-12 flex-shrink-0 relative mx-1">
+              <svg
+                className="absolute inset-0 w-full h-full"
+                viewBox="0 0 48 100"
+                preserveAspectRatio="none"
+              >
+                {/* Rama desde Semi 1 (~20%) hacia el centro (~50%) */}
+                <path
+                  d="M0,20 L28,20 L28,50"
+                  stroke="rgba(245,166,35,0.35)"
+                  strokeWidth="2"
+                  fill="none"
+                  vectorEffect="non-scaling-stroke"
+                />
+                {/* Rama desde Semi 2 (~80%) hacia el centro (~50%) */}
+                <path
+                  d="M0,80 L28,80 L28,50"
+                  stroke="rgba(245,166,35,0.35)"
+                  strokeWidth="2"
+                  fill="none"
+                  vectorEffect="non-scaling-stroke"
+                />
+                {/* Tronco vertical que une las ramas */}
+                <line
+                  x1="28" y1="20" x2="28" y2="80"
+                  stroke="rgba(245,166,35,0.15)"
+                  strokeWidth="1.5"
+                  vectorEffect="non-scaling-stroke"
+                />
+                {/* Flecha → que apunta a la final */}
+                <polygon points="36,46 46,50 36,54" fill="rgba(245,166,35,0.6)" />
+              </svg>
+            </div>
+
+            {/* ─── Columna Final ─── */}
+            <div className="flex flex-col justify-center min-w-[185px]">
+              {rondas[1].partidos.map((p, pi) => (
+                <MatchCardB key={pi} partido={p} index={pi} />
+              ))}
+            </div>
+
+            {/* ─── Conector Final → Champion ─── */}
+            {champion && (
+              <div className="w-12 flex-shrink-0 relative mx-1">
+                <svg
+                  className="absolute inset-0 w-full h-full"
+                  viewBox="0 0 48 100"
+                  preserveAspectRatio="none"
+                >
+                  <path
+                    d="M0,50 L34,50"
+                    stroke="rgba(245,166,35,0.35)"
+                    strokeWidth="2"
+                    fill="none"
+                    vectorEffect="non-scaling-stroke"
+                  />
+                  <polygon points="38,46 48,50 38,54" fill="rgba(245,166,35,0.6)" />
+                </svg>
+              </div>
+            )}
+
+            {/* ─── Columna Campeón ─── */}
+            {champion && (
+              <div className="flex flex-col justify-center min-w-[130px]">
+                <motion.div
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.6, duration: 0.5 }}
+                  className="flex flex-col items-center gap-2 p-4 rounded-xl bg-gradient-to-b from-gold/20 via-gold/10 to-transparent border-4 border-gold/50"
+                >
+                  <span className="text-3xl">🏆</span>
+                  <span className="text-2xl">{champion.emoji}</span>
+                  <p className="font-[family-name:var(--font-display)] text-sm uppercase text-gold text-center">
+                    {champion.nom}
+                  </p>
+                  <p className="text-[10px] text-text-muted">Campeón 2026-I</p>
+                </motion.div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </SpotlightCard>
   )
 }

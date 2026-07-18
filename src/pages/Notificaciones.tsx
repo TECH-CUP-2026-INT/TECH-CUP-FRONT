@@ -30,12 +30,12 @@ const notificacionesMock: Notificacion[] = [
   { id: 8, tipo: 'inscripcion', titulo: 'Comprobante recibido', descripcion: 'Subieron un comprobante de pago para TechCup 2026-II.', hora: 'Hace 2 días', leida: true, accion: 'revisar' },
 ]
 
-const tipoConfig: Record<string, { icon: typeof Bell; color: string; bg: string }> = {
-  sancion: { icon: ShieldAlert, color: 'text-red-400', bg: 'bg-red-500/10' },
-  mensaje: { icon: MessageSquare, color: 'text-blue-400', bg: 'bg-blue-500/10' },
-  invitacion: { icon: UserPlus, color: 'text-purple-400', bg: 'bg-purple-500/10' },
-  inscripcion: { icon: CreditCard, color: 'text-green-400', bg: 'bg-green-500/10' },
-  partido: { icon: Calendar, color: 'text-gold', bg: 'bg-gold/10' },
+const tipoConfig: Record<string, { icon: typeof Bell; color: string; bg: string; img: string; dot: string }> = {
+  sancion: { icon: ShieldAlert, color: 'text-red-400', bg: 'bg-red-500/10', img: '/manchas-sancion.png', dot: 'bg-red-400' },
+  mensaje: { icon: MessageSquare, color: 'text-blue-400', bg: 'bg-blue-500/10', img: '/manchas-mensaje.png', dot: 'bg-blue-400' },
+  invitacion: { icon: UserPlus, color: 'text-purple-400', bg: 'bg-purple-500/10', img: '/manchas-invitacion.png', dot: 'bg-purple-400' },
+  inscripcion: { icon: CreditCard, color: 'text-green-400', bg: 'bg-green-500/10', img: '/manchas-inscripcion.png', dot: 'bg-green-400' },
+  partido: { icon: Calendar, color: 'text-gold', bg: 'bg-gold/10', img: '/manchas-partido.png', dot: 'bg-gold' },
 }
 
 const tabs = [
@@ -51,6 +51,7 @@ export default function Notificaciones() {
   const navigate = useNavigate()
   const [notificaciones, setNotificaciones] = useState(notificacionesMock)
   const [tab, setTab] = useState<TipoNotif>('todas')
+  const [invitacionActiva, setInvitacionActiva] = useState<Notificacion | null>(null)
 
   const filtered = tab === 'todas' ? notificaciones : notificaciones.filter(n => n.tipo === tab)
   const noLeidas = notificaciones.filter(n => !n.leida).length
@@ -94,7 +95,10 @@ export default function Notificaciones() {
         <div className="flex items-center gap-1 bg-surface/50 border border-border/60 rounded-2xl p-1 mb-6 overflow-x-auto">
           {tabs.map(t => (
             <button key={t.id} onClick={() => setTab(t.id)}
-              className={`py-2 px-3.5 rounded-xl text-sm font-semibold capitalize whitespace-nowrap transition-all ${tab === t.id ? 'bg-purple-mid text-white shadow-lg shadow-purple-mid/25' : 'text-text-muted hover:text-white'}`}>
+              className={`flex items-center py-2 px-3.5 rounded-xl text-sm font-semibold capitalize whitespace-nowrap transition-all ${tab === t.id ? 'bg-purple-mid text-white shadow-lg shadow-purple-mid/25' : 'text-text-muted hover:text-white'}`}>
+              {t.id !== 'todas' && (
+                <span className={`inline-block w-2 h-2 rounded-full ${tipoConfig[t.id].dot} mr-1.5 flex-shrink-0`} />
+              )}
               {t.label}
               {t.id !== 'todas' && (
                 <span className="ml-1.5 text-[10px] opacity-60">
@@ -123,14 +127,15 @@ export default function Notificaciones() {
                       className={`bg-surface border rounded-2xl p-4 transition-all hover:bg-white/5 cursor-pointer ${n.leida ? 'border-border' : 'border-gold/30'}`}
                       onClick={() => marcarLeida(n.id)}>
                       <div className="flex items-start gap-4">
-                        <div className={`w-10 h-10 rounded-xl ${cfg.bg} flex items-center justify-center flex-shrink-0`}>
-                          <Icon size={18} className={cfg.color} />
+                        <div className="relative w-14 h-14 flex-shrink-0">
+                          <img src={cfg.img} alt="Manchas" className="w-14 h-14 object-contain" />
+                          <span className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full ${cfg.dot} border-2 border-surface`} />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-2">
-                            <h3 className={`text-sm ${n.leida ? 'text-white' : 'text-white font-bold'}`}>{n.titulo}</h3>
+                            <h3 className={`text-sm ${n.leida ? 'text-gray-light' : 'text-gray-light font-bold'}`}>{n.titulo}</h3>
                             <div className="flex items-center gap-1.5 flex-shrink-0">
-                              {!n.leida && <span className="w-2 h-2 rounded-full bg-gold" />}
+                              {!n.leida && <span className="w-3 h-3 rounded-full bg-gold" />}
                               <button onClick={e => { e.stopPropagation(); eliminar(n.id) }} className="text-text-faint hover:text-red-400 transition-colors p-0.5">
                                 <Trash2 size={14} />
                               </button>
@@ -140,7 +145,7 @@ export default function Notificaciones() {
                           <div className="flex items-center gap-2 mt-2">
                             <span className="text-[10px] text-text-faint">{n.hora}</span>
                             {n.accion === 'responder' && (
-                              <Button size="sm" className="rounded-full bg-purple-mid text-white text-[10px] h-auto py-1 px-3 hover:bg-purple-deep gap-1" onClick={e => { e.stopPropagation(); navigate('/invitaciones') }}>
+                              <Button size="sm" className="rounded-full bg-purple-mid text-white text-[10px] h-auto py-1 px-3 hover:bg-purple-deep gap-1" onClick={e => { e.stopPropagation(); setInvitacionActiva(n) }}>
                                 Ver invitación <ChevronRight size={12} />
                               </Button>
                             )}
@@ -160,6 +165,37 @@ export default function Notificaciones() {
           </AnimatePresence>
         )}
       </main>
+
+      <AnimatePresence>
+        {invitacionActiva && (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4"
+            onClick={() => setInvitacionActiva(null)}>
+            <motion.div
+              initial={{ opacity: 0, y: 10, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 10, scale: 0.97 }}
+              className="bg-surface border border-border rounded-2xl p-6 max-w-sm w-full text-center"
+              onClick={e => e.stopPropagation()}>
+              <img src={tipoConfig.invitacion.img} alt="Manchas" className="w-20 h-20 object-contain mx-auto mb-3" />
+              <h3 className="font-[family-name:var(--font-display)] text-lg uppercase text-gray-light mb-2">{invitacionActiva.titulo}</h3>
+              <p className="text-sm text-text-muted mb-6">{invitacionActiva.descripcion}</p>
+              <div className="flex gap-2">
+                <Button
+                  onClick={() => { eliminar(invitacionActiva.id); setInvitacionActiva(null) }}
+                  variant="outline"
+                  className="flex-1 rounded-full border border-border text-text-muted hover:text-red-400 hover:border-red-400/40 text-xs h-9">
+                  Rechazar
+                </Button>
+                <Button
+                  onClick={() => { marcarLeida(invitacionActiva.id); setInvitacionActiva(null) }}
+                  className="flex-1 rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark text-xs h-9 font-bold">
+                  Aceptar
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </DashboardLayout>
   )
 }
