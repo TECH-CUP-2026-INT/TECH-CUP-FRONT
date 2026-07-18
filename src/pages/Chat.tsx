@@ -40,8 +40,7 @@ export default function Chat() {
   const [input, setInput] = useState('')
   const [sendError, setSendError] = useState<string | null>(null)
 
-  const profileCache = useRef<Map<string, PerfilPublicoResponse>>(new Map())
-  const [, forceRerender] = useState(0)
+  const [profiles, setProfiles] = useState<Record<string, PerfilPublicoResponse>>({})
   const stompClientRef = useRef<Client | null>(null)
   const subscriptionRef = useRef<StompSubscription | null>(null)
 
@@ -127,16 +126,16 @@ export default function Chat() {
 
   function resolveSenderProfiles(msgs: Message[]) {
     const unknown = [...new Set(msgs.map(m => m.senderId))].filter(
-      id => id !== myUserId && !profileCache.current.has(id),
+      id => id !== myUserId && !(id in profiles),
     )
     if (unknown.length === 0) return
     Promise.all(
-      unknown.map(id =>
-        getPerfilPublico(id)
-          .then(perfil => profileCache.current.set(id, perfil))
-          .catch(() => {}),
-      ),
-    ).then(() => forceRerender(n => n + 1))
+      unknown.map(id => getPerfilPublico(id).then(perfil => [id, perfil] as const).catch(() => null)),
+    ).then(results => {
+      const found = results.filter((r): r is readonly [string, PerfilPublicoResponse] => r !== null)
+      if (found.length === 0) return
+      setProfiles(prev => ({ ...prev, ...Object.fromEntries(found) }))
+    })
   }
 
   async function handleSend() {
@@ -152,7 +151,7 @@ export default function Chat() {
 
   function senderName(senderId: string): string {
     if (senderId === myUserId) return 'Tú'
-    return profileCache.current.get(senderId)?.nombreCompleto ?? 'Usuario'
+    return profiles[senderId]?.nombreCompleto ?? 'Usuario'
   }
 
   function senderAvatar(senderId: string): string {

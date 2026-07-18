@@ -1,4 +1,4 @@
-import { apiGet, apiPost, apiPostForm, apiPut, TEAMS_SERVICE_PREFIX } from './client'
+import { apiGet, apiPostForm, apiPut, TEAMS_SERVICE_PREFIX } from './client'
 import type { Team } from './tipos'
 
 export type InvitationStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED'
