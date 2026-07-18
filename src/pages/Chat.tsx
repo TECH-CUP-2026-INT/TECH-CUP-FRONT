@@ -13,6 +13,7 @@ import {
   MANCHAS_BOT_GREETINGS,
   isManchasBotMessage,
   cleanManchasBotMessage,
+  getBotResponse,
 } from '@/utils/manchasbot'
 
 function chatLabel(chat: ChatDto): string {
@@ -180,10 +181,31 @@ export default function Chat() {
 
   async function handleSend() {
     if (!input.trim() || !selectedChatId) return
+    const texto = input.trim()
     setSendError(null)
     try {
-      await sendMessage(selectedChatId, input.trim())
+      await sendMessage(selectedChatId, texto)
       setInput('')
+      // En chats de soporte, ManchasBot responde automáticamente.
+      // Antes solo saludaba una vez y quedaba mudo ("chat con IA no responde").
+      if (selectedChat?.type === 'SUPPORT') {
+        const respuesta = getBotResponse(texto)
+        setTimeout(() => {
+          sendMessage(selectedChatId, `🤖 *ManchasBot*: ${respuesta}`)
+            .then(() => getChatMessages(selectedChatId).then(p => setMessages(p.content)))
+            .catch(() => {
+              // Si el envío falla, mostramos la respuesta localmente igual.
+              setMessages(prev => [...prev, {
+                id: `manchas-${Date.now()}`,
+                chatId: selectedChatId,
+                senderId: 'MANCHAS_BOT',
+                content: `🤖 *ManchasBot*: ${respuesta}`,
+                status: 'SENT',
+                sentAt: new Date().toISOString(),
+              }])
+            })
+        }, 700)
+      }
     } catch {
       setSendError('No se pudo enviar el mensaje. Intentá de nuevo.')
     }
