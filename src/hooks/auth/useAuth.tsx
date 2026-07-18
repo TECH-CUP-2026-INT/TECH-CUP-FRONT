@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react'
 import { clearJwt, hasJwt } from '@/api/client'
-import { getInitialsAvatar } from '@/utils/avatar'
 
 export type UserRole = 'jugador' | 'arbitro' | 'organizador'
 
@@ -21,6 +20,19 @@ interface AuthContextType {
   removeCaptain: () => void
 }
 
+function getInitialsAvatar(name: string): string {
+  const initials = name
+    .split(' ')
+    .map(w => w[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join('')
+    .toUpperCase() || '?'
+  const colors = ['#7f77dd', '#e24b4a', '#3fc8ff', '#e8bd5f', '#4CAF50', '#FF9800']
+  const color = colors[name.length % colors.length]
+  return `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="${color}"/><text x="50" y="50" dominant-baseline="central" text-anchor="middle" fill="white" font-size="40" font-weight="700" font-family="Arial,sans-serif">${initials}</text></svg>`)}`
+}
+
 const AuthContext = createContext<AuthContextType>({
   user: null,
   login: () => {},
@@ -31,25 +43,14 @@ const AuthContext = createContext<AuthContextType>({
 })
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(() => {
-    // Si no hay sesi├│n guardada, crear usuario demo automaticamente
-    const stored = localStorage.getItem('techcup_user')
-    if (stored) return JSON.parse(stored)
-    if (hasJwt()) return null
-    const demo: User = {
-      name: 'Usuario Demo',
-      email: 'demo@techcup.com',
-      avatar: getInitialsAvatar('Usuario Demo'),
-      role: 'jugador',
-      isCaptain: false,
-    }
-    localStorage.setItem('techcup_user', JSON.stringify(demo))
-    return demo
-  })
+  const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
-    if (!localStorage.getItem('techcup_user') && hasJwt()) {
-      // Hay JWT pero no user data ΓåÆ intentar validarlo
+    const stored = localStorage.getItem('techcup_user')
+    if (stored) {
+      setUser(JSON.parse(stored))
+    } else if (hasJwt()) {
+      // Hay JWT pero no user data → intentar validarlo
       import('@/services/auth').then(({ validateToken }) => {
         validateToken().then((res) => {
           if (res?.valid && res.email) {
