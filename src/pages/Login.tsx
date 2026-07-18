@@ -152,10 +152,13 @@ export default function Login() {
         <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-gold/5 blur-[60px]" />
         <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-gold/10 blur-[50px]" />
         <div className={`relative w-full transition-all duration-300 ${step === 'role' ? 'max-w-[560px]' : 'max-w-[460px]'}`}>
-          {/* Back to home button */}
-          <Link to="/" aria-label="Volver al inicio" className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-black/60 border border-gold/30 text-gold-ink hover:bg-gold/20 hover:text-white transition-all duration-300 backdrop-blur-sm mb-10">
-            <ArrowLeft size={16} />
-          </Link>
+          {/* Logo + back to home button */}
+          <div className="flex items-center gap-3 mb-10">
+            <img src="/assets/logo.png" alt="TechCup" className="w-9 h-9 rounded-lg object-cover shadow-lg shadow-gold/20" />
+            <Link to="/" aria-label="Volver al inicio" className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-black/60 border border-gold/30 text-gold-ink hover:bg-gold/20 hover:text-white transition-all duration-300 backdrop-blur-sm">
+              <ArrowLeft size={16} />
+            </Link>
+          </div>
 
           {step === 'role' ? (
             /* Step 1: Role Selector — recuadro negro-dorado */
@@ -181,7 +184,7 @@ export default function Login() {
                 <ArrowLeft size={16} /> Elegir otro rol
               </button>
               <div className="flex items-center gap-3 mb-2 p-3 rounded-xl bg-purple-mid/10 border border-gold/20">
-                <img src={`/images/${selectedRole}.png`} alt="" className="w-10 h-10 object-contain" />
+                <img src={roleCards.find(r => r.shortName.toLowerCase() === selectedRole)?.img} alt="" className="w-10 h-10 object-contain" />
                 <div>
                   <p className="text-xs text-gold/60 uppercase tracking-wider">Rol seleccionado</p>
                   <p className="text-sm font-bold text-white">{selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)}</p>
