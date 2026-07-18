@@ -16,12 +16,10 @@ export function SpotlightCard({
   className,
   onClick,
 }: SpotlightCardProps) {
+  const Tag = onClick ? 'button' : 'div'
   return (
-    <div
+    <Tag
       onClick={onClick}
-      role={onClick ? "button" : undefined}
-      tabIndex={onClick ? 0 : undefined}
-      onKeyDown={onClick ? (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onClick() } } : undefined}
       className={cn(
         "relative overflow-hidden rounded-2xl transition-all duration-300",
         "hover:-translate-y-1 hover:shadow-lg",
@@ -30,6 +28,6 @@ export function SpotlightCard({
       )}
     >
       {children}
-    </div>
+    </Tag>
   );
 }

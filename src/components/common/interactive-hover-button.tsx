@@ -23,7 +23,7 @@ export function InteractiveHoverButton({
       onMouseLeave={() => setHovered(false)}
       onClick={onClick}
       className={cn(
-        "group relative cursor-pointer overflow-hidden rounded-full border border-gold/40 bg-gold/5 px-8 py-3 font-bold uppercase text-gold-ink transition-all duration-500 hover:bg-gold/15",
+        "group relative cursor-pointer overflow-hidden rounded-full border border-gold/40 bg-gold/5 px-8 py-3 font-bold text-gold transition-all duration-500 hover:bg-gold/15",
         className
       )}
     >

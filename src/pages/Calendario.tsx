@@ -113,11 +113,11 @@ function CalendarioContent() {
             }
           `}</style>
           <div className="text-center max-w-[600px] mx-auto relative z-10">
-            <motion.span initial={{opacity:0,y:-10}} animate={{opacity:1,y:0}} transition={{delay:0.2}} className="inline-flex items-center gap-2 text-[11.5px] font-bold tracking-[1.6px] uppercase text-gold-ink bg-gold/10 border border-gold/30 px-3.5 py-1.5 rounded-full mb-[22px]">
+            <motion.span initial={{opacity:0,y:-10}} animate={{opacity:1,y:0}} transition={{delay:0.2}} className="inline-flex items-center gap-2 text-[11.5px] font-bold tracking-[1.6px] uppercase text-gold bg-gold/10 border border-gold/30 px-3.5 py-1.5 rounded-full mb-[22px]">
               <CalendarDays size={14} /> Calendario {año}
             </motion.span>
             <motion.h1 initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:0.3}} className="font-[family-name:var(--font-display-alt)] font-bold text-[clamp(28px,4vw,48px)] leading-[.92] tracking-[.5px] uppercase italic mb-4">
-              <span className="text-[#3D1A6B] dark:text-[#F7EDE2]">Calendario</span> <span className="text-gold-ink">de Partidos</span>
+              <span className="text-[#3D1A6B] dark:text-[#F7EDE2]">Calendario</span> <span className="text-gold">de Partidos</span>
             </motion.h1>
             <motion.p initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.5}} className="text-base leading-relaxed text-[#7A6B99] dark:text-text-muted">Consultá la programación de partidos, filtrá por torneo y seguí la acción en vivo.</motion.p>
           </div>
@@ -175,7 +175,7 @@ function CalendarioContent() {
             {/* Left: Lista de partidos — solo primeros 5 */}
             <div>
               <h2 className="font-[family-name:var(--font-display)] text-xl uppercase tracking-[.5px] mb-5 text-[#3D1A6B] dark:text-white">
-                Próximos <span className="text-gold-ink">partidos</span>
+                Próximos <span className="text-gold">partidos</span>
               </h2>
               <div className="flex flex-col gap-3">
                 {partidos.length === 0 && (
@@ -193,7 +193,7 @@ function CalendarioContent() {
                         <div className="flex flex-col items-center min-w-[50px]">
                           <span className="font-[family-name:var(--font-display)] text-2xl leading-none text-[#3D1A6B] dark:text-white">{p.dia}</span>
                           <span className="text-[10px] text-[#7A6B99] dark:text-text-muted uppercase font-semibold tracking-wider">{p.mes}</span>
-                          <div className="flex items-center gap-1 mt-1.5"><Clock size={11} className="text-gold-ink" /><span className="text-[10px] font-bold text-gold-ink">{p.hora}</span></div>
+                          <div className="flex items-center gap-1 mt-1.5"><Clock size={11} className="text-gold" /><span className="text-[10px] font-bold text-gold">{p.hora}</span></div>
                         </div>
                         <div className="w-[2px] self-stretch bg-[#D4C8E8]/40 dark:bg-white/10 rounded-full max-md:hidden" />
                         <div className="flex-1 flex items-center justify-center gap-3 max-md:justify-center">
@@ -228,7 +228,7 @@ function CalendarioContent() {
                       <div className="relative w-full h-full flex flex-col justify-between p-5 z-10">
                         <div>
                           <span className="inline-block rounded-full text-[10px] font-bold uppercase tracking-[.4px] px-2.5 py-0.5 mb-2 bg-white/15 text-white border border-white/20 backdrop-blur-sm">Próximo</span>
-                          <span className="block text-[10px] tracking-[1.2px] text-gold-ink font-bold uppercase mb-1">Torneo oficial</span>
+                          <span className="block text-[10px] tracking-[1.2px] text-gold font-bold uppercase mb-1">Torneo oficial</span>
                           <h3 className="font-[family-name:var(--font-display)] text-xl uppercase text-white leading-tight">{selectedMatch.eq1} vs {selectedMatch.eq2}</h3>
                           <p className="text-[12px] text-white/60 mt-1">{selectedMatch.dia} de {selectedMatch.mes} • {selectedMatch.hora}</p>
                         </div>
@@ -240,13 +240,13 @@ function CalendarioContent() {
                                 <TeamLogo icon={teamIcons[selectedMatch.eq1]?.icon || Cat} size={22} bgColor="rgb(231, 178, 58)" iconColor="rgb(58, 42, 5)" />
                                 <span className="text-[11px] text-white/60">{selectedMatch.eq1}</span>
                               </div>
-                              <span className="text-[10px] text-gold-ink font-bold">VS</span>
+                              <span className="text-[10px] text-gold font-bold">VS</span>
                               <div className="flex items-center gap-1.5">
                                 <TeamLogo icon={teamIcons[selectedMatch.eq2]?.icon || Cat} size={22} bgColor="rgb(231, 178, 58)" iconColor="rgb(58, 42, 5)" />
                                 <span className="text-[11px] text-white/60">{selectedMatch.eq2}</span>
                               </div>
                             </div>
-                            <span className="text-[11px] font-bold text-gold-ink bg-gold/10 border border-gold/30 px-3 py-1 rounded-full transition-colors">Ver partido</span>
+                            <span className="text-[11px] font-bold text-gold bg-gold/10 border border-gold/30 px-3 py-1 rounded-full transition-colors">Ver partido</span>
                           </div>
                         </div>
                       </div>
@@ -294,20 +294,20 @@ function CalendarioContent() {
                   <span className="inline-block rounded-full text-[10px] font-bold uppercase tracking-[.4px] px-2.5 py-0.5 mb-2 bg-white/15 text-white border border-white/20 backdrop-blur-sm">
                     {t.estado === 'live' ? 'En curso' : t.estado === 'upcoming' ? 'Próximo' : 'Finalizado'}
                   </span>
-                  <span className="block text-[10px] tracking-[1.2px] text-gold-ink font-bold uppercase mb-1">{t.tag}</span>
+                  <span className="block text-[10px] tracking-[1.2px] text-gold font-bold uppercase mb-1">{t.tag}</span>
                   <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase text-white leading-tight">{t.nombre}</h2>
                   <p className="text-[12px] text-white/60 mt-1">{t.categoria} — {t.semestre}</p>
                 </div>
               </div>
               <div className="flex border-b border-[#D4C8E8]/40 dark:border-white/10">
                 <button onClick={() => setModalTab('info')}
-                  className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'info' ? 'text-gold-ink border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold-ink'}`}>Info</button>
+                  className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'info' ? 'text-gold border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold'}`}>Info</button>
                 <button onClick={() => setModalTab('partidos')}
-                  className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'partidos' ? 'text-gold-ink border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold-ink'}`}>Partidos</button>
+                  className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'partidos' ? 'text-gold border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold'}`}>Partidos</button>
                 <button onClick={() => setModalTab('equipos')}
-                  className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'equipos' ? 'text-gold-ink border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold-ink'}`}>Equipos</button>
+                  className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'equipos' ? 'text-gold border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold'}`}>Equipos</button>
                 {!isUpcoming && <button onClick={() => setModalTab('tablero')}
-                  className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'tablero' ? 'text-gold-ink border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold-ink'}`}>Tablero</button>}
+                  className={`flex-1 py-3 text-[12px] font-bold uppercase tracking-[1px] transition-all ${modalTab === 'tablero' ? 'text-gold border-b-2 border-gold' : 'text-[#7A6B99] dark:text-white/50 hover:text-gold'}`}>Tablero</button>}
               </div>
               <div className="p-5 max-h-[50vh] overflow-y-auto">
                 {modalTab === 'info' && (
@@ -374,7 +374,7 @@ function CalendarioContent() {
                         <span className="flex-1 text-xs font-semibold text-[#3D1A6B] dark:text-white truncate">{eq.nom}</span>
                         <span className="w-8 text-center text-[11px] text-[#7A6B99] dark:text-white/60">{eq.pj}</span>
                         <span className={`w-8 text-center text-[11px] font-mono ${eq.dg >= 0 ? 'text-green-500' : 'text-red-400'}`}>{eq.dg > 0 ? '+' : ''}{eq.dg}</span>
-                        <span className="w-8 text-center text-xs font-bold text-gold-ink">{eq.pts}</span>
+                        <span className="w-8 text-center text-xs font-bold text-gold">{eq.pts}</span>
                       </div>
                     ))}
                   </div>

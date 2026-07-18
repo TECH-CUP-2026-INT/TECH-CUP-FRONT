@@ -21,7 +21,7 @@ export default function Footer() {
             <p className="text-[13.5px] text-white/85 leading-relaxed mt-3.5 max-w-[260px]">
               Generado por y para estudiantes.
             </p>
-            <div className="mt-4 w-[170px]">
+            <div className="mt-4 w-[170px] bg-white rounded-lg p-2.5">
               <img src="/assets/logo-eci.png" alt="Escuela Colombiana de Ingeniería Julio Garavito" className="w-full h-auto object-contain" />
             </div>
           </div>
@@ -65,10 +65,10 @@ export default function Footer() {
                       <div className="w-[50px] h-[50px] text-[25px] font-bold border border-purple-mid rounded-[10px] flex items-center justify-center bg-white text-purple-mid">TC</div>
                       <div className="flex flex-col text-white">
                         <div className="text-[17px] font-bold text-purple-mid">TechCup</div>
-                        <div className="text-xs text-white/60">@techcup</div>
+                        <div className="text-xs text-text-muted">@techcup</div>
                       </div>
                     </div>
-                    <div className="text-xs text-white/60 pt-[5px]">1,200+ Followers</div>
+                    <div className="text-xs text-text-muted pt-[5px]">1,200+ Followers</div>
                   </div>
                 </div>
                 <a href="https://www.instagram.com/techcup_eci?igsh=MTg2NDNoYmR2dDFkYg==" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="block relative no-underline text-white">

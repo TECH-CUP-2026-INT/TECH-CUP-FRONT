@@ -64,10 +64,10 @@ export default function ManchasFloating() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="chrome-dark fixed bottom-24 right-6 z-50 w-[360px] max-w-[90vw] bg-black/95 backdrop-blur-xl border border-gold/20 rounded-2xl overflow-hidden shadow-2xl"
+            className="fixed bottom-24 right-6 z-50 w-[360px] max-w-[90vw] bg-black/95 backdrop-blur-xl border border-gold/20 rounded-2xl overflow-hidden shadow-2xl"
           >
             {/* Header */}
-            <div className="flex items-center gap-3 px-4 py-3 border-b border-gold/20 bg-gradient-to-r from-purple-deep2 to-purple-deep">
+            <div className="flex items-center gap-3 px-4 py-3 border-b border-gold/20 bg-gradient-to-r from-purple-deep2 to-purple-black">
               <div className="w-9 h-9 rounded-full overflow-hidden ring-2 ring-gold/40 flex-shrink-0">
                 <img src="/manchas-callcenter.png" alt="" className="w-full h-full object-cover" />
               </div>

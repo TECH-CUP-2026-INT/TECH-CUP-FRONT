@@ -44,7 +44,7 @@ export default function Soporte() {
                 <img src="/manchas-callcenter.png" alt="Manchas" className="w-full h-full object-cover" />
               </div>
               <div>
-                <h2 className="font-[family-name:var(--font-display)] text-lg uppercase">Manchas<span className="text-gold-ink">Bot</span></h2>
+                <h2 className="font-[family-name:var(--font-display)] text-lg uppercase">Manchas<span className="text-gold">Bot</span></h2>
                 <p className="text-xs text-green-400 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" /> En línea</p>
               </div>
             </div>
@@ -56,7 +56,7 @@ export default function Soporte() {
                   <div className={`flex items-start gap-2 max-w-[80%] ${m.tipo === 'user' ? 'flex-row-reverse' : ''}`}>
                     {m.tipo === 'bot' && (
                       <div className="w-8 h-8 rounded-full bg-gold/20 border border-gold/30 flex items-center justify-center flex-shrink-0 mt-1">
-                        <Bot size={14} className="text-gold-ink" />
+                        <Bot size={14} className="text-gold" />
                       </div>
                     )}
                     <div>
@@ -87,7 +87,7 @@ export default function Soporte() {
 
             {/* Escalar */}
             <div className="px-5 pb-4">
-              <Button size="sm" variant="outline" className="rounded-full border-gold/50 text-gold-ink hover:bg-gold/10 text-xs h-auto py-1.5 px-4">
+              <Button size="sm" variant="outline" className="rounded-full border-gold/50 text-gold hover:bg-gold/10 text-xs h-auto py-1.5 px-4">
                 <ArrowUpRight size={14} /> ¿No resuelve tu duda? Escalar a organizador
               </Button>
             </div>

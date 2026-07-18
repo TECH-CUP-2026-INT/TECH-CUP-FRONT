@@ -73,7 +73,7 @@ export function BentoCard({
         {Icon && (
           <span className={cn(
             "w-10 h-10 rounded-xl flex items-center justify-center mb-2",
-            isGold ? "bg-gold/15 text-gold-ink" : "bg-purple-mid/20 text-purple-mid"
+            isGold ? "bg-gold/15 text-gold" : "bg-purple-mid/20 text-purple-mid"
           )}>
             {Icon}
           </span>
@@ -88,7 +88,7 @@ export function BentoCard({
         <div
           className={cn(
             "pointer-events-none z-10 flex items-center gap-2 px-6 pb-6 text-sm font-bold transition-all duration-300",
-            isGold ? "text-gold-ink group-hover:translate-x-1" : "text-purple-mid group-hover:translate-x-1"
+            isGold ? "text-gold group-hover:translate-x-1" : "text-purple-mid group-hover:translate-x-1"
           )}
         >
           {cta} <ArrowRight size={14} />

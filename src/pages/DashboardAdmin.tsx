@@ -291,7 +291,7 @@ export default function DashboardAdmin() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-1.5">
                         <span className="text-[12.5px] font-semibold">{j.nombre}</span>
-                        {j.nombre === t.capitan && <Medal size={10} className="text-gold-ink" />}
+                        {j.nombre === t.capitan && <Medal size={10} className="text-gold" />}
                       </div>
                       <span className="text-[10px] text-text-muted">{POS_ICON[j.posicion] || '⚽'} {j.posicion} • #{j.dorsal}</span>
                     </div>
@@ -303,7 +303,7 @@ export default function DashboardAdmin() {
             {/* Botón alineación */}
             <div className="px-6 pb-6">
               <button onClick={() => { setTeamModal(null); setLineupModal(t) }}
-                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gold/10 border border-gold/30 text-gold-ink font-bold text-[12px] hover:bg-gold/20 transition-all">
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gold/10 border border-gold/30 text-gold font-bold text-[12px] hover:bg-gold/20 transition-all">
                 <Swords size={16} /> Ver alineación táctica
               </button>
             </div>
@@ -329,7 +329,7 @@ export default function DashboardAdmin() {
                 <div className="text-center flex-1"><span className="text-3xl">{eq1?.emoji || '⚽'}</span><p className="text-sm font-semibold mt-1">{matchModal.eq1}</p></div>
                 <div className="text-center px-6">
                   <div className="text-4xl font-bold font-[family-name:var(--font-display)]">
-                    {matchModal.estado === 'programado' ? <span className="text-white/40">vs</span> : <><span className="text-gold-ink">{matchModal.score1}</span><span className="text-white/40 mx-2">-</span><span className="text-gold-ink">{matchModal.score2}</span></>}
+                    {matchModal.estado === 'programado' ? <span className="text-white/40">vs</span> : <><span className="text-gold">{matchModal.score1}</span><span className="text-white/40 mx-2">-</span><span className="text-gold">{matchModal.score2}</span></>}
                   </div>
                   <Badge className={`mt-1 rounded-full text-[9px] px-2 py-0.5 h-auto ${matchModal.estado === 'finalizado' ? 'bg-green-500/20 text-green-400 border-green-500/30' : matchModal.estado === 'en_vivo' ? 'bg-red-500/20 text-red-400 border-red-500/30' : 'bg-blue-500/20 text-blue-400 border-blue-500/30'}`}>
                     {matchModal.estado === 'finalizado' ? 'Finalizado' : matchModal.estado === 'en_vivo' ? '🔴 En vivo' : 'Programado'}
@@ -343,12 +343,12 @@ export default function DashboardAdmin() {
             </div>
           </div>
           <div className="flex items-center gap-3 px-6 py-3 bg-white/[0.02] border-b border-white/5 text-[11px] text-text-muted">
-            <ShieldCheck size={12} className="text-gold-ink" /> Árbitro: {matchModal.arbitro}
+            <ShieldCheck size={12} className="text-gold" /> Árbitro: {matchModal.arbitro}
             <span className="w-1 h-1 rounded-full bg-white/20" /> 🏆 {matchModal.torneo}
           </div>
           <div className="p-6">
             <h3 className="text-[13px] font-semibold text-white/70 uppercase tracking-[.5px] mb-4">
-              <Activity size={14} className="inline mr-1.5 text-gold-ink" /> Cronología del partido
+              <Activity size={14} className="inline mr-1.5 text-gold" /> Cronología del partido
             </h3>
             {matchModal.eventos.length === 0 ? (
               <div className="text-center py-8 text-text-muted text-[13px]">No hay eventos registrados</div>
@@ -362,7 +362,7 @@ export default function DashboardAdmin() {
                     <div className="flex-1 min-w-0 py-1">
                       <div className="flex items-center gap-2">
                         <button onClick={() => openPlayerStats(ev.jugador, ev.equipo)}
-                          className="text-[13px] font-semibold hover:text-gold-ink transition-colors text-left">
+                          className="text-[13px] font-semibold hover:text-gold transition-colors text-left">
                           {ev.jugador}
                         </button>
                         <span className="text-[10px] text-text-muted">{getEmoji(ev.equipo)} {ev.equipo}</span>
@@ -381,10 +381,10 @@ export default function DashboardAdmin() {
             )}
           </div>
           <div className="flex gap-3 px-6 pb-6">
-            <Button onClick={() => { setMatchModal(null); openTeamModal(matchModal.eq1) }} className="flex-1 rounded-full bg-gold/10 text-gold-ink border border-gold/30 hover:bg-gold/20 text-[11px] h-9 font-semibold">
+            <Button onClick={() => { setMatchModal(null); openTeamModal(matchModal.eq1) }} className="flex-1 rounded-full bg-gold/10 text-gold border border-gold/30 hover:bg-gold/20 text-[11px] h-9 font-semibold">
               <Users size={13} className="mr-1" /> {matchModal.eq1}
             </Button>
-            <Button onClick={() => { setMatchModal(null); openTeamModal(matchModal.eq2) }} className="flex-1 rounded-full bg-gold/10 text-gold-ink border border-gold/30 hover:bg-gold/20 text-[11px] h-9 font-semibold">
+            <Button onClick={() => { setMatchModal(null); openTeamModal(matchModal.eq2) }} className="flex-1 rounded-full bg-gold/10 text-gold border border-gold/30 hover:bg-gold/20 text-[11px] h-9 font-semibold">
               <Users size={13} className="mr-1" /> {matchModal.eq2}
             </Button>
           </div>
@@ -403,7 +403,7 @@ export default function DashboardAdmin() {
             <div className="absolute inset-0 opacity-20" style={{ background: 'radial-gradient(at 50% 40%, rgb(200, 133, 26) 0%, transparent 60%)' }} />
             <button onClick={() => setPlayerModal(null)} className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm text-gray-900 dark:text-white flex items-center justify-center hover:bg-gold"><X size={16} /></button>
             <div className="absolute bottom-0 left-0 right-0 p-5 flex items-end gap-4">
-              <div className="w-14 h-14 rounded-xl bg-gold/20 border border-gold/30 flex items-center justify-center text-xl font-bold text-gold-ink flex-shrink-0">{p.dorsal}</div>
+              <div className="w-14 h-14 rounded-xl bg-gold/20 border border-gold/30 flex items-center justify-center text-xl font-bold text-gold flex-shrink-0">{p.dorsal}</div>
               <div>
                 <h2 className="text-lg font-bold">{p.nombre}</h2>
                 <div className="flex items-center gap-2 text-[11px] text-gray-600 dark:text-white/60">
@@ -430,8 +430,8 @@ export default function DashboardAdmin() {
             <div className="grid grid-cols-2 gap-3">
               <div className="p-3 rounded-xl bg-black/30 border border-white/5"><div className="text-lg font-bold text-gray-900 dark:text-white">{p.partidosJugados}</div><div className="text-[10px] text-text-muted">Partidos jugados</div></div>
               <div className="p-3 rounded-xl bg-black/30 border border-white/5"><div className="text-lg font-bold text-gray-900 dark:text-white">{p.goles + p.asistencias}</div><div className="text-[10px] text-text-muted">G+A (contribución)</div></div>
-              <div className="p-3 rounded-xl bg-black/30 border border-white/5"><div className="text-lg font-bold text-gold-ink">{p.partidosJugados > 0 ? (p.goles / p.partidosJugados).toFixed(2) : '0'}</div><div className="text-[10px] text-text-muted">Goles por partido</div></div>
-              <div className="p-3 rounded-xl bg-black/30 border border-white/5"><div className="text-lg font-bold text-gold-ink">{p.partidosJugados > 0 ? (p.asistencias / p.partidosJugados).toFixed(2) : '0'}</div><div className="text-[10px] text-text-muted">Asistencias por partido</div></div>
+              <div className="p-3 rounded-xl bg-black/30 border border-white/5"><div className="text-lg font-bold text-gold">{p.partidosJugados > 0 ? (p.goles / p.partidosJugados).toFixed(2) : '0'}</div><div className="text-[10px] text-text-muted">Goles por partido</div></div>
+              <div className="p-3 rounded-xl bg-black/30 border border-white/5"><div className="text-lg font-bold text-gold">{p.partidosJugados > 0 ? (p.asistencias / p.partidosJugados).toFixed(2) : '0'}</div><div className="text-[10px] text-text-muted">Asistencias por partido</div></div>
             </div>
           </div>
         </div>
@@ -481,7 +481,7 @@ export default function DashboardAdmin() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-purple-black/40" />
             <div className="absolute inset-0 opacity-20" style={{ background: 'radial-gradient(at 60% 40%, rgb(200, 133, 26) 0%, transparent 60%)' }} />
             <div className="relative z-10 p-8 max-md:p-5">
-              <h2 className="font-[family-name:var(--font-display)] uppercase text-2xl leading-tight mb-1">Panel de <span className="text-gold-ink">Administración</span></h2>
+              <h2 className="font-[family-name:var(--font-display)] uppercase text-2xl leading-tight mb-1">Panel de <span className="text-gold">Administración</span></h2>
               <p className="text-sm text-gray-600 dark:text-white/60 mb-3">Gestión completa: torneos, equipos, partidos, jugadores y logística.</p>
               <div className="flex items-center gap-2">
                 {([['admin','Admin', ShieldCheck] as const, ['arbitro','Árbitro', Flag] as const, ['capitan','Capitán', Medal] as const]).map(([id, label, Icon]) => (
@@ -519,7 +519,7 @@ export default function DashboardAdmin() {
                       { icon:'📋', num:listaInscripciones.filter(i => i.estado === 'pending').length.toString(), label:'Pendientes', accent:'gold' },
                     ].map((s, i) => (
                       <SpotlightCard key={i} accent={s.accent as 'gold'|'purple'} className="p-5 flex gap-3.5 items-center bg-surface border-border rounded-2xl">
-                        <span className={`w-[46px] h-[46px] rounded-xl flex items-center justify-center flex-shrink-0 ${s.accent === 'purple' ? 'bg-purple-mid/20 text-[#b39ef2]' : 'bg-gold/15 text-gold-ink'}`}>{s.icon}</span>
+                        <span className={`w-[46px] h-[46px] rounded-xl flex items-center justify-center flex-shrink-0 ${s.accent === 'purple' ? 'bg-purple-mid/20 text-[#b39ef2]' : 'bg-gold/15 text-gold'}`}>{s.icon}</span>
                         <div><div className="font-[family-name:var(--font-display)] text-[26px] leading-none">{s.num}</div><div className="text-xs text-text-muted mt-1">{s.label}</div></div>
                       </SpotlightCard>
                     ))}
@@ -527,7 +527,7 @@ export default function DashboardAdmin() {
 
                   <SpotlightCard accent="purple" className="p-[22px_24px] bg-surface border-border rounded-2xl">
                     <h3 className="text-[14.5px] font-semibold tracking-[.3px] flex items-center gap-2 mb-4">
-                      <CalendarDays size={16} className="text-gold-ink" /> Partidos — click para detalle
+                      <CalendarDays size={16} className="text-gold" /> Partidos — click para detalle
                     </h3>
                     {partidosDetalle.map(m => (
                       <button key={m.id} onClick={() => setMatchModal(m)}
@@ -540,7 +540,7 @@ export default function DashboardAdmin() {
                             {m.estado === 'finalizado' && <span className="text-green-400 font-bold">• {m.score1}-{m.score2}</span>}
                           </div>
                         </div>
-                        {m.estado === 'finalizado' && <span className="text-sm font-bold text-gold-ink">{m.score1}-{m.score2}</span>}
+                        {m.estado === 'finalizado' && <span className="text-sm font-bold text-gold">{m.score1}-{m.score2}</span>}
                         {m.estado === 'en_vivo' && <span className="text-[10px] text-red-400 font-bold animate-pulse">🔴 EN VIVO</span>}
                         {m.estado === 'programado' && <Badge className="rounded-full text-[9px] bg-blue-500/20 text-blue-400 border-blue-500/30 px-2 py-0.5 h-auto">Programado</Badge>}
                         <ChevronRight size={14} className="text-text-faint" />
@@ -550,7 +550,7 @@ export default function DashboardAdmin() {
 
                   <SpotlightCard accent="gold" className="p-[22px_24px] bg-surface border-border rounded-2xl">
                     <h3 className="text-[14.5px] font-semibold tracking-[.3px] flex items-center gap-2 mb-4">
-                      <Users size={16} className="text-gold-ink" /> Equipos — click para ver plantilla
+                      <Users size={16} className="text-gold" /> Equipos — click para ver plantilla
                     </h3>
                     <div className="grid grid-cols-2 max-md:grid-cols-1 gap-2">
                       {equiposDetalle.map(eq => (
@@ -560,7 +560,7 @@ export default function DashboardAdmin() {
                           <div className="flex-1 min-w-0">
                             <span className="font-semibold text-[13px]">{eq.nombre}</span>
                             <div className="flex items-center gap-2 text-[10px] text-text-muted">
-                              <Medal size={10} className="text-gold-ink" /> {eq.capitan} • {eq.jugadores.length} jug.
+                              <Medal size={10} className="text-gold" /> {eq.capitan} • {eq.jugadores.length} jug.
                             </div>
                           </div>
                           <ChevronRight size={14} className="text-text-faint" />
@@ -571,15 +571,15 @@ export default function DashboardAdmin() {
 
                   <SpotlightCard accent="purple" className="p-[22px_24px] bg-surface border-border rounded-2xl">
                     <h3 className="text-[14.5px] font-semibold tracking-[.3px] flex items-center gap-2 mb-4">
-                      <Goal size={16} className="text-gold-ink" /> Goleadores — click para stats
+                      <Goal size={16} className="text-gold" /> Goleadores — click para stats
                     </h3>
                     {[...playersStats].sort((a, b) => b.goles - a.goles).slice(0, 5).map((p, i) => (
                       <button key={p.id} onClick={() => setPlayerModal(p)}
                         className="w-full flex items-center gap-3 py-2.5 px-3 border-b border-border last:border-b-0 hover:bg-white/[0.03] transition-all rounded-lg text-left">
-                        <span className={`w-6 text-center text-sm font-bold ${i === 0 ? 'text-gold-ink' : 'text-text-muted'}`}>{i + 1}º</span>
+                        <span className={`w-6 text-center text-sm font-bold ${i === 0 ? 'text-gold' : 'text-text-muted'}`}>{i + 1}º</span>
                         <span className="text-lg">{p.emoji}</span>
                         <div className="flex-1 text-[13px]"><span className="font-semibold">{p.nombre}</span><span className="text-text-muted ml-2">{p.equipo}</span></div>
-                        <span className="text-sm font-bold text-gold-ink">{p.goles} ⚽</span>
+                        <span className="text-sm font-bold text-gold">{p.goles} ⚽</span>
                       </button>
                     ))}
                   </SpotlightCard>
@@ -589,7 +589,7 @@ export default function DashboardAdmin() {
               {adminTab === 'inscripciones' && (
                 <div className="space-y-5">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-[family-name:var(--font-display)] uppercase text-lg tracking-[.5px]">Solicitudes de <span className="text-gold-ink">inscripción</span></h3>
+                    <h3 className="font-[family-name:var(--font-display)] uppercase text-lg tracking-[.5px]">Solicitudes de <span className="text-gold">inscripción</span></h3>
                     <div className="relative">
                       <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
                       <input type="text" placeholder="Buscar..." className="bg-white/5 border border-white/10 rounded-lg pl-9 pr-3 py-2 text-[12px] text-gray-900 dark:text-white w-[180px] outline-none focus:border-gold/50" />
@@ -627,7 +627,7 @@ export default function DashboardAdmin() {
 
               {adminTab === 'arbitros' && (
                 <div className="space-y-3">
-                  <h3 className="font-[family-name:var(--font-display)] uppercase text-lg tracking-[.5px] mb-4">Gestión de <span className="text-gold-ink">árbitros</span></h3>
+                  <h3 className="font-[family-name:var(--font-display)] uppercase text-lg tracking-[.5px] mb-4">Gestión de <span className="text-gold">árbitros</span></h3>
                   {arbitros.map(a => (
                     <div key={a.id} className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10">
                       <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-mid to-gold flex items-center justify-center text-gray-900 dark:text-white font-bold text-lg flex-shrink-0">
@@ -650,10 +650,10 @@ export default function DashboardAdmin() {
 
               {adminTab === 'torneos' && (
                 <div className="space-y-3">
-                  <h3 className="font-[family-name:var(--font-display)] uppercase text-lg tracking-[.5px] mb-4">Gestión de <span className="text-gold-ink">torneos</span></h3>
+                  <h3 className="font-[family-name:var(--font-display)] uppercase text-lg tracking-[.5px] mb-4">Gestión de <span className="text-gold">torneos</span></h3>
                   {torneos.filter(t => t.estado !== 'closed').map(t => (
                     <div key={t.id} className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10">
-                      <div className="w-12 h-12 rounded-xl bg-gold/15 flex items-center justify-center flex-shrink-0"><Trophy size={22} className="text-gold-ink" /></div>
+                      <div className="w-12 h-12 rounded-xl bg-gold/15 flex items-center justify-center flex-shrink-0"><Trophy size={22} className="text-gold" /></div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
                           <span className="font-semibold text-[14px]">{t.nombre}</span>
@@ -671,7 +671,7 @@ export default function DashboardAdmin() {
 
               {adminTab === 'logistica' && (
                 <div className="space-y-3">
-                  <h3 className="font-[family-name:var(--font-display)] uppercase text-lg tracking-[.5px] mb-4">Logística: <span className="text-gold-ink">refrigerios y kits</span></h3>
+                  <h3 className="font-[family-name:var(--font-display)] uppercase text-lg tracking-[.5px] mb-4">Logística: <span className="text-gold">refrigerios y kits</span></h3>
                   {listaEquiposLog.map(eq => (
                     <div key={eq.id} className="flex items-center gap-4 p-3.5 rounded-xl bg-black/30 border border-white/5">
                       <span className="text-xl w-8 text-center">{eq.emoji}</span>
@@ -691,7 +691,7 @@ export default function DashboardAdmin() {
 
               {adminTab === 'reportes' && (
                 <div className="space-y-5">
-                  <h3 className="font-[family-name:var(--font-display)] uppercase text-lg tracking-[.5px] mb-2">Reportes y <span className="text-gold-ink">estadísticas</span></h3>
+                  <h3 className="font-[family-name:var(--font-display)] uppercase text-lg tracking-[.5px] mb-2">Reportes y <span className="text-gold">estadísticas</span></h3>
                   <p className="text-sm text-text-muted mb-4">Vista general de métricas, rendimiento y actividad del torneo.</p>
 
                   <div className="grid grid-cols-4 max-lg:grid-cols-2 gap-[18px]">
@@ -706,7 +706,7 @@ export default function DashboardAdmin() {
                       { icon: '✅', num: listaInscripciones.filter(i => i.estado === 'approved').length.toString(), label: 'Inscripciones aprobadas', accent: 'purple' },
                     ].map((s, i) => (
                       <SpotlightCard key={i} accent={s.accent as 'gold'|'purple'} className="p-5 flex gap-3.5 items-center bg-surface border-border rounded-2xl">
-                        <span className={`w-[46px] h-[46px] rounded-xl flex items-center justify-center flex-shrink-0 ${s.accent === 'purple' ? 'bg-purple-mid/20 text-[#b39ef2]' : 'bg-gold/15 text-gold-ink'}`}>{s.icon}</span>
+                        <span className={`w-[46px] h-[46px] rounded-xl flex items-center justify-center flex-shrink-0 ${s.accent === 'purple' ? 'bg-purple-mid/20 text-[#b39ef2]' : 'bg-gold/15 text-gold'}`}>{s.icon}</span>
                         <div><div className="font-[family-name:var(--font-display)] text-[26px] leading-none">{s.num}</div><div className="text-xs text-text-muted mt-1">{s.label}</div></div>
                       </SpotlightCard>
                     ))}
@@ -714,7 +714,7 @@ export default function DashboardAdmin() {
 
                   <SpotlightCard accent="gold" className="p-[22px_24px] bg-surface border-border rounded-2xl">
                     <h3 className="text-[14.5px] font-semibold tracking-[.3px] flex items-center gap-2 mb-4">
-                      <Goal size={16} className="text-gold-ink" /> Tabla de goleadores completa
+                      <Goal size={16} className="text-gold" /> Tabla de goleadores completa
                     </h3>
                     <div className="overflow-x-auto">
                       <table className="w-full text-[13px]">
@@ -733,10 +733,10 @@ export default function DashboardAdmin() {
                         <tbody>
                           {[...playersStats].sort((a, b) => b.goles - a.goles).map((p, i) => (
                             <tr key={p.id} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
-                              <td className="py-2.5 pr-2 font-bold text-gold-ink">{i + 1}º</td>
+                              <td className="py-2.5 pr-2 font-bold text-gold">{i + 1}º</td>
                               <td className="py-2.5 pr-2 font-semibold">{p.nombre}</td>
                               <td className="py-2.5 pr-2 text-text-muted">{p.emoji} {p.equipo}</td>
-                              <td className="py-2.5 pr-2 text-center font-bold text-gold-ink">{p.goles}</td>
+                              <td className="py-2.5 pr-2 text-center font-bold text-gold">{p.goles}</td>
                               <td className="py-2.5 pr-2 text-center text-blue-400">{p.asistencias}</td>
                               <td className="py-2.5 pr-2 text-center text-yellow-400">{p.amarillas}</td>
                               <td className="py-2.5 pr-2 text-center text-red-400">{p.rojas}</td>
@@ -751,7 +751,7 @@ export default function DashboardAdmin() {
                   <div className="grid grid-cols-2 max-lg:grid-cols-1 gap-4">
                     <SpotlightCard accent="purple" className="p-[22px_24px] bg-surface border-border rounded-2xl">
                       <h3 className="text-[14.5px] font-semibold tracking-[.3px] flex items-center gap-2 mb-4">
-                        <CalendarDays size={16} className="text-gold-ink" /> Partidos por estado
+                        <CalendarDays size={16} className="text-gold" /> Partidos por estado
                       </h3>
                       {[
                         { label: 'Finalizados', count: partidosDetalle.filter(m => m.estado === 'finalizado').length, color: 'bg-green-500' },
@@ -776,14 +776,14 @@ export default function DashboardAdmin() {
 
                     <SpotlightCard accent="gold" className="p-[22px_24px] bg-surface border-border rounded-2xl">
                       <h3 className="text-[14.5px] font-semibold tracking-[.3px] flex items-center gap-2 mb-4">
-                        <Users size={16} className="text-gold-ink" /> Equipos con más jugadores
+                        <Users size={16} className="text-gold" /> Equipos con más jugadores
                       </h3>
                       {[...equiposDetalle].sort((a, b) => b.jugadores.length - a.jugadores.length).map((eq, i) => (
                         <div key={eq.id} className="flex items-center gap-3 py-2 border-b border-white/5 last:border-b-0">
                           <span className="w-5 text-center text-sm font-bold text-text-muted">{i + 1}º</span>
                           <span className="text-lg">{eq.emoji}</span>
                           <span className="flex-1 text-[13px] font-semibold">{eq.nombre}</span>
-                          <span className="text-sm font-bold text-gold-ink">{eq.jugadores.length} jug.</span>
+                          <span className="text-sm font-bold text-gold">{eq.jugadores.length} jug.</span>
                         </div>
                       ))}
                     </SpotlightCard>
@@ -797,18 +797,18 @@ export default function DashboardAdmin() {
           {rolActivo === 'arbitro' && (
             <div className="grid grid-cols-[1.2fr_1fr] gap-5 items-start max-lg:grid-cols-1">
               <SpotlightCard accent="purple" className="p-[22px_24px] bg-surface border-border rounded-2xl">
-                <h3 className="text-[14.5px] font-semibold tracking-[.3px] flex items-center gap-2 mb-4"><Flag size={16} className="text-gold-ink" /> Panel del Árbitro</h3>
+                <h3 className="text-[14.5px] font-semibold tracking-[.3px] flex items-center gap-2 mb-4"><Flag size={16} className="text-gold" /> Panel del Árbitro</h3>
                 <div className="flex gap-2 mb-4">
                   {partidosDetalle.map(m => (
                     <button key={m.id} onClick={() => { setArbitroMatch(m); setEventosTemp(m.eventos) }}
-                      className={`flex-1 p-2.5 rounded-xl text-center text-[11px] font-semibold border transition-all ${arbitroMatch.id === m.id ? 'bg-gold/20 text-gold-ink border-gold/40' : 'bg-black/30 text-gray-600 dark:text-white/60 border-white/10'}`}>
+                      className={`flex-1 p-2.5 rounded-xl text-center text-[11px] font-semibold border transition-all ${arbitroMatch.id === m.id ? 'bg-gold/20 text-gold border-gold/40' : 'bg-black/30 text-gray-600 dark:text-white/60 border-white/10'}`}>
                       {m.eq1} vs {m.eq2}
                     </button>
                   ))}
                 </div>
                 <div className="text-center py-4 mb-4 bg-black/30 rounded-xl border border-white/5">
                   <div className="text-3xl font-bold font-[family-name:var(--font-display)]">
-                    <span className="text-gold-ink">{arbitroMatch.score1}</span><span className="text-white/30 mx-3">-</span><span className="text-gold-ink">{arbitroMatch.score2}</span>
+                    <span className="text-gold">{arbitroMatch.score1}</span><span className="text-white/30 mx-3">-</span><span className="text-gold">{arbitroMatch.score2}</span>
                   </div>
                   <div className="text-xs text-text-muted mt-1">{arbitroMatch.eq1} vs {arbitroMatch.eq2}</div>
                 </div>
@@ -821,7 +821,7 @@ export default function DashboardAdmin() {
 
               <SpotlightCard accent="gold" className="p-[22px_24px] bg-surface border-border rounded-2xl">
                 <h3 className="text-[14.5px] font-semibold tracking-[.3px] flex items-center gap-2 mb-4">
-                  <Activity size={16} className="text-gold-ink" /> Eventos del partido
+                  <Activity size={16} className="text-gold" /> Eventos del partido
                 </h3>
                 <div className="space-y-1 relative before:absolute before:left-[18px] before:top-0 before:bottom-0 before:w-[2px] before:bg-white/10">
                   {eventosTemp.length === 0 ? (
@@ -833,7 +833,7 @@ export default function DashboardAdmin() {
                       </div>
                       <div className="flex-1 min-w-0 py-1">
                         <button onClick={() => openPlayerStats(ev.jugador, ev.equipo)}
-                          className="text-[12.5px] font-semibold hover:text-gold-ink transition-colors text-left">
+                          className="text-[12.5px] font-semibold hover:text-gold transition-colors text-left">
                           {ev.jugador}
                         </button>
                         <div className="text-[10px] text-text-muted">
@@ -856,7 +856,7 @@ export default function DashboardAdmin() {
             <div className="grid grid-cols-[1.2fr_1fr] gap-5 items-start max-lg:grid-cols-1">
               <SpotlightCard accent="gold" className="p-[22px_24px] bg-surface border-border rounded-2xl">
                 <h3 className="text-[14.5px] font-semibold tracking-[.3px] flex items-center gap-2 mb-4">
-                  <Medal size={16} className="text-gold-ink" /> {equiposDetalle[0].emoji} {equiposDetalle[0].nombre}
+                  <Medal size={16} className="text-gold" /> {equiposDetalle[0].emoji} {equiposDetalle[0].nombre}
                 </h3>
                 <div className="space-y-1.5">
                   {equiposDetalle[0].jugadores.map(j => {
@@ -867,7 +867,7 @@ export default function DashboardAdmin() {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-1">
                             <span className="text-[12.5px] font-semibold">{j.nombre}</span>
-                            {j.nombre === equiposDetalle[0].capitan && <Medal size={9} className="text-gold-ink" />}
+                            {j.nombre === equiposDetalle[0].capitan && <Medal size={9} className="text-gold" />}
                           </div>
                           <span className="text-[9.5px] text-text-muted">{POS_ICON[j.posicion] || '⚽'} {j.posicion}</span>
                         </div>
@@ -887,7 +887,7 @@ export default function DashboardAdmin() {
 
               <SpotlightCard accent="purple" className="p-[22px_24px] bg-surface border-border rounded-2xl">
                 <h3 className="text-[14.5px] font-semibold tracking-[.3px] flex items-center gap-2 mb-4">
-                  <ClipboardList size={16} className="text-gold-ink" /> Solicitudes
+                  <ClipboardList size={16} className="text-gold" /> Solicitudes
                 </h3>
                 {solicitudes.map(s => (
                   <div key={s.id} className="flex items-center gap-3 p-3 rounded-xl bg-black/30 border border-white/5 mb-2">

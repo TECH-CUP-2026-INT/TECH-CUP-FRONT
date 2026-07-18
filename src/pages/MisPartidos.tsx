@@ -31,7 +31,7 @@ export default function MisPartidos() {
           <div className="flex items-center gap-1 bg-surface/50 border border-border/60 rounded-2xl p-1 mb-6">
             {(['proximos', 'envivo', 'finalizados'] as Tab[]).map(t => (
               <button key={t} onClick={() => setTab(t)}
-                className={`flex-1 py-2.5 px-4 rounded-xl text-sm font-semibold transition-all ${
+                className={`flex-1 py-2.5 px-4 rounded-xl text-sm font-semibold capitalize transition-all ${
                   tab === t ? 'bg-purple-mid text-white shadow-lg shadow-purple-mid/25' : 'text-text-muted hover:text-white'
                 }`}>
                 {t === 'proximos' ? 'Próximos' : t === 'envivo' ? 'En vivo' : 'Finalizados'}
@@ -56,7 +56,7 @@ export default function MisPartidos() {
                       <span className="text-xs text-text-faint uppercase tracking-[.4px] font-semibold">{p.torneo}</span>
                       <Badge className={`rounded-full text-[10px] px-2.5 py-0.5 h-auto uppercase font-bold ${
                         p.estado === 'live' ? 'bg-green-500/20 text-green-400 border border-green-500/30 animate-pulse' :
-                        p.estado === 'upcoming' ? 'bg-gold/15 text-gold-ink border border-gold/40' : 'bg-white/10 text-text-muted border border-white/15'
+                        p.estado === 'upcoming' ? 'bg-gold/15 text-gold border border-gold/40' : 'bg-white/10 text-text-muted border border-white/15'
                       }`}>
                         {p.estado === 'live' ? '🔴 En vivo' : p.estado === 'upcoming' ? '📅 Próximo' : '✅ Finalizado'}
                       </Badge>
@@ -81,7 +81,7 @@ export default function MisPartidos() {
                       <span className="flex items-center gap-1"><CalendarDays size={12} /> {p.fecha}</span>
                       <span className="flex items-center gap-1"><Clock size={12} /> {p.hora}</span>
                       <span className="flex items-center gap-1"><MapPin size={12} /> {p.cancha}</span>
-                      {p.detalle && <span className="text-gold-ink font-semibold">{p.detalle}</span>}
+                      {p.detalle && <span className="text-gold font-semibold">{p.detalle}</span>}
                     </div>
 
                     <div className="mt-3">
@@ -125,7 +125,7 @@ export default function MisPartidos() {
                 <div className="absolute inset-0 bg-gradient-to-b from-purple-deep/60 to-transparent" />
                 <div className="relative z-10 text-center mb-3">
                   <p className="text-xs text-gold/60 uppercase tracking-wider mb-1">{selectedMatch.torneo}</p>
-                  <span className="text-[10px] bg-gold/15 text-gold-ink border border-gold/30 px-3 py-0.5 rounded-full font-bold uppercase">Semifinal</span>
+                  <span className="text-[10px] bg-gold/15 text-gold border border-gold/30 px-3 py-0.5 rounded-full font-bold uppercase">Semifinal</span>
                 </div>
                 <div className="relative z-10 flex items-center justify-center gap-4 md:gap-8 py-2">
                   <div className="flex flex-col items-center text-center">
@@ -141,7 +141,7 @@ export default function MisPartidos() {
                     <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-[0_0_25px_-5px_rgba(245,166,35,.4)]">
                       <Swords size={18} className="text-[#1A1206]" />
                     </div>
-                    <span className="font-[family-name:var(--font-display)] text-xl md:text-3xl font-bold text-gold-ink mt-1 tracking-wider">VS</span>
+                    <span className="font-[family-name:var(--font-display)] text-xl md:text-3xl font-bold text-gold mt-1 tracking-wider">VS</span>
                     {selectedMatch.resultado && <span className="text-lg font-bold text-white -mt-1">{selectedMatch.resultado}</span>}
                   </div>
 
@@ -161,7 +161,7 @@ export default function MisPartidos() {
                   <span className="flex items-center gap-1"><MapPin size={12} /> {selectedMatch.cancha}</span>
                   <Badge className={`rounded-full text-[10px] ${
                     selectedMatch.estado === 'live' ? 'bg-green-500/20 text-green-400 border border-green-400/30 animate-pulse' :
-                    selectedMatch.estado === 'upcoming' ? 'bg-gold/20 text-gold-ink border border-gold/30' :
+                    selectedMatch.estado === 'upcoming' ? 'bg-gold/20 text-gold border border-gold/30' :
                     'bg-purple-mid/20 text-purple-mid border border-purple-mid/30'
                   }`}>
                     {selectedMatch.estado === 'live' ? '🔴 En vivo' : selectedMatch.estado === 'upcoming' ? '⏳ Próximo' : '✅ Finalizado'}
@@ -181,7 +181,7 @@ export default function MisPartidos() {
                   {(['resumen', 'estadisticas', 'alineaciones'] as const).map((tab, i) => (
                     <button key={tab}
                       onClick={() => setDetailTab(tab)}
-                      className="py-2.5 px-5 text-sm font-semibold relative transition-colors"
+                      className="py-2.5 px-5 text-sm font-semibold capitalize relative transition-colors"
                       style={{ color: detailTab === tab ? '#fff' : '#aaa' }}
                     >
                       {tab === 'resumen' ? 'Resumen' : tab === 'estadisticas' ? 'Estadísticas' : 'Alineaciones'}
@@ -195,7 +195,7 @@ export default function MisPartidos() {
                 {detailTab === 'resumen' && (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
                     <div className="bg-black/40 backdrop-blur-sm border border-white/10 rounded-2xl p-5">
-                      <h3 className="font-[family-name:var(--font-display)] text-base uppercase tracking-[.3px] mb-3 text-white">Previo del <span className="text-gold-ink">partido</span></h3>
+                      <h3 className="font-[family-name:var(--font-display)] text-base uppercase tracking-[.3px] mb-3 text-white">Previo del <span className="text-gold">partido</span></h3>
                       <div className="space-y-2.5">
                         {[
                           { time: selectedMatch.hora, event: 'Inicio del partido', icon: '⚽' },
@@ -212,10 +212,10 @@ export default function MisPartidos() {
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                       <div className="bg-black/40 backdrop-blur-sm border border-white/10 rounded-2xl p-4">
-                        <div className="flex items-center gap-3"><Trophy size={18} className="text-gold-ink" /><div><p className="text-xs text-text-muted">Último encuentro</p><p className="text-sm font-semibold text-white">{selectedMatch.eq1} vs {selectedMatch.eq2}</p></div></div>
+                        <div className="flex items-center gap-3"><Trophy size={18} className="text-gold" /><div><p className="text-xs text-text-muted">Último encuentro</p><p className="text-sm font-semibold text-white">{selectedMatch.eq1} vs {selectedMatch.eq2}</p></div></div>
                       </div>
                       <div className="bg-black/40 backdrop-blur-sm border border-white/10 rounded-2xl p-4">
-                        <div className="flex items-center gap-3"><MapPin size={18} className="text-gold-ink" /><div><p className="text-xs text-text-muted">{selectedMatch.cancha}</p><p className="text-sm font-semibold text-green-400">{selectedMatch.hora}</p></div></div>
+                        <div className="flex items-center gap-3"><MapPin size={18} className="text-gold" /><div><p className="text-xs text-text-muted">{selectedMatch.cancha}</p><p className="text-sm font-semibold text-green-400">{selectedMatch.hora}</p></div></div>
                       </div>
                     </div>
                   </motion.div>
@@ -225,7 +225,7 @@ export default function MisPartidos() {
                 {detailTab === 'estadisticas' && (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                     <div className="bg-black/40 backdrop-blur-sm border border-white/10 rounded-2xl p-5">
-                      <h3 className="font-[family-name:var(--font-display)] text-base uppercase tracking-[.3px] mb-5 text-center text-white"><span className="text-gold-ink">Estadísticas</span> del torneo</h3>
+                      <h3 className="font-[family-name:var(--font-display)] text-base uppercase tracking-[.3px] mb-5 text-center text-white"><span className="text-gold">Estadísticas</span> del torneo</h3>
                       <div className="space-y-4">
                         {[
                           { label: 'Partidos jugados', local: '5', visitor: '5' },

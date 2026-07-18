@@ -52,13 +52,13 @@ export default function EditarPerfil() {
   return (
     <DashboardLayout title="Editar perfil">
       <main className="max-w-[680px] mx-auto px-8 py-8 pb-[60px]">
-          <button onClick={() => navigate('/perfil')} className="flex items-center gap-1.5 text-sm text-text-muted hover:text-gold-ink transition-colors mb-6">
+          <button onClick={() => navigate('/perfil')} className="flex items-center gap-1.5 text-sm text-text-muted hover:text-gold transition-colors mb-6">
             <ArrowLeft size={16} /> Volver al perfil
           </button>
 
           <SpotlightCard accent="gold" className="bg-gradient-to-br from-purple-deep2/70 to-purple-black/80 border border-gold/20 rounded-2xl p-8 shadow-lg shadow-purple-900/20">
             <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase tracking-[.5px] mb-6 text-white">
-              Editar <span className="text-gold-ink">perfil</span>
+              Editar <span className="text-gold">perfil</span>
             </h2>
 
             {/* Foto */}
@@ -73,7 +73,7 @@ export default function EditarPerfil() {
                 <button className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-purple-mid border-2 border-black flex items-center justify-center hover:bg-purple-deep2"><Camera size={12} className="text-white" /></button>
               </div>
               <div className="flex gap-2">
-                <Button size="sm" className="rounded-full border-gold text-gold-ink bg-transparent hover:bg-gold/10 text-xs h-auto py-2 px-4">Subir foto</Button>
+                <Button size="sm" className="rounded-full border-gold text-gold bg-transparent hover:bg-gold/10 text-xs h-auto py-2 px-4">Subir foto</Button>
                 <Button size="sm" variant="outline" className="rounded-full border-red-500/50 text-red-400 hover:bg-red-500/10 text-xs h-auto py-2 px-4">Eliminar</Button>
               </div>
             </div>
@@ -116,7 +116,7 @@ export default function EditarPerfil() {
             )}
 
             <div className="flex gap-3 justify-end">
-              <Button variant="outline" onClick={() => navigate('/perfil')} className="rounded-full border-gold/30 text-gold-ink hover:bg-gold/10 h-12 px-8">
+              <Button variant="outline" onClick={() => navigate('/perfil')} className="rounded-full border-gold/30 text-gold hover:bg-gold/10 h-12 px-8">
                 Cancelar
               </Button>
               <Button onClick={handleSave} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold h-12 px-8 shadow-lg shadow-gold/20">

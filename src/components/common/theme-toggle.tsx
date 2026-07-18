@@ -25,7 +25,7 @@ export function ThemeToggle() {
             transition={{ duration: 0.25, ease: 'easeInOut' }}
             className="flex"
           >
-            <Moon size={16} className="text-gold-ink" />
+            <Moon size={16} className="text-gold" />
           </motion.span>
         ) : (
           <motion.span

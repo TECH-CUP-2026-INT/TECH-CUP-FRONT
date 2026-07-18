@@ -72,14 +72,14 @@ export default function CrearTorneo() {
                 <Check size={40} className="text-green-400" />
               </div>
               <h1 className="font-[family-name:var(--font-display)] text-3xl uppercase mb-2">
-                Torneo <span className="text-gold-ink">creado</span>
+                Torneo <span className="text-gold">creado</span>
               </h1>
               <p className="text-text-muted text-sm mb-8">"{nombre}" ya está disponible. Ahora podés configurar los emparejamientos.</p>
               <div className="flex gap-3 justify-center">
                 <Button onClick={() => navigate('/dashboard/admin')} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-12 px-8">
                   Ir al panel
                 </Button>
-                <Button variant="outline" onClick={() => navigate('/torneos')} className="rounded-full border-gold text-gold-ink hover:bg-gold/10 h-12 px-8">
+                <Button variant="outline" onClick={() => navigate('/torneos')} className="rounded-full border-gold text-gold hover:bg-gold/10 h-12 px-8">
                   Ver torneos
                 </Button>
               </div>
@@ -110,7 +110,7 @@ export default function CrearTorneo() {
               {[1, 2, 3].map(p => (
                 <div key={p} className="flex items-center gap-2">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${paso >= p ? 'bg-gold text-[#1A1206]' : 'bg-surface text-text-muted border border-border'}`}>{p}</div>
-                  <span className={`text-xs font-semibold hidden md:block ${paso >= p ? 'text-gold-ink' : 'text-text-muted'}`}>
+                  <span className={`text-xs font-semibold hidden md:block ${paso >= p ? 'text-gold' : 'text-text-muted'}`}>
                     {p === 1 ? 'Info' : p === 2 ? 'Configuración' : 'Canchas'}
                   </span>
                   {p < 3 && <div className={`w-8 h-px mx-1 ${paso > p ? 'bg-gold' : 'bg-border'}`} />}
@@ -121,7 +121,7 @@ export default function CrearTorneo() {
             <AnimatePresence mode="wait">
               {paso === 0 && (
                 <motion.div key="p0" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Info del <span className="text-gold-ink">torneo</span></h2>
+                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Info del <span className="text-gold">torneo</span></h2>
                   <p className="text-sm text-text-muted mb-6">Datos básicos para crear el torneo.</p>
 
                   <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Nombre del torneo</Label>
@@ -166,7 +166,7 @@ export default function CrearTorneo() {
 
               {paso === 1 && (
                 <motion.div key="p1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Configuración <span className="text-gold-ink">del torneo</span></h2>
+                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Configuración <span className="text-gold">del torneo</span></h2>
                   <p className="text-sm text-text-muted mb-6">Equipos, costo y fechas.</p>
 
                   <div className="grid grid-cols-2 gap-4 mb-4">
@@ -219,7 +219,7 @@ export default function CrearTorneo() {
 
               {paso === 2 && (
                 <motion.div key="p2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Canchas del <span className="text-gold-ink">torneo</span></h2>
+                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Canchas del <span className="text-gold">torneo</span></h2>
                   <p className="text-sm text-text-muted mb-6">Registrá las canchas donde se jugarán los partidos.</p>
 
                   <div className="space-y-4 mb-6">

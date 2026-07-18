@@ -34,18 +34,18 @@ export default function RefereeLogin() {
             <img src="/assets/logo.png" alt="" className="w-full h-full object-cover" />
           </div>
           <span className="font-[family-name:var(--font-display)] font-bold text-lg tracking-[.5px]">
-            TECH<span className="text-gold-ink">CUP</span>
+            TECH<span className="text-gold">CUP</span>
           </span>
         </Link>
 
         <div className="bg-surface border border-border/60 rounded-2xl p-8 md:p-10">
           {/* Ícono */}
           <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gold/20 to-purple-mid/20 border border-gold/30 flex items-center justify-center mx-auto mb-6">
-            <Shield size={28} className="text-gold-ink" />
+            <Shield size={28} className="text-gold" />
           </div>
 
           <h1 className="font-[family-name:var(--font-display)] text-2xl uppercase tracking-[.5px] mb-2 text-center">
-            Acceso para <span className="text-gold-ink">árbitros</span>
+            Acceso para <span className="text-gold">árbitros</span>
           </h1>
           
           <div className="bg-purple-mid/10 border border-purple-mid/30 rounded-xl p-4 mb-6 text-sm text-text-muted">
@@ -73,7 +73,7 @@ export default function RefereeLogin() {
           </form>
 
           <div className="text-center mt-6">
-            <Link to="/login" className="text-sm text-text-muted hover:text-gold-ink transition-colors inline-flex items-center gap-1.5">
+            <Link to="/login" className="text-sm text-text-muted hover:text-gold transition-colors inline-flex items-center gap-1.5">
               <ArrowLeft size={14} /> Volver al inicio de sesión
             </Link>
           </div>

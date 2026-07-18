@@ -70,7 +70,7 @@ export default function InscribirEquipo() {
             <AnimatePresence mode="wait">
               {paso === 1 && (
                 <motion.div key="p1" initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-20}}>
-                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Seleccionar <span className="text-gold-ink">torneo</span></h2>
+                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Seleccionar <span className="text-gold">torneo</span></h2>
                   <p className="text-sm text-text-muted mb-6">Elegí el torneo en el que querés inscribir a tu equipo.</p>
                   <div className="space-y-3 mb-6">
                     {torneos.map(t => (
@@ -96,7 +96,7 @@ export default function InscribirEquipo() {
 
               {paso === 2 && (
                 <motion.div key="p2" initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-20}}>
-                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Confirmar <span className="text-gold-ink">datos</span></h2>
+                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Confirmar <span className="text-gold">datos</span></h2>
                   <p className="text-sm text-text-muted mb-6">Revisá la información antes de continuar.</p>
                   <div className="bg-black/50 border border-border rounded-xl p-5 space-y-3 mb-6">
                     {[
@@ -132,7 +132,7 @@ export default function InscribirEquipo() {
 
               {paso === 3 && paymentData && (
                 <motion.div key="p3" initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-20}}>
-                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Realizar <span className="text-gold-ink">pago</span></h2>
+                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Realizar <span className="text-gold">pago</span></h2>
                   <p className="text-sm text-text-muted mb-6">Paga con tarjeta, PSE o cuenta de Mercado Pago.</p>
 
                   <PaymentBrick

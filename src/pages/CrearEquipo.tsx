@@ -57,7 +57,7 @@ export default function CrearEquipo() {
               {[1,2,3,4].map(p => (
                 <div key={p} className="flex items-center gap-2">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${paso >= p ? 'bg-gold text-[#1A1206]' : 'bg-surface text-text-muted border border-border'}`}>{p}</div>
-                  <span className={`text-xs font-semibold hidden md:block ${paso >= p ? 'text-gold-ink' : 'text-text-muted'}`}>
+                  <span className={`text-xs font-semibold hidden md:block ${paso >= p ? 'text-gold' : 'text-text-muted'}`}>
                     {p === 1 ? 'Torneo' : p === 2 ? 'Nombre' : p === 3 ? 'Colores' : 'Escudo'}
                   </span>
                   {p < 4 && <div className={`w-8 h-px mx-1 ${paso > p ? 'bg-gold' : 'bg-border'}`} />}
@@ -72,12 +72,12 @@ export default function CrearEquipo() {
                     <span className="text-5xl mb-4 block">👑</span>
                     <h2 className="font-[family-name:var(--font-display)] text-xl uppercase mb-2">Solo capitanes</h2>
                     <p className="text-sm text-text-muted mb-6">Necesitás ser capitán para crear un equipo. Activá la opción desde tu perfil.</p>
-                    <Button onClick={() => navigate('/perfil')} className="rounded-full bg-gold/15 border border-gold/40 text-gold-ink hover:bg-gold/25 h-12 px-8">Ir a mi perfil</Button>
+                    <Button onClick={() => navigate('/perfil')} className="rounded-full bg-gold/15 border border-gold/40 text-gold hover:bg-gold/25 h-12 px-8">Ir a mi perfil</Button>
                   </motion.div>
                 )
                 if (paso === 0) return (
                   <motion.div key="p0" initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-20}}>
-                    <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Elegí un <span className="text-gold-ink">torneo</span></h2>
+                    <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Elegí un <span className="text-gold">torneo</span></h2>
                     <p className="text-sm text-text-muted mb-6">Seleccioná el torneo al que querés inscribir tu equipo.</p>
                     <div className="space-y-3">
                       {torneosActivos.length === 0 && <p className="text-center py-6 text-text-muted">No hay torneos activos disponibles.</p>}
@@ -88,7 +88,7 @@ export default function CrearEquipo() {
                               ? 'border-gold/50 bg-gold/5'
                               : 'border-border bg-black/30 hover:border-purple-mid/50'
                           }`}>
-                          <div className="w-12 h-12 rounded-xl bg-gold/20 flex items-center justify-center text-xl shrink-0"><Trophy size={22} className="text-gold-ink" /></div>
+                          <div className="w-12 h-12 rounded-xl bg-gold/20 flex items-center justify-center text-xl shrink-0"><Trophy size={22} className="text-gold" /></div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-bold text-white">{t.nombre}</p>
                             <div className="flex items-center gap-3 mt-1 text-[11px] text-text-muted">
@@ -97,7 +97,7 @@ export default function CrearEquipo() {
                             </div>
                           </div>
                           <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${
-                            t.estado === 'live' ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-gold/10 text-gold-ink border border-gold/30'
+                            t.estado === 'live' ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-gold/10 text-gold border border-gold/30'
                           }`}>{t.estado === 'live' ? 'En curso' : 'Abierto'}</span>
                         </button>
                       ))}
@@ -106,7 +106,7 @@ export default function CrearEquipo() {
                 )
                 if (paso === 1) return (
                 <motion.div key="p1" initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-20}}>
-                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Nombre del <span className="text-gold-ink">equipo</span></h2>
+                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Nombre del <span className="text-gold">equipo</span></h2>
                   <p className="text-sm text-text-muted mb-6">Elegí un nombre único para tu equipo.</p>
                   <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Nombre</Label>
                   <Input value={nombre} onChange={e => setNombre(e.target.value)} placeholder="Ej. Sistemas FC" className="bg-black border-border text-white rounded-xl h-12 mt-1.5 mb-6 focus-visible:border-gold" />
@@ -122,7 +122,7 @@ export default function CrearEquipo() {
 
               if (paso === 3) return (
                 <motion.div key="p3" initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-20}}>
-                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Colores del <span className="text-gold-ink">equipo</span></h2>
+                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Colores del <span className="text-gold">equipo</span></h2>
                   <p className="text-sm text-text-muted mb-6">Elegí los colores que representen a tu equipo.</p>
                   <div className="mb-4">
                     <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Color primario</Label>
@@ -149,7 +149,7 @@ export default function CrearEquipo() {
               )
               if (paso === 4) return (
                 <motion.div key="p4" initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-20}}>
-                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Escudo del <span className="text-gold-ink">equipo</span></h2>
+                  <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Escudo del <span className="text-gold">equipo</span></h2>
                   <p className="text-sm text-text-muted mb-6">Elegí un diseño o subí tu propio escudo.</p>
                   <div className="mb-4">
                     <Label className="text-xs text-text-faint font-semibold uppercase tracking-[.4px]">Elegir diseño</Label>

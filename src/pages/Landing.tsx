@@ -190,7 +190,7 @@ export default function Landing() {
                 </motion.h1>
               </div>
               <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7, duration: 0.5 }} className="font-[family-name:var(--font-display)] text-[clamp(16px,2vw,21px)] font-semibold tracking-[.4px] uppercase text-[#5B4A7A] dark:text-gray-light leading-tight mb-5">
-                Torneos de fútbol de la decanatura de<br /><span className="text-gold-ink">Ingeniería de Sistemas</span>
+                Torneos de fútbol de la decanatura de<br /><span className="text-gold">Ingeniería de Sistemas</span>
               </motion.p>
               <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9, duration: 0.5 }} className="text-base leading-relaxed text-[#7A6B99] dark:text-text-muted max-w-[520px] mb-10 max-lg:mx-auto">
                 La pagina que conecta talento, pasión y tecnología. Vive la experiencia de representar a tu equipo y dejar tu huella en la cancha.
@@ -207,7 +207,7 @@ export default function Landing() {
         {/* Texto inferior derecha — encima de todo */}
         <div className="absolute bottom-8 right-8 z-20 max-w-[360px] text-right max-md:hidden rounded-2xl border border-white/40 dark:border-white/10 bg-white/50 dark:bg-black/40 backdrop-blur-md px-6 py-5 shadow-lg">
           <p className="font-[family-name:var(--font-display)] text-4xl uppercase leading-[1.1] text-[#3D1A6B] dark:text-white drop-shadow-lg">
-            La pasión nos <span className="text-gold-ink">conecta</span>
+            La pasión nos <span className="text-gold">conecta</span>
           </p>
           <div className="flex items-center gap-3 mt-5 justify-end">
             <div className="w-8 h-[2px] rounded-full bg-gold/20" />
@@ -395,8 +395,8 @@ export default function Landing() {
             <div className="flex items-center gap-3">
               <span className="w-1 h-6 rounded-full bg-gold" />
               <div>
-                <span className="text-lg font-bold tracking-[1.4px] uppercase text-gold-ink">Manchas</span>
-                <h2 className="font-[family-name:var(--font-display)] text-xl uppercase tracking-[.5px] text-[#4B2D7A] dark:text-gray-light">Nuestra <span className="text-gold-ink">mascota</span></h2>
+                <span className="text-lg font-bold tracking-[1.4px] uppercase text-gold">Manchas</span>
+                <h2 className="font-[family-name:var(--font-display)] text-xl uppercase tracking-[.5px] text-[#4B2D7A] dark:text-gray-light">Nuestra <span className="text-gold">mascota</span></h2>
               </div>
             </div>
           </div>
@@ -429,8 +429,8 @@ export default function Landing() {
             <div className="flex items-center gap-3 mb-5 relative z-10">
               <span className="w-1 h-6 rounded-full bg-gold" />
               <div>
-                <span className="text-[11px] font-bold tracking-[1.4px] uppercase text-gold-ink">En vivo</span>
-                <h2 className="font-[family-name:var(--font-display)] text-lg uppercase tracking-[.5px] text-[#4B2D7A] dark:text-gray-light">Resultados <span className="text-gold-ink">en vivo</span></h2>
+                <span className="text-[11px] font-bold tracking-[1.4px] uppercase text-gold">En vivo</span>
+                <h2 className="font-[family-name:var(--font-display)] text-lg uppercase tracking-[.5px] text-[#4B2D7A] dark:text-gray-light">Resultados <span className="text-gold">en vivo</span></h2>
               </div>
             </div>
 
@@ -458,7 +458,7 @@ export default function Landing() {
                         <span className="text-[11px] font-semibold text-[#4B2D7A] dark:text-gray-light text-center leading-tight truncate w-full">{m.eq1}</span>
                       </div>
                       <div className="flex flex-col items-center px-1">
-                        <span className="text-3xl font-black leading-none text-gold-ink">{m.score}</span>
+                        <span className="text-3xl font-black leading-none text-gold">{m.score}</span>
                         <span className="text-xs text-[#9B8AB5] dark:text-text-faint font-bold uppercase mt-1">VS</span>
                       </div>
                       <div className="flex flex-col items-center gap-1 flex-1 min-w-0">
