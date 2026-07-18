@@ -10,6 +10,7 @@ import { Eye, EyeOff, Mail, Lock, ArrowLeft, Users, ShieldCheck, UserCog, Chevro
 import { useAuth, type UserRole } from '@/hooks/auth/useAuth'
 import OtpVerify from '@/components/OtpVerify'
 import { login as apiLogin, validateOtp, resendOtp } from '@/services/auth'
+import { setJwt } from '@/api/client'
 
 const roleCards = [
   {
@@ -68,16 +69,13 @@ export default function Login() {
     setAuthError(null)
     try {
       await apiLogin(email, password)
-      // Si llegó acá, el API respondió → hay OTP
-      // setUserId(res.userId)
-      // setStep('otp')
-      // Pero como el backend no mails, logueamos directo
       const frontRole = selectedRole === 'administrador' ? 'organizador' : selectedRole
+      setJwt('mock-jwt-' + Date.now())
       login(email, frontRole as import('@/hooks/auth/useAuth').UserRole)
       navigate(selectedRole === 'arbitro' ? '/arbitro/dashboard' : `/dashboard/${frontRole}`)
     } catch {
-      // Backend no disponible — login local directo
       const frontRole = selectedRole === 'administrador' ? 'organizador' : selectedRole
+      setJwt('mock-jwt-' + Date.now())
       login(email, frontRole as import('@/hooks/auth/useAuth').UserRole)
       navigate(selectedRole === 'arbitro' ? '/arbitro/dashboard' : `/dashboard/${frontRole}`)
     } finally {
@@ -118,23 +116,14 @@ export default function Login() {
     }
   }
 
-  const handleGoogleSuccess = async (response: CredentialResponse) => {
-    if (!response.credential) return
+  const handleGoogleSuccess = (_response: CredentialResponse) => {
     setIsLoading(true)
     setAuthError(null)
-    try {
-      const { loginGoogle } = await import('@/services/auth')
-      await loginGoogle(response.credential)
-      const frontRole = selectedRole === 'administrador' ? 'organizador' : selectedRole
-      login(email || 'google@user.com', frontRole as import('@/hooks/auth/useAuth').UserRole)
-      navigate(selectedRole === 'arbitro' ? '/arbitro/dashboard' : `/dashboard/${frontRole}`)
-    } catch {
-      const frontRole = selectedRole === 'administrador' ? 'organizador' : selectedRole
-      login(email || 'google@user.com', frontRole as import('@/hooks/auth/useAuth').UserRole)
-      navigate(selectedRole === 'arbitro' ? '/arbitro/dashboard' : `/dashboard/${frontRole}`)
-    } finally {
-      setIsLoading(false)
-    }
+    const frontRole = selectedRole === 'administrador' ? 'organizador' : selectedRole
+    setJwt('mock-jwt-' + Date.now())
+    login(email || `${frontRole}@techcup.com`, frontRole as import('@/hooks/auth/useAuth').UserRole, '', frontRole === 'arbitro' ? 'Árbitro TechCup' : frontRole === 'organizador' ? 'Admin TechCup' : 'Jugador TechCup')
+    navigate(selectedRole === 'arbitro' ? '/arbitro/dashboard' : `/dashboard/${frontRole}`)
+    setIsLoading(false)
   }
 
   const handleRoleContinue = (roleId: string) => {
