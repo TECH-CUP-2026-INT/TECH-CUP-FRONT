@@ -81,25 +81,33 @@ function CalendarioContent() {
           <div className="absolute top-[40%] -left-[5%] w-[55%] h-[20%] opacity-[0.05] dark:opacity-[0.06]" style={{ background: 'linear-gradient(115deg, transparent 20%, #C8851A 40%, #8B5CF6 55%, transparent 75%)', transform: 'skewX(-15deg)' }} />
         </div>
         {/* 3D Carousel de fondo */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <ThreeDCarousel spotlightOffsetY={310} images={[
-            { src: '/images/logo1.png', alt: 'Logo 1' },
-            { src: '/images/logo2.png', alt: 'Logo 2' },
-            { src: '/images/logo3.png', alt: 'Logo 3' },
-            { src: '/images/logo4.png', alt: 'Logo 4' },
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ transform: 'translateY(30px)' }}>
+          <ThreeDCarousel spotlightOffsetY={310} maxScale={1.1} spotlightWidth="min(25dvw, 240px)" images={[
+            { src: '/images/equipo-1.png', alt: 'Equipo 1' },
+            { src: '/images/equipo-2.png', alt: 'Equipo 2' },
+            { src: '/images/equipo-3.png', alt: 'Equipo 3' },
+            { src: '/images/equipo-4.png', alt: 'Equipo 4' },
+            { src: '/images/equipo-5.png', alt: 'Equipo 5' },
+            { src: '/images/equipo-6.png', alt: 'Equipo 6' },
+            { src: '/images/equipo-7.png', alt: 'Equipo 7' },
+            { src: '/images/equipo-8.png', alt: 'Equipo 8' },
           ]} />
         </div>
-        <div className="relative w-full max-w-[1280px] mx-auto px-8 pt-[130px] pb-[120px]">
+        <div className="relative w-full max-w-[1280px] mx-auto px-8 pt-[130px] pb-[170px]">
           {/* Carrusel fantasma — arriba y abajo */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ opacity: 0.12 }}>
             <div className="flex gap-6 items-center animate-scroll" style={{ width: 'max-content', filter: 'blur(2px)' }}>
-              {[...Array(8)].flatMap(() => [
-                { src:'/images/logo1.png' },
-                { src:'/images/logo2.png' },
-                { src:'/images/logo3.png' },
-                { src:'/images/logo4.png' },
+              {[...Array(4)].flatMap(() => [
+                { src:'/images/equipo-1.png' },
+                { src:'/images/equipo-2.png' },
+                { src:'/images/equipo-3.png' },
+                { src:'/images/equipo-4.png' },
+                { src:'/images/equipo-5.png' },
+                { src:'/images/equipo-6.png' },
+                { src:'/images/equipo-7.png' },
+                { src:'/images/equipo-8.png' },
               ]).map((logo, i) => (
-                <img key={i} src={logo.src} alt="" className="object-cover" style={{ width: `${100 + (i % 4) * 20}px`, height: `${120 + (i % 4) * 24}px`, transform: `translateY(${(i % 4) * 5 - 7}px)` }} />
+                <img key={i} src={logo.src} alt="" className="object-cover" style={{ width: `${100 + (i % 8) * 15}px`, height: `${120 + (i % 8) * 18}px`, transform: `translateY(${(i % 8) * 3 - 10}px)` }} />
               ))}
             </div>
           </div>
