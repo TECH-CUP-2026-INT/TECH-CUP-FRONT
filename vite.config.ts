@@ -21,16 +21,50 @@ export default defineConfig({
       '/identity': {
         target: 'https://techapi.azure-api.net',
         changeOrigin: true,
-        headers: {
-          'Ocp-Apim-Subscription-Key': '4eff9bdd419b49308dc37fd491741c47',
-        },
       },
       '/api': {
         target: 'https://techapi.azure-api.net',
         changeOrigin: true,
-        headers: {
-          'Ocp-Apim-Subscription-Key': '4eff9bdd419b49308dc37fd491741c47',
-        },
+      },
+      '/users': {
+        target: 'https://techapi.azure-api.net',
+        changeOrigin: true,
+      },
+      '/teams': {
+        target: 'https://techapi.azure-api.net',
+        changeOrigin: true,
+      },
+      '/communication': {
+        target: 'https://techapi.azure-api.net',
+        changeOrigin: true,
+      },
+      '/communications': {
+        target: 'https://techapi.azure-api.net',
+        changeOrigin: true,
+      },
+      '/matches': {
+        target: 'https://techapi.azure-api.net',
+        changeOrigin: true,
+      },
+      '/tournaments': {
+        target: 'https://techapi.azure-api.net',
+        changeOrigin: true,
+      },
+      '/logistics': {
+        target: 'https://techapi.azure-api.net',
+        changeOrigin: true,
+      },
+      '/payments': {
+        target: 'https://techapi.azure-api.net',
+        changeOrigin: true,
+      },
+      '/players': {
+        target: 'https://techapi.azure-api.net',
+        changeOrigin: true,
+      },
+      '/audit': {
+        target: 'https://techapi.azure-api.net',
+        changeOrigin: true,
       },
     },
   },

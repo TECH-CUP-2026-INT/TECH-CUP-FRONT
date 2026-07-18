@@ -19,6 +19,7 @@ export const TEAMS_SERVICE_PREFIX = '/teams'
 
 const api: AxiosInstance = axios.create({
   baseURL: BASE_URL,
+  params: APIM_KEY ? { 'subscription-key': APIM_KEY } : {},
   headers: {
     'Content-Type': 'application/json',
     ...(APIM_KEY ? { 'Ocp-Apim-Subscription-Key': APIM_KEY } : {}),
