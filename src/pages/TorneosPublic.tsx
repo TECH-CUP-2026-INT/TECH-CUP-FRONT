@@ -92,13 +92,6 @@ function TorneosContent() {
             <motion.h1 initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:0.3}} className="font-[family-name:var(--font-display-alt)] font-bold text-[clamp(42px,6vw,72px)] leading-[.92] tracking-[.5px] uppercase italic mb-4">
               <span className="text-[#3D1A6B] dark:text-[#F7EDE2]">Torneos</span> <span className="text-gold">y Equipos</span>
             </motion.h1>
-            <motion.div initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{delay:0.7}} className="flex items-center justify-center gap-6 mt-5 text-[13px] text-[#7A6B99] dark:text-text-muted">
-              <span><strong className="text-gold">{torneos.length}</strong> torneos</span>
-              <span className="w-px h-4 bg-black/10 dark:bg-white/10" />
-              <span><strong className="text-gold">{torneos.reduce((a,t)=>a+t.equipos,0)}</strong> equipos</span>
-              <span className="w-px h-4 bg-black/10 dark:bg-white/10" />
-              <span><strong className="text-gold">{torneos.reduce((a,t)=>a+t.jugadores,0)}+</strong> jugadores</span>
-            </motion.div>
           </div>
         </div>
       </section>
