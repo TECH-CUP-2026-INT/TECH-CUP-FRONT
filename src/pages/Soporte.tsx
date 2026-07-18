@@ -6,6 +6,7 @@ import Footer from '@/components/common/Footer'
 import { SpotlightCard } from '@/components/common/spotlight-card'
 import { Button } from '@/components/common/button'
 import { Send, Bot, ArrowUpRight } from 'lucide-react'
+import { getBotResponse } from '@/utils/manchasbot'
 
 const faqs = ['¿Cómo me inscribo?', 'Fechas importantes', 'Proceso de pago', 'Reglamento']
 
@@ -24,7 +25,7 @@ export default function Soporte() {
     setMsgs([...msgs, { tipo: 'user', texto: input, hora: new Date().getHours() + ':' + String(new Date().getMinutes()).padStart(2, '0') }])
     setInput('')
     setTimeout(() => {
-      setMsgs(prev => [...prev, { tipo: 'bot', texto: 'Gracias por tu consulta. Un organizador te responderá a la brevedad.', hora: new Date().getHours() + ':' + String(new Date().getMinutes()).padStart(2, '0') }])
+      setMsgs(prev => [...prev, { tipo: 'bot', texto: getBotResponse(input), hora: new Date().getHours() + ':' + String(new Date().getMinutes()).padStart(2, '0') }])
     }, 1000)
   }
 

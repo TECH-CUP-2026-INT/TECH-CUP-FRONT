@@ -8,6 +8,12 @@ import { getUserChats, getChatMessages, sendMessage, type Chat as ChatDto, type 
 import { createChatSocket, subscribeToChat } from '@/api/ws'
 import { getTeamName } from '@/utils/teamNameCache'
 import { getInitialsAvatar } from '@/utils/avatar'
+import {
+  MANCHAS_BOT_AVATAR,
+  MANCHAS_BOT_GREETINGS,
+  isManchasBotMessage,
+  cleanManchasBotMessage,
+} from '@/utils/manchasbot'
 
 function chatLabel(chat: ChatDto): string {
   if (chat.type === 'SUPPORT') return 'Soporte'
@@ -41,6 +47,7 @@ export default function Chat() {
   const [sendError, setSendError] = useState<string | null>(null)
 
   const profileCache = useRef<Map<string, PerfilPublicoResponse>>(new Map())
+  const sentBotGreeting = useRef<Set<string>>(new Set())
   const [, forceRerender] = useState(0)
   const stompClientRef = useRef<Client | null>(null)
   const subscriptionRef = useRef<StompSubscription | null>(null)
@@ -91,8 +98,40 @@ export default function Chat() {
     setMessagesError(null)
     getChatMessages(selectedChatId)
       .then(page => {
-        setMessages(page.content)
-        resolveSenderProfiles(page.content)
+        const msgs = page.content
+        setMessages(msgs)
+        resolveSenderProfiles(msgs)
+
+        // ManchasBot saluda si el chat está vacío o no tiene mensaje suyo
+        const hasBotMsg = msgs.some(m => isManchasBotMessage(m.content))
+        if (
+          !hasBotMsg &&
+          !sentBotGreeting.current.has(selectedChatId)
+        ) {
+          sentBotGreeting.current.add(selectedChatId)
+          const greeting =
+            MANCHAS_BOT_GREETINGS[Math.floor(Math.random() * MANCHAS_BOT_GREETINGS.length)]
+          sendMessage(selectedChatId, `🤖 *ManchasBot*: ${greeting}`)
+            .then(() => {
+              // Refrescar mensajes para que aparezca el saludo
+              getChatMessages(selectedChatId).then(p2 => {
+                setMessages(p2.content)
+                resolveSenderProfiles(p2.content)
+              })
+            })
+            .catch(() => {
+              // Si falla, igual mostramos el mensaje localmente para que se vea
+              const fakeBotMsg: Message = {
+                id: `manchas-${Date.now()}`,
+                chatId: selectedChatId,
+                senderId: 'MANCHAS_BOT',
+                content: `🤖 *ManchasBot*: ${greeting}`,
+                status: 'SENT',
+                sentAt: new Date().toISOString(),
+              }
+              setMessages(prev => [...prev, fakeBotMsg])
+            })
+        }
       })
       .catch(() => setMessagesError('No pudimos cargar los mensajes.'))
       .finally(() => setMessagesLoading(false))
@@ -236,13 +275,22 @@ export default function Chat() {
               )}
               {messages.map((msg) => {
                 const isMe = msg.senderId === myUserId
+                const isBot = isManchasBotMessage(msg.content)
                 return (
                   <div key={msg.id} className={`flex items-end gap-2.5 ${isMe ? 'flex-row-reverse' : ''}`}>
                     <div className="flex-shrink-0">
                       <div className={`w-8 h-8 rounded-full overflow-hidden ring-2 shadow-lg ${
-                        isMe ? 'ring-purple-mid/60 ring-offset-2 ring-offset-black' : 'ring-gold/40 ring-offset-2 ring-offset-black'
+                        isBot
+                          ? 'ring-gold/60 ring-offset-2 ring-offset-black'
+                          : isMe
+                            ? 'ring-purple-mid/60 ring-offset-2 ring-offset-black'
+                            : 'ring-gold/40 ring-offset-2 ring-offset-black'
                       }`}>
-                        <img src={senderAvatar(msg.senderId)} alt="" className="w-full h-full object-cover" />
+                        <img
+                          src={isBot ? MANCHAS_BOT_AVATAR : senderAvatar(msg.senderId)}
+                          alt=""
+                          className="w-full h-full object-cover"
+                        />
                       </div>
                     </div>
                     <div className="max-w-[75%] md:max-w-[60%]">
@@ -251,10 +299,10 @@ export default function Chat() {
                           ? 'bg-purple-mid/15 border-purple-mid/20 rounded-br-md'
                           : 'bg-white/5 border-white/10 rounded-bl-md'
                       }`}>
-                        <p className="text-gray-light">{msg.content}</p>
+                        <p className="text-gray-light">{isBot ? cleanManchasBotMessage(msg.content) : msg.content}</p>
                       </div>
                       <p className={`text-[10px] text-text-faint/60 mt-1 ${isMe ? 'text-right' : 'text-left'}`}>
-                        {formatTime(msg.sentAt)}
+                        {isBot ? 'ManchasBot' : senderName(msg.senderId)} · {formatTime(msg.sentAt)}
                       </p>
                     </div>
                   </div>

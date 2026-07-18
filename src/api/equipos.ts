@@ -24,7 +24,7 @@ import api, { apiGet, apiPost, apiPut, apiDelete } from './client'
 import type { UUID } from './tipos'
 
 // ─── Base path via APIM ──────────────────────────────────────
-const BASE = '/api/v1/Teams/api/v1'
+const BASE = '/teams'
 
 // ═══════════════════════════════════════════════════════════════
 // TIPOS API (raw) — mapean directamente las respuestas del backend
@@ -283,18 +283,18 @@ export async function getAuditEventsApi(): Promise<ApiAuditEvent[]> {
  * Interno: GET /teams/{teamId} — puede requerir configurar APIM.
  */
 export async function getTeamInfoApi(teamId: UUID): Promise<ApiTeamInfo> {
-  return apiGet<ApiTeamInfo>(`/api/v1/Teams/teams/${teamId}`)
+  return apiGet<ApiTeamInfo>(`/teams/teams/${teamId}`)
 }
 
 /**
  * Roster de un jugador (teamId + memberIds).
- * Interno: GET /teams/by-player/{playerId}/roster — puede requerir configurar APIM.
+ * APIM: GET /teams/teams/by-player/{playerId}/roster
  */
 export async function getTeamRosterApi(
   playerId: UUID
 ): Promise<ApiTeamRoster> {
   return apiGet<ApiTeamRoster>(
-    `/api/v1/Teams/teams/by-player/${playerId}/roster`
+    `/teams/teams/by-player/${playerId}/roster`
   )
 }
 

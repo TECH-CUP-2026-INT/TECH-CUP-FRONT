@@ -11,19 +11,19 @@ import { apiGet, apiPost, apiPut, apiDelete } from './client'
 import type { MatchSummaryAPI, MatchDetailAPI, CreateMatchRequest, CreateMatchResponse } from './tipos'
 
 // Siempre via APIM — el client.ts ya apunta a https://techapi.azure-api.net
-const MATCHES_PATH = '/api/v1/matches'
+const MATCHES_PATH = '/matches'
 
 /**
  * Obtiene todos los partidos via APIM.
- * GET /api/v1/matches
+ * APIM: GET /matches
  */
 export async function getPartidosApi(): Promise<MatchSummaryAPI[]> {
-  return apiGet<MatchSummaryAPI[]>(`${MATCHES_PATH}`)
+  return apiGet<MatchSummaryAPI[]>(MATCHES_PATH)
 }
 
 /**
  * Obtiene detalle de un partido por ID via APIM.
- * GET /api/v1/matches/{matchId}
+ * APIM: GET /matches/{matchId}
  */
 export async function getPartidoPorIdApi(
   matchId: string
@@ -33,17 +33,17 @@ export async function getPartidoPorIdApi(
 
 /**
  * Crea un nuevo partido via APIM.
- * POST /api/v1/matches
+ * APIM: POST /matches
  */
 export async function crearPartidoApi(
   data: CreateMatchRequest
 ): Promise<CreateMatchResponse> {
-  return apiPost<CreateMatchResponse>(`${MATCHES_PATH}`, {
+  return apiPost<CreateMatchResponse>(MATCHES_PATH, {
     tournamentId: data.tournamentId,
-    homeTeamName: data.homeTeamId === 'eq-1' ? 'Tigres FC' : data.homeTeamId === 'eq-2' ? 'Sistemas FC' : data.homeTeamId === 'eq-3' ? 'Code United' : data.homeTeamId === 'eq-4' ? 'IA Warriors' : data.homeTeamId === 'eq-5' ? 'Dragones FC' : data.homeTeamId === 'eq-6' ? 'Los Bits' : 'Equipo',
-    awayTeamName: data.awayTeamId === 'eq-1' ? 'Tigres FC' : data.awayTeamId === 'eq-2' ? 'Sistemas FC' : data.awayTeamId === 'eq-3' ? 'Code United' : data.awayTeamId === 'eq-4' ? 'IA Warriors' : data.awayTeamId === 'eq-5' ? 'Dragones FC' : data.awayTeamId === 'eq-6' ? 'Los Bits' : 'Equipo',
     scheduledDate: data.scheduledDate,
     venue: data.venue,
+    homeTeamName: data.homeTeamId,
+    awayTeamName: data.awayTeamId,
   })
 }
 
@@ -69,7 +69,7 @@ export interface UpdateMatchResponse {
 
 /**
  * Actualiza un partido (resultado, estado, minuto, etc.).
- * PUT /api/v1/matches/{matchId}
+ * APIM: PUT /matches/{matchId}
  */
 export async function updatePartidoApi(
   matchId: string,
@@ -80,7 +80,7 @@ export async function updatePartidoApi(
 
 /**
  * Elimina/cancela un partido.
- * DELETE /api/v1/matches/{matchId}
+ * APIM: DELETE /matches/{matchId}
  */
 export async function deletePartidoApi(
   matchId: string

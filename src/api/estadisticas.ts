@@ -25,7 +25,7 @@ import { apiGet } from './client'
 // ─── Base path via APIM ──────────────────────────────────────
 // APIM mapea cada servicio bajo su propio prefijo.
 // Statistics Service: path = /api/v1/Statistics (controller base = /api/v1/statistics)
-const BASE = '/api/v1/Statistics/api/v1/statistics'
+const BASE = '/statistics'
 
 // ─── Tipos API (raw) ─────────────────────────────────────────
 

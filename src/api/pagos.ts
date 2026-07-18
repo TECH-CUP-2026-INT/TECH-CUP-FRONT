@@ -7,7 +7,7 @@ import type {
   PaymentStatusResponse,
 } from '@/types/pagos'
 
-const PAYMENTS_PATH = '/api/v1/Payment'
+const PAYMENTS_PATH = '/payments'
 
 export function createPaymentOrder(data: CreatePaymentOrderRequest) {
   return apiPost<PaymentOrderResponse>(`${PAYMENTS_PATH}/payment-orders`, data)

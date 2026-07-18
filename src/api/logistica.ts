@@ -98,7 +98,7 @@ export interface RegistrarItemDotacionRequest {
 
 // ─── Helpers ─────────────────────────────────────────────────
 
-const LOGISTIC_PATH = '/api/v1/Logistic'
+const LOGISTIC_PATH = '/logistics'
 
 // ─── Refrigerios: Definiciones ──────────────────────────────
 

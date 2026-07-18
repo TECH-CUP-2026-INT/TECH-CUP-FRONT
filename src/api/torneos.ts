@@ -1,22 +1,20 @@
 import { apiGet, apiPut, apiDelete } from './client'
 import type { Torneo } from './tipos'
 
-const BASE = '/api/v1/Tournament'
-
 /**
  * Obtiene todos los torneos activos desde el Tournament Service via APIM.
- * APIM path: /api/v1/Tournament/tournaments/active
+ * APIM: GET /tournaments/active
  */
 export async function getTorneosActivos(): Promise<Torneo[]> {
-  return apiGet<Torneo[]>(`${BASE}/tournaments/active`)
+  return apiGet<Torneo[]>('/tournaments/active')
 }
 
 /**
  * Obtiene un torneo específico por ID.
- * APIM path: /api/v1/Tournament/tournaments/{id}
+ * APIM: GET /tournaments/{id}
  */
 export async function getTorneoPorId(id: string): Promise<Torneo> {
-  return apiGet<Torneo>(`${BASE}/tournaments/${id}`)
+  return apiGet<Torneo>(`/tournaments/${id}`)
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -34,19 +32,19 @@ export interface UpdateTorneoRequest {
 
 /**
  * Actualiza un torneo existente.
- * PUT /api/v1/Tournament/tournaments/{id}
+ * APIM: PUT /tournaments/{id}
  */
 export async function updateTorneoApi(
   id: string,
   data: UpdateTorneoRequest
 ): Promise<Torneo> {
-  return apiPut<Torneo>(`${BASE}/tournaments/${id}`, data)
+  return apiPut<Torneo>(`/tournaments/${id}`, data)
 }
 
 /**
  * Elimina un torneo.
- * DELETE /api/v1/Tournament/tournaments/{id}
+ * APIM: DELETE /tournaments/{id}
  */
 export async function deleteTorneoApi(id: string): Promise<{ message: string }> {
-  return apiDelete<{ message: string }>(`${BASE}/tournaments/${id}`)
+  return apiDelete<{ message: string }>(`/tournaments/${id}`)
 }

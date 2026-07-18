@@ -47,7 +47,7 @@ function mapTipoDoc(tipoDoc: string): TipoIdentificacion {
 
 // ─── API Functions ──────────────────────────────────────────
 
-const USERS_PATH = '/api/v1/Users'
+const USERS_PATH = '/users'
 
 export async function registerStudentApi(data: RegistroEstudianteRequest): Promise<RegistroResponse> {
   return apiPost<RegistroResponse>(`${USERS_PATH}/usuarios/registro/estudiante`, data)

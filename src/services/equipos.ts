@@ -142,7 +142,7 @@ export async function fetchMiEquipo(
 
   try {
     const roster = await apiGet<{ teamId: UUID | null; memberIds: UUID[] }>(
-      `/api/v1/Teams/teams/by-player/${playerId}/roster`
+      `/teams/teams/by-player/${playerId}/roster`
     )
     if (!roster.teamId) return null
 

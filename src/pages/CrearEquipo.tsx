@@ -48,6 +48,7 @@ export default function CrearEquipo() {
   const [colorS, setColorS] = useState('#F5A623')
   const [diseno, setDiseno] = useState('SF')
   const [creating, setCreating] = useState(false)
+  const [createError, setCreateError] = useState<string | null>(null)
   const [createdTeamId, setCreatedTeamId] = useState<string | null>(null)
   const [torneosLocal, setTorneosLocal] = useState<Torneo[]>(torneos)
   const navigate = useNavigate()
@@ -67,7 +68,6 @@ export default function CrearEquipo() {
 
   async function handleCrearEquipo() {
     setCreating(true)
-    setCreateError(null)
     try {
       const miPerfil = await getMiPerfil()
       const logo = await generarLogoPlaceholder(colorP, colorS, diseno)
@@ -79,29 +79,12 @@ export default function CrearEquipo() {
       await crearChatDelEquipo(teamId)
       navigate('/inscribir-equipo', { state: { teamId } })
     } catch {
-      setCreateError('No pudimos crear el equipo. Intentá de nuevo.')
+      setCreateError('No pudimos crear el equipo. Intent� de nuevo.')
     } finally {
       setCreating(false)
     }
   }
 
-  async function handleCrearEquipo() {
-    if (!torneoElegido) return
-    setCreating(true)
-    try {
-      const team = await crearEquipo(
-        user?.name || nombre,
-        nombre,
-        `${colorP},${colorS}`,
-      )
-      if (team) setCreatedTeamId(team.id)
-      navigate('/inscribir-equipo', { state: { teamId: team?.id, torneoId: torneoElegido.id } })
-    } catch {
-      navigate('/inscribir-equipo')
-    } finally {
-      setCreating(false)
-    }
-  }
 
   const preview = (
     <div className="flex items-center gap-4 p-4 rounded-xl bg-black/50 border border-border">
@@ -274,3 +257,4 @@ export default function CrearEquipo() {
     </div>
   )
 }
+

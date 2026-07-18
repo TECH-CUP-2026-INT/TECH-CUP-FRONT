@@ -1,24 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Send } from 'lucide-react'
-
-const faqResponses: Record<string, string> = {
-  'inscribir': 'Para inscribirte, tu capitán debe completar el registro del equipo y cargar el comprobante de pago. El organizador revisa y aprueba la inscripción.',
-  'torneo': 'Los torneos disponibles los encontrás en la sección Torneos. Cada torneo tiene su fecha, categoría y costo de inscripción.',
-  'reglamento': 'El reglamento oficial está disponible en la sección Reglamento de cada torneo. Incluye normas de juego, sanciones y formato de competencia.',
-  'equipo': 'Podés crear un equipo desde la sección "Crear equipo" o unirte a uno existente mediante invitación del capitán.',
-  'partido': 'Los partidos se programan automáticamente según el bracket del torneo. El calendario completo está en la sección Calendario.',
-  'pago': 'El pago de inscripción se realiza por los medios indicados por la organización. Solo debés subir el comprobante desde la inscripción.',
-  'default': '¡Hola! Soy ManchasBot 🤖. Puedo ayudarte con información sobre torneos, inscripciones, equipos, reglamento y más. ¿En qué te puedo ayudar?'
-}
-
-function getResponse(input: string): string {
-  const lower = input.toLowerCase()
-  for (const [key, response] of Object.entries(faqResponses)) {
-    if (lower.includes(key)) return response
-  }
-  return faqResponses['default']
-}
+import { getBotResponse } from '@/utils/manchasbot'
 
 export default function ManchasFloating() {
   const [open, setOpen] = useState(false)
@@ -33,7 +16,7 @@ export default function ManchasFloating() {
     setMessages(prev => [...prev, { text: userMsg, me: true }])
     setInput('')
     setTimeout(() => {
-      setMessages(prev => [...prev, { text: getResponse(userMsg), me: false }])
+      setMessages(prev => [...prev, { text: getBotResponse(userMsg), me: false }])
     }, 500)
   }
 

@@ -1,13 +1,13 @@
 ﻿import axios, { type AxiosInstance, type InternalAxiosRequestConfig } from 'axios'
 
 const DEV = import.meta.env.DEV
-const BASE_URL = DEV ? '' : 'https://techapi.azure-api.net'
+const BASE_URL = DEV ? '' : (import.meta.env.VITE_API_BASE_URL || 'https://techapi.azure-api.net')
 const APIM_KEY = import.meta.env.VITE_APIM_KEY
 
 // ── Prefijos por servicio en el gateway ──────────────────────
-export const CHAT_SERVICE_PREFIX = '/communications'
-export const USERS_SERVICE_PREFIX = '/users/api/v1'
-export const TEAMS_SERVICE_PREFIX = '/teams/api/v1'
+export const CHAT_SERVICE_PREFIX = '/communication'
+export const USERS_SERVICE_PREFIX = '/users'
+export const TEAMS_SERVICE_PREFIX = '/teams'
 
 const api: AxiosInstance = axios.create({
   baseURL: BASE_URL,
