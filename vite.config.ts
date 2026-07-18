@@ -68,69 +68,6 @@ export default defineConfig({
         target: 'https://techapi.azure-api.net',
         changeOrigin: true,
       },
-      '/users': {
-        target: 'https://techapi.azure-api.net',
-        changeOrigin: true,
-        headers: {
-          'Ocp-Apim-Subscription-Key': '4eff9bdd419b49308dc37fd491741c47',
-        },
-      },
-      '/teams': {
-        target: 'https://techapi.azure-api.net',
-        changeOrigin: true,
-        headers: {
-          'Ocp-Apim-Subscription-Key': '4eff9bdd419b49308dc37fd491741c47',
-        },
-      },
-      '/communication': {
-        target: 'https://techapi.azure-api.net',
-        changeOrigin: true,
-        headers: {
-          'Ocp-Apim-Subscription-Key': '4eff9bdd419b49308dc37fd491741c47',
-        },
-      },
-      '/matches': {
-        target: 'https://techapi.azure-api.net',
-        changeOrigin: true,
-        headers: {
-          'Ocp-Apim-Subscription-Key': '4eff9bdd419b49308dc37fd491741c47',
-        },
-      },
-      '/tournaments': {
-        target: 'https://techapi.azure-api.net',
-        changeOrigin: true,
-        headers: {
-          'Ocp-Apim-Subscription-Key': '4eff9bdd419b49308dc37fd491741c47',
-        },
-      },
-      '/logistics': {
-        target: 'https://techapi.azure-api.net',
-        changeOrigin: true,
-        headers: {
-          'Ocp-Apim-Subscription-Key': '4eff9bdd419b49308dc37fd491741c47',
-        },
-      },
-      '/payments': {
-        target: 'https://techapi.azure-api.net',
-        changeOrigin: true,
-        headers: {
-          'Ocp-Apim-Subscription-Key': '4eff9bdd419b49308dc37fd491741c47',
-        },
-      },
-      '/players': {
-        target: 'https://techapi.azure-api.net',
-        changeOrigin: true,
-        headers: {
-          'Ocp-Apim-Subscription-Key': '4eff9bdd419b49308dc37fd491741c47',
-        },
-      },
-      '/audit': {
-        target: 'https://techapi.azure-api.net',
-        changeOrigin: true,
-        headers: {
-          'Ocp-Apim-Subscription-Key': '4eff9bdd419b49308dc37fd491741c47',
-        },
-      },
     },
   },
 })
