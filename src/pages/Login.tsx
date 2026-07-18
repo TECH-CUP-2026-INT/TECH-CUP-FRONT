@@ -154,7 +154,7 @@ export default function Login() {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: i * 0.1 }}
-        onClick={() => handleRoleContinue(role.shortName.toLowerCase())}
+        onClick={() => handleRoleContinue(role.id)}
         className="group relative flex items-stretch gap-0 rounded-[10px] overflow-hidden border border-gold/20 bg-[#F3EEFF]/70 dark:bg-black/60 hover:border-gold/50 transition-all duration-300 text-left w-full cursor-pointer"
       >
         {/* Imagen lateral */}
@@ -239,10 +239,10 @@ export default function Login() {
                 <ArrowLeft size={16} /> Elegir otro rol
               </button>
               <div className="flex items-center gap-3 mb-2 p-3 rounded-xl bg-purple-mid/10 border border-gold/20">
-                <img src={roleCards.find(r => r.shortName.toLowerCase() === selectedRole)?.img} alt="" className="w-10 h-10 object-contain" />
+                <img src={roleCards.find(r => r.id === selectedRole)?.img} alt="" className="w-10 h-10 object-contain" />
                 <div>
                   <p className="text-xs text-gold-ink uppercase tracking-wider">Rol seleccionado</p>
-                  <p className="text-sm font-bold text-gray-light">{selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)}</p>
+                  <p className="text-sm font-bold text-gray-light">{roleCards.find(r => r.id === selectedRole)?.shortName}</p>
                 </div>
               </div>
               <h1 className="font-[family-name:var(--font-display)] text-3xl uppercase tracking-[.5px] text-gray-light mb-1">
