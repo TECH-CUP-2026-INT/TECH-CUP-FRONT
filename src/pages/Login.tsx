@@ -100,12 +100,12 @@ export default function Login() {
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: i * 0.1 }}
         onClick={() => handleRoleContinue(role.shortName.toLowerCase())}
-        className="group relative flex items-stretch gap-0 rounded-[10px] overflow-hidden border border-gold/20 bg-black/60 hover:border-gold/50 transition-all duration-300 text-left w-full cursor-pointer"
+        className="group relative flex items-stretch gap-0 rounded-[10px] overflow-hidden border border-gold/20 bg-[#F3EEFF]/70 dark:bg-black/60 hover:border-gold/50 transition-all duration-300 text-left w-full cursor-pointer"
       >
         {/* Imagen lateral */}
-        <div className="relative w-[120px] min-h-[140px] flex-shrink-0 overflow-hidden bg-black/80 flex items-center justify-center max-sm:hidden">
+        <div className="relative w-[120px] min-h-[140px] flex-shrink-0 overflow-hidden bg-[#F3EEFF] dark:bg-black/80 flex items-center justify-center max-sm:hidden">
           <img src={role.img} alt="" className="w-full h-full object-contain p-3 transition-transform duration-500 group-hover:scale-110" />
-          <div className="absolute inset-0" style={{ background: `linear-gradient(90deg, transparent 40%, rgba(0,0,0,0.8) 100%)` }} />
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_40%,rgba(243,238,255,0.8)_100%)] dark:bg-[linear-gradient(90deg,transparent_40%,rgba(0,0,0,0.8)_100%)]" />
         </div>
         {/* Contenido */}
         <div className="flex-1 p-4 flex flex-col justify-center relative">
@@ -115,8 +115,8 @@ export default function Login() {
               <div className="flex items-center gap-2 mb-1.5">
                 <Icon size={16} className="text-gold-ink" />
               </div>
-              <h3 className="font-[family-name:var(--font-display)] text-lg normal-case tracking-[.3px] text-gold mb-1">{role.name}</h3>
-              <p className="text-xs normal-case text-gray-400 leading-relaxed">{role.desc}</p>
+              <h3 className="font-[family-name:var(--font-display)] text-lg normal-case tracking-[.3px] text-gold-ink mb-1">{role.name}</h3>
+              <p className="text-xs normal-case text-text-muted leading-relaxed">{role.desc}</p>
             </div>
             <div className="flex-shrink-0 mt-1">
               <div className="w-9 h-9 rounded-[8px] flex items-center justify-center transition-all duration-300 group-hover:bg-gold/20 border border-gold/30">
@@ -130,11 +130,11 @@ export default function Login() {
   }
 
   return (
-    <div className="chrome-dark min-h-screen bg-black flex relative overflow-x-auto">
+    <div className="min-h-screen bg-[#F6F5FA] dark:bg-black flex relative overflow-x-auto">
 
       {/* Izquierda — imagen de roles, solo en el paso de selección de rol */}
       {step === 'role' && (
-        <div className="block relative w-[58%] min-w-[380px] overflow-hidden bg-black">
+        <div className="block relative w-[58%] min-w-[380px] overflow-hidden bg-[#F6F5FA] dark:bg-black">
           <img src="/images/bg-roles.png" alt="" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: '63% center' }} />
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/10 to-black/50" />
         </div>
@@ -142,11 +142,11 @@ export default function Login() {
 
       {/* Panel negro-dorado */}
       <div className={`relative z-10 flex items-center justify-center p-8 lg:p-16 overflow-hidden min-w-[320px] ${step === 'role' ? 'w-[42%]' : 'w-1/2'}`}>
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-[#1a1a1a] to-black" />
+        <div className="absolute inset-0 bg-gradient-to-br from-white via-[#F3EEFF] to-white dark:from-black dark:via-[#1a1a1a] dark:to-black" />
         {/* Aurora dorado + violeta — mismo tratamiento que el hero de Landing */}
-        <div className="absolute inset-0 pointer-events-none opacity-60" style={{ background: 'radial-gradient(ellipse at 30% 40%, rgba(139,92,246,0.15) 0%, transparent 60%)' }} />
-        <div className="absolute inset-0 pointer-events-none opacity-40" style={{ background: 'radial-gradient(ellipse at 70% 60%, rgba(245,166,35,0.08) 0%, transparent 50%)' }} />
-        <div className="absolute inset-0 bg-black/70" />
+        <div className="absolute inset-0 pointer-events-none opacity-60 bg-[radial-gradient(ellipse_at_30%_40%,rgba(139,92,246,0.08)_0%,transparent_60%)] dark:bg-[radial-gradient(ellipse_at_30%_40%,rgba(139,92,246,0.15)_0%,transparent_60%)]" />
+        <div className="absolute inset-0 pointer-events-none opacity-40 bg-[radial-gradient(ellipse_at_70%_60%,rgba(245,166,35,0.05)_0%,transparent_50%)] dark:bg-[radial-gradient(ellipse_at_70%_60%,rgba(245,166,35,0.08)_0%,transparent_50%)]" />
+        <div className="absolute inset-0 hidden dark:block dark:bg-black/70" />
         {/* Brillo dorado sutil */}
         <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
         <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-gold/5 blur-[60px]" />
@@ -155,7 +155,7 @@ export default function Login() {
           {/* Logo + back to home button */}
           <div className="flex items-center gap-3 mb-10">
             <img src="/assets/logo.png" alt="TechCup" className="w-9 h-9 rounded-lg object-cover shadow-lg shadow-gold/20" />
-            <Link to="/" aria-label="Volver al inicio" className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-black/60 border border-gold/30 text-gold-ink hover:bg-gold/20 hover:text-white transition-all duration-300 backdrop-blur-sm">
+            <Link to="/" aria-label="Volver al inicio" className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/70 dark:bg-black/60 border border-gold/30 text-gold-ink hover:bg-gold/20 hover:text-white transition-all duration-300 backdrop-blur-sm">
               <ArrowLeft size={16} />
             </Link>
           </div>
@@ -163,12 +163,12 @@ export default function Login() {
           {step === 'role' ? (
             /* Step 1: Role Selector — recuadro negro-dorado */
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-              className="p-8 rounded-[12px] border border-gold/30 shadow-[0_0_40px_rgba(212,175,55,0.08)] relative overflow-hidden bg-black/40 backdrop-blur-sm">
+              className="p-8 rounded-[12px] border border-gold/30 shadow-[0_0_40px_rgba(212,175,55,0.08)] relative overflow-hidden bg-white/60 dark:bg-black/40 backdrop-blur-sm">
               <div className="mb-6">
-                <h1 className="font-[family-name:var(--font-display)] text-3xl uppercase tracking-[.5px] text-white mb-2">
+                <h1 className="font-[family-name:var(--font-display)] text-3xl uppercase tracking-[.5px] text-gray-light mb-2">
                   Selecciona tu <span className="text-gold-ink">rol</span>
                 </h1>
-                <p className="text-sm text-gray-400">Selecciona cómo quieres ingresar al sistema.</p>
+                <p className="text-sm text-text-muted">Selecciona cómo quieres ingresar al sistema.</p>
               </div>
 
               <div className="flex flex-col gap-4">
@@ -179,18 +179,18 @@ export default function Login() {
             </motion.div>
           ) : (
             /* Step 2: Login form */
-            <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} className="space-y-5 p-6 rounded-2xl border border-gold/10 bg-purple-deep/20 backdrop-blur-sm">
+            <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} className="space-y-5 p-6 rounded-2xl border border-gold/10 bg-white/60 dark:bg-purple-deep/20 backdrop-blur-sm">
               <button onClick={() => setStep('role')} className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-gold-ink transition-colors mb-3">
                 <ArrowLeft size={16} /> Elegir otro rol
               </button>
               <div className="flex items-center gap-3 mb-2 p-3 rounded-xl bg-purple-mid/10 border border-gold/20">
                 <img src={roleCards.find(r => r.shortName.toLowerCase() === selectedRole)?.img} alt="" className="w-10 h-10 object-contain" />
                 <div>
-                  <p className="text-xs text-gold/60 uppercase tracking-wider">Rol seleccionado</p>
-                  <p className="text-sm font-bold text-white">{selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)}</p>
+                  <p className="text-xs text-gold-ink uppercase tracking-wider">Rol seleccionado</p>
+                  <p className="text-sm font-bold text-gray-light">{selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)}</p>
                 </div>
               </div>
-              <h1 className="font-[family-name:var(--font-display)] text-3xl uppercase tracking-[.5px] text-white mb-1">
+              <h1 className="font-[family-name:var(--font-display)] text-3xl uppercase tracking-[.5px] text-gray-light mb-1">
                 Bienvenido de <span className="text-gold-ink">vuelta</span>
               </h1>
               <p className="text-sm text-text-muted mb-4">Inicia sesión para acceder a tu cuenta.</p>
@@ -201,7 +201,7 @@ export default function Login() {
                   <div className="relative">
                     <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-faint" />
                     <Input id="email" type="email" placeholder="correo@escuelaing.edu.co" value={email} onChange={e => setEmail(e.target.value)}
-                      className="bg-purple-deep/40 border-gold/20 text-white placeholder:text-gold/40 rounded-xl pl-10 h-12 focus-visible:border-gold focus-visible:ring-1 focus-visible:ring-gold/30" />
+                      className="bg-white/80 dark:bg-purple-deep/40 border-gold/20 text-gray-light placeholder:text-text-faint rounded-xl pl-10 h-12 focus-visible:border-gold focus-visible:ring-1 focus-visible:ring-gold/30" />
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -209,8 +209,8 @@ export default function Login() {
                   <div className="relative">
                     <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-faint" />
                     <Input id="password" type={showPassword ? 'text' : 'password'} placeholder="••••••••"
-                      className="bg-purple-deep/40 border-gold/20 text-white placeholder:text-gold/40 rounded-xl pl-10 h-12 focus-visible:border-gold focus-visible:ring-1 focus-visible:ring-gold/30" />
-                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-text-faint hover:text-white transition-colors">
+                      className="bg-white/80 dark:bg-purple-deep/40 border-gold/20 text-gray-light placeholder:text-text-faint rounded-xl pl-10 h-12 focus-visible:border-gold focus-visible:ring-1 focus-visible:ring-gold/30" />
+                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-text-faint hover:text-gold-ink transition-colors">
                       {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>
                   </div>
@@ -222,7 +222,7 @@ export default function Login() {
                 <Button type="submit" className="w-full rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark font-bold h-12 text-sm shadow-lg shadow-gold/20 hover:shadow-gold/30 transition-all">Iniciar sesión</Button>
               </form>
 
-              <div className="flex items-center gap-3"><div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" /><span className="text-xs text-gold/60 font-semibold uppercase">o</span><div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" /></div>
+              <div className="flex items-center gap-3"><div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" /><span className="text-xs text-gold-ink font-semibold uppercase">o</span><div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" /></div>
 
               {import.meta.env.VITE_GOOGLE_CLIENT_ID ? (
                 <GoogleLogin
@@ -235,12 +235,12 @@ export default function Login() {
                   theme="outline"
                 />
               ) : (
-                <Button variant="outline" className="w-full rounded-full border-gold/30 bg-purple-deep/30 text-gold-ink hover:bg-gold/10 hover:text-white h-12 text-sm font-semibold gap-3">
+                <Button variant="outline" className="w-full rounded-full border-gold/30 bg-white/60 dark:bg-purple-deep/30 text-gold-ink hover:bg-gold/10 hover:text-gray-light h-12 text-sm font-semibold gap-3">
                   <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
                   Continuar con Google
                 </Button>
               )}
-              <p className="text-center text-sm text-gold/60">¿No tienes cuenta? <Link to="/registro" className="text-gold-ink font-semibold hover:text-gold-dark transition-colors">Regístrate</Link></p>
+              <p className="text-center text-sm text-text-muted">¿No tienes cuenta? <Link to="/registro" className="text-gold-ink font-semibold hover:text-gold-dark transition-colors">Regístrate</Link></p>
             </motion.div>
           )}
         </div>
@@ -248,7 +248,7 @@ export default function Login() {
 
       {/* Right — video, solo en el paso de iniciar sesión */}
       {step === 'login' && (
-        <div className="flex relative z-10 w-1/2 min-w-[320px] overflow-hidden bg-black">
+        <div className="chrome-dark flex relative z-10 w-1/2 min-w-[320px] overflow-hidden bg-black">
           <video key={videoIndex} ref={videoRef} autoPlay loop muted playsInline
             className="absolute inset-0 w-full h-full object-cover">
             <source src={videos[videoIndex]} type="video/mp4" />
