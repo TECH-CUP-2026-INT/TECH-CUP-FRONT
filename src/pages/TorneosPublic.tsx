@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Navbar from '@/components/common/Navbar'
@@ -10,7 +10,7 @@ import {
 } from '@/components/common/select'
 import { Search, RefreshCw, LayoutGrid, List, CalendarDays, MapPin, Clock, Download } from 'lucide-react'
 import { ThreeDCarousel } from '@/components/common/three-d-carousel'
-import { torneos, type Torneo } from '@/services/torneos'
+import { torneos, type Torneo, fetchTorneos } from '@/services/torneos'
 
 const PAGE_SIZE = 6
 
@@ -23,6 +23,8 @@ function TorneosContent() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const [modalTournament, setModalTournament] = useState<Torneo | null>(null)
   const [modalTab, setModalTab] = useState('info')
+
+  useEffect(() => { fetchTorneos() }, [])
 
   const filtered = useMemo(() => {
     return torneos.filter(t => {
@@ -188,7 +190,8 @@ function TorneosContent() {
           {/* Modal flotante con tabs */}
           {modalTournament && (() => {
             const t = modalTournament
-            const imgSrc = `/images/fondo-${((Number(t.id) - 1) % 6) + 1}.png`
+  const idx = Math.abs((Number(t.id) - 1) % 6) || 0
+  const imgSrc = t.imagen || `/images/fondo-${idx + 1}.png`
             const isClosed = t.estado === 'closed'
             const isUpcoming = t.estado === 'upcoming'
             const isLive = t.estado === 'live'
@@ -402,7 +405,8 @@ function TorneoCard({ torneo: t, onClick }: { torneo: Torneo; onClick: () => voi
   const badgeStyle = t.estado === 'live' ? 'bg-purple-mid text-white'
     : t.estado === 'upcoming' ? 'bg-gold/20 text-gold border border-gold/40'
     : 'bg-white/15 text-white border border-white/20 backdrop-blur-sm'
-  const imgSrc = `/images/fondo-${((Number(t.id) - 1) % 6) + 1}.png`
+  const idx = Math.abs((Number(t.id) - 1) % 6) || 0
+  const imgSrc = t.imagen || `/images/fondo-${idx + 1}.png`
 
   return (
     <button onClick={onClick} className="block group w-full text-left">

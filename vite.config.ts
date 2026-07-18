@@ -18,6 +18,20 @@ export default defineConfig({
         target: 'http://20.12.84.133',
         changeOrigin: true,
       },
+      '/identity': {
+        target: 'https://techapi.azure-api.net',
+        changeOrigin: true,
+        headers: {
+          'Ocp-Apim-Subscription-Key': '4eff9bdd419b49308dc37fd491741c47',
+        },
+      },
+      '/api': {
+        target: 'https://techapi.azure-api.net',
+        changeOrigin: true,
+        headers: {
+          'Ocp-Apim-Subscription-Key': '4eff9bdd419b49308dc37fd491741c47',
+        },
+      },
     },
   },
 })

@@ -1,18 +1,35 @@
 ﻿import axios, { type AxiosInstance, type InternalAxiosRequestConfig } from 'axios'
 
-const BASE_URL = 'https://techapi.azure-api.net'
-const SUBSCRIPTION_KEY = '4eff9bdd419b49308dc37fd491741c47'
+const DEV = import.meta.env.DEV
+const BASE_URL = DEV ? '' : 'https://techapi.azure-api.net'
+const APIM_KEY = import.meta.env.VITE_APIM_KEY
+
+// ── Prefijos por servicio en el gateway ──────────────────────
+export const CHAT_SERVICE_PREFIX = '/communications'
+export const USERS_SERVICE_PREFIX = '/users/api/v1'
+export const TEAMS_SERVICE_PREFIX = '/teams/api/v1'
 
 const api: AxiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
-    'Ocp-Apim-Subscription-Key': SUBSCRIPTION_KEY,
     'Content-Type': 'application/json',
+    ...(APIM_KEY ? { 'Ocp-Apim-Subscription-Key': APIM_KEY } : {}),
   },
 })
 
 /** Key donde guardamos el JWT en localStorage */
-const JWT_STORAGE_KEY = 'techcup_jwt'
+export const JWT_STORAGE_KEY = 'techcup_jwt'
+
+/** Error de API que conserva el status HTTP para que el caller pueda ramificar sobre él. */
+export class ApiError extends Error {
+  readonly status: number
+
+  constructor(status: number, message: string) {
+    super(message)
+    this.name = 'ApiError'
+    this.status = status
+  }
+}
 
 // ── Interceptor: mete el JWT automáticamente en cada request ──
 api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
@@ -37,7 +54,7 @@ api.interceptors.response.use(
       if (status === 401) {
         localStorage.removeItem(JWT_STORAGE_KEY)
       }
-      throw new Error(`API Error ${status}: ${message}`)
+      throw new ApiError(status, `API Error ${status}: ${message}`)
     }
     if (error.request) {
       throw new Error('Sin respuesta del servidor — revisá la conexión')
@@ -79,6 +96,33 @@ export async function apiGet<T>(
  */
 export async function apiPost<T>(path: string, body: unknown): Promise<T> {
   const res = await api.post<T>(path, body)
+  return res.data
+}
+
+/**
+ * PUT request al API de TechCup.
+ */
+export async function apiPut<T>(path: string, body: unknown): Promise<T> {
+  const res = await api.put<T>(path, body)
+  return res.data
+}
+
+/**
+ * PATCH request al API de TechCup.
+ */
+export async function apiPatch<T>(path: string, body?: unknown): Promise<T> {
+  const res = await api.patch<T>(path, body)
+  return res.data
+}
+
+/**
+ * POST multipart/form-data al API de TechCup.
+ * La instancia fuerza 'Content-Type: application/json' por defecto, lo que rompe un body
+ * FormData (axios lo serializa como JSON en vez de mandarlo como multipart real) — acá se
+ * limpia ese header puntualmente para que axios detecte el FormData y setee el boundary correcto.
+ */
+export async function apiPostForm<T>(path: string, formData: FormData): Promise<T> {
+  const res = await api.post<T>(path, formData, { headers: { 'Content-Type': undefined } })
   return res.data
 }
 

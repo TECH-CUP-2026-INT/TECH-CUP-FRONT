@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import Sidebar from '@/components/common/Sidebar'
@@ -9,12 +9,35 @@ import { Button } from '@/components/common/button'
 import { Input } from '@/components/common/input'
 import { Label } from '@/components/common/label'
 import { ArrowLeft, ArrowRight, Check, Upload, CalendarDays, MapPin, Trophy } from 'lucide-react'
-import { torneos } from '@/services/torneos'
+import { torneos, fetchTorneos } from '@/services/torneos'
+import { crearEquipo, fetchEquiposTorneo } from '@/services/equipos'
 import { useAuth } from '@/hooks/auth/useAuth'
 import type { Torneo } from '@/services/torneos'
+import { getMiPerfil } from '@/api/usuarios'
+import { crearEquipo } from '@/api/teams'
+import { createChat } from '@/api/chat'
+import { rememberTeamName } from '@/utils/teamNameCache'
 
 const colores = ['#6D28D9','#F5A623','#22C55E','#EF4444','#3B82F6','#EC4899','#14B8A6','#F97316','#8B5CF6','#000000','#FFFFFF','#1F1F28']
 const diseños = ['SF','TC','FC','🚀','⚡','🛡️','🐯','🔥']
+
+/** Genera un logo placeholder a partir de los colores/diseño ya elegidos en el wizard. */
+function generarLogoPlaceholder(colorP: string, colorS: string, diseno: string): Promise<Blob> {
+  const canvas = document.createElement('canvas')
+  canvas.width = 256
+  canvas.height = 256
+  const ctx = canvas.getContext('2d')!
+  ctx.fillStyle = colorP
+  ctx.fillRect(0, 0, 256, 256)
+  ctx.fillStyle = colorS
+  ctx.font = 'bold 96px Arial'
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+  ctx.fillText(diseno, 128, 128)
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(blob => (blob ? resolve(blob) : reject(new Error('No se pudo generar el logo'))), 'image/png')
+  })
+}
 
 export default function CrearEquipo() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -24,9 +47,45 @@ export default function CrearEquipo() {
   const [colorP, setColorP] = useState('#6D28D9')
   const [colorS, setColorS] = useState('#F5A623')
   const [diseno, setDiseno] = useState('SF')
+  const [creating, setCreating] = useState(false)
+  const [createError, setCreateError] = useState<string | null>(null)
+  const [createdTeamId, setCreatedTeamId] = useState<string | null>(null)
   const navigate = useNavigate()
   const { user } = useAuth()
   const isCaptain = user?.isCaptain ?? false
+
+  useEffect(() => { fetchTorneos() }, [])
+
+  async function crearChatDelEquipo(teamId: string) {
+    const miPerfil = await getMiPerfil()
+    await createChat('GROUP', teamId, [{ userId: miPerfil.id, role: 'MODERATOR' }])
+  }
+
+  async function handleCrearEquipo() {
+    setCreating(true)
+    setCreateError(null)
+    try {
+      if (!createdTeamId) {
+        const miPerfil = await getMiPerfil()
+        const logo = await generarLogoPlaceholder(colorP, colorS, diseno)
+        const team = await crearEquipo(miPerfil.nombreCompleto, nombre, `${colorP},${colorS}`, logo)
+        setCreatedTeamId(team.id)
+        rememberTeamName(team.id, team.name)
+        await crearChatDelEquipo(team.id)
+      } else {
+        await crearChatDelEquipo(createdTeamId)
+      }
+      navigate('/inscribir-equipo', { state: { teamId: createdTeamId } })
+    } catch {
+      setCreateError(
+        createdTeamId
+          ? 'El equipo ya se creó, pero no pudimos crear su chat. Reintentá solo esa parte.'
+          : 'No pudimos crear el equipo. Intentá de nuevo.',
+      )
+    } finally {
+      setCreating(false)
+    }
+  }
 
   const torneosActivos = torneos.filter(t => t.estado === 'upcoming' || t.estado === 'live')
 
@@ -64,6 +123,25 @@ export default function CrearEquipo() {
               ))}
             </div>
 
+            {createdTeamId ? (
+              <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-center py-10">
+                <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-6">
+                  <Check size={40} className="text-green-400" />
+                </div>
+                <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-2">
+                  Equipo <span className="text-gold">creado</span>
+                </h2>
+                <p className="text-text-muted text-sm mb-8">"{nombre}" ya está listo para el torneo "{torneoElegido?.nombre}".</p>
+                <div className="flex gap-3 justify-center">
+                  <Button onClick={() => navigate('/dashboard/jugador')} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-12 px-8">
+                    Ir al panel
+                  </Button>
+                  <Button variant="outline" onClick={() => navigate('/mi-equipo')} className="rounded-full border-gold text-gold hover:bg-gold/10 h-12 px-8">
+                    Ver mi equipo
+                  </Button>
+                </div>
+              </motion.div>
+            ) : (
             <AnimatePresence mode="wait">
               {(() => {
                 if (!isCaptain) return (
@@ -112,15 +190,15 @@ export default function CrearEquipo() {
                   {preview}
                   <div className="flex gap-3 mt-6">
                     <Button variant="outline" onClick={() => setPaso(0)} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1"><ArrowLeft size={16} /> Anterior</Button>
-                    <Button onClick={() => setPaso(3)} disabled={!nombre.trim()} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-12 flex-1 disabled:opacity-40">
+                    <Button onClick={() => setPaso(2)} disabled={!nombre.trim()} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-12 flex-1 disabled:opacity-40">
                       Siguiente <ArrowRight size={16} />
                     </Button>
                   </div>
                 </motion.div>
               )
 
-              if (paso === 3) return (
-                <motion.div key="p3" initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-20}}>
+              if (paso === 2) return (
+                <motion.div key="p2" initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-20}}>
                   <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Colores del <span className="text-gold">equipo</span></h2>
                   <p className="text-sm text-text-muted mb-6">Elegí los colores que representen a tu equipo.</p>
                   <div className="mb-4">
@@ -142,11 +220,11 @@ export default function CrearEquipo() {
                   {preview}
                   <div className="flex gap-3 mt-6">
                     <Button variant="outline" onClick={() => setPaso(2)} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1"><ArrowLeft size={16} /> Anterior</Button>
-                    <Button onClick={() => setPaso(4)} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-12 flex-1">Siguiente <ArrowRight size={16} /></Button>
+                    <Button onClick={() => setPaso(3)} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-12 flex-1">Siguiente <ArrowRight size={16} /></Button>
                   </div>
                 </motion.div>
               )
-              if (paso === 4) return (
+              if (paso === 3) return (
                 <motion.div key="p4" initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-20}}>
                   <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase mb-1">Escudo del <span className="text-gold">equipo</span></h2>
                   <p className="text-sm text-text-muted mb-6">Elegí un diseño o subí tu propio escudo.</p>
@@ -158,14 +236,15 @@ export default function CrearEquipo() {
                       ))}
                     </div>
                   </div>
-                  <Button variant="outline" className="w-full rounded-full border-border text-gray-light hover:bg-white/5 h-12 mb-6 gap-2">
-                    <Upload size={16} /> Subir escudo propio
+                  <Button variant="outline" disabled className="w-full rounded-full border-border text-gray-light hover:bg-white/5 h-12 mb-6 gap-2 opacity-50">
+                    <Upload size={16} /> Subir escudo propio (próximamente)
                   </Button>
                   {preview}
+                  {createError && <p className="text-sm text-red-400 mt-4">{createError}</p>}
                   <div className="flex gap-3 mt-6">
-                    <Button variant="outline" onClick={() => setPaso(3)} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1"><ArrowLeft size={16} /> Anterior</Button>
-                    <Button onClick={() => { alert(`✅ Equipo "${nombre}" creado para torneo "${torneoElegido?.nombre}"`); navigate('/inscribir-equipo') }} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-12 flex-1">
-                      <Check size={16} /> Crear equipo
+                    <Button variant="outline" onClick={() => setPaso(2)} disabled={creating} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1"><ArrowLeft size={16} /> Anterior</Button>
+                    <Button onClick={handleCrearEquipo} disabled={creating} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-12 flex-1 disabled:opacity-60">
+                      <Check size={16} /> {creating ? 'Creando…' : createdTeamId ? 'Ir a inscribir' : 'Crear equipo'}
                     </Button>
                   </div>
                 </motion.div>
@@ -173,6 +252,7 @@ export default function CrearEquipo() {
               return null
               })()}
             </AnimatePresence>
+            )}
           </SpotlightCard>
         </main>
         <Footer />

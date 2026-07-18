@@ -1,12 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import Navbar from '@/components/common/Navbar'
 import Footer from '@/components/common/Footer'
 import DashboardLayout from '@/components/common/DashboardLayout'
 import { Badge } from '@/components/common/badge'
-import { partidos } from '@/services/partidos'
-import { torneos, type Torneo } from '@/services/torneos'
+import { partidos, fetchPartidos } from '@/services/partidos'
+import { torneos, type Torneo, fetchTorneos } from '@/services/torneos'
 import { CalendarDays, MapPin, Clock, ChevronLeft, ChevronRight, X, Cat, Code2, Cpu, Cog, Flame, HardDrive, Shield, Feather } from 'lucide-react'
 import { TeamLogo } from '@/components/common/TeamLogo'
 import { ThreeDCarousel } from '@/components/common/three-d-carousel'
@@ -64,6 +64,9 @@ function CalendarioContent() {
   const [modalTab, setModalTab] = useState('info')
   const [calendarDayMatches, setCalendarDayMatches] = useState<typeof partidos | null>(null)
   const [filtros, setFiltros] = useState<{ grupo: string; cancha: string; estado: string }>({ grupo: '', cancha: '', estado: '' })
+
+  useEffect(() => { fetchTorneos(); fetchPartidos() }, [])
+
   const dias = generarDiasMes(mes, año)
   const nombreMes = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'][mes]
   const selectedCancha = selectedMatch ? canchaFotos[selectedMatch.lugar] : null
