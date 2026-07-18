@@ -168,14 +168,14 @@ export default function Login() {
           <div className="relative z-10 flex items-start justify-between gap-4">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1.5">
-                <Icon size={16} className="text-gold-ink" />
+                <Icon size={16} className="text-gold" />
               </div>
-              <h3 className="font-[family-name:var(--font-display)] text-lg normal-case tracking-[.3px] text-gold-ink mb-1">{role.name}</h3>
+              <h3 className="font-[family-name:var(--font-display)] text-lg normal-case tracking-[.3px] text-gold mb-1">{role.name}</h3>
               <p className="text-xs normal-case text-text-muted leading-relaxed">{role.desc}</p>
             </div>
-            <div className="flex-shrink-0 mt-1">
-              <div className="w-9 h-9 rounded-[8px] flex items-center justify-center transition-all duration-300 group-hover:bg-gold/20 border border-gold/30">
-                <ChevronRight size={16} className="text-gold-ink" />
+              <div className="flex-shrink-0 mt-1">
+                <div className="w-9 h-9 rounded-[8px] flex items-center justify-center transition-all duration-300 group-hover:bg-gold/20 border border-gold/30">
+                  <ChevronRight size={16} className="text-gold" />
               </div>
             </div>
           </div>
@@ -221,7 +221,7 @@ export default function Login() {
               className="p-8 rounded-[12px] border border-gold/30 shadow-[0_0_40px_rgba(212,175,55,0.08)] relative overflow-hidden bg-white/60 dark:bg-black/40 backdrop-blur-sm">
               <div className="mb-6">
                 <h1 className="font-[family-name:var(--font-display)] text-3xl uppercase tracking-[.5px] text-gray-light mb-2">
-                  Selecciona tu <span className="text-gold-ink">rol</span>
+                  <span className="text-gold">Selecciona tu</span> <span className="text-gold">rol</span>
                 </h1>
                 <p className="text-sm text-text-muted">Selecciona cómo quieres ingresar al sistema.</p>
               </div>
