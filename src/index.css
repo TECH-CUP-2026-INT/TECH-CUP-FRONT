@@ -2,6 +2,11 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Colorblind assistance — daltonization filters, toggled via ColorblindProvider */
+html.cb-protanopia { filter: url(#cb-protanopia-filter); }
+html.cb-deuteranopia { filter: url(#cb-deuteranopia-filter); }
+html.cb-tritanopia { filter: url(#cb-tritanopia-filter); }
+
 @theme {
   --animate-aurora: aurora 60s linear infinite;
 

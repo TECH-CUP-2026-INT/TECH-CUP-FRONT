@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Menu, Send, Paperclip, X, Search, Plus } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ThemeToggle } from '@/components/common/theme-toggle'
+import { ColorblindToggle } from '@/components/common/colorblind-toggle'
 import { useAuth } from '@/hooks/auth/useAuth'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/common/avatar'
 import {
@@ -96,6 +97,7 @@ export default function AppTopbar({ title, sidebarOpen, sidebarCollapsed, onMenu
           </button>
 
           <ThemeToggle />
+          <ColorblindToggle />
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

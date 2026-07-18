@@ -19,7 +19,6 @@ export default function DetalleTorneo() {
     <div className="min-h-screen bg-black">
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="fixed top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-purple-mid/15 blur-[150px] pointer-events-none" />
-      <div className="fixed bottom-[-5%] left-[-5%] w-[450px] h-[450px] rounded-full bg-gold/15 blur-[120px] pointer-events-none" />
       <div className="min-w-0 relative z-10">
         <AppTopbar title="Detalle del torneo" onMenuClick={() => setSidebarOpen(true)} />
 

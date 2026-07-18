@@ -131,7 +131,6 @@ function CalendarioContent() {
       <section className="py-12 pb-[100px] relative overflow-hidden bg-[#E5ECE9] dark:bg-[#190D2B]">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-[10%] right-[-10%] w-[600px] h-[600px] rounded-full bg-purple-mid/15 dark:bg-purple-mid/20 blur-[180px]" />
-          <div className="absolute bottom-[5%] left-[-10%] w-[500px] h-[500px] rounded-full bg-gold/15 dark:bg-gold/20 blur-[150px]" />
         </div>
         <div className="max-w-[1280px] mx-auto px-8 relative">
           {/* Toolbar */}

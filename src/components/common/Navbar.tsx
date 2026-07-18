@@ -5,6 +5,7 @@ import { Button } from '@/components/common/button'
 import { cn } from '@/utils/cn'
 import { useAuth } from '@/hooks/auth/useAuth'
 import { ThemeToggle } from '@/components/common/theme-toggle'
+import { ColorblindToggle } from '@/components/common/colorblind-toggle'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/common/avatar'
 
 const links = [
@@ -72,6 +73,7 @@ export default function Navbar() {
         {/* Right — theme toggle + auth */}
         <div className="hidden md:flex items-center gap-3.5">
           <ThemeToggle />
+          <ColorblindToggle />
           {isAuthenticated && user ? (
             <div className="flex items-center gap-3">
               <Link
@@ -116,8 +118,9 @@ export default function Navbar() {
       {/* Mobile menu */}
       {mobileOpen && (
         <div className="md:hidden bg-[#F0EDF7]/95 dark:bg-black/95 backdrop-blur-md border-t border-border mt-4 py-6 px-8">
-          <div className="flex justify-center mb-4">
+          <div className="flex justify-center gap-3 mb-4">
             <ThemeToggle />
+            <ColorblindToggle />
           </div>
           <ul className="flex flex-col items-center gap-5">
             {links.map((link) => (

@@ -85,14 +85,21 @@ export default function Footer() {
                   </div>
                 </a>
               </div>
-              {/* Otras redes */}
-              {['fb','tw','yt'].map(s => (
-                <a key={s} href="#" aria-label={s} className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/70 hover:border-white hover:text-white transition-colors">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    {s === 'fb' ? <><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></> : s === 'tw' ? <><path d="M4 4l16 16M20 4L4 20"/></> : <><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3z"/></>}
-                  </svg>
-                </a>
-              ))}
+              {/* Contacto */}
+              <Link to="/contacto" aria-label="Contacto" className="block relative no-underline text-white">
+                <div className="w-[55px] h-[55px] transition-transform duration-300 hover:scale-110">
+                  <span className="absolute inset-0 border border-purple-mid/60 rounded-[15px] bg-purple-mid/10" />
+                  <span className="absolute inset-0 rounded-[15px] transition-all duration-300 opacity-0 hover:opacity-100" style={{
+                    background: "linear-gradient(135deg, #6D28D9 0%, #4C1D95 50%, #3B1264 100%)",
+                  }} />
+                  <span className="absolute inset-0 flex items-center justify-center text-[22px] z-10">
+                    <svg fill="none" stroke="white" strokeWidth="2" viewBox="0 0 24 24" height="1.2em" width="1.2em" xmlns="http://www.w3.org/2000/svg">
+                      <rect x="2" y="4" width="20" height="16" rx="2" />
+                      <path d="M2 6l10 7 10-7" />
+                    </svg>
+                  </span>
+                </div>
+              </Link>
             </div>
           </div>
         </div>
