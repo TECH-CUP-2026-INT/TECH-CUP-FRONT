@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import DashboardLayout from '@/components/common/DashboardLayout'
-import { FutPlayerCard } from '@/components/employees/FutPlayerCard'
 import { SpotlightCard } from '@/components/common/spotlight-card'
 import { Badge } from '@/components/common/badge'
 import { Button } from '@/components/common/button'
@@ -53,7 +52,6 @@ export default function MiEquipo() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [tab, setTab] = useState<Tab>('plantilla')
   const [jugadores, setJugadores] = useState<Jugador[]>([
-    { id: 1, nombre: 'Juan Pérez', dorsal: 10, posicion: 'Delantero', img: 'https://i.pravatar.cc/72?img=1', goles: 6, asistencias: 3, amarillas: 1, rojas: 0, faltas: 4, partidos: 8 },
     { id: 2, nombre: 'Nicolás', dorsal: 7, posicion: 'Volante', img: '/images/nicolas.png', goles: 2, asistencias: 5, amarillas: 2, rojas: 0, faltas: 6, partidos: 8 },
     { id: 3, nombre: 'Thomas', dorsal: 1, posicion: 'Portero', img: '/images/thomas.png', goles: 0, asistencias: 0, amarillas: 0, rojas: 0, faltas: 1, partidos: 8 },
     { id: 4, nombre: 'José', dorsal: 5, posicion: 'Defensa', img: '/images/jose.png', goles: 1, asistencias: 1, amarillas: 3, rojas: 1, faltas: 8, partidos: 7 },
@@ -184,31 +182,19 @@ export default function MiEquipo() {
 
               <div className="flex flex-wrap justify-center gap-5">
                 {jugadores.map(j => (
-                  <div key={j.id} className="group relative">
-                    <FutPlayerCard
-                      nombre={j.nombre}
-                      dorsal={j.dorsal}
-                      posicion={j.posicion}
-                      img={j.img}
-                      stats={{
-                        goles: j.goles,
-                        asistencias: j.asistencias,
-                        partidos: j.partidos,
-                        amarillas: j.amarillas,
-                        rojas: j.rojas,
-                        faltas: j.faltas,
-                      }}
-                      onClick={() => setSelectedPlayer(j)}
-                      actions={
-                        <button
-                          onClick={(e) => { e.stopPropagation(); eliminar(j.id) }}
-                          className="w-7 h-7 rounded-full bg-red-500/15 border border-red-500/25 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-500/30"
-                          aria-label="Eliminar jugador"
-                        >
-                          <X size={12} className="text-red-400" />
-                        </button>
-                      }
-                    />
+                  <div
+                    key={j.id}
+                    className="group relative w-[220px] h-[280px] rounded-2xl overflow-hidden cursor-pointer border border-border shadow-lg"
+                    onClick={() => setSelectedPlayer(j)}
+                  >
+                    <img src={j.img} alt={j.nombre} className="w-full h-full object-cover" />
+                    <button
+                      onClick={(e) => { e.stopPropagation(); eliminar(j.id) }}
+                      className="absolute top-2 right-2 w-7 h-7 rounded-full bg-red-500/15 border border-red-500/25 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-500/30"
+                      aria-label="Eliminar jugador"
+                    >
+                      <X size={12} className="text-red-400" />
+                    </button>
                   </div>
                 ))}
               </div>
