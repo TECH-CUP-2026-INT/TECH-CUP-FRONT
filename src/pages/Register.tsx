@@ -67,6 +67,7 @@ export default function Register() {
   const [otp, setOtp] = useState(['', '', '', '', '', ''])
   const [googleVerified, setGoogleVerified] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
+  const [generatedOtp] = useState(() => String(Math.floor(100000 + Math.random() * 900000)))
   const navigate = useNavigate()
   const { login } = useAuth()
 
@@ -387,7 +388,11 @@ export default function Register() {
                   </>
                 ) : (
                   <>
-                    <p className="text-sm text-text-muted mb-6">Ingresa el código de 6 dígitos enviado a {form.email.replace(/(.{3}).+(?=@)/, '$1***')}</p>
+                    <p className="text-sm text-text-muted mb-2">Ingresa el código de 6 dígitos enviado a <strong className="text-gold">{form.email.replace(/(.{3}).+(?=@)/, '$1***')}</strong></p>
+                    <div className="mb-4 py-2 px-4 rounded-xl bg-yellow-500/10 border border-yellow-500/30 text-center">
+                      <p className="text-xs text-yellow-400/70 mb-0.5">Modo desarrollo — código OTP</p>
+                      <p className="text-2xl font-bold text-yellow-300 tracking-[8px] font-mono">{generatedOtp}</p>
+                    </div>
                     <div className="flex justify-center gap-2 mb-6">
                       {otp.map((digit, i) => (
                         <input key={i} id={`otp-${i}`} type="text" maxLength={1} value={digit}
