@@ -48,7 +48,6 @@ export default function CrearEquipo() {
       <div className="min-w-0 flex-1">
         <AppTopbar title="Crear equipo" onMenuClick={() => setSidebarOpen(true)} />
         <div className="fixed top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-purple-mid/15 blur-[150px] pointer-events-none" />
-        <div className="fixed bottom-[-5%] left-[-5%] w-[450px] h-[450px] rounded-full bg-gold/15 blur-[120px] pointer-events-none" />
         
         <main className="max-w-[600px] mx-auto px-8 py-8 pb-[60px] relative z-10">
           <SpotlightCard accent="gold" className="bg-surface border border-border rounded-2xl p-8">

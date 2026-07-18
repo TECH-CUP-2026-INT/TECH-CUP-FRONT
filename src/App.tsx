@@ -6,7 +6,6 @@ import { StarfieldBackground } from '@/components/common/starfield-bg'
 import { ErrorBoundary } from '@/components/common/error-boundary'
 
 import Landing from '@/pages/Landing'
-import Dashboard from '@/pages/Dashboard'
 import DashboardJugador from '@/pages/DashboardJugador'
 import DashboardAdmin from '@/pages/DashboardAdmin'
 import TorneosPublic from '@/pages/TorneosPublic'
@@ -73,7 +72,7 @@ export default function App() {
         <Route path="/inscribir-equipo" element={<InscribirEquipo />} />
         <Route path="/llaves" element={<Llaves />} />
         <Route path="/registro" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Navigate to="/dashboard/jugador" replace />} />
         <Route path="/dashboard/jugador" element={<DashboardJugador />} />
         <Route path="/dashboard/admin" element={<DashboardAdmin />} />
         <Route path="/dashboard/organizador" element={<DashboardAdmin />} />

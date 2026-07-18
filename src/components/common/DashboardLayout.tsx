@@ -43,7 +43,6 @@ export default function DashboardLayout({ title, children }: DashboardLayoutProp
         />
         <main className="p-8 pb-[60px] max-md:p-5 relative">
           <div className="fixed top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-purple-mid/15 blur-[150px] pointer-events-none" />
-          <div className="fixed bottom-[-5%] left-[-5%] w-[450px] h-[450px] rounded-full bg-gold/15 blur-[120px] pointer-events-none" />
           {children}
         </main>
         <Footer />

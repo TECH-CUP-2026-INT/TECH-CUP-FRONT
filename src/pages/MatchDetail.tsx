@@ -147,7 +147,6 @@ export default function MatchDetail() {
       {/* Detalles del partido */}
       <section className="py-10 pb-[80px] relative">
         <div className="absolute top-[10%] left-[-5%] w-[400px] h-[400px] rounded-full bg-purple-mid/10 blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-[20%] right-[-5%] w-[300px] h-[300px] rounded-full bg-gold/10 blur-[100px] pointer-events-none" />
 
         <div className="max-w-[900px] mx-auto px-8 relative">
           
