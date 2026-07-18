@@ -49,7 +49,6 @@ export default function Chat() {
       
       {/* Background glow */}
       <div className="fixed top-[-10%] right-[-5%] w-[400px] h-[400px] rounded-full bg-purple-mid/15 blur-[120px] pointer-events-none" />
-      <div className="fixed bottom-[-5%] left-[-5%] w-[350px] h-[350px] rounded-full bg-gold/15 blur-[100px] pointer-events-none" />
 
       <div className="flex-1 flex flex-col h-screen relative z-10">
         {/* Topbar exacta como la del Dashboard */}

@@ -54,7 +54,6 @@ export default function Llaves() {
       <div className="min-w-0 flex-1">
         <AppTopbar title="Llaves eliminatorias" onMenuClick={() => setSidebarOpen(true)} />
         <div className="fixed top-[-5%] right-[-5%] w-[400px] h-[400px] rounded-full bg-purple-mid/15 blur-[120px] pointer-events-none" />
-        <div className="fixed bottom-[-5%] left-[-5%] w-[350px] h-[350px] rounded-full bg-gold/15 blur-[100px] pointer-events-none" />
 
         <main className="p-8 pb-[60px] relative z-10 overflow-x-auto">
           <div className="flex items-center justify-between mb-6 max-md:flex-col gap-3">

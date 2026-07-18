@@ -2,11 +2,12 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import { AuthProvider } from '@/hooks/auth/useAuth'
 import { ThemeProvider } from '@/configs/theme'
+import { ColorblindProvider } from '@/configs/colorblind'
+import { ColorblindFilters } from '@/components/common/colorblind-filters'
 import { StarfieldBackground } from '@/components/common/starfield-bg'
 import { ErrorBoundary } from '@/components/common/error-boundary'
 
 import Landing from '@/pages/Landing'
-import Dashboard from '@/pages/Dashboard'
 import DashboardJugador from '@/pages/DashboardJugador'
 import DashboardAdmin from '@/pages/DashboardAdmin'
 import TorneosPublic from '@/pages/TorneosPublic'
@@ -42,6 +43,8 @@ export default function App() {
     <BrowserRouter>
       <GoogleOAuthProvider clientId={googleClientId}>
       <ThemeProvider>
+      <ColorblindProvider>
+      <ColorblindFilters />
       <AuthProvider>
       <StarfieldBackground className="min-h-screen">
       <div className="fixed inset-0 pointer-events-none z-0 dark:hidden" style={{ backgroundImage: 'url(/images/fondo-landing2-claro.png)', backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.45 }} />
@@ -73,7 +76,7 @@ export default function App() {
         <Route path="/inscribir-equipo" element={<InscribirEquipo />} />
         <Route path="/llaves" element={<Llaves />} />
         <Route path="/registro" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Navigate to="/dashboard/jugador" replace />} />
         <Route path="/dashboard/jugador" element={<DashboardJugador />} />
         <Route path="/dashboard/admin" element={<DashboardAdmin />} />
         <Route path="/dashboard/organizador" element={<DashboardAdmin />} />
@@ -85,6 +88,7 @@ export default function App() {
       </ErrorBoundary>
       </StarfieldBackground>
       </AuthProvider>
+      </ColorblindProvider>
       </ThemeProvider>
       </GoogleOAuthProvider>
     </BrowserRouter>

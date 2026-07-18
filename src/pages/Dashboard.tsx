@@ -44,7 +44,6 @@ export default function Dashboard() {
         <main className="p-8 pb-[60px] max-md:p-5 relative">
           {/* Background glow - más intenso */}
           <div className="fixed top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-purple-mid/15 blur-[150px] pointer-events-none" />
-          <div className="fixed bottom-[-5%] left-[-5%] w-[450px] h-[450px] rounded-full bg-gold/15 blur-[120px] pointer-events-none" />
           <div className="fixed top-[40%] left-[30%] w-[300px] h-[300px] rounded-full bg-purple-deep/10 blur-[100px] pointer-events-none" />
           
           {/* Hero */}
