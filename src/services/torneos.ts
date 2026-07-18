@@ -30,11 +30,25 @@ const MOCK_TORNEOS: Torneo[] = [
   { id:'12', nombre:'TechCup Mini 2026', estado:'live', semestre:'2026-II', categoria:'Futsal', equipos:6, jugadores:48, canchas:1, fecha:'Jun 15 – Ago 1, 2026', tag:'Categorías menores', imagen:'/images/fondo-4.png' },
 ]
 
+// ── localStorage persistence ──────────────────────────────────
+const STORAGE_KEY = 'techcup_torneos_creados'
+
+function loadCreados(): Torneo[] {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    return raw ? JSON.parse(raw) : []
+  } catch { return [] }
+}
+
+function saveCreados(creados: Torneo[]): void {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(creados)) } catch {}
+}
+
 // ── Module-level array ───────────────────────────────────────
 // El array compartido: las páginas que importan `torneos` obtienen
 // esta misma referencia. Al mutar _torneos, `torneos` refleja los cambios
 // automáticamente porque apuntan al mismo objeto Array.
-const _torneos: Torneo[] = [...MOCK_TORNEOS]
+const _torneos: Torneo[] = [...MOCK_TORNEOS, ...loadCreados()]
 
 /**
  * Referencia directa al array de torneos.
@@ -85,7 +99,7 @@ export async function fetchTorneos(): Promise<Torneo[]> {
 }
 
 /**
- * Crea un torneo nuevo (local) y lo agrega al listado.
+ * Crea un torneo nuevo y lo persiste en localStorage + memoria.
  */
 export function createTorneo(data: {
   nombre: string
@@ -93,14 +107,14 @@ export function createTorneo(data: {
   fechaInicio?: string
   fechaFin?: string
   canchas?: number
+  categoria?: string
 }): Torneo {
-  const id = Date.now()
   const torneo: Torneo = {
-    id: id.toString(),
+    id: 't-' + Date.now(),
     nombre: data.nombre,
     estado: 'upcoming',
     semestre: '2026-II',
-    categoria: 'Fútbol 11',
+    categoria: (data.categoria as any) || 'Fútbol 11',
     equipos: 0,
     jugadores: 0,
     canchas: data.canchas ?? 0,
@@ -108,6 +122,10 @@ export function createTorneo(data: {
     tag: data.tipo === 'relampago' ? 'Relámpago' : 'Próximo',
   }
   _torneos.unshift(torneo)
+  // Persistir solo los creados localmente (no los mock ni API)
+  const creados = loadCreados()
+  creados.unshift(torneo)
+  saveCreados(creados)
   return torneo
 }
 

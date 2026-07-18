@@ -10,7 +10,7 @@ import { Input } from '@/components/common/input'
 import { Label } from '@/components/common/label'
 import { ArrowLeft, ArrowRight, Check, Upload, CalendarDays, MapPin, Trophy } from 'lucide-react'
 import { torneos, fetchTorneos } from '@/services/torneos'
-import { crearEquipo, fetchEquiposTorneo } from '@/services/equipos'
+import { crearEquipo } from '@/services/equipos'
 import { useAuth } from '@/hooks/auth/useAuth'
 import type { Torneo } from '@/services/torneos'
 import { getMiPerfil } from '@/api/usuarios'
@@ -48,7 +48,6 @@ export default function CrearEquipo() {
   const [colorS, setColorS] = useState('#F5A623')
   const [diseno, setDiseno] = useState('SF')
   const [creating, setCreating] = useState(false)
-  const [createError, setCreateError] = useState<string | null>(null)
   const [createdTeamId, setCreatedTeamId] = useState<string | null>(null)
   const navigate = useNavigate()
   const { user } = useAuth()
@@ -88,6 +87,24 @@ export default function CrearEquipo() {
   }
 
   const torneosActivos = torneos.filter(t => t.estado === 'upcoming' || t.estado === 'live')
+
+  async function handleCrearEquipo() {
+    if (!torneoElegido) return
+    setCreating(true)
+    try {
+      const team = await crearEquipo(
+        user?.name || nombre,
+        nombre,
+        `${colorP},${colorS}`,
+      )
+      if (team) setCreatedTeamId(team.id)
+      navigate('/inscribir-equipo', { state: { teamId: team?.id, torneoId: torneoElegido.id } })
+    } catch {
+      navigate('/inscribir-equipo')
+    } finally {
+      setCreating(false)
+    }
+  }
 
   const preview = (
     <div className="flex items-center gap-4 p-4 rounded-xl bg-black/50 border border-border">
@@ -242,9 +259,9 @@ export default function CrearEquipo() {
                   {preview}
                   {createError && <p className="text-sm text-red-400 mt-4">{createError}</p>}
                   <div className="flex gap-3 mt-6">
-                    <Button variant="outline" onClick={() => setPaso(2)} disabled={creating} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1"><ArrowLeft size={16} /> Anterior</Button>
+                    <Button variant="outline" onClick={() => setPaso(3)} className="rounded-full border-border text-gray-light hover:bg-white/5 h-12 flex-1"><ArrowLeft size={16} /> Anterior</Button>
                     <Button onClick={handleCrearEquipo} disabled={creating} className="rounded-full bg-gold text-[#1A1206] hover:bg-gold-dark h-12 flex-1 disabled:opacity-60">
-                      <Check size={16} /> {creating ? 'Creando…' : createdTeamId ? 'Ir a inscribir' : 'Crear equipo'}
+                      <Check size={16} /> {creating ? 'Creando…' : 'Crear equipo'}
                     </Button>
                   </div>
                 </motion.div>

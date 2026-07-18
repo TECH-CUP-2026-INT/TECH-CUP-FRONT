@@ -41,14 +41,12 @@ export default function CrearTorneo() {
   const canAddMore = canchas.every(c => c.nombre.trim() && c.ubicacion.trim())
 
   const handleCrear = () => {
-    const creado = createTorneo({
-      nombre,
-      tipo,
-      fechaInicio,
-      fechaFin,
+    createTorneo({
+      nombre, tipo,
+      fechaInicio, fechaFin,
       canchas: canchas.filter(c => c.nombre.trim()).length,
+      categoria: 'Fútbol 11',
     })
-    console.log('[CrearTorneo] Torneo creado:', creado)
     setCreado(true)
   }
 
