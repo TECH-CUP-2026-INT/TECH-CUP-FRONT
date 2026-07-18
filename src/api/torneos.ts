@@ -1,4 +1,4 @@
-import { apiGet, apiPut, apiDelete } from './client'
+import { apiGet, apiPost, apiPut, apiDelete } from './client'
 import type { Torneo } from './tipos'
 
 /**
@@ -7,6 +7,29 @@ import type { Torneo } from './tipos'
  */
 export async function getTorneosActivos(): Promise<Torneo[]> {
   return apiGet<Torneo[]>('/tournaments/active')
+}
+
+/**
+ * Cuerpo que espera el backend para crear un torneo (verificado en fuente).
+ * type: NORMAL|LIGHTNING · format: BRACKETS|GROUPS|LEAGUE.
+ */
+export interface CreateTournamentRequest {
+  name: string
+  type: string
+  format: string
+  numberOfTeams: number
+  cost: number
+  startDate: string
+  endDate?: string
+  registrationDeadline: string
+}
+
+/**
+ * Crea un torneo en el backend.
+ * APIM: POST /tournaments (mk-tournament-service)
+ */
+export async function crearTorneoApi(data: CreateTournamentRequest): Promise<{ id: string }> {
+  return apiPost<{ id: string }>('/tournaments', data)
 }
 
 /**

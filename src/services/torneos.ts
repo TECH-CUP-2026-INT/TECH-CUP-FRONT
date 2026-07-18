@@ -14,6 +14,7 @@ import {
   getTorneoPorId as apiGetTorneoPorId,
   updateTorneoApi,
   deleteTorneoApi,
+  crearTorneoApi,
   type UpdateTorneoRequest,
 } from '@/api/torneos'
 
@@ -107,20 +108,51 @@ export async function fetchTorneos(): Promise<Torneo[]> {
 /**
  * Crea un torneo nuevo y lo persiste en localStorage + memoria.
  */
-export function createTorneo(data: {
+const FORMATO_A_API: Record<string, string> = {
+  llaves: 'BRACKETS',
+  grupos: 'GROUPS',
+  liga: 'LEAGUE',
+}
+
+export async function createTorneo(data: {
   nombre: string
   tipo?: string
+  formato?: string
+  numberOfTeams?: number
+  costo?: number
   fechaInicio?: string
   fechaFin?: string
+  fechaCierre?: string
   canchas?: number
   categoria?: string
-}): Torneo {
+}): Promise<Torneo> {
+  // Intento crear en el backend real (POST /tournaments). Antes esto solo
+  // guardaba en localStorage, por eso "torneos no configura".
+  let backendId: string | null = null
+  try {
+    if (data.fechaInicio && data.fechaCierre) {
+      const res = await crearTorneoApi({
+        name: data.nombre,
+        type: data.tipo === 'relampago' ? 'LIGHTNING' : 'NORMAL',
+        format: FORMATO_A_API[data.formato ?? 'llaves'] ?? 'BRACKETS',
+        numberOfTeams: data.numberOfTeams ?? 8,
+        cost: data.costo ?? 0,
+        startDate: data.fechaInicio,
+        endDate: data.fechaFin || undefined,
+        registrationDeadline: data.fechaCierre,
+      })
+      backendId = res.id
+    }
+  } catch (error) {
+    console.warn('[torneos] createTorneo API falló, guardando local:', error)
+  }
+
   const torneo: Torneo = {
-    id: 't-' + Date.now(),
+    id: backendId ?? 't-' + Date.now(),
     nombre: data.nombre,
     estado: 'upcoming',
     semestre: '2026-II',
-    categoria: (data.categoria as any) || 'Fútbol 11',
+    categoria: (data.categoria as Torneo['categoria']) || 'Fútbol 11',
     equipos: 0,
     jugadores: 0,
     canchas: data.canchas ?? 0,
@@ -128,7 +160,8 @@ export function createTorneo(data: {
     tag: data.tipo === 'relampago' ? 'Relámpago' : 'Próximo',
   }
   _torneos.unshift(torneo)
-  // Persistir solo los creados localmente (no los mock ni API)
+  // Persistir localmente también, para que aparezca aunque el listado del
+  // backend todavía no incluya torneos recién creados.
   const creados = loadCreados()
   creados.unshift(torneo)
   saveCreados(creados)

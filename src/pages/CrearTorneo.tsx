@@ -40,10 +40,12 @@ export default function CrearTorneo() {
 
   const canAddMore = canchas.every(c => c.nombre.trim() && c.ubicacion.trim())
 
-  const handleCrear = () => {
-    createTorneo({
-      nombre, tipo,
-      fechaInicio, fechaFin,
+  const handleCrear = async () => {
+    await createTorneo({
+      nombre, tipo, formato,
+      numberOfTeams: parseInt(maxEquipos, 10) || 8,
+      costo: parseInt(costo, 10) || 0,
+      fechaInicio, fechaFin, fechaCierre,
       canchas: canchas.filter(c => c.nombre.trim()).length,
       categoria: 'Fútbol 11',
     })
