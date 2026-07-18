@@ -55,6 +55,7 @@ export default function CrearEquipo() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const isCaptain = user?.isCaptain ?? false
+  const isRealAuth = useAuth().isRealAuth
 
   useEffect(() => {
     fetchTorneos().then(() => setTorneosLocal([...torneos]))
@@ -162,6 +163,14 @@ export default function CrearEquipo() {
                     <h2 className="font-[family-name:var(--font-display)] text-xl uppercase mb-2">Solo capitanes</h2>
                     <p className="text-sm text-text-muted mb-6">Necesitás ser capitán para crear un equipo. Activá la opción desde tu perfil.</p>
                     <Button onClick={() => navigate('/perfil')} className="rounded-full bg-gold/15 border border-gold/40 text-gold hover:bg-gold/25 h-12 px-8">Ir a mi perfil</Button>
+                  </motion.div>
+                )
+                if (!isRealAuth) return (
+                  <motion.div key="no-real-auth" initial={{opacity:0}} animate={{opacity:1}} className="text-center py-10">
+                    <span className="text-5xl mb-4 block">🔒</span>
+                    <h2 className="font-[family-name:var(--font-display)] text-xl uppercase mb-2">Modo sin conexión</h2>
+                    <p className="text-sm text-text-muted mb-6">El servicio de equipos requiere autenticación real. Iniciá sesión con tu cuenta para crear un equipo.</p>
+                    <Button onClick={() => navigate('/login')} className="rounded-full bg-gold/15 border border-gold/40 text-gold hover:bg-gold/25 h-12 px-8">Iniciar sesión</Button>
                   </motion.div>
                 )
                 if (paso === 0) return (

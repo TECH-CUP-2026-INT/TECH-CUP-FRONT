@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react'
-import { clearJwt, hasJwt } from '@/api/client'
+import { clearJwt, hasJwt, isRealJwt } from '@/api/client'
 import { getInitialsAvatar } from '@/utils/avatar'
 
 export type UserRole = 'jugador' | 'arbitro' | 'organizador'
@@ -17,6 +17,7 @@ interface AuthContextType {
   login: (email: string, role: UserRole, avatar?: string, name?: string) => void
   logout: () => void
   isAuthenticated: boolean
+  isRealAuth: boolean
   becomeCaptain: () => void
   removeCaptain: () => void
 }
@@ -26,6 +27,7 @@ const AuthContext = createContext<AuthContextType>({
   login: () => {},
   logout: () => {},
   isAuthenticated: false,
+  isRealAuth: false,
   becomeCaptain: () => {},
   removeCaptain: () => {},
 })
@@ -103,7 +105,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user, becomeCaptain, removeCaptain }}>
+    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user, isRealAuth: isRealJwt(), becomeCaptain, removeCaptain }}>
       {children}
     </AuthContext.Provider>
   )
