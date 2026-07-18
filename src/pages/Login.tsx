@@ -105,7 +105,7 @@ export default function Login() {
         {/* Imagen lateral */}
         <div className="relative w-[120px] min-h-[140px] flex-shrink-0 overflow-hidden bg-[#F3EEFF] dark:bg-black/80 flex items-center justify-center max-sm:hidden">
           <img src={role.img} alt="" className="w-full h-full object-contain p-3 transition-transform duration-500 group-hover:scale-110" />
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_40%,rgba(243,238,255,0.8)_100%)] dark:bg-[linear-gradient(90deg,transparent_40%,rgba(0,0,0,0.8)_100%)]" />
+          <div className="absolute inset-0 hidden dark:block dark:bg-[linear-gradient(90deg,transparent_40%,rgba(0,0,0,0.8)_100%)]" />
         </div>
         {/* Contenido */}
         <div className="flex-1 p-4 flex flex-col justify-center relative">
