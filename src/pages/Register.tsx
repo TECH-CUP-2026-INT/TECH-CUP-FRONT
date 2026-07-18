@@ -1,11 +1,13 @@
 import { useState, useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { GoogleLogin, type CredentialResponse } from '@react-oauth/google'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/common/button'
 import { Input } from '@/components/common/input'
 import { Label } from '@/components/common/label'
-import { ArrowLeft, ArrowRight, Check, ChevronLeft, Camera } from 'lucide-react'
+import { useAuth } from '@/hooks/auth/useAuth'
+import { setJwt } from '@/api/client'
+import { ArrowLeft, ArrowRight, Check, ChevronLeft, Camera, Loader2 } from 'lucide-react'
 
 type Position = 'portero' | 'defensa' | 'volante' | 'delantero'
 
@@ -65,6 +67,8 @@ export default function Register() {
   const [otp, setOtp] = useState(['', '', '', '', '', ''])
   const [googleVerified, setGoogleVerified] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
+  const navigate = useNavigate()
+  const { login } = useAuth()
 
   const isExterno = form.userType === 'externo'
 
@@ -138,17 +142,22 @@ export default function Register() {
   }
 
   const nextStep = () => {
-    if (step === 4 && isExterno) {
-      handleFinish()
+    if (step === 4 && !isExterno) {
+      // Auto-login al verificar OTP
+      setShowSuccess(true)
+      setJwt('demo-jwt-' + Date.now())
+      login(form.email || 'demo@techcup.com', 'jugador')
+      setTimeout(() => navigate('/dashboard/jugador', { replace: true }), 1500)
     } else {
       setStep(s => Math.min(s + 1, totalSteps))
     }
   }
 
   const handleFinish = () => {
-    console.log('Registro completado:', { ...form, foto: form.foto?.name })
     setShowSuccess(true)
-    setTimeout(() => setShowSuccess(false), 4000)
+    setJwt('demo-jwt-' + Date.now())
+    login(form.email || 'demo@techcup.com', 'jugador')
+    setTimeout(() => navigate('/dashboard/jugador', { replace: true }), 1500)
   }
 
   return (
