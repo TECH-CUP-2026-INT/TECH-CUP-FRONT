@@ -68,12 +68,20 @@ export default function Login() {
     setIsLoading(true)
     setAuthError(null)
     try {
-      await apiLogin(email, password)
-      const frontRole = selectedRole === 'administrador' ? 'organizador' : selectedRole
-      setJwt('mock-jwt-' + Date.now())
-      login(email, frontRole as import('@/hooks/auth/useAuth').UserRole)
-      navigate(selectedRole === 'arbitro' ? '/arbitro/dashboard' : `/dashboard/${frontRole}`)
+      // Intentar login real contra identity service
+      const loginRes = await apiLogin(email, password)
+      if (loginRes.otpCode) {
+        // Auto-validar OTP con el código que nos devolvió
+        const otpRes = await validateOtp(loginRes.userId, loginRes.otpCode)
+        setJwt(otpRes.token)
+        const frontRole = selectedRole === 'administrador' ? 'organizador' : selectedRole
+        login(otpRes.user.email, frontRole as import('@/hooks/auth/useAuth').UserRole, '', otpRes.user.fullName)
+        navigate(selectedRole === 'arbitro' ? '/arbitro/dashboard' : `/dashboard/${frontRole}`)
+      } else {
+        throw new Error('No OTP code returned')
+      }
     } catch {
+      // Fallback: login local sin backend
       const frontRole = selectedRole === 'administrador' ? 'organizador' : selectedRole
       setJwt('mock-jwt-' + Date.now())
       login(email, frontRole as import('@/hooks/auth/useAuth').UserRole)

@@ -14,6 +14,7 @@ export interface LoginRequest {
 export interface LoginResponse {
   userId: string
   message: string
+  otpCode?: string
 }
 
 export interface OtpValidationRequest {
