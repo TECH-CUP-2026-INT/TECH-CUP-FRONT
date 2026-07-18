@@ -57,16 +57,16 @@ function TorneosContent() {
 
         {/* 3D Carousel de fondo */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <ThreeDCarousel spotlightOffsetY={50} images={[
+          <ThreeDCarousel spotlightOffsetY={135} maxScale={2.09} images={[
             { src: '/images/carrusel-2.png', alt: '' },
             { src: '/images/carrusel-3.png', alt: '' },
             { src: '/images/carrusel-4.png', alt: '' },
             { src: '/images/carrusel-5.png', alt: '' },
-            { src: '/images/carrusel-8.png', alt: '' },
+            { src: '/images/carrusel-10.png', alt: '' },
           ]} />
         </div>
 
-        <div className="relative w-full max-w-[1280px] mx-auto px-8 pt-[130px] pb-[80px]">
+        <div className="relative w-full max-w-[1280px] mx-auto px-8 pt-[130px] pb-[120px]">
           {/* Carrusel de fondo — fotos */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ opacity: 0.12 }}>
             <div className="flex gap-6 items-center animate-scroll" style={{ width: 'max-content', filter: 'blur(2px)' }}>
@@ -88,7 +88,7 @@ function TorneosContent() {
               animation: scroll 60s linear infinite;
             }
           `}</style>
-          <div className="text-center max-w-[700px] mx-auto relative z-10 mt-[222px]">
+          <div className="text-center max-w-[700px] mx-auto relative z-10 mt-[222px]" style={{ transform: 'translateY(-250px)' }}>
             <motion.h1 initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:0.3}} className="font-[family-name:var(--font-display-alt)] font-bold text-[clamp(42px,6vw,72px)] leading-[.92] tracking-[.5px] uppercase italic mb-4">
               <span className="text-[#3D1A6B] dark:text-[#F7EDE2]">Torneos</span> <span className="text-gold">y Equipos</span>
             </motion.h1>

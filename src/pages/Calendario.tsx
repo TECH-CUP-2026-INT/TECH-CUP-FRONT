@@ -82,14 +82,14 @@ function CalendarioContent() {
         </div>
         {/* 3D Carousel de fondo */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <ThreeDCarousel images={[
+          <ThreeDCarousel spotlightOffsetY={310} images={[
             { src: '/images/logo1.png', alt: 'Logo 1' },
             { src: '/images/logo2.png', alt: 'Logo 2' },
             { src: '/images/logo3.png', alt: 'Logo 3' },
             { src: '/images/logo4.png', alt: 'Logo 4' },
           ]} />
         </div>
-        <div className="relative w-full max-w-[1280px] mx-auto px-8 pt-[130px] pb-[80px]">
+        <div className="relative w-full max-w-[1280px] mx-auto px-8 pt-[130px] pb-[120px]">
           {/* Carrusel fantasma — arriba y abajo */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ opacity: 0.12 }}>
             <div className="flex gap-6 items-center animate-scroll" style={{ width: 'max-content', filter: 'blur(2px)' }}>
@@ -113,13 +113,9 @@ function CalendarioContent() {
             }
           `}</style>
           <div className="text-center max-w-[600px] mx-auto relative z-10">
-            <motion.span initial={{opacity:0,y:-10}} animate={{opacity:1,y:0}} transition={{delay:0.2}} className="inline-flex items-center gap-2 text-[11.5px] font-bold tracking-[1.6px] uppercase text-gold bg-gold/10 border border-gold/30 px-3.5 py-1.5 rounded-full mb-[22px]">
-              <CalendarDays size={14} /> Calendario {año}
-            </motion.span>
             <motion.h1 initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:0.3}} className="font-[family-name:var(--font-display-alt)] font-bold text-[clamp(28px,4vw,48px)] leading-[.92] tracking-[.5px] uppercase italic mb-4">
               <span className="text-[#3D1A6B] dark:text-[#F7EDE2]">Calendario</span> <span className="text-gold">de Partidos</span>
             </motion.h1>
-            <motion.p initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.5}} className="text-base leading-relaxed text-[#7A6B99] dark:text-text-muted">Consultá la programación de partidos, filtrá por torneo y seguí la acción en vivo.</motion.p>
           </div>
         </div>
       </section>
