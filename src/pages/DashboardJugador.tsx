@@ -597,7 +597,7 @@ export default function DashboardJugador() {
               <div className="max-h-[45vh] overflow-y-auto p-6 pt-2 space-y-3">
                 {equiposDisponibles.filter(eq => eq.nom.toLowerCase().includes(teamSearch.toLowerCase())).map((eq, i) => (
                   <div key={i} className="flex items-center gap-4 p-4 rounded-2xl bg-[#E8DFF5]/70 dark:bg-black/30 backdrop-blur-sm border border-[#D4C8E8]/40 dark:border-purple-mid/20 hover:border-purple-mid/50 transition-all group">
-                    <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 ring-2 ring-gold/30 bg-[#E8DFF5]/70 dark:bg-black/40">
+                    <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 ring-2 ring-gold/30 bg-white">
                       <img src={eq.img} alt="" className="w-full h-full object-contain" />
                     </div>
                     <div className="flex-1 min-w-0">
