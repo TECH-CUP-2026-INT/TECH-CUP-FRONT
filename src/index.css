@@ -2,6 +2,11 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Colorblind assistance — daltonization filters, toggled via ColorblindProvider */
+html.cb-protanopia { filter: url(#cb-protanopia-filter); }
+html.cb-deuteranopia { filter: url(#cb-deuteranopia-filter); }
+html.cb-tritanopia { filter: url(#cb-tritanopia-filter); }
+
 @theme {
   --animate-aurora: aurora 60s linear infinite;
 
@@ -89,5 +94,11 @@
   ::-webkit-scrollbar-track { background: var(--color-black); }
   ::-webkit-scrollbar-thumb { background: #33303f; border-radius: 10px; }
   ::-webkit-scrollbar-thumb:hover { background: var(--color-purple-mid); }
+}
+
+/* Mercado Pago Payment Brick overrides (class hash suffix can change between SDK builds) */
+:root:not(.dark) .mp-checkout-bricks__payment-options-_ANPQa,
+:root:not(.dark) [class*="mp-checkout-bricks__payment-options-"] {
+  opacity: 1 !important;
 }
 
