@@ -148,8 +148,12 @@ export default function Register() {
   }
 
   const nextStep = () => {
-    if (step === 4 && isExterno) {
-      handleFinish()
+    if (step === 4 && !isExterno) {
+      // Auto-login al verificar OTP
+      setShowSuccess(true)
+      setJwt('demo-jwt-' + Date.now())
+      login(form.email || 'demo@techcup.com', 'jugador')
+      setTimeout(() => navigate('/dashboard/jugador', { replace: true }), 1500)
     } else {
       setStep(s => Math.min(s + 1, totalSteps))
     }

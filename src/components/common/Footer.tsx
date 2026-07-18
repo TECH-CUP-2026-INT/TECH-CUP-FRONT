@@ -21,7 +21,7 @@ export default function Footer() {
             <p className="text-[13.5px] text-white/85 leading-relaxed mt-3.5 max-w-[260px]">
               Generado por y para estudiantes.
             </p>
-            <div className="mt-4 w-[170px] bg-white rounded-lg p-2.5">
+            <div className="mt-4 w-[170px]">
               <img src="/assets/logo-eci.png" alt="Escuela Colombiana de Ingeniería Julio Garavito" className="w-full h-auto object-contain" />
             </div>
           </div>
@@ -46,7 +46,7 @@ export default function Footer() {
           <div>
             <h4 className="text-xs tracking-[1.2px] uppercase text-white/90 font-semibold mb-4">Más información</h4>
             <ul className="space-y-2.5">
-              {['Reglamento', 'Preguntas frecuentes', 'Contacto'].map(l => (
+              {['Reglamento', 'Preguntas frecuentes'].map(l => (
                 <li key={l}><a href="#" className="text-[13.5px] text-white/85 hover:text-white transition-colors">{l}</a></li>
               ))}
             </ul>

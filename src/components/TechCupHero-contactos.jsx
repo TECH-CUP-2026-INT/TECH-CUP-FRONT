@@ -125,7 +125,7 @@ export default function TechCupHero() {
       >
         <ContactCard icon={<Mail size={18} color="#7C6CF4" />} title="Correo" value="techcup@escuelaing.edu.co" />
         <ContactCard icon={<MapPin size={18} color="#7C6CF4" />} title="Ubicación" value="Campus Norte · Cancha 1" />
-        <ContactCard icon={<Phone size={18} color="#7C6CF4" />} title="Teléfono" value="+57 601 123 4567" />
+        <ContactCard icon={<Phone size={18} color="#7C6CF4" />} title="Teléfono" value="+57 (1) 668 3600" />
       </div>
     </div>
   );

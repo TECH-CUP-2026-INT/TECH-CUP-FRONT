@@ -1,0 +1,51 @@
+import { getPartidosApi } from '@/api/partidos'
+import { torneos } from './torneos'
+
+export interface DashboardMatch {
+  id: number; eq1: string; eq2: string; score1: number; score2: number
+  fecha: string; hora: string; lugar: string
+  estado: 'programado' | 'en_vivo' | 'finalizado'
+}
+
+export interface DashboardPlayerStats {
+  id: number; nombre: string; equipo: string; emoji: string; dorsal: number
+  posicion: string; goles: number; amarillas: number; rojas: number
+  partidosJugados: number; asistencias: number
+}
+
+const MOCK_MATCHES: DashboardMatch[] = [
+  { id:1, eq1:'Tigres FC', eq2:'IA Warriors', score1:3, score2:1, fecha:'24 MAY', hora:'8:00 PM', lugar:'Cancha Principal', estado:'finalizado' },
+  { id:2, eq1:'Code United', eq2:'Sistemas FC', score1:2, score2:2, fecha:'24 MAY', hora:'9:30 PM', lugar:'Cancha Principal', estado:'finalizado' },
+]
+
+const MOCK_SCORERS: DashboardPlayerStats[] = [
+  { id:1, nombre:'Laura Gómez', equipo:'Tigres FC', emoji:'🐯', dorsal:7, posicion:'Delantero', goles:5, amarillas:1, rojas:0, partidosJugados:4, asistencias:2 },
+  { id:2, nombre:'Juan Pablo Mora', equipo:'Tigres FC', emoji:'🐯', dorsal:9, posicion:'Delantero', goles:4, amarillas:0, rojas:0, partidosJugados:4, asistencias:3 },
+]
+
+export async function fetchDashboardMatches(): Promise<DashboardMatch[]> {
+  try {
+    const data = await getPartidosApi()
+    if (data && data.length > 0) {
+      return data.map((m, i) => ({
+        id: i + 1, eq1: m.homeTeamName, eq2: m.awayTeamName,
+        score1: m.homeScore, score2: m.awayScore,
+        fecha: '', hora: '', lugar: '',
+        estado: (m.status === 'FINISHED' ? 'finalizado' : m.status === 'IN_PROGRESS' ? 'en_vivo' : 'programado') as DashboardMatch['estado'],
+      }))
+    }
+  } catch {}
+  return MOCK_MATCHES
+}
+
+export async function fetchDashboardScorers(): Promise<DashboardPlayerStats[]> {
+  try {
+    const res = await fetch('https://techcup-estadisticas.bravedune-ceed739f.eastus2.azurecontainerapps.io/api/v1/statistics/rankings?type=GOALS&limit=10')
+    if (res.ok) { const data = await res.json(); if (data?.entries?.length > 0) return data.entries.map((e: any, i: number) => ({ id: i+1, nombre: e.playerName||'', equipo: e.teamName||'', emoji:'⚽', dorsal:0, posicion:'', goles: e.value||0, amarillas:0, rojas:0, partidosJugados:0, asistencias:0 })) }
+  } catch {}
+  return MOCK_SCORERS
+}
+
+export function getTorneoActivo() {
+  return torneos.find(t => t.estado === 'live') || torneos.find(t => t.estado === 'upcoming') || torneos[0] || null
+}

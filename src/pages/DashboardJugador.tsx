@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import Sidebar from '@/components/common/Sidebar'
@@ -11,9 +11,8 @@ import { Badge } from '@/components/common/badge'
 import { useAuth } from '@/hooks/auth/useAuth'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/common/avatar'
 import ManchasFloating from '@/components/common/ManchasFloating'
-import FallingBalls from '@/components/FallingBalls'
-import { partidos, posiciones, fetchPartidos } from '@/services/partidos'
-import { torneos, fetchTorneos } from '@/services/torneos'
+import { partidos, posiciones } from '@/services/partidos'
+import { torneos } from '@/services/torneos'
 import {
   X, CalendarDays, Trophy, Clock, MapPin, Download, Medal, Users, Package, QrCode, Check, RefreshCw, Swords, Shirt, Apple, Smartphone, Truck, ChevronRight, UserCheck, ClipboardList, Search, Plus, ArrowLeft, UserPlus, Send, Trash2, Edit3
 } from 'lucide-react'
@@ -85,8 +84,6 @@ export default function DashboardJugador() {
 
   const isCaptain = user?.isCaptain ?? false
 
-  useEffect(() => { fetchTorneos(); fetchPartidos() }, [])
-
   const handleCollapse = (val: boolean) => {
     setSidebarCollapsed(val)
     localStorage.setItem(SIDEBAR_KEY, JSON.stringify(val))
@@ -113,13 +110,12 @@ export default function DashboardJugador() {
 
   return (
     <div className="min-h-screen bg-black">
-      <FallingBalls count={40} duration={20000} startDelay={2000} triggerOnScroll={true} />
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} collapsed={sidebarCollapsed} onCollapse={handleCollapse} />
 
       <div className="min-w-0 transition-all duration-300" style={{ marginLeft: sidebarWidth }}>
         <AppTopbar title={isCaptain ? `Panel Capitán — ${MI_EQUIPO.nombre}` : 'Panel Jugador'} sidebarOpen={sidebarOpen} sidebarCollapsed={sidebarCollapsed} onMenuClick={() => setSidebarOpen(true)} />
 
-        <main className="p-8 pb-[60px] max-md:p-5 relative" style={{ backgroundImage: 'linear-gradient(rgba(30,10,60,0.65), rgba(30,10,60,0.65)), url(/images/fondo3.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+        <main className="p-8 pb-[60px] max-md:p-5 relative">
 
           {/* ═══════════ PERFIL ═══════════ */}
           <section className="rounded-2xl mb-[26px] relative overflow-hidden border border-purple-mid/30" style={{ minHeight: '280px' }}>

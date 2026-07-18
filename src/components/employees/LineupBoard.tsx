@@ -25,30 +25,29 @@ interface Slot {
 }
 
 const FORMATIONS: Record<string, Slot[]> = {
-  "4-4-2": [
+  "3-2-1": [
     { role: "POR", x: 50, y: 91 },
-    { role: "DEF", x: 15, y: 71 }, { role: "DEF", x: 38, y: 74 }, { role: "DEF", x: 62, y: 74 }, { role: "DEF", x: 85, y: 71 },
-    { role: "VOL", x: 15, y: 47 }, { role: "VOL", x: 38, y: 50 }, { role: "VOL", x: 62, y: 50 }, { role: "VOL", x: 85, y: 47 },
-    { role: "DEL", x: 36, y: 20 }, { role: "DEL", x: 64, y: 20 },
+    { role: "DEF", x: 20, y: 70 }, { role: "DEF", x: 50, y: 74 }, { role: "DEF", x: 80, y: 70 },
+    { role: "VOL", x: 35, y: 45 }, { role: "VOL", x: 65, y: 45 },
+    { role: "DEL", x: 50, y: 18 },
   ],
-  "4-3-3": [
+  "2-3-1": [
     { role: "POR", x: 50, y: 91 },
-    { role: "DEF", x: 15, y: 71 }, { role: "DEF", x: 38, y: 74 }, { role: "DEF", x: 62, y: 74 }, { role: "DEF", x: 85, y: 71 },
-    { role: "VOL", x: 30, y: 50 }, { role: "VOL", x: 50, y: 55 }, { role: "VOL", x: 70, y: 50 },
-    { role: "DEL", x: 18, y: 20 }, { role: "DEL", x: 50, y: 15 }, { role: "DEL", x: 82, y: 20 },
+    { role: "DEF", x: 30, y: 72 }, { role: "DEF", x: 70, y: 72 },
+    { role: "VOL", x: 20, y: 48 }, { role: "VOL", x: 50, y: 50 }, { role: "VOL", x: 80, y: 48 },
+    { role: "DEL", x: 50, y: 18 },
   ],
-  "3-5-2": [
+  "3-1-2": [
     { role: "POR", x: 50, y: 91 },
-    { role: "DEF", x: 26, y: 74 }, { role: "DEF", x: 50, y: 77 }, { role: "DEF", x: 74, y: 74 },
-    { role: "VOL", x: 10, y: 50 }, { role: "VOL", x: 31, y: 44 }, { role: "VOL", x: 50, y: 50 }, { role: "VOL", x: 69, y: 44 }, { role: "VOL", x: 90, y: 50 },
-    { role: "DEL", x: 36, y: 20 }, { role: "DEL", x: 64, y: 20 },
+    { role: "DEF", x: 20, y: 70 }, { role: "DEF", x: 50, y: 74 }, { role: "DEF", x: 80, y: 70 },
+    { role: "VOL", x: 50, y: 48 },
+    { role: "DEL", x: 30, y: 20 }, { role: "DEL", x: 70, y: 20 },
   ],
-  "4-2-3-1": [
+  "2-2-2": [
     { role: "POR", x: 50, y: 91 },
-    { role: "DEF", x: 15, y: 71 }, { role: "DEF", x: 38, y: 74 }, { role: "DEF", x: 62, y: 74 }, { role: "DEF", x: 85, y: 71 },
-    { role: "VOL", x: 36, y: 56 }, { role: "VOL", x: 64, y: 56 },
-    { role: "VOL", x: 18, y: 34 }, { role: "VOL", x: 50, y: 30 }, { role: "VOL", x: 82, y: 34 },
-    { role: "DEL", x: 50, y: 12 },
+    { role: "DEF", x: 30, y: 72 }, { role: "DEF", x: 70, y: 72 },
+    { role: "VOL", x: 30, y: 48 }, { role: "VOL", x: 70, y: 48 },
+    { role: "DEL", x: 30, y: 20 }, { role: "DEL", x: 70, y: 20 },
   ],
 }
 
@@ -90,8 +89,8 @@ export default function LineupBoard({
   jugadores: LineupPlayer[]
   onSelectPlayer?: (id: number) => void
 }) {
-  const [formation, setFormation] = useState("4-4-2")
-  const [slots, setSlots] = useState<(number | null)[]>(() => autoAssign(jugadores, FORMATIONS["4-4-2"]))
+  const [formation, setFormation] = useState("3-2-1")
+  const [slots, setSlots] = useState<(number | null)[]>(() => autoAssign(jugadores, FORMATIONS["3-2-1"]))
 
   const byId = useMemo(() => new Map(jugadores.map(j => [j.id, j])), [jugadores])
   const bench = useMemo(() => jugadores.filter(j => !slots.includes(j.id)), [jugadores, slots])
